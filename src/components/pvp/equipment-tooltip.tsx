@@ -17,7 +17,7 @@ function DistList({ entries }: { entries: DistEntry[] }) {
       {entries.map((e, i) => (
         <div key={i} className="flex items-center gap-1.5">
           {e.icon_url && (
-            <Image src={e.icon_url} alt={e.name} width={14} height={14} className="rounded shrink-0 opacity-80" />
+            <Image src={e.icon_url} width={14} height={14} className="rounded shrink-0 opacity-80" alt="class icon" />
           )}
           <span className="text-xs truncate flex-1" style={{ color: e.quality ? QUALITY_COLORS[e.quality] : undefined }}>
             {e.name}

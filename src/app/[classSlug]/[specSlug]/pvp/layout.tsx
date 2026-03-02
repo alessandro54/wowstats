@@ -46,8 +46,8 @@ export default async function PvpLayout({ children, params }: Props) {
 
       <div className="mx-auto max-w-5xl flex flex-col" style={{ height: "calc(100vh - 60px)" }}>
         <div className="flex items-center gap-3 shrink-0 px-6 py-3">
-          <span className="icon-vignette rounded-full">
-            <video autoPlay loop muted playsInline width={80} height={80} poster={spec.iconRemasteredUrl ?? spec.iconUrl} className="rounded-full block">
+          <span className="icon-vignette icon-vignette-lg rounded-full">
+            <video autoPlay loop muted playsInline width={100} height={100} poster={spec.iconRemasteredUrl ?? spec.iconUrl} className="rounded-full block">
               <source src={spec.animationUrl} type="video/mp4" />
             </video>
           </span>

@@ -13,7 +13,7 @@ const MageConfig: WowClassConfig = {
       id: 62,
       name: "arcane",
       url: "/mage/arcane",
-      iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_nature_starfall.jpg",
+      iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_holy_magicalsentry.jpg",
       iconRemasteredUrl: `${CDN_BASE}/icons-remastered/mage_arcane.png`,
     },
     {

@@ -1,7 +1,8 @@
 import { WOW_CLASSES } from "@/config/wow/classes"
 import { BRACKETS } from "@/config/wow/brackets"
 import { Equipment } from "@/components/pvp/equipment"
-import { fetchItems, fetchEnchants, fetchGems, type MetaItem, type MetaEnchant, type MetaGem } from "@/lib/api"
+import { Talents } from "@/components/pvp/talents"
+import { fetchItems, fetchEnchants, fetchGems, fetchTalents, type MetaItem, type MetaEnchant, type MetaGem, type MetaTalent } from "@/lib/api"
 import { notFound } from "next/navigation"
 import type { Metadata } from "next"
 
@@ -92,10 +93,11 @@ export default async function SpecPage({ params }: PageProps) {
 
   const resolvedBracket = apiBracket(bracket, classSlug, specSlug)
 
-  const [items, enchants, gems] = await Promise.all([
+  const [items, enchants, gems, talents] = await Promise.all([
     fetchItems(resolvedBracket, spec.id).catch((): MetaItem[] => []),
     fetchEnchants(resolvedBracket, spec.id).catch((): MetaEnchant[] => []),
     fetchGems(resolvedBracket, spec.id).catch((): MetaGem[] => []),
+    fetchTalents(resolvedBracket, spec.id).catch((): MetaTalent[] => []),
   ])
 
   const itemGroups = sortedBySlotOrder(groupBy(items, (i) => i.slot.toUpperCase()))
@@ -112,6 +114,7 @@ export default async function SpecPage({ params }: PageProps) {
         gemGroups={gemGroups}
         fiberGems={fiberGems}
       />
+      <Talents classSlug={cls.slug} talents={talents} />
     </div>
   )
 }

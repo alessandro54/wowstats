@@ -29,6 +29,10 @@
   pointer-events: none;
 }
 
+.icon-vignette-lg::after {
+  box-shadow: inset 0 0 28px 10px rgba(0, 0, 0, 0.7);
+}
+
 /* ─── Class-colored pill — set --pill-color on the element ───────────────── */
 .class-pill {
   color: var(--pill-color);

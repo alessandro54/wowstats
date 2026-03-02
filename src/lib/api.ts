@@ -67,3 +67,21 @@ export function fetchEnchants(bracket: string, specId: number): Promise<MetaEnch
 export function fetchGems(bracket: string, specId: number): Promise<MetaGem[]> {
   return apiFetch("/api/v1/pvp/meta/gems", { bracket, spec_id: String(specId) })
 }
+
+export type MetaTalent = {
+  id: number
+  talent: {
+    id: number
+    blizzard_id: number
+    name: string
+    talent_type: string
+    spell_id: number
+  }
+  usage_count: number
+  usage_pct: number
+  snapshot_at: string
+}
+
+export function fetchTalents(bracket: string, specId: number): Promise<MetaTalent[]> {
+  return apiFetch("/api/v1/pvp/meta/talents", { bracket, spec_id: String(specId) })
+}
