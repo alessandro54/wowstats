@@ -24,7 +24,7 @@ export function NavClassHoverCard({ item, onMouseEnter }: Props) {
     <HoverCard openDelay={150} closeDelay={100}>
       <HoverCardTrigger asChild>
         <SidebarMenuButton onMouseEnter={onMouseEnter}>
-          <Image src={item.iconUrl} width={20} height={20} className="rounded-full" alt={item.title} />
+          <span className="icon-vignette rounded-full"><Image src={item.iconUrl} width={20} height={20} className="rounded-full block" alt={item.title} /></span>
           <span>{item.title}</span>
         </SidebarMenuButton>
       </HoverCardTrigger>
@@ -46,7 +46,7 @@ export function NavClassHoverCard({ item, onMouseEnter }: Props) {
                 href={`/${item.slug}/${spec.title}`}
                 className="flex items-center gap-2 px-1 py-1 rounded hover:bg-muted transition-colors"
               >
-                <Image src={spec.iconUrl} width={16} height={16} className="rounded-full shrink-0" alt={spec.title} />
+                <span className="icon-vignette rounded-full"><Image src={spec.iconUrl} width={16} height={16} className="rounded-full block" alt={spec.title} /></span>
                 <span className="text-sm capitalize">{spec.title}</span>
               </Link>
               <div className="grid grid-rows-[0fr] group-hover/spec:grid-rows-[1fr] transition-[grid-template-rows] duration-200 ease-out">

@@ -10,8 +10,19 @@ import {
 import { HoverProvider } from "@/components/wow/hover-provider";
 
 export const metadata: Metadata = {
-  title: "WoW PvP Meta",
-  description: "PvP Insights for WoW Arena / Shuffle / RBG.",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:5123"),
+  title: {
+    default: "WoW PvP Meta",
+    template: "%s | WoW PvP Meta",
+  },
+  description: "PvP insights for WoW Arena, Solo Shuffle, and RBG. Best in slot gear based on real player data.",
+  openGraph: {
+    siteName: "WoW PvP Meta",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+  },
 };
 
 export default function RootLayout({

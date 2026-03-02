@@ -89,7 +89,7 @@ export function BracketBars({ classSlug, itemGroups, enchantGroups, gemGroups, f
                 <div key={entry.id} className="space-y-1">
                   <div className="flex items-center gap-2">
                     {entry.item.icon_url && (
-                      <img src={entry.item.icon_url} alt={entry.item.name} width={20} height={20} className="rounded shrink-0" />
+                      <span className="icon-vignette rounded shrink-0"><img src={entry.item.icon_url} alt={entry.item.name} width={20} height={20} className="rounded block" /></span>
                     )}
                     <span className="text-xs font-medium truncate flex-1" style={{ color: QUALITY_COLORS[entry.item.quality] }}>
                       {entry.item.name}
@@ -194,7 +194,7 @@ export function BracketBars({ classSlug, itemGroups, enchantGroups, gemGroups, f
                   <div key={entry.id} className="space-y-1">
                     <div className="flex items-center gap-2">
                       {entry.item.icon_url && (
-                        <img src={entry.item.icon_url} alt={entry.item.name} width={20} height={20} className="rounded shrink-0" />
+                        <span className="icon-vignette rounded shrink-0"><img src={entry.item.icon_url} alt={entry.item.name} width={20} height={20} className="rounded block" /></span>
                       )}
                       <span className="text-xs font-medium truncate flex-1" style={{ color: QUALITY_COLORS[entry.item.quality] }}>
                         {entry.item.name}

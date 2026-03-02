@@ -9,7 +9,7 @@ type Props = {
 
 export function PageHeader({ children, centerSlot }: Props) {
   return (
-    <header className="bg-background sticky top-0 z-20 flex shrink-0 items-center gap-2 border-b p-4 h-[60px]">
+    <header className="bg-background/40 backdrop-blur-md sticky top-0 z-20 flex shrink-0 items-center gap-2 border-b p-4 h-[60px]">
       <SidebarTrigger className="-ml-1" />
       <Separator orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4" />
       <div className="hidden sm:flex flex-1 min-w-0 items-center">

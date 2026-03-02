@@ -1,3 +1,4 @@
+import { CDN_BASE } from "@/config/cdn";
 import {WowClassConfig} from "@/config/wow/classes/index";
 
 const WarlockConfig: WowClassConfig = {
@@ -13,18 +14,24 @@ const WarlockConfig: WowClassConfig = {
       name: "affliction",
       url: "/warlock/affliction",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_shadow_deathcoil.jpg",
+      iconRemasteredUrl: `${CDN_BASE}/icons-remastered/warlock_affliction.png`,
+      animationUrl: `${CDN_BASE}/animations/warlock_affliction.mp4`,
     },
     {
       id: 266,
       name: "demonology",
       url: "/warlock/demonology",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_shadow_metamorphosis.jpg",
+      iconRemasteredUrl: `${CDN_BASE}/icons-remastered/warlock_demonology.png`,
+      animationUrl: `${CDN_BASE}/animations/warlock_demonology.mp4`,
     },
     {
       id: 267,
       name: "destruction",
       url: "/warlock/destruction",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_shadow_rainoffire.jpg",
+      iconRemasteredUrl: `${CDN_BASE}/icons-remastered/warlock_destruction.png`,
+      animationUrl: `${CDN_BASE}/animations/warlock_destruction.mp4`,
     },
   ],
 }

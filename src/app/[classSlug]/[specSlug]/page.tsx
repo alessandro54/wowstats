@@ -50,13 +50,7 @@ export default async function SpecIndexPage({ params }: PageProps) {
       <div className="animate-page-in mx-auto max-w-2xl space-y-10 p-8">
         {/* Spec hero */}
         <div className="flex items-center gap-4">
-          <Image
-            src={spec.iconUrl}
-            alt={specSlug}
-            width={56}
-            height={56}
-            className="rounded-xl"
-          />
+          <span className="icon-vignette rounded-xl"><Image src={spec.iconUrl} alt={specSlug} width={56} height={56} className="rounded-xl block" /></span>
           <div>
             <h1 className="text-3xl font-bold capitalize" style={{ color: cls.color }}>
               {specSlug} {cls.name}

@@ -66,7 +66,7 @@ export function NavMain() {
               {sidebarOpen ? (
                 <CollapsibleTrigger asChild>
                   <SidebarMenuButton tooltip={item.title}>
-                    <Image src={item.iconUrl} width={20} height={20} className="rounded-full" alt={item.title} />
+                    <span className="icon-vignette rounded-full"><Image src={item.iconUrl} width={20} height={20} className="rounded-full block" alt={item.title} /></span>
                     <span>{item.title}</span>
                     <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                   </SidebarMenuButton>
@@ -86,7 +86,7 @@ export function NavMain() {
                       <SidebarMenuSubItem key={subItem.title} className="group/spec">
                         <SidebarMenuSubButton asChild>
                           <Link href={subItem.url}>
-                            <Image src={subItem.iconUrl} width={16} height={16} className="rounded-full shrink-0" alt={subItem.title} />
+                            <span className="icon-vignette rounded-full"><Image src={subItem.iconUrl} width={16} height={16} className="rounded-full block" alt={subItem.title} /></span>
                             <span className="capitalize">{subItem.title}</span>
                           </Link>
                         </SidebarMenuSubButton>

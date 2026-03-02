@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { BRACKETS } from "@/config/wow/brackets"
 import { useActiveColor } from "@/hooks/use-active-color"
 import type { WowClassSlug } from "@/config/wow/classes"
@@ -8,11 +9,12 @@ import type { WowClassSlug } from "@/config/wow/classes"
 type Props = {
   classSlug: WowClassSlug
   specSlug: string
-  currentBracket: string
 }
 
-export function BracketSelector({ classSlug, specSlug, currentBracket }: Props) {
+export function BracketSelector({ classSlug, specSlug }: Props) {
   const activeColor = useActiveColor(classSlug)
+  const pathname = usePathname()
+  const currentBracket = pathname.split('/')[4] ?? ''
 
   return (
     <div className="flex gap-1">

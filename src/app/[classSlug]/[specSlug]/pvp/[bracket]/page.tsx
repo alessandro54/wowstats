@@ -1,19 +1,8 @@
-import {
-  Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbSeparator,
-  BreadcrumbPage,
-} from "@/components/ui/breadcrumb"
 import { WOW_CLASSES } from "@/config/wow/classes"
-import { BracketSelector } from "@/components/pvp/bracket-selector"
-import { PageHeader } from "@/components/page-header"
-import { SpecHeading } from "@/components/pvp/spec-heading"
+import { BRACKETS } from "@/config/wow/brackets"
 import { BracketBars } from "@/components/pvp/bracket-bars"
 import { fetchItems, fetchEnchants, fetchGems, type MetaItem, type MetaEnchant, type MetaGem } from "@/lib/api"
 import { notFound } from "next/navigation"
-import Image from "next/image"
 import type { Metadata } from "next"
 
 const SLOT_ORDER = [
@@ -52,7 +41,31 @@ type PageProps = {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { classSlug, specSlug, bracket } = await params
-  return { title: `${specSlug} ${classSlug} PvP – ${bracket} | WoW Meta` }
+
+  const cls = WOW_CLASSES.find((c) => c.slug === classSlug)
+  const spec = cls?.specs.find((s) => s.name === specSlug)
+  if (!cls || !spec) return {}
+
+  const bracketLabel = BRACKETS.find((b) => b.slug === bracket)?.label ?? bracket
+  const title = `${cls.name} ${specSlug} – ${bracketLabel} BIS`
+  const description = `Best in slot items, enchants, and gems for ${cls.name} ${specSlug} in ${bracketLabel}. Based on real WoW PvP data.`
+  const image = spec.iconRemasteredUrl ?? spec.iconUrl
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: [{ url: image, width: 1024, height: 1024 }],
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+      images: [image],
+    },
+  }
 }
 
 export const dynamic = "force-dynamic"
@@ -91,42 +104,14 @@ export default async function SpecPage({ params }: PageProps) {
   const gemGroups = Array.from(groupBy(gems.filter((g) => g.socket_type !== "FIBER"), (g) => g.socket_type)).map(([socketType, entries]) => ({ socketType, entries }))
 
   return (
-    <>
-      <PageHeader
-        centerSlot={<BracketSelector classSlug={cls.slug} specSlug={specSlug} currentBracket={bracket} />}
-      >
-        <Breadcrumb className="flex-1 min-w-0">
-          <BreadcrumbList>
-            <BreadcrumbItem className="hidden md:block">
-              <BreadcrumbLink href={`/${classSlug}`}>{cls.name}</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator className="hidden md:block" />
-            <BreadcrumbItem>
-              <BreadcrumbPage className="capitalize">{specSlug}</BreadcrumbPage>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>PvP</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-      </PageHeader>
-
-      <div className="animate-page-in mx-auto max-w-5xl space-y-8 overflow-auto" style={{ height: "calc(100vh - 60px)" }}>
-        <div className="flex items-center gap-3 sticky top-0 z-10 bg-background px-6 py-3">
-          <Image src={spec.iconUrl} alt={specSlug} width={40} height={40} className="rounded-full" />
-          <SpecHeading className={cls.name} classSlug={cls.slug} specSlug={specSlug} bracket={bracket} />
-        </div>
-        <div className="px-6">
-        <BracketBars
-          classSlug={cls.slug}
-          itemGroups={itemGroups}
-          enchantGroups={enchantGroups}
-          gemGroups={gemGroups}
-          fiberGems={fiberGems}
-        />
-        </div>
-      </div>
-    </>
+    <div className="animate-page-in px-6 pb-8 space-y-8">
+      <BracketBars
+        classSlug={cls.slug}
+        itemGroups={itemGroups}
+        enchantGroups={enchantGroups}
+        gemGroups={gemGroups}
+        fiberGems={fiberGems}
+      />
+    </div>
   )
 }

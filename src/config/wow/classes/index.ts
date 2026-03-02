@@ -36,6 +36,9 @@ export type WowClassSpec = {
   name: WowClassSpecSlug;
   url: string;
   iconUrl: string;
+  iconRemasteredUrl?: string;
+  animationUrl?: string;
+  colorOlkch?: string;
 };
 
 export type WowClassConfig = {
