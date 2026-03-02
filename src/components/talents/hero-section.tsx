@@ -74,7 +74,7 @@ export function HeroSection({
   const card = (
     <div className="inline-block rounded-xl border border-border/40 bg-card/30 backdrop-blur-sm p-4">
       {hasTreeData(primary) ? (
-        <TalentTree talents={primary} activeColor={activeColor} onlyChoicePct fullOpacity />
+        <TalentTree talents={primary} activeColor={activeColor} onlyChoicePct fullOpacity apexExtra />
       ) : (
         <TalentList talents={primary} activeColor={activeColor} />
       )}
@@ -102,7 +102,7 @@ export function HeroSection({
               Alt · {Math.max(...alt.map((t) => t.usage_pct)).toFixed(0)}%
             </p>
             {hasTreeData(alt) ? (
-              <TalentTree talents={alt} activeColor={activeColor} onlyChoicePct fullOpacity />
+              <TalentTree talents={alt} activeColor={activeColor} onlyChoicePct fullOpacity apexExtra />
             ) : (
               <TalentList talents={alt} activeColor={activeColor} />
             )}

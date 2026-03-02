@@ -15,7 +15,7 @@ export function TalentList({
     <div className="rounded-lg border bg-transparent divide-y divide-border/40 backdrop-blur-lg">
       {talents.map((record) => (
         <div
-          key={record.id}
+          key={record.id ?? record.talent.id}
           className="flex items-center gap-3 px-4 py-2.5 hover:bg-muted/20 transition-colors first:rounded-t-lg last:rounded-b-lg"
         >
           {record.talent.icon_url && (

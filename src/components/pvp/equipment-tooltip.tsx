@@ -8,8 +8,10 @@ import { QUALITY_COLORS, getStatMeta } from "./equipment-config"
 
 export type DistEntry = { name: string; icon_url?: string | null; quality?: string; pct: number }
 
-const tooltipContentClass = "bg-card/20 backdrop-blur-2xl text-card-foreground border border-border/40 shadow-lg"
-const tooltipArrowClass = "fill-transparent bg-transparent"
+// backdrop-blur must live on an inner element — placing it on TooltipContent
+// creates a CSS isolation context that clips the Radix Arrow overflow.
+const tooltipInnerClass = "bg-card/30 backdrop-blur-2xl text-card-foreground border border-border/40 shadow-lg rounded-[inherit] px-3 py-1.5"
+const tooltipArrowClass = "fill-slate-200 dark:fill-zinc-700"
 
 function DistList({ entries }: { entries: DistEntry[] }) {
   return (
@@ -91,8 +93,8 @@ export function ClickableTooltip({ children, content, side, align }: {
       <TooltipTrigger asChild onClick={() => setOpen((v) => !v)}>
         {children}
       </TooltipTrigger>
-      <TooltipContent side={side} align={align} className={tooltipContentClass} arrowClassName={tooltipArrowClass}>
-        {content}
+      <TooltipContent side={side} align={align} sideOffset={8} className="bg-transparent border-0 shadow-none p-0" arrowClassName={tooltipArrowClass}>
+        <div className={tooltipInnerClass}>{content}</div>
       </TooltipContent>
     </Tooltip>
   )

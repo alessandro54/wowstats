@@ -33,7 +33,7 @@ export function Talents({ classSlug, talents }: Props) {
 
   const renderTree = (entries: MetaTalent[]) =>
     hasTreeData(entries) ? (
-      <TalentTree talents={entries} activeColor={activeColor} />
+      <TalentTree talents={entries} activeColor={activeColor} budget={34} />
     ) : (
       <TalentList talents={entries} activeColor={activeColor} />
     )

@@ -69,7 +69,7 @@ export function fetchGems(bracket: string, specId: number): Promise<MetaGem[]> {
 }
 
 export type MetaTalent = {
-  id: number
+  id: number | null
   talent: {
     id: number
     blizzard_id: number
@@ -83,9 +83,10 @@ export type MetaTalent = {
     icon_url: string | null
     prerequisite_node_ids: number[]
   }
-  usage_count: number
-  usage_pct: number
-  snapshot_at: string
+  usage_count:  number
+  usage_pct:    number
+  in_top_build: boolean
+  snapshot_at:  string | null
 }
 
 export function fetchTalents(bracket: string, specId: number): Promise<MetaTalent[]> {
