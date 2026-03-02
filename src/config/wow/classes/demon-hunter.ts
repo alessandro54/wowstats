@@ -1,3 +1,4 @@
+import { CDN_BASE } from "@/config/cdn"
 import { WowClassConfig } from "."
 
 const DemonHunterConfig: WowClassConfig = {
@@ -25,6 +26,7 @@ const DemonHunterConfig: WowClassConfig = {
       name: "devourer",
       url: "/demon-hunter/devourer",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/classicon_demonhunter_void.jpg",
+      iconRemasteredUrl: `${CDN_BASE}/icons-remastered/demonhunter_devourer.png`
     },
   ],
 }

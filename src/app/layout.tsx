@@ -36,12 +36,12 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <HoverProvider>
             <SidebarProvider>
+              <DynamicBackground />
               <AppSidebar />
               <SidebarInset>
                 <main>
                   {children}
                 </main>
-                <DynamicBackground />
               </SidebarInset>
             </SidebarProvider>
           </HoverProvider>

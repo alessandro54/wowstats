@@ -53,17 +53,17 @@ export type WowClassConfig = {
 }
 
 export const WOW_CLASSES: WowClassConfig[] = [
-  RogueConfig,
-  WarlockConfig,
-  PaladinConfig,
   DeathKnightConfig,
   DemonHunterConfig,
   DruidConfig,
-  MonkConfig,
-  MageConfig,
-  ShamanConfig,
+  EvokerConfig,
   HunterConfig,
-  WarriorConfig,
+  MageConfig,
+  MonkConfig,
+  PaladinConfig,
   PriestConfig,
-  EvokerConfig
+  RogueConfig,
+  ShamanConfig,
+  WarlockConfig,
+  WarriorConfig,
 ]

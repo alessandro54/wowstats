@@ -9,7 +9,7 @@ import type { NavMainItem } from "@/config/wow/nav"
 const QUICK_BRACKETS = [
   { slug: "2v2",     label: "2v2" },
   { slug: "3v3",     label: "3v3" },
-  { slug: "shuffle", label: "SS"  },
+  { slug: "shuffle", label: "Solo"  },
 ] as const
 
 type Props = {

@@ -1,3 +1,4 @@
+import { CDN_BASE } from "@/config/cdn";
 import { WowClassConfig } from "@/config/wow/classes/index";
 
 const HunterConfig: WowClassConfig = {
@@ -13,18 +14,21 @@ const HunterConfig: WowClassConfig = {
       name: "beast-mastery",
       url: "/hunter/beast-mastery",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_hunter_bestialdiscipline.jpg",
+      iconRemasteredUrl: `${CDN_BASE}/icons-remastered/hunter_beastmastery.png`,
     },
     {
       id: 254,
       name: "marksmanship",
       url: "/hunter/marksmanship",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_hunter_focusedaim.jpg",
+      iconRemasteredUrl: `${CDN_BASE}/icons-remastered/hunter_marksmanship.png`,
     },
     {
       id: 255,
       name: "survival",
       url: "/hunter/survival",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_hunter_camouflage.jpg",
+      iconRemasteredUrl: `${CDN_BASE}/icons-remastered/hunter_survival.png`,
     },
   ],
 }

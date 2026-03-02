@@ -20,13 +20,13 @@ export default function DynamicBackground() {
     <>
       {/* Class color — top center blob */}
       <div
-        className="absolute left-1/2 -translate-x-1/2 -top-[40vw] w-[90vw] h-[50vw] rounded-full filter blur-3xl opacity-15 animate-blob animation-delay-6000 pointer-events-none overflow-hidden transition-all duration-700 ease-in-out"
+        className="fixed left-1/2 -translate-x-1/2 -top-[40vw] w-[90vw] h-[50vw] rounded-full filter blur-3xl opacity-15 animate-blob animation-delay-6000 pointer-events-none overflow-hidden transition-all duration-700 ease-in-out"
         style={{ zIndex: -1, background }}
       />
       {/* Spec color — bottom center gradient (only on spec pages) */}
       {isSpecPage && (
         <div
-          className={`absolute inset-x-0 bottom-0 h-96 pointer-events-none transition-all duration-700 spec-${classSlug}-${specSlug}`}
+          className={`fixed inset-x-0 bottom-0 h-96 pointer-events-none transition-all duration-700 spec-${classSlug}-${specSlug}`}
           style={{
             zIndex: -1,
             backgroundImage: "linear-gradient(to top, oklch(from var(--spec-color) l c h / 0.18), transparent)",

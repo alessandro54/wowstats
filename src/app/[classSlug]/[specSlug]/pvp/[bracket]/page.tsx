@@ -1,6 +1,6 @@
 import { WOW_CLASSES } from "@/config/wow/classes"
 import { BRACKETS } from "@/config/wow/brackets"
-import { BracketBars } from "@/components/pvp/bracket-bars"
+import { Equipment } from "@/components/pvp/equipment"
 import { fetchItems, fetchEnchants, fetchGems, type MetaItem, type MetaEnchant, type MetaGem } from "@/lib/api"
 import { notFound } from "next/navigation"
 import type { Metadata } from "next"
@@ -105,7 +105,7 @@ export default async function SpecPage({ params }: PageProps) {
 
   return (
     <div className="animate-page-in px-6 pb-8 space-y-8">
-      <BracketBars
+      <Equipment
         classSlug={cls.slug}
         itemGroups={itemGroups}
         enchantGroups={enchantGroups}

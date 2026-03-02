@@ -1,3 +1,4 @@
+import { CDN_BASE } from "@/config/cdn";
 import { WowClassConfig } from ".";
 
 const RogueConfig: WowClassConfig = {
@@ -13,18 +14,21 @@ const RogueConfig: WowClassConfig = {
       name: "assassination",
       url: "/rogue/assassination",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_rogue_deadlybrew.jpg",
+      iconRemasteredUrl: `${CDN_BASE}/icons-remastered/rogue_assassination.png`,
     },
     {
       id: 260,
       name: "outlaw",
       url: "/rogue/outlaw",
-      iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_rogue_rollthebones.jpg",
+      iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_rogue_waylay.jpg",
+      iconRemasteredUrl: `${CDN_BASE}/icons-remastered/rogue_outlaw.png`,
     },
     {
       id: 261,
       name: "subtlety",
       url: "/rogue/subtlety",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_rogue_shadowdance.jpg",
+      iconRemasteredUrl: `${CDN_BASE}/icons-remastered/rogue_subtlety.png`,
     },
   ],
 };

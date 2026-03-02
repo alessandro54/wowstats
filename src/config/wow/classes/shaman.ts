@@ -1,3 +1,4 @@
+import { CDN_BASE } from "@/config/cdn";
 import { WowClassConfig } from "@/config/wow/classes/index";
 
 const ShamanConfig: WowClassConfig = {
@@ -13,18 +14,21 @@ const ShamanConfig: WowClassConfig = {
       name: "elemental",
       url: "/shaman/elemental",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_nature_lightning.jpg",
+      iconRemasteredUrl: `${CDN_BASE}/icons-remastered/shaman_elemental.png`,
     },
     {
       id: 263,
       name: "enhancement",
       url: "/shaman/enhancement",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_shaman_improvedstormstrike.jpg",
+      iconRemasteredUrl: `${CDN_BASE}/icons-remastered/shaman_enhancement.png`,
     },
     {
       id: 264,
       name: "restoration",
       url: "/shaman/restoration",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_nature_magicimmunity.jpg",
+      iconRemasteredUrl: `${CDN_BASE}/icons-remastered/shaman_restoration.png`,
     },
   ],
 }

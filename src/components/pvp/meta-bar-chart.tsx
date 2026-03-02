@@ -1,5 +1,7 @@
 "use client"
 
+import Image from "next/image"
+
 export type MetaBarEntry = {
   key: string
   specName: string
@@ -22,7 +24,7 @@ export function MetaBarChart({ entries }: { entries: MetaBarEntry[] }) {
             </div>
           </div>
           {iconUrl && (
-            <img src={iconUrl} alt={specName} className="h-6 w-6 rounded-full mb-1 mt-2" />
+            <Image src={iconUrl} alt={specName} className="h-6 w-6 rounded-full mb-1 mt-2" />
           )}
           <span className="font-medium text-[10px] text-center truncate max-w-[40px]">{specName}</span>
         </div>

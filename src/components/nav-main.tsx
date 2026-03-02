@@ -104,7 +104,7 @@ export function NavMain() {
                                   className="class-pill text-[10px] font-semibold px-1.5 py-0.5 rounded"
                                   style={pillStyle}
                                 >
-                                  {bracket === "shuffle" ? "SS" : bracket}
+                                  {bracket === "shuffle" ? "Solo" : bracket}
                                 </Link>
                               ))}
                             </div>

@@ -1,5 +1,11 @@
 /* ─── Light mode ─────────────────────────────────────────────────────────── */
 :root {
+  /* Stat colors */
+  --color-stat-haste:       oklch(0.60 0.18 98);
+  --color-stat-crit:        oklch(0.55 0.22 35);
+  --color-stat-mastery:     oklch(0.55 0.15 295);
+  --color-stat-versatility: oklch(0.55 0.14 225);
+
   /* Class colors */
   --color-class-death-knight: oklch(0.48 0.1969 19.54);
   --color-class-demon-hunter: oklch(0.50 0.2299 316);
@@ -15,20 +21,24 @@
   --color-class-warlock:      oklch(0.52 0.1488 281.19);
   --color-class-warrior:      oklch(0.50 0.0802 67.87);
 
-  /* Stat colors */
-  --color-stat-haste:       oklch(0.60 0.18 98);
-  --color-stat-crit:        oklch(0.55 0.22 35);
-  --color-stat-mastery:     oklch(0.55 0.15 295);
-  --color-stat-versatility: oklch(0.55 0.14 225);
-
   /* Spec colors */
   --color-spec-death-knight-blood:  oklch(0.38 0.17 15);
   --color-spec-death-knight-frost:  oklch(0.65 0.08 220);
   --color-spec-death-knight-unholy: oklch(0.48 0.13 145);
+
+  --color-spec-warlock-affliction:  oklch(44.255% 0.1469 143.267);
+  --color-spec-warlock-demonology:  oklch(62.793% 0.25768 29.223 / 0.627);
+  --color-spec-warlock-destruction: oklch(72.445% 0.18897 50.929 / 0.493);
 }
 
 /* ─── Dark mode ──────────────────────────────────────────────────────────── */
 .dark {
+  /* Stat colors */
+  --color-stat-haste:       oklch(0.96 0.18  98);
+  --color-stat-crit:        oklch(0.68 0.22  35);
+  --color-stat-mastery:     oklch(0.78 0.15 295);
+  --color-stat-versatility: oklch(0.75 0.14 225);
+
   /* Class colors */
   --color-class-death-knight: oklch(0.5308 0.1969 19.54);
   --color-class-demon-hunter: oklch(0.5507 0.2299 316);
@@ -43,12 +53,6 @@
   --color-class-shaman:       oklch(0.5563 0.1869 255.57);
   --color-class-warlock:      oklch(0.6711 0.1488 281.19);
   --color-class-warrior:      oklch(0.7188 0.0802 67.87);
-
-  /* Stat colors */
-  --color-stat-haste:       oklch(0.96 0.18  98);
-  --color-stat-crit:        oklch(0.68 0.22  35);
-  --color-stat-mastery:     oklch(0.78 0.15 295);
-  --color-stat-versatility: oklch(0.75 0.14 225);
 
   /* Spec colors */
   --color-spec-death-knight-blood:  oklch(0.50 0.20 15);
