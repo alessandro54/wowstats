@@ -19,7 +19,9 @@ export function PageHeader({ children, centerSlot }: Props) {
         <div className="flex flex-1 justify-center">{centerSlot}</div>
       )}
       {!centerSlot && <div className="flex-1" />}
-      <ThemeSwitcher />
+      <div className="hidden sm:block">
+        <ThemeSwitcher />
+      </div>
     </header>
   )
 }

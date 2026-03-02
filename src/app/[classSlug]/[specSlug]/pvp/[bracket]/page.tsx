@@ -1,7 +1,7 @@
 import { WOW_CLASSES } from "@/config/wow/classes"
 import { BRACKETS } from "@/config/wow/brackets"
 import { Equipment } from "@/components/pvp/equipment"
-import { Talents } from "@/components/pvp/talents"
+import { Talents } from "@/components/talents"
 import { fetchItems, fetchEnchants, fetchGems, fetchTalents, type MetaItem, type MetaEnchant, type MetaGem, type MetaTalent } from "@/lib/api"
 import { notFound } from "next/navigation"
 import type { Metadata } from "next"

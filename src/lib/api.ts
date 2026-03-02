@@ -75,7 +75,13 @@ export type MetaTalent = {
     blizzard_id: number
     name: string
     talent_type: string
-    spell_id: number
+    spell_id: number | null
+    node_id: number | null
+    display_row: number | null
+    display_col: number | null
+    max_rank: number
+    icon_url: string | null
+    prerequisite_node_ids: number[]
   }
   usage_count: number
   usage_pct: number
