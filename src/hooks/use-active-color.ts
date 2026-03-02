@@ -9,7 +9,7 @@ export function classColor(slug: WowClassSlug | null | undefined): string | unde
 }
 
 export function useActiveColor(defaultSlug: WowClassSlug): string {
-  const { slug: hoverSlug } = useHoverSlug()
+  const hoverSlug = useHoverSlug()
   const activeSlug = (hoverSlug ?? defaultSlug) as WowClassSlug
   return `var(--color-class-${activeSlug})`
 }

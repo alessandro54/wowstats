@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useCallback } from "react"
 import { ChevronRight } from "lucide-react"
 
 import {
@@ -23,32 +23,36 @@ import {
 import Image from "next/image"
 import Link from "next/link"
 import { navMain } from "@/config/wow/nav"
-import { useHoverSlug } from "./wow/hover-provider"
+import { useSetHoverSlug } from "./wow/hover-provider"
 import { NavClassHoverCard } from "@/components/nav-class-hover-card"
 import type { WowClassSlug } from "@/config/wow/classes"
 
 export function NavMain() {
-  const { setSlug } = useHoverSlug()
+  const setSlug = useSetHoverSlug()
   const [openSlug, setOpenSlug] = useState<WowClassSlug | null>(null)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const prefetchedRef = useRef<Set<string>>(new Set())
   const { open: sidebarOpen } = useSidebar()
 
-  function handleItemEnter(item: typeof navMain[number]) {
+  const handleItemEnter = useCallback((item: typeof navMain[number]) => {
     if (timerRef.current) clearTimeout(timerRef.current)
     timerRef.current = setTimeout(() => {
       setOpenSlug(item.slug)
       setSlug(item.slug)
-      item.items.forEach((spec) => {
-        fetch(`/api/prefetch/items?spec_id=${spec.id}&bracket=3v3`, { priority: "low" }).catch(() => {})
-      })
+      if (!prefetchedRef.current.has(item.slug)) {
+        prefetchedRef.current.add(item.slug)
+        item.items.forEach((spec) => {
+          fetch(`/api/prefetch/items?spec_id=${spec.id}&bracket=3v3`, { priority: "low" }).catch(() => {})
+        })
+      }
     }, 80)
-  }
+  }, [setSlug])
 
-  function handleMenuLeave() {
+  const handleMenuLeave = useCallback(() => {
     if (timerRef.current) clearTimeout(timerRef.current)
     setOpenSlug(null)
     setSlug(null)
-  }
+  }, [setSlug])
 
   return (
     <SidebarGroup>
@@ -60,7 +64,7 @@ export function NavMain() {
             asChild
             open={openSlug === item.slug}
             className="group/collapsible"
-            onMouseEnter={() => handleItemEnter(item)}
+            onMouseEnter={() => handleItemEnter(item)}  // item ref is stable (navMain is a module-level const)
           >
             <SidebarMenuItem>
               {sidebarOpen ? (

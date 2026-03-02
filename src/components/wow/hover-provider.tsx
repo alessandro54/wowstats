@@ -3,32 +3,28 @@
 import { createContext, useContext, useState } from "react";
 import type { WowClassSlug } from "@/config/wow/classes";
 
-type HoverContextValue = {
-  slug: WowClassSlug | null;
-  setSlug: (slug: WowClassSlug | null) => void;
-};
-
-const HoverContext = createContext<HoverContextValue | null>(null);
+// Split into two contexts so setter-only consumers don't re-render on slug changes
+const HoverSlugContext = createContext<WowClassSlug | null>(null);
+const SetHoverSlugContext = createContext<(slug: WowClassSlug | null) => void>(() => {});
 
 export function HoverProvider({ children }: { children: React.ReactNode }) {
   const [slug, setSlug] = useState<WowClassSlug | null>(null);
 
-  const value: HoverContextValue = {
-    slug,
-    setSlug,
-  };
-
   return (
-    <HoverContext.Provider value={value}>
-      {children}
-    </HoverContext.Provider>
+    <SetHoverSlugContext.Provider value={setSlug}>
+      <HoverSlugContext.Provider value={slug}>
+        {children}
+      </HoverSlugContext.Provider>
+    </SetHoverSlugContext.Provider>
   );
 }
 
-export function useHoverSlug() {
-  const ctx = useContext(HoverContext);
-  if (!ctx) {
-    throw new Error("useHoverSlug must be used within HoverProvider");
-  }
-  return ctx;
+/** Re-renders when the hovered class slug changes. */
+export function useHoverSlug(): WowClassSlug | null {
+  return useContext(HoverSlugContext);
+}
+
+/** Stable setter — never triggers a re-render in the consumer. */
+export function useSetHoverSlug(): (slug: WowClassSlug | null) => void {
+  return useContext(SetHoverSlugContext);
 }

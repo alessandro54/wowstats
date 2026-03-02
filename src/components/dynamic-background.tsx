@@ -5,7 +5,7 @@ import type { WowClassSlug } from "@/config/wow/classes";
 import { useHoverSlug } from "./wow/hover-provider";
 
 export default function DynamicBackground() {
-  const { slug: hoverSlug } = useHoverSlug();
+  const hoverSlug = useHoverSlug();
   const pathname = usePathname();
 
   const segments = pathname.split("/").filter(Boolean);

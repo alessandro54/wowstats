@@ -3,7 +3,9 @@
 import { useTheme } from "next-themes"
 import { Monitor, Sun, Moon } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useMemo } from "react"
+import { usePathname } from "next/navigation"
+import { useHoverSlug } from "@/components/wow/hover-provider"
 
 const OPTIONS = [
   { value: "system", icon: Monitor },
@@ -14,26 +16,46 @@ const OPTIONS = [
 export function ThemeSwitcher() {
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const pathname = usePathname()
+  const hoverSlug = useHoverSlug()
 
   useEffect(() => setMounted(true), [])
 
+  // Stable click handlers — only recreated if setTheme changes (never in practice)
+  const handlers = useMemo(
+    () => Object.fromEntries(OPTIONS.map(({ value }) => [value, () => setTheme(value)])),
+    [setTheme]
+  )
+
+  // Recomputed only when pathname or hoverSlug changes, not on every hover-unrelated render
+  const classColor = useMemo(() => {
+    const pathClassSlug = pathname.split("/").filter(Boolean)[0]
+    const activeSlug = hoverSlug ?? pathClassSlug
+    return activeSlug ? `var(--color-class-${activeSlug}, var(--border))` : "var(--border)"
+  }, [hoverSlug, pathname])
+
   return (
-    <div className="flex items-center gap-0.5 rounded-md border bg-muted p-0.5">
-      {OPTIONS.map(({ value, icon: Icon }) => (
-        <button
-          key={value}
-          onClick={() => setTheme(value)}
-          className={cn(
-            "rounded p-1.5 transition-colors",
-            mounted && theme === value
-              ? "bg-background text-foreground shadow-sm"
-              : "text-muted-foreground hover:text-foreground"
-          )}
-          aria-label={value}
-        >
-          <Icon size={14} />
-        </button>
-      ))}
+    <div
+      className="flex items-center gap-0.5 rounded-md border bg-transparent p-0.5"
+      style={{ borderColor: classColor }}
+    >
+      {OPTIONS.map(({ value, icon: Icon }) => {
+        const isActive = mounted && theme === value
+        return (
+          <button
+            key={value}
+            onClick={handlers[value]}
+            style={isActive ? { backgroundColor: classColor, color: "var(--background)" } : undefined}
+            className={cn(
+              "rounded p-1.5 transition-colors",
+              isActive ? "shadow-sm" : "text-muted-foreground"
+            )}
+            aria-label={value}
+          >
+            <Icon size={14} />
+          </button>
+        )
+      })}
     </div>
   )
 }

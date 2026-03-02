@@ -7,8 +7,9 @@ import {
     BreadcrumbSeparator,
     BreadcrumbPage
 } from "@/components/ui/breadcrumb";
-import {WOW_CLASSES, type WowClassSlug, WowClassSpecSlug} from "@/config/wow/classes";
+import {WOW_CLASSES, type WowClassSlug} from "@/config/wow/classes";
 import {PageHeader} from "@/components/page-header";
+import { MetaBarChart, type MetaBarEntry } from "@/components/pvp/meta-bar-chart";
 import type {Metadata} from "next";
 
 type Bracket =
@@ -48,7 +49,7 @@ async function fetchClassDistribution(params: {
     url.searchParams.set("bracket", params.bracket);
     url.searchParams.set("region", params.region);
 
-    const res = await fetch(url.toString(), {cache: "no-store"});
+    const res = await fetch(url.toString(), { next: { revalidate: 300 } });
     if (!res.ok) {
         throw new Error(`Backend request failed: ${res.status} ${res.statusText}`);
     }
@@ -79,6 +80,23 @@ export default async function PvpBracketPage({params, searchParams}: PageProps) 
     const topRows = (Array.isArray(data?.classes) ? data.classes : [])
         .slice()
         .sort((a: any, b: any) => (Number(b?.meta_score ?? 0) - Number(a?.meta_score ?? 0)));
+
+    // Pre-build lookup map to avoid O(n) WOW_CLASSES.find() inside the render loop
+    const classMap = new Map(WOW_CLASSES.map((c) => [c.slug, c]));
+    const maxScore = Number(topRows[0]?.meta_score ?? 1);
+    const barEntries: MetaBarEntry[] = topRows.map((row: any) => {
+        const classSlug = typeof row?.class === "string" ? normalizeClassSlug(row.class) : null;
+        const classConfig = classSlug ? classMap.get(classSlug as WowClassSlug) : undefined;
+        const specName = row?.spec ?? "";
+        const specConfig = classConfig?.specs.find((s) => normalizeSpecName(s.name) === normalizeSpecName(specName));
+        return {
+            key: `bar-${row?.class ?? "unknown"}-${row?.spec_id ?? ""}`,
+            specName,
+            percentage: (Number(row?.meta_score ?? 0) / maxScore) * 100,
+            color: classConfig?.color ?? "#888",
+            iconUrl: specConfig?.iconUrl,
+        };
+    });
 
     return (
         <>
@@ -116,40 +134,7 @@ export default async function PvpBracketPage({params, searchParams}: PageProps) 
                 <div className="rounded-lg flex flex-col flex-1 justify-center items-center py-4 min-h-[300px]">
                     <h2 className="text-lg font-semibold mb-4">Meta Score by Spec</h2>
                     <div className="w-full h-full flex items-center justify-center flex-1">
-                        <div className="flex flex-row gap-2 overflow-x-auto pb-2 h-full items-end justify-center flex-1">
-                            {topRows.map((row: any) => {
-                                const classSlug = typeof row?.class === "string" ? normalizeClassSlug(row.class) : null;
-                                const classConfig = classSlug
-                                    ? WOW_CLASSES.find((c) => c.slug === classSlug)
-                                    : undefined;
-                                const specConfig = classConfig?.specs.find((s) => normalizeSpecName(s.name) === normalizeSpecName(row?.spec ?? ""));
-                                const specName = row?.spec ?? "";
-                                const metaScore = Number(row?.meta_score ?? 0);
-                                const maxScore = Number(topRows[0]?.meta_score ?? 1);
-                                const percentage = (metaScore / maxScore) * 100;
-
-                                return (
-                                    <div key={`bar-${row?.class ?? "unknown"}-${row?.spec_id ?? ""}`} className="flex flex-col items-center min-w-12 w-12 h-[400px]">
-                                        <div className="flex flex-col items-center justify-end h-full w-full">
-                                            <div className="w-8 bg-muted rounded-full flex items-end h-full">
-                                                <div
-                                                    className="w-full rounded-full transition-all"
-                                                    style={{
-                                                        height: `${percentage}%`,
-                                                        backgroundColor: classConfig?.color ?? "#888",
-                                                        minHeight: '8px',
-                                                    }}
-                                                />
-                                            </div>
-                                        </div>
-                                        {specConfig?.iconUrl && (
-                                            <img src={specConfig.iconUrl} alt={specName} className="h-6 w-6 rounded-full mb-1 mt-2"/>
-                                        )}
-                                        <span className="font-medium text-[10px] text-center truncate max-w-[40px]">{specName}</span>
-                                    </div>
-                                );
-                            })}
-                        </div>
+                        <MetaBarChart entries={barEntries} />
                     </div>
                 </div>
             </section>
