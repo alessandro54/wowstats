@@ -4,12 +4,26 @@ import { TalentIcon } from "../talent-icon"
 import type { MetaTalent } from "@/lib/api"
 
 const mockTalent: MetaTalent = {
+  id: null,
   talent: {
+    id: 1,
     blizzard_id: 12345,
     name: "Test Talent",
+    description: null,
+    talent_type: "active",
+    spell_id: null,
+    node_id: null,
+    display_row: null,
+    display_col: null,
+    max_rank: 1,
     icon_url: "https://example.com/icon.jpg",
+    prerequisite_node_ids: [],
   },
+  usage_count: 10,
   usage_pct: 0.5,
+  in_top_build: false,
+  top_build_rank: 0,
+  snapshot_at: null,
 }
 
 describe("TalentIcon", () => {

@@ -1,6 +1,7 @@
-import { defineConfig } from "vitest/config";
+import { defineConfig, type Plugin } from "vitest/config";
 import react from "@vitejs/plugin-react";
-import { storybookTest } from "@storybook/experimental-addon-test/vitest-plugin";
+import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
+import { playwright } from "@vitest/browser-playwright";
 import path from "path";
 
 export default defineConfig({
@@ -29,12 +30,19 @@ export default defineConfig({
         resolve: {
           alias: { "@": path.resolve(__dirname, "./src") },
         },
-        plugins: [storybookTest({ configDir: ".storybook" })],
+        plugins: [
+          storybookTest({ configDir: path.resolve(__dirname, ".storybook") }) as unknown as Plugin,
+        ],
         test: {
           name: "storybook",
-          environment: "jsdom",
           globals: true,
           setupFiles: [".storybook/vitest.setup.ts"],
+          browser: {
+            enabled: true,
+            headless: true,
+            provider: playwright({ browser: "chromium", headless: true }),
+            instances: [{ browser: "chromium" }],
+          },
         },
       },
     ],

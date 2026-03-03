@@ -14,7 +14,7 @@ export function MetaBarChart({ entries }: { entries: MetaBarEntry[] }) {
   return (
     <div className="flex flex-row gap-2 overflow-x-auto pb-2 h-full items-end justify-center flex-1">
       {entries.map(({ key, specName, percentage, color, iconUrl }) => (
-        <div key={key} className="flex flex-col items-center min-w-12 w-12 h-[400px]">
+        <div key={key} className="flex flex-col items-center min-w-12 w-12 h-100">
           <div className="flex flex-col items-center justify-end h-full w-full">
             <div className="w-8 bg-muted rounded-full flex items-end h-full">
               <div
@@ -26,7 +26,7 @@ export function MetaBarChart({ entries }: { entries: MetaBarEntry[] }) {
           {iconUrl && (
             <Image src={iconUrl} alt={specName} className="h-6 w-6 rounded-full mb-1 mt-2" />
           )}
-          <span className="font-medium text-[10px] text-center truncate max-w-[40px]">{specName}</span>
+          <span className="font-medium text-[10px] text-center truncate max-w-10">{specName}</span>
         </div>
       ))}
     </div>
