@@ -1,6 +1,6 @@
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
-import { ThemeSwitcher } from "@/components/theme-switcher"
+import { ThemeSwitcher } from "@/components/atoms/theme-switcher"
 
 type Props = {
   children?: React.ReactNode

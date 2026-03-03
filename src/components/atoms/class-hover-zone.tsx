@@ -1,6 +1,6 @@
 "use client"
 
-import { useHoverSlug } from "./hover-provider"
+import { useSetHoverSlug } from "@/components/providers/hover-provider"
 import type { WowClassSlug } from "@/config/wow/classes"
 import { cn } from "@/lib/utils"
 
@@ -11,7 +11,7 @@ type Props = {
 }
 
 export function ClassHoverZone({ slug, className, children }: Props) {
-  const { setSlug } = useHoverSlug()
+  const setSlug = useSetHoverSlug()
   return (
     <div
       className={cn(className)}

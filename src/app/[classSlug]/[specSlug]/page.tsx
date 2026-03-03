@@ -6,7 +6,7 @@ import {
   BreadcrumbSeparator,
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb"
-import { PageHeader } from "@/components/page-header"
+import { PageHeader } from "@/components/molecules/page-header"
 import { WOW_CLASSES } from "@/config/wow/classes"
 import { BRACKETS } from "@/config/wow/brackets"
 import { notFound } from "next/navigation"

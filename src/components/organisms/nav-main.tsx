@@ -23,8 +23,8 @@ import {
 import Image from "next/image"
 import Link from "next/link"
 import { navMain } from "@/config/wow/nav"
-import { useSetHoverSlug } from "./wow/hover-provider"
-import { NavClassHoverCard } from "@/components/nav-class-hover-card"
+import { useSetHoverSlug } from "@/components/providers/hover-provider"
+import { NavClassHoverCard } from "@/components/molecules/nav-class-hover-card"
 import type { WowClassSlug } from "@/config/wow/classes"
 
 export function NavMain() {

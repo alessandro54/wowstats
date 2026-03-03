@@ -1,11 +1,11 @@
 "use client"
 
-import { APEX_EXTRA, BORDER_BIS, BORDER_SITUATIONAL, CELL_SIZE, NODE_SIZE, buildEdgeSet, buildNodeMap, buildTopNodeIds } from "./talent-tree-utils"
+import { APEX_EXTRA, BORDER_BIS, BORDER_SITUATIONAL, CELL_SIZE, NODE_SIZE, buildEdgeSet, buildNodeMap, buildTopNodeIds } from "@/lib/talent-tree-utils"
 import type { MetaTalent } from "@/lib/api"
-import { TalentEdges } from "./talent-tree-edges"
-import { TalentNodeCard } from "./talent-tree-node"
+import { TalentEdges } from "@/components/molecules/talent-tree-edges"
+import { TalentNodeCard } from "@/components/molecules/talent-tree-node"
 
-export { hasTreeData } from "./talent-tree-utils"
+export { hasTreeData } from "@/lib/talent-tree-utils"
 
 export function TalentTree({
   talents,
@@ -31,10 +31,15 @@ export function TalentTree({
 
   const topNodeIds = budget ? buildTopNodeIds(nodes, budget) : new Set<number>()
 
-  const minRow = Math.min(...nodes.map((n) => n.row))
-  const minCol = Math.min(...nodes.map((n) => n.col))
-  const maxRow = Math.max(...nodes.map((n) => n.row))
-  const maxCol = Math.max(...nodes.map((n) => n.col))
+  // Normalize rows and cols to contiguous indices so gaps in Blizzard's
+  // display_row / display_col values don't produce extra whitespace.
+  const uniqueRows = [...new Set(nodes.map((n) => n.row))].sort((a, b) => a - b)
+  const uniqueCols = [...new Set(nodes.map((n) => n.col))].sort((a, b) => a - b)
+  const rowIdx = new Map(uniqueRows.map((r, i) => [r, i]))
+  const colIdx = new Map(uniqueCols.map((c, i) => [c, i]))
+
+  const minRow = uniqueRows[0]
+  const maxRow = uniqueRows[uniqueRows.length - 1]
 
   const rowCounts = new Map<number, number>()
   for (const node of nodes) {
@@ -45,15 +50,15 @@ export function TalentTree({
   const botApex = rowCounts.get(maxRow) === 1
   const extra   = apexExtra ? APEX_EXTRA : 0
 
-  const svgW = (maxCol - minCol) * CELL_SIZE + NODE_SIZE
-  const svgH = (maxRow - minRow) * CELL_SIZE + NODE_SIZE +
+  const svgW = (uniqueCols.length - 1) * CELL_SIZE + NODE_SIZE
+  const svgH = (uniqueRows.length - 1) * CELL_SIZE + NODE_SIZE +
     (topApex ? extra : 0) + (botApex ? extra : 0)
 
-  const cx    = (col: number) => (col - minCol) * CELL_SIZE + NODE_SIZE / 2
+  const cx    = (col: number) => colIdx.get(col)! * CELL_SIZE + NODE_SIZE / 2
   const nodeY = (row: number) => {
     if (topApex && row === minRow) return NODE_SIZE / 2
     if (botApex && row === maxRow) return svgH - NODE_SIZE / 2
-    return (row - minRow) * CELL_SIZE + NODE_SIZE / 2 + (topApex ? extra : 0)
+    return rowIdx.get(row)! * CELL_SIZE + NODE_SIZE / 2 + (topApex ? extra : 0)
   }
   const nodeCX = (node: { row: number; col: number }) =>
     (node.row === minRow || node.row === maxRow) && rowCounts.get(node.row) === 1
@@ -63,8 +68,8 @@ export function TalentTree({
   const edgeSet = buildEdgeSet(talents)
 
   return (
-    <>
-      <div className="flex justify-center lg:justify-start [zoom:0.9] lg:[zoom:1]">
+    <div className="flex flex-col h-full min-h-0">
+      <div className="flex justify-center">
         <div className="relative" style={{ width: svgW, height: svgH }}>
           <TalentEdges
             edgeSet={edgeSet}
@@ -92,8 +97,9 @@ export function TalentTree({
           ))}
         </div>
       </div>
+
       {budget && (
-        <div className="flex gap-5 justify-center lg:justify-start text-[11px] text-muted-foreground mt-5">
+        <div className="mt-auto pt-5 flex gap-5 justify-center lg:justify-start text-[11px] text-muted-foreground">
           <div className="flex items-center gap-1.5">
             <div className={`w-3 h-3 rounded border-2 shrink-0 ${BORDER_BIS}`} />
             BIS
@@ -104,6 +110,6 @@ export function TalentTree({
           </div>
         </div>
       )}
-    </>
+    </div>
   )
 }

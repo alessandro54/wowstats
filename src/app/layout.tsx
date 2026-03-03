@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
-import DynamicBackground from "@/components/dynamic-background";
-import { AppSidebar } from "@/components/app-sidebar"
+import { ThemeProvider } from "@/components/providers/theme-provider";
+import DynamicBackground from "@/components/organisms/dynamic-background";
+import { AppSidebar } from "@/components/organisms/app-sidebar"
 import {
   SidebarInset,
   SidebarProvider,
 } from "@/components/ui/sidebar"
-import { HoverProvider } from "@/components/wow/hover-provider";
+import { HoverProvider } from "@/components/providers/hover-provider";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:5123"),

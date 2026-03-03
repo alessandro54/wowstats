@@ -1,17 +1,10 @@
 "use client"
 
 import Image from "next/image"
-import { useState, type ReactNode } from "react"
 import type { MetaGem } from "@/lib/api"
-import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
-import { QUALITY_COLORS, getStatMeta } from "./equipment-config"
+import { QUALITY_COLORS, getStatMeta } from "@/lib/equipment-config"
 
 export type DistEntry = { name: string; icon_url?: string | null; quality?: string; pct: number }
-
-// backdrop-blur must live on an inner element — placing it on TooltipContent
-// creates a CSS isolation context that clips the Radix Arrow overflow.
-const tooltipInnerClass = "bg-card/30 backdrop-blur-2xl text-card-foreground border border-border/40 shadow-lg rounded-[inherit] px-3 py-1.5"
-const tooltipArrowClass = "fill-slate-200 dark:fill-zinc-700"
 
 function DistList({ entries }: { entries: DistEntry[] }) {
   return (
@@ -78,24 +71,5 @@ export function DistributionTooltip({ entries, enchantEntries, activeColor, craf
         </div>
       )}
     </div>
-  )
-}
-
-export function ClickableTooltip({ children, content, side, align }: {
-  children: ReactNode
-  content: ReactNode
-  side: "left" | "bottom" | "top" | "right"
-  align: "center" | "end" | "start"
-}) {
-  const [open, setOpen] = useState(false)
-  return (
-    <Tooltip open={open} onOpenChange={setOpen}>
-      <TooltipTrigger asChild onClick={() => setOpen((v) => !v)}>
-        {children}
-      </TooltipTrigger>
-      <TooltipContent side={side} align={align} sideOffset={8} className="bg-transparent border-0 shadow-none p-0" arrowClassName={tooltipArrowClass}>
-        <div className={tooltipInnerClass}>{content}</div>
-      </TooltipContent>
-    </Tooltip>
   )
 }

@@ -8,8 +8,8 @@ import {
     BreadcrumbPage
 } from "@/components/ui/breadcrumb";
 import {WOW_CLASSES, type WowClassSlug} from "@/config/wow/classes";
-import {PageHeader} from "@/components/page-header";
-import { MetaBarChart, type MetaBarEntry } from "@/components/pvp/meta-bar-chart";
+import {PageHeader} from "@/components/molecules/page-header";
+import { MetaBarChart, type MetaBarEntry } from "@/components/molecules/meta-bar-chart";
 import type {Metadata} from "next";
 
 type Bracket =

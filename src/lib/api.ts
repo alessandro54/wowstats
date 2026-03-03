@@ -74,6 +74,7 @@ export type MetaTalent = {
     id: number
     blizzard_id: number
     name: string
+    description: string | null
     talent_type: string
     spell_id: number | null
     node_id: number | null
@@ -83,10 +84,11 @@ export type MetaTalent = {
     icon_url: string | null
     prerequisite_node_ids: number[]
   }
-  usage_count:  number
-  usage_pct:    number
-  in_top_build: boolean
-  snapshot_at:  string | null
+  usage_count:    number
+  usage_pct:      number
+  in_top_build:   boolean
+  top_build_rank: number
+  snapshot_at:    string | null
 }
 
 export function fetchTalents(bracket: string, specId: number): Promise<MetaTalent[]> {

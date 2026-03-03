@@ -1,6 +1,6 @@
 "use client"
 
-import { useHoverSlug } from "@/components/wow/hover-provider"
+import { useHoverSlug } from "@/components/providers/hover-provider"
 import type { WowClassSlug } from "@/config/wow/classes"
 
 export function classColor(slug: WowClassSlug | null | undefined): string | undefined {

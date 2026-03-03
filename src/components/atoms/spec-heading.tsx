@@ -13,7 +13,6 @@ function isSoloShuffle(bracketSlug: string) {
   return bracketSlug.toLowerCase().includes('shuffle')
 }
 
-
 export function SpecHeading({ className, classSlug, specSlug }: Props) {
   const bracket = usePathname().split('/')[4] ?? ''
   return (

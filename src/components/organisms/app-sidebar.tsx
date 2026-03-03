@@ -3,15 +3,12 @@
 import * as React from "react"
 import {
   AudioWaveform,
-  BookOpen,
-  Bot,
   Command,
-  Frame,
   GalleryVerticalEnd,
 } from "lucide-react"
 
-import { NavMain } from "@/components/nav-main"
-import { TeamSwitcher } from "@/components/team-switcher"
+import { NavMain } from "@/components/organisms/nav-main"
+import { TeamSwitcher } from "@/components/molecules/team-switcher"
 import {
   Sidebar,
   SidebarContent,

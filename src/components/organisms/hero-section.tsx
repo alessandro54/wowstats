@@ -2,8 +2,8 @@
 
 import type { MetaTalent } from "@/lib/api"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-import { TalentTree, hasTreeData } from "./talent-tree"
-import { TalentList } from "./talent-list"
+import { TalentTree, hasTreeData } from "@/components/organisms/talent-tree"
+import { TalentList } from "@/components/molecules/talent-list"
 
 // Split hero talents into separate sub-trees via connected-component BFS.
 // Hero trees share no prerequisite edges between them, so components = trees.

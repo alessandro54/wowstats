@@ -7,9 +7,9 @@ import {
   BreadcrumbSeparator,
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb"
-import { BracketSelector } from "@/components/pvp/bracket-selector"
-import { PageHeader } from "@/components/page-header"
-import { SpecHeading } from "@/components/pvp/spec-heading"
+import { BracketSelector } from "@/components/molecules/bracket-selector"
+import { PageHeader } from "@/components/molecules/page-header"
+import { SpecHeading } from "@/components/atoms/spec-heading"
 import { notFound } from "next/navigation"
 
 type Props = {

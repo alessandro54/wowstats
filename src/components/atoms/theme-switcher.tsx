@@ -5,7 +5,7 @@ import { Monitor, Sun, Moon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useEffect, useState, useMemo } from "react"
 import { usePathname } from "next/navigation"
-import { useHoverSlug } from "@/components/wow/hover-provider"
+import { useHoverSlug } from "@/components/providers/hover-provider"
 
 const OPTIONS = [
   { value: "system", icon: Monitor },

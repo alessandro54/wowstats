@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import type { WowClassSlug } from "@/config/wow/classes";
-import { useHoverSlug } from "./wow/hover-provider";
+import { useHoverSlug } from "@/components/providers/hover-provider";
 
 export default function DynamicBackground() {
   const hoverSlug = useHoverSlug();
