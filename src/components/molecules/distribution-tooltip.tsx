@@ -9,8 +9,8 @@ export interface DistEntry { name: string, icon_url?: string | null, quality?: s
 function DistList({ entries }: { entries: DistEntry[] }) {
   return (
     <div className="space-y-1">
-      {entries.map((e, i) => (
-        <div key={i} className="flex items-center gap-1.5">
+      {entries.map(e => (
+        <div key={e.name} className="flex items-center gap-1.5">
           {e.icon_url && (
             <Image
               src={e.icon_url}
@@ -39,7 +39,7 @@ function DistList({ entries }: { entries: DistEntry[] }) {
 export function DistributionTooltip({
   entries,
   enchantEntries,
-  _activeColor,
+  activeColor: _activeColor,
   craftingStats,
   fiberGems,
 }: {
