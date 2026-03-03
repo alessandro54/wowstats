@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { ThemeSwitcher } from "../../components/atoms/theme-switcher";
+import type { Meta, StoryObj } from "@storybook/react-vite"
+import { ThemeSwitcher } from "../../components/atoms/theme-switcher"
 
 const meta = {
   title: "Atoms/ThemeSwitcher",
@@ -13,10 +13,10 @@ const meta = {
       },
     },
   },
-} satisfies Meta<typeof ThemeSwitcher>;
+} satisfies Meta<typeof ThemeSwitcher>
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   parameters: {
@@ -26,7 +26,7 @@ export const Default: Story = {
       },
     },
   },
-};
+}
 
 export const InContext: Story = {
   parameters: {
@@ -37,9 +37,9 @@ export const InContext: Story = {
     },
   },
   render: () => (
-    <div className="flex items-center justify-between rounded border bg-card p-4">
+    <div className="bg-card flex items-center justify-between rounded border p-4">
       <div className="text-sm font-medium">WoW BIS</div>
       <ThemeSwitcher />
     </div>
   ),
-};
+}

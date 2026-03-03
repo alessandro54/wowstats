@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { TalentIcon } from "../../components/atoms/talent-icon";
+import type { Meta, StoryObj } from "@storybook/react-vite"
+import { TalentIcon } from "../../components/atoms/talent-icon"
 
 const sampleTalent = {
   id: 1,
@@ -22,7 +22,7 @@ const sampleTalent = {
   in_top_build: true,
   top_build_rank: 1,
   snapshot_at: "2026-03-02T00:00:00Z",
-};
+}
 
 const meta = {
   title: "Atoms/TalentIcon",
@@ -61,10 +61,10 @@ const meta = {
     tooltipContent: "Mortal Strike · 74.2%",
     partialRank: false,
   },
-} satisfies Meta<typeof TalentIcon>;
+} satisfies Meta<typeof TalentIcon>
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   parameters: {
@@ -74,7 +74,7 @@ export const Default: Story = {
       },
     },
   },
-};
+}
 
 export const PartialRank: Story = {
   args: {
@@ -83,11 +83,12 @@ export const PartialRank: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Diagonal clip shows only bottom-right border, indicating this talent is partially ranked (e.g., 1/2 points).",
+        story:
+          "Diagonal clip shows only bottom-right border, indicating this talent is partially ranked (e.g., 1/2 points).",
       },
     },
   },
-};
+}
 
 export const WithoutTooltip: Story = {
   args: {
@@ -100,7 +101,7 @@ export const WithoutTooltip: Story = {
       },
     },
   },
-};
+}
 
 export const SizeVariants: Story = {
   args: {
@@ -117,7 +118,7 @@ export const SizeVariants: Story = {
   },
   render: () => (
     <div className="flex items-end gap-4">
-      {[32, 48, 56, 64, 80].map((size) => (
+      {[32, 48, 56, 64, 80].map(size => (
         <div key={size} className="flex flex-col items-center gap-2">
           <TalentIcon
             talent={sampleTalent}
@@ -125,12 +126,15 @@ export const SizeVariants: Story = {
             activeColor="#c79c6e"
             tooltipContent={`${size}px`}
           />
-          <span className="text-xs text-muted-foreground">{size}px</span>
+          <span className="text-muted-foreground text-xs">
+            {size}
+            px
+          </span>
         </div>
       ))}
     </div>
   ),
-};
+}
 
 export const ColorVariants: Story = {
   args: {
@@ -156,15 +160,10 @@ export const ColorVariants: Story = {
         { name: "Death Knight", color: "#c41f3b" },
       ].map(({ name, color }) => (
         <div key={name} className="flex flex-col items-center gap-2">
-          <TalentIcon
-            talent={sampleTalent}
-            size={56}
-            activeColor={color}
-            tooltipContent={name}
-          />
-          <span className="text-xs text-muted-foreground">{name}</span>
+          <TalentIcon talent={sampleTalent} size={56} activeColor={color} tooltipContent={name} />
+          <span className="text-muted-foreground text-xs">{name}</span>
         </div>
       ))}
     </div>
   ),
-};
+}

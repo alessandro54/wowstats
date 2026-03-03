@@ -1,4 +1,4 @@
-import { WowClassConfig } from ".";
+import type { WowClassConfig } from "./classes-config"
 
 const PaladinConfig: WowClassConfig = {
   id: 2,
@@ -29,4 +29,4 @@ const PaladinConfig: WowClassConfig = {
   ],
 }
 
-export default PaladinConfig;
+export default PaladinConfig

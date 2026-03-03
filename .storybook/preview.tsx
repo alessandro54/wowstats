@@ -1,8 +1,8 @@
-import type { Preview } from "@storybook/react-vite";
-import { withThemeByClassName } from "@storybook/addon-themes";
-import "../src/app/globals.css";
-import { ThemeProvider } from "../src/components/providers/theme-provider";
-import { HoverProvider } from "../src/components/providers/hover-provider";
+import type { Preview } from "@storybook/react-vite"
+import { withThemeByClassName } from "@storybook/addon-themes"
+import { HoverProvider } from "../src/components/providers/hover-provider"
+import { ThemeProvider } from "../src/components/providers/theme-provider"
+import "../src/app/globals.css"
 
 const preview: Preview = {
   decorators: [
@@ -13,7 +13,7 @@ const preview: Preview = {
       },
       defaultTheme: "dark",
     }),
-    (Story) => (
+    Story => (
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <HoverProvider>
           <Story />
@@ -29,6 +29,6 @@ const preview: Preview = {
       },
     },
   },
-};
+}
 
-export default preview;
+export default preview

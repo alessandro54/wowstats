@@ -1,7 +1,22 @@
-import { render } from "@testing-library/react"
-import { describe, it, expect } from "vitest"
-import { TalentIcon } from "../talent-icon"
 import type { MetaTalent } from "@/lib/api"
+import { render } from "@testing-library/react"
+import { describe, expect, it, vi } from "vitest"
+import { TalentIcon } from "../talent-icon"
+
+vi.mock("@/components/atoms/clickable-tooltip", () => ({
+  ClickableTooltip: ({
+    children,
+    content,
+  }: {
+    children: React.ReactNode
+    content: React.ReactNode
+  }) => (
+    <div data-testid="clickable-tooltip">
+      {children}
+      {content}
+    </div>
+  ),
+}))
 
 const mockTalent: MetaTalent = {
   id: null,
@@ -26,20 +41,16 @@ const mockTalent: MetaTalent = {
   snapshot_at: null,
 }
 
-describe("TalentIcon", () => {
+describe("talentIcon", () => {
   it("renders talent icon element with correct id", () => {
-    const { container } = render(
-      <TalentIcon talent={mockTalent} size={48} activeColor="#ff0000" />
-    )
+    const { container } = render(<TalentIcon talent={mockTalent} size={48} activeColor="#ff0000" />)
 
     const iconElement = container.querySelector("#talent-12345")
     expect(iconElement).toBeInTheDocument()
   })
 
   it("applies correct size dimensions", () => {
-    const { container } = render(
-      <TalentIcon talent={mockTalent} size={64} activeColor="#ff0000" />
-    )
+    const { container } = render(<TalentIcon talent={mockTalent} size={64} activeColor="#ff0000" />)
 
     const iconElement = container.querySelector("div[style*='width']")
     expect(iconElement).toHaveStyle("width: 64px")
@@ -47,9 +58,7 @@ describe("TalentIcon", () => {
   })
 
   it("applies activeColor when borderClass is not provided", () => {
-    const { container } = render(
-      <TalentIcon talent={mockTalent} size={48} activeColor="#00ff00" />
-    )
+    const { container } = render(<TalentIcon talent={mockTalent} size={48} activeColor="#00ff00" />)
 
     const iconElement = container.querySelector("#talent-12345")
     expect(iconElement).toBeInTheDocument()
@@ -65,7 +74,7 @@ describe("TalentIcon", () => {
         size={48}
         activeColor="#ff0000"
         borderClass="border-purple-500"
-      />
+      />,
     )
 
     const borderDiv = container.querySelector(".border-purple-500")
@@ -74,12 +83,7 @@ describe("TalentIcon", () => {
 
   it("applies partial rank diagonal clip when partialRank is true", () => {
     const { container } = render(
-      <TalentIcon
-        talent={mockTalent}
-        size={48}
-        activeColor="#ff0000"
-        partialRank={true}
-      />
+      <TalentIcon talent={mockTalent} size={48} activeColor="#ff0000" partialRank={true} />,
     )
 
     const iconElement = container.querySelector("#talent-12345")
@@ -90,12 +94,39 @@ describe("TalentIcon", () => {
     expect(style).toContain("polygon(100% 0, 100% 100%, 0 100%)")
   })
 
+  it("renders grey placeholder when icon_url is null", () => {
+    const nullIconTalent: MetaTalent = {
+      ...mockTalent,
+      talent: { ...mockTalent.talent, icon_url: null as unknown as string },
+    }
+    const { container } = render(
+      <TalentIcon talent={nullIconTalent} size={48} activeColor="#ff0000" />,
+    )
+    // No img element rendered when icon_url is null
+    expect(container.querySelector("img")).not.toBeInTheDocument()
+    // The placeholder div with rounded class is present
+    const placeholder = container.querySelector(".w-full.h-full.rounded")
+    expect(placeholder).toBeInTheDocument()
+  })
+
+  it("wraps in ClickableTooltip when tooltipContent is provided", () => {
+    const { getByTestId } = render(
+      <TalentIcon
+        talent={mockTalent}
+        size={48}
+        activeColor="#ff0000"
+        tooltipContent={<span>tooltip text</span>}
+      />,
+    )
+    expect(getByTestId("clickable-tooltip")).toBeInTheDocument()
+  })
+
   it("handles different sizes correctly", () => {
     const sizes = [32, 44, 48, 64]
 
     sizes.forEach((size) => {
       const { container, unmount } = render(
-        <TalentIcon talent={mockTalent} size={size} activeColor="#ff0000" />
+        <TalentIcon talent={mockTalent} size={size} activeColor="#ff0000" />,
       )
 
       const iconElement = container.querySelector("div[style*='width']")

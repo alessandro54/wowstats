@@ -1,6 +1,6 @@
 const BACKEND_URL = process.env.BACKEND_URL ?? "http://localhost:3000"
 
-export type MetaItem = {
+export interface MetaItem {
   id: number
   item: {
     id: number
@@ -17,7 +17,7 @@ export type MetaItem = {
   top_crafting_stats: string[]
 }
 
-export type MetaEnchant = {
+export interface MetaEnchant {
   id: number
   enchantment: {
     id: number
@@ -30,7 +30,7 @@ export type MetaEnchant = {
   snapshot_at: string
 }
 
-export type MetaGem = {
+export interface MetaGem {
   id: number
   item: {
     id: number
@@ -52,7 +52,8 @@ async function apiFetch<T>(path: string, params: Record<string, string>): Promis
     url.searchParams.set(key, value)
   }
   const res = await fetch(url.toString(), { next: { revalidate: 300 } })
-  if (!res.ok) throw new Error(`Backend ${path} failed: ${res.status} ${res.statusText}`)
+  if (!res.ok)
+    throw new Error(`Backend ${path} failed: ${res.status} ${res.statusText}`)
   return res.json() as Promise<T>
 }
 
@@ -68,7 +69,7 @@ export function fetchGems(bracket: string, specId: number): Promise<MetaGem[]> {
   return apiFetch("/api/v1/pvp/meta/gems", { bracket, spec_id: String(specId) })
 }
 
-export type MetaTalent = {
+export interface MetaTalent {
   id: number | null
   talent: {
     id: number
@@ -84,11 +85,11 @@ export type MetaTalent = {
     icon_url: string | null
     prerequisite_node_ids: number[]
   }
-  usage_count:    number
-  usage_pct:      number
-  in_top_build:   boolean
+  usage_count: number
+  usage_pct: number
+  in_top_build: boolean
   top_build_rank: number
-  snapshot_at:    string | null
+  snapshot_at: string | null
 }
 
 export function fetchTalents(bracket: string, specId: number): Promise<MetaTalent[]> {

@@ -1,6 +1,6 @@
-import { setProjectAnnotations } from "@storybook/react-vite";
-import * as previewAnnotations from "./preview";
+import { setProjectAnnotations } from "@storybook/react-vite"
+import * as previewAnnotations from "./preview"
 
-const project = setProjectAnnotations([previewAnnotations]);
+const project = setProjectAnnotations([previewAnnotations])
 
-beforeAll(project.beforeAll);
+beforeAll(project.beforeAll)

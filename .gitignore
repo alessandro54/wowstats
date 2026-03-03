@@ -17,6 +17,10 @@
 /.next/
 /out/
 
+#storybook
+/storybook-static
+*storybook.log
+
 # production
 /build
 

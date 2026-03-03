@@ -1,5 +1,5 @@
-import { CDN_BASE } from "@/config/cdn";
-import { WowClassConfig } from "@/config/wow/classes/index";
+import type { WowClassConfig } from "./classes-config"
+import { CDN_BASE } from "@/config/cdn-config"
 
 const HunterConfig: WowClassConfig = {
   id: 3,
@@ -13,7 +13,8 @@ const HunterConfig: WowClassConfig = {
       id: 253,
       name: "beast-mastery",
       url: "/hunter/beast-mastery",
-      iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_hunter_bestialdiscipline.jpg",
+      iconUrl:
+        "https://render.worldofwarcraft.com/us/icons/56/ability_hunter_bestialdiscipline.jpg",
       iconRemasteredUrl: `${CDN_BASE}/icons-remastered/hunter_beastmastery.png`,
     },
     {

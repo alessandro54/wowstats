@@ -4,7 +4,7 @@ This directory contains Storybook stories for the WoW BIS UI components, organiz
 
 ## Structure
 
-```
+```text
 stories/
 ├── atoms/          # Smallest UI building blocks
 │   ├── class-hover-zone.stories.tsx
@@ -21,51 +21,63 @@ stories/
 ## Atoms
 
 ### ClassHoverZone
+
 Wrapper component that updates global hover context for synchronized class color effects across the UI.
 
 **Key Features:**
+
 - Updates global hover state on mouse enter/leave
 - Works with HoverProvider context
 - Visual state indicator in stories
 
 ### ClickableTooltip
+
 Toggle-on-click tooltip component wrapping Radix UI Tooltip.
 
 **Key Features:**
+
 - Controlled open/close state
 - Click to toggle (vs. hover-only)
 - Supports all Radix placement options
 - Rich content support
 
 ### SpecHeading
+
 Displays class/spec heading with bracket information.
 
 **Key Features:**
+
 - Class-specific color theming via CSS variables
 - Extracts bracket from URL pathname
 - Auto-formats "Solo Shuffle" vs standard bracket names
 
 ### StickySpecHeader
+
 Sticky header with progressive backdrop blur effect on scroll.
 
 **Key Features:**
+
 - CSS custom property for opacity (`--header-bg-opacity`)
 - Dynamic backdrop-filter blur
 - Smooth transitions based on scroll position
 
 ### TalentIcon
+
 WoW talent icon display with optional tooltip and rank indicators.
 
 **Key Features:**
+
 - Configurable size and border color
 - Partial rank visualization (diagonal clip)
 - Optional clickable tooltip integration
 - Image optimization via Next.js Image
 
 ### ThemeSwitcher
+
 Three-way theme toggle (System, Light, Dark).
 
 **Key Features:**
+
 - next-themes integration
 - Class-aware border coloring (reacts to hover state)
 - Mounted state check to prevent hydration mismatch
@@ -96,8 +108,8 @@ Browse to http://localhost:6006
 ### Example Template
 
 ```tsx
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { MyComponent } from "../../components/atoms/my-component";
+import type { Meta, StoryObj } from "@storybook/react-vite"
+import { MyComponent } from "../../components/atoms/my-component"
 
 const meta = {
   title: "Atoms/MyComponent",
@@ -117,16 +129,16 @@ const meta = {
       description: "What this prop controls",
     },
   },
-} satisfies Meta<typeof MyComponent>;
+} satisfies Meta<typeof MyComponent>
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
     propName: "option1",
   },
-};
+}
 
 export const Variant: Story = {
   args: {
@@ -139,12 +151,13 @@ export const Variant: Story = {
       },
     },
   },
-};
+}
 ```
 
 ## Testing Philosophy
 
 Stories serve as:
+
 - **Visual regression tests** (via Storybook visual testing)
 - **Component documentation** (via autodocs)
 - **Development sandbox** (interactive controls)

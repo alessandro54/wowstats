@@ -1,5 +1,5 @@
-import { CDN_BASE } from "@/config/cdn";
-import { WowClassConfig } from "@/config/wow/classes/index";
+import type { WowClassConfig } from "./classes-config"
+import { CDN_BASE } from "@/config/cdn-config"
 
 const ShamanConfig: WowClassConfig = {
   id: 7,
@@ -20,7 +20,8 @@ const ShamanConfig: WowClassConfig = {
       id: 263,
       name: "enhancement",
       url: "/shaman/enhancement",
-      iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_shaman_improvedstormstrike.jpg",
+      iconUrl:
+        "https://render.worldofwarcraft.com/us/icons/56/spell_shaman_improvedstormstrike.jpg",
       iconRemasteredUrl: `${CDN_BASE}/icons-remastered/shaman_enhancement.png`,
     },
     {

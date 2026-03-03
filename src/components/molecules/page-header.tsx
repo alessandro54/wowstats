@@ -1,23 +1,19 @@
-import { SidebarTrigger } from "@/components/ui/sidebar"
-import { Separator } from "@/components/ui/separator"
 import { ThemeSwitcher } from "@/components/atoms/theme-switcher"
+import { Separator } from "@/components/ui/separator"
+import { SidebarTrigger } from "@/components/ui/sidebar"
 
-type Props = {
+interface Props {
   children?: React.ReactNode
   centerSlot?: React.ReactNode
 }
 
 export function PageHeader({ children, centerSlot }: Props) {
   return (
-    <header className="bg-background/40 backdrop-blur-md sticky top-0 z-20 flex shrink-0 items-center gap-2 border-b p-4 h-[60px]">
+    <header className="bg-background/40 sticky top-0 z-20 flex h-[60px] shrink-0 items-center gap-2 border-b p-4 backdrop-blur-md">
       <SidebarTrigger className="-ml-1" />
       <Separator orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4" />
-      <div className="hidden sm:flex flex-1 min-w-0 items-center">
-        {children}
-      </div>
-      {centerSlot && (
-        <div className="flex flex-1 justify-center">{centerSlot}</div>
-      )}
+      <div className="hidden min-w-0 flex-1 items-center sm:flex">{children}</div>
+      {centerSlot && <div className="flex flex-1 justify-center">{centerSlot}</div>}
       {!centerSlot && <div className="flex-1" />}
       <div className="hidden sm:block">
         <ThemeSwitcher />

@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 
-export type MetaBarEntry = {
+export interface MetaBarEntry {
   key: string
   specName: string
   percentage: number
@@ -12,11 +12,11 @@ export type MetaBarEntry = {
 
 export function MetaBarChart({ entries }: { entries: MetaBarEntry[] }) {
   return (
-    <div className="flex flex-row gap-2 overflow-x-auto pb-2 h-full items-end justify-center flex-1">
+    <div className="flex h-full flex-1 flex-row items-end justify-center gap-2 overflow-x-auto pb-2">
       {entries.map(({ key, specName, percentage, color, iconUrl }) => (
-        <div key={key} className="flex flex-col items-center min-w-12 w-12 h-100">
-          <div className="flex flex-col items-center justify-end h-full w-full">
-            <div className="w-8 bg-muted rounded-full flex items-end h-full">
+        <div key={key} className="flex h-100 w-12 min-w-12 flex-col items-center">
+          <div className="flex h-full w-full flex-col items-center justify-end">
+            <div className="bg-muted flex h-full w-8 items-end rounded-full">
               <div
                 className="w-full rounded-full"
                 style={{ height: `${percentage}%`, backgroundColor: color, minHeight: "8px" }}
@@ -24,9 +24,9 @@ export function MetaBarChart({ entries }: { entries: MetaBarEntry[] }) {
             </div>
           </div>
           {iconUrl && (
-            <Image src={iconUrl} alt={specName} className="h-6 w-6 rounded-full mb-1 mt-2" />
+            <Image src={iconUrl} alt={specName} className="mt-2 mb-1 h-6 w-6 rounded-full" />
           )}
-          <span className="font-medium text-[10px] text-center truncate max-w-10">{specName}</span>
+          <span className="max-w-10 truncate text-center text-[10px] font-medium">{specName}</span>
         </div>
       ))}
     </div>

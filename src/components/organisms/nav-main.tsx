@@ -1,13 +1,15 @@
 "use client"
 
-import { useState, useRef, useCallback } from "react"
+import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { ChevronRight } from "lucide-react"
 
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+import Image from "next/image"
+import Link from "next/link"
+
+import { useCallback, useRef, useState } from "react"
+import { NavClassHoverCard } from "@/components/molecules/nav-class-hover-card"
+import { useSetHoverSlug } from "@/components/providers/hover-provider"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -19,13 +21,7 @@ import {
   SidebarMenuSubItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-
-import Image from "next/image"
-import Link from "next/link"
-import { navMain } from "@/config/wow/nav"
-import { useSetHoverSlug } from "@/components/providers/hover-provider"
-import { NavClassHoverCard } from "@/components/molecules/nav-class-hover-card"
-import type { WowClassSlug } from "@/config/wow/classes"
+import { navMain } from "@/config/wow/nav-config"
 
 export function NavMain() {
   const setSlug = useSetHoverSlug()
@@ -34,22 +30,29 @@ export function NavMain() {
   const prefetchedRef = useRef<Set<string>>(new Set())
   const { open: sidebarOpen } = useSidebar()
 
-  const handleItemEnter = useCallback((item: typeof navMain[number]) => {
-    if (timerRef.current) clearTimeout(timerRef.current)
-    timerRef.current = setTimeout(() => {
-      setOpenSlug(item.slug)
-      setSlug(item.slug)
-      if (!prefetchedRef.current.has(item.slug)) {
-        prefetchedRef.current.add(item.slug)
-        item.items.forEach((spec) => {
-          fetch(`/api/prefetch/items?spec_id=${spec.id}&bracket=3v3`, { priority: "low" }).catch(() => {})
-        })
-      }
-    }, 80)
-  }, [setSlug])
+  const handleItemEnter = useCallback(
+    (item: (typeof navMain)[number]) => {
+      if (timerRef.current)
+        clearTimeout(timerRef.current)
+      timerRef.current = setTimeout(() => {
+        setOpenSlug(item.slug)
+        setSlug(item.slug)
+        if (!prefetchedRef.current.has(item.slug)) {
+          prefetchedRef.current.add(item.slug)
+          item.items.forEach((spec) => {
+            fetch(`/api/prefetch/items?spec_id=${spec.id}&bracket=3v3`, { priority: "low" }).catch(
+              () => {},
+            )
+          })
+        }
+      }, 80)
+    },
+    [setSlug],
+  )
 
   const handleMenuLeave = useCallback(() => {
-    if (timerRef.current) clearTimeout(timerRef.current)
+    if (timerRef.current)
+      clearTimeout(timerRef.current)
     setOpenSlug(null)
     setSlug(null)
   }, [setSlug])
@@ -58,29 +61,36 @@ export function NavMain() {
     <SidebarGroup>
       <SidebarGroupLabel>Guides</SidebarGroupLabel>
       <SidebarMenu onMouseLeave={handleMenuLeave}>
-        {navMain.map((item) => (
+        {navMain.map(item => (
           <Collapsible
             key={item.title}
             asChild
             open={openSlug === item.slug}
             className="group/collapsible"
-            onMouseEnter={() => handleItemEnter(item)}  // item ref is stable (navMain is a module-level const)
+            onMouseEnter={() => handleItemEnter(item)} // item ref is stable (navMain is a module-level const)
           >
             <SidebarMenuItem>
-              {sidebarOpen ? (
-                <CollapsibleTrigger asChild>
-                  <SidebarMenuButton tooltip={item.title}>
-                    <span className="icon-vignette rounded-full"><Image src={item.iconUrl} width={20} height={20} className="rounded-full block" alt={item.title} /></span>
-                    <span>{item.title}</span>
-                    <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                  </SidebarMenuButton>
-                </CollapsibleTrigger>
-              ) : (
-                <NavClassHoverCard
-                  item={item}
-                  onMouseEnter={() => setSlug(item.slug)}
-                />
-              )}
+              {sidebarOpen
+                ? (
+                    <CollapsibleTrigger asChild>
+                      <SidebarMenuButton tooltip={item.title}>
+                        <span className="icon-vignette rounded-full">
+                          <Image
+                            src={item.iconUrl}
+                            width={20}
+                            height={20}
+                            className="block rounded-full"
+                            alt={item.title}
+                          />
+                        </span>
+                        <span>{item.title}</span>
+                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                      </SidebarMenuButton>
+                    </CollapsibleTrigger>
+                  )
+                : (
+                    <NavClassHoverCard item={item} onMouseEnter={() => setSlug(item.slug)} />
+                  )}
               <CollapsibleContent>
                 <SidebarMenuSub>
                   {item.items?.map((subItem) => {
@@ -90,18 +100,26 @@ export function NavMain() {
                       <SidebarMenuSubItem key={subItem.title} className="group/spec">
                         <SidebarMenuSubButton asChild>
                           <Link href={subItem.url}>
-                            <span className="icon-vignette rounded-full"><Image src={subItem.iconUrl} width={16} height={16} className="rounded-full block" alt={subItem.title} /></span>
+                            <span className="icon-vignette rounded-full">
+                              <Image
+                                src={subItem.iconUrl}
+                                width={16}
+                                height={16}
+                                className="block rounded-full"
+                                alt={subItem.title}
+                              />
+                            </span>
                             <span className="capitalize">{subItem.title}</span>
                           </Link>
                         </SidebarMenuSubButton>
-                        <div className="grid grid-rows-[0fr] group-hover/spec:grid-rows-[1fr] transition-[grid-template-rows] duration-200 ease-out">
+                        <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-200 ease-out group-hover/spec:grid-rows-[1fr]">
                           <div className="overflow-hidden">
-                            <div className="flex justify-center gap-1 px-2 pb-1.5 pt-0.5 opacity-0 group-hover/spec:opacity-100 transition-opacity duration-150 delay-75">
-                              {(["2v2", "3v3", "shuffle"] as const).map((bracket) => (
+                            <div className="flex justify-center gap-1 px-2 pt-0.5 pb-1.5 opacity-0 transition-opacity delay-75 duration-150 group-hover/spec:opacity-100">
+                              {(["2v2", "3v3", "shuffle"] as const).map(bracket => (
                                 <Link
                                   key={bracket}
                                   href={`/${item.slug}/${subItem.title}/pvp/${bracket}`}
-                                  className="class-pill text-[10px] font-semibold px-1.5 py-0.5 rounded"
+                                  className="class-pill rounded px-1.5 py-0.5 text-[10px] font-semibold"
                                   style={pillStyle}
                                 >
                                   {bracket === "shuffle" ? "Solo" : bracket}

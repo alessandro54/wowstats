@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { ClassHoverZone } from "../../components/atoms/class-hover-zone";
-import { useHoverSlug } from "../../components/providers/hover-provider";
+import type { Meta, StoryObj } from "@storybook/react-vite"
+import { ClassHoverZone } from "../../components/atoms/class-hover-zone"
+import { useHoverSlug } from "../../components/providers/hover-provider"
 
 const meta = {
   title: "Atoms/ClassHoverZone",
@@ -17,7 +17,21 @@ const meta = {
   argTypes: {
     slug: {
       control: "select",
-      options: ["warrior", "paladin", "death-knight", "mage", "priest", "warlock", "rogue", "druid", "hunter", "shaman", "monk", "demon-hunter", "evoker"],
+      options: [
+        "warrior",
+        "paladin",
+        "death-knight",
+        "mage",
+        "priest",
+        "warlock",
+        "rogue",
+        "druid",
+        "hunter",
+        "shaman",
+        "monk",
+        "demon-hunter",
+        "evoker",
+      ],
       description: "WoW class slug that determines which class color to activate",
     },
     className: {
@@ -25,26 +39,28 @@ const meta = {
       description: "Optional CSS classes to apply to the wrapper div",
     },
   },
-} satisfies Meta<typeof ClassHoverZone>;
+} satisfies Meta<typeof ClassHoverZone>
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 /** Visual indicator to show current hover state */
 function HoverStateIndicator() {
-  const hoverSlug = useHoverSlug();
+  const hoverSlug = useHoverSlug()
   return (
-    <div className="fixed top-4 right-4 rounded border bg-background p-3 shadow-lg">
-      <div className="text-xs text-muted-foreground mb-1">Hover State:</div>
+    <div className="bg-background fixed top-4 right-4 rounded border p-3 shadow-lg">
+      <div className="text-muted-foreground mb-1 text-xs">Hover State:</div>
       <div className="font-mono text-sm">
-        {hoverSlug ? (
-          <span style={{ color: `var(--color-class-${hoverSlug})` }}>{hoverSlug}</span>
-        ) : (
-          <span className="text-muted-foreground">null</span>
-        )}
+        {hoverSlug
+          ? (
+              <span style={{ color: `var(--color-class-${hoverSlug})` }}>{hoverSlug}</span>
+            )
+          : (
+              <span className="text-muted-foreground">null</span>
+            )}
       </div>
     </div>
-  );
+  )
 }
 
 export const Default: Story = {
@@ -53,13 +69,13 @@ export const Default: Story = {
     className: "inline-block rounded border px-4 py-3 transition-colors hover:bg-muted",
     children: "Hover me to see Warrior class state",
   },
-  render: (args) => (
+  render: args => (
     <>
       <HoverStateIndicator />
       <ClassHoverZone {...args}>{args.children}</ClassHoverZone>
     </>
   ),
-};
+}
 
 export const MultipleClasses: Story = {
   args: {
@@ -69,7 +85,8 @@ export const MultipleClasses: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Multiple hover zones demonstrating different class colors. Hover over each to see the global state update.",
+        story:
+          "Multiple hover zones demonstrating different class colors. Hover over each to see the global state update.",
       },
     },
   },
@@ -77,18 +94,20 @@ export const MultipleClasses: Story = {
     <>
       <HoverStateIndicator />
       <div className="flex flex-wrap gap-3">
-        {["warrior", "paladin", "death-knight", "mage", "priest", "rogue", "druid", "hunter"].map((slug) => (
-          <ClassHoverZone
-            key={slug}
-            slug={slug as any}
-            className="rounded border px-4 py-2 transition-colors hover:bg-muted cursor-default"
-          >
-            <span className="capitalize" style={{ color: `var(--color-class-${slug})` }}>
-              {slug.replace("-", " ")}
-            </span>
-          </ClassHoverZone>
-        ))}
+        {["warrior", "paladin", "death-knight", "mage", "priest", "rogue", "druid", "hunter"].map(
+          slug => (
+            <ClassHoverZone
+              key={slug}
+              slug={slug as any}
+              className="hover:bg-muted cursor-default rounded border px-4 py-2 transition-colors"
+            >
+              <span className="capitalize" style={{ color: `var(--color-class-${slug})` }}>
+                {slug.replace("-", " ")}
+              </span>
+            </ClassHoverZone>
+          ),
+        )}
       </div>
     </>
   ),
-};
+}

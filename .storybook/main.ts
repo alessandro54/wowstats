@@ -1,10 +1,10 @@
+import type { StorybookConfig } from "@storybook/react-vite"
+import path, { dirname } from "node:path"
 // This file has been automatically migrated to valid ESM format by Storybook.
-import { fileURLToPath } from "node:url";
-import type { StorybookConfig } from "@storybook/react-vite";
-import path, { dirname } from "path";
+import { fileURLToPath } from "node:url"
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 const config: StorybookConfig = {
   stories: ["../src/stories/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
@@ -15,15 +15,16 @@ const config: StorybookConfig = {
   },
   staticDirs: ["../public"],
   viteFinal: async (config) => {
-    config.resolve ??= {};
+    config.resolve ??= {}
     config.resolve.alias = {
       ...(config.resolve.alias ?? {}),
       "@": path.resolve(__dirname, "../src"),
       "next/navigation": path.resolve(__dirname, "./mocks/next-navigation.ts"),
       "next/image": path.resolve(__dirname, "./mocks/next-image.tsx"),
-    };
-    return config;
+      "next/link": path.resolve(__dirname, "./mocks/next-link.tsx"),
+    }
+    return config
   },
-};
+}
 
-export default config;
+export default config

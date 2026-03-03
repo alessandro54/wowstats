@@ -1,1 +1,8 @@
-import "@testing-library/jest-dom/vitest";
+import "@testing-library/jest-dom/vitest"
+
+// Polyfill ResizeObserver for Radix UI components in jsdom
+globalThis.ResizeObserver = class ResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+} as unknown as typeof ResizeObserver

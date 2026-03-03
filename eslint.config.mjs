@@ -1,22 +1,46 @@
-// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
-import storybook from "eslint-plugin-storybook";
+import antfu from "@antfu/eslint-config"
+import storybook from "eslint-plugin-storybook"
 
-import { defineConfig, globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
-
-const eslintConfig = defineConfig([
-  ...nextVitals,
-  ...nextTs,
-  // Override default ignores of eslint-config-next.
-  globalIgnores([
-    // Default ignores of eslint-config-next:
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
-  ]),
-  ...storybook.configs["flat/recommended"]
-]);
-
-export default eslintConfig;
+export default antfu(
+  {
+    react: true,
+    nextjs: true,
+    typescript: true,
+    formatters: {
+      css: true,
+      markdown: "prettier",
+    },
+    stylistic: {
+      quotes: "double",
+    },
+    ignores: [
+      ".next/**",
+      "out/**",
+      "build/**",
+      "storybook-static/**",
+      "next-env.d.ts",
+      "src/components/ui/**",
+    ],
+  },
+  ...storybook.configs["flat/recommended"],
+  {
+    files: ["**/*.test.{ts,tsx}", "**/*.stories.{ts,tsx}"],
+    rules: {
+      "react/no-array-index-key": "off",
+      "react-refresh/only-export-components": "off",
+    },
+  },
+  {
+    files: ["**/providers/**", "**/hooks/**", "**/organisms/**"],
+    rules: {
+      "react-refresh/only-export-components": "off",
+    },
+  },
+  {
+    rules: {
+      "node/prefer-global/process": "off",
+      "react-hooks-extra/no-direct-set-state-in-use-effect": "off",
+      "react-hooks/set-state-in-effect": "off",
+    },
+  },
+)

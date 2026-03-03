@@ -1,4 +1,4 @@
-import { WowClassConfig } from "@/config/wow/classes/index";
+import type { WowClassConfig } from "./classes-config"
 
 const MonkConfig: WowClassConfig = {
   id: 10,

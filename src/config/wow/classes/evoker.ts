@@ -1,4 +1,4 @@
-import { WowClassConfig } from "."
+import type { WowClassConfig } from "./classes-config"
 
 const EvokerConfig: WowClassConfig = {
   id: 13,

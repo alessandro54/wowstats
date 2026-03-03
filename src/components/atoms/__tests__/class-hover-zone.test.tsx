@@ -1,25 +1,48 @@
-import { render, screen, fireEvent } from "@testing-library/react"
-import { describe, it, expect } from "vitest"
+import type { WowClassSlug } from "@/config/wow/classes/classes-config"
+import { fireEvent, render, screen } from "@testing-library/react"
+import { describe, expect, it } from "vitest"
+import { HoverProvider, useHoverSlug } from "@/components/providers/hover-provider"
 import { ClassHoverZone } from "../class-hover-zone"
-import type { WowClassSlug } from "@/config/wow/classes"
 
-describe("ClassHoverZone", () => {
+function SlugDisplay() {
+  const slug = useHoverSlug()
+  return <span data-testid="slug">{slug ?? "null"}</span>
+}
+
+describe("classHoverZone", () => {
   const classSlug = "paladin" as WowClassSlug
 
   it("renders children", () => {
     render(
       <ClassHoverZone slug={classSlug}>
         <div>Child content</div>
-      </ClassHoverZone>
+      </ClassHoverZone>,
     )
     expect(screen.getByText("Child content")).toBeInTheDocument()
+  })
+
+  it("updates hover slug via context on mouseEnter/mouseLeave", () => {
+    const { getByTestId } = render(
+      <HoverProvider>
+        <ClassHoverZone slug="warrior">
+          <div data-testid="zone">Content</div>
+        </ClassHoverZone>
+        <SlugDisplay />
+      </HoverProvider>,
+    )
+
+    expect(getByTestId("slug").textContent).toBe("null")
+    fireEvent.mouseEnter(getByTestId("zone").parentElement!)
+    expect(getByTestId("slug").textContent).toBe("warrior")
+    fireEvent.mouseLeave(getByTestId("zone").parentElement!)
+    expect(getByTestId("slug").textContent).toBe("null")
   })
 
   it("applies className when provided", () => {
     const { container } = render(
       <ClassHoverZone slug={classSlug} className="custom-class">
         <div>Content</div>
-      </ClassHoverZone>
+      </ClassHoverZone>,
     )
 
     const zone = container.querySelector("div")
@@ -31,7 +54,7 @@ describe("ClassHoverZone", () => {
       <ClassHoverZone slug={classSlug}>
         <div>Child 1</div>
         <div>Child 2</div>
-      </ClassHoverZone>
+      </ClassHoverZone>,
     )
 
     expect(screen.getByText("Child 1")).toBeInTheDocument()
@@ -42,7 +65,7 @@ describe("ClassHoverZone", () => {
     const { container } = render(
       <ClassHoverZone slug={classSlug}>
         <div>Content</div>
-      </ClassHoverZone>
+      </ClassHoverZone>,
     )
 
     const zone = container.querySelector("div")

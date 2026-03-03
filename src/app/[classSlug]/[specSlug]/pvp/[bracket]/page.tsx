@@ -1,14 +1,35 @@
-import { WOW_CLASSES } from "@/config/wow/classes"
-import { BRACKETS } from "@/config/wow/brackets"
+import type { Metadata } from "next"
+import type { MetaEnchant, MetaGem, MetaItem, MetaTalent } from "@/lib/api"
+import { notFound } from "next/navigation"
 import { Equipment } from "@/components/organisms/equipment"
 import { Talents } from "@/components/organisms/talents"
-import { fetchItems, fetchEnchants, fetchGems, fetchTalents, type MetaItem, type MetaEnchant, type MetaGem, type MetaTalent } from "@/lib/api"
-import { notFound } from "next/navigation"
-import type { Metadata } from "next"
+import { BRACKETS } from "@/config/wow/brackets-config"
+import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
+import {
+  fetchEnchants,
+  fetchGems,
+  fetchItems,
+  fetchTalents,
+
+} from "@/lib/api"
 
 const SLOT_ORDER = [
-  "HEAD", "NECK", "SHOULDER", "BACK", "CHEST", "WRIST", "HANDS", "WAIST", "LEGS", "FEET",
-  "FINGER_1", "FINGER_2", "TRINKET_1", "TRINKET_2", "MAIN_HAND", "OFF_HAND",
+  "HEAD",
+  "NECK",
+  "SHOULDER",
+  "BACK",
+  "CHEST",
+  "WRIST",
+  "HANDS",
+  "WAIST",
+  "LEGS",
+  "FEET",
+  "FINGER_1",
+  "FINGER_2",
+  "TRINKET_1",
+  "TRINKET_2",
+  "MAIN_HAND",
+  "OFF_HAND",
 ]
 
 function groupBy<T>(items: T[], key: (item: T) => string): Map<string, T[]> {
@@ -22,32 +43,34 @@ function groupBy<T>(items: T[], key: (item: T) => string): Map<string, T[]> {
   return map
 }
 
-function sortedBySlotOrder<T>(map: Map<string, T[]>): { slot: string; entries: T[] }[] {
-  const result: { slot: string; entries: T[] }[] = []
+function sortedBySlotOrder<T>(map: Map<string, T[]>): { slot: string, entries: T[] }[] {
+  const result: { slot: string, entries: T[] }[] = []
   for (const slot of SLOT_ORDER) {
     const entry = map.get(slot) ?? map.get(slot.toLowerCase())
-    if (entry) result.push({ slot, entries: entry })
+    if (entry)
+      result.push({ slot, entries: entry })
   }
   for (const [slot, entries] of map) {
-    if (!result.some((r) => r.slot.toUpperCase() === slot.toUpperCase())) {
+    if (!result.some(r => r.slot.toUpperCase() === slot.toUpperCase())) {
       result.push({ slot, entries })
     }
   }
   return result
 }
 
-type PageProps = {
-  params: Promise<{ classSlug: string; specSlug: string; bracket: string }>
+interface PageProps {
+  params: Promise<{ classSlug: string, specSlug: string, bracket: string }>
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { classSlug, specSlug, bracket } = await params
 
-  const cls = WOW_CLASSES.find((c) => c.slug === classSlug)
-  const spec = cls?.specs.find((s) => s.name === specSlug)
-  if (!cls || !spec) return {}
+  const cls = WOW_CLASSES.find(c => c.slug === classSlug)
+  const spec = cls?.specs.find(s => s.name === specSlug)
+  if (!cls || !spec)
+    return {}
 
-  const bracketLabel = BRACKETS.find((b) => b.slug === bracket)?.label ?? bracket
+  const bracketLabel = BRACKETS.find(b => b.slug === bracket)?.label ?? bracket
   const title = `${cls.name} ${specSlug} – ${bracketLabel} BIS`
   const description = `Best in slot items, enchants, and gems for ${cls.name} ${specSlug} in ${bracketLabel}. Based on real WoW PvP data.`
   const image = spec.iconRemasteredUrl ?? spec.iconUrl
@@ -87,9 +110,10 @@ function apiBracket(bracket: string, classSlug: string, specSlug: string): strin
 export default async function SpecPage({ params }: PageProps) {
   const { classSlug, specSlug, bracket } = await params
 
-  const cls = WOW_CLASSES.find((c) => c.slug === classSlug)
-  const spec = cls?.specs.find((s) => s.name === specSlug)
-  if (!cls || !spec) notFound()
+  const cls = WOW_CLASSES.find(c => c.slug === classSlug)
+  const spec = cls?.specs.find(s => s.name === specSlug)
+  if (!cls || !spec)
+    notFound()
 
   const resolvedBracket = apiBracket(bracket, classSlug, specSlug)
 
@@ -100,13 +124,18 @@ export default async function SpecPage({ params }: PageProps) {
     fetchTalents(resolvedBracket, spec.id).catch((): MetaTalent[] => []),
   ])
 
-  const itemGroups = sortedBySlotOrder(groupBy(items, (i) => i.slot.toUpperCase()))
-  const enchantGroups = sortedBySlotOrder(groupBy(enchants, (e) => e.slot.toUpperCase()))
-  const fiberGems = gems.filter((g) => g.socket_type === "FIBER")
-  const gemGroups = Array.from(groupBy(gems.filter((g) => g.socket_type !== "FIBER"), (g) => g.socket_type)).map(([socketType, entries]) => ({ socketType, entries }))
+  const itemGroups = sortedBySlotOrder(groupBy(items, i => i.slot.toUpperCase()))
+  const enchantGroups = sortedBySlotOrder(groupBy(enchants, e => e.slot.toUpperCase()))
+  const fiberGems = gems.filter(g => g.socket_type === "FIBER")
+  const gemGroups = Array.from(
+    groupBy(
+      gems.filter(g => g.socket_type !== "FIBER"),
+      g => g.socket_type,
+    ),
+  ).map(([socketType, entries]) => ({ socketType, entries }))
 
   return (
-    <div className="animate-page-in px-6 pb-8 space-y-8">
+    <div className="animate-page-in space-y-8 px-6 pb-8">
       <Equipment
         classSlug={cls.slug}
         itemGroups={itemGroups}

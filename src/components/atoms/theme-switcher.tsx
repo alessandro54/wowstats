@@ -1,16 +1,16 @@
 "use client"
 
+import { Monitor, Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
-import { Monitor, Sun, Moon } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { useEffect, useState, useMemo } from "react"
 import { usePathname } from "next/navigation"
+import { useEffect, useMemo, useState } from "react"
 import { useHoverSlug } from "@/components/providers/hover-provider"
+import { cn } from "@/lib/utils"
 
 const OPTIONS = [
   { value: "system", icon: Monitor },
-  { value: "light",  icon: Sun },
-  { value: "dark",   icon: Moon },
+  { value: "light", icon: Sun },
+  { value: "dark", icon: Moon },
 ] as const
 
 export function ThemeSwitcher() {
@@ -24,7 +24,7 @@ export function ThemeSwitcher() {
   // Stable click handlers — only recreated if setTheme changes (never in practice)
   const handlers = useMemo(
     () => Object.fromEntries(OPTIONS.map(({ value }) => [value, () => setTheme(value)])),
-    [setTheme]
+    [setTheme],
   )
 
   // Recomputed only when pathname or hoverSlug changes, not on every hover-unrelated render
@@ -45,10 +45,12 @@ export function ThemeSwitcher() {
           <button
             key={value}
             onClick={handlers[value]}
-            style={isActive ? { backgroundColor: classColor, color: "var(--background)" } : undefined}
+            style={
+              isActive ? { backgroundColor: classColor, color: "var(--background)" } : undefined
+            }
             className={cn(
               "rounded p-1.5 transition-colors",
-              isActive ? "shadow-sm" : "text-muted-foreground"
+              isActive ? "shadow-sm" : "text-muted-foreground",
             )}
             aria-label={value}
           >

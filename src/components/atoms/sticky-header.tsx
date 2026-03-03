@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react"
 
-type Props = {
+interface Props {
   children: React.ReactNode
   className?: string
 }
@@ -13,7 +13,8 @@ export function StickySpecHeader({ children, className }: Props) {
   useEffect(() => {
     const el = ref.current
     const container = el?.parentElement
-    if (!el || !container) return
+    if (!el || !container)
+      return // v8 ignore next
 
     const onScroll = () => {
       const t = Math.min(container.scrollTop / 80, 1)

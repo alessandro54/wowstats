@@ -1,5 +1,5 @@
-import { CDN_BASE } from "@/config/cdn";
-import { WowClassConfig } from ".";
+import type { WowClassConfig } from "./classes-config"
+import { CDN_BASE } from "@/config/cdn-config"
 
 const RogueConfig: WowClassConfig = {
   id: 4,
@@ -31,6 +31,6 @@ const RogueConfig: WowClassConfig = {
       iconRemasteredUrl: `${CDN_BASE}/icons-remastered/rogue_subtlety.png`,
     },
   ],
-};
+}
 
-export default RogueConfig;
+export default RogueConfig

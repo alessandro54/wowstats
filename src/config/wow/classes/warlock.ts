@@ -1,5 +1,5 @@
-import { CDN_BASE } from "@/config/cdn";
-import {WowClassConfig} from "@/config/wow/classes/index";
+import type { WowClassConfig } from "./classes-config"
+import { CDN_BASE } from "@/config/cdn-config"
 
 const WarlockConfig: WowClassConfig = {
   id: 9,

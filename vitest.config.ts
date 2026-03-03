@@ -1,22 +1,24 @@
-import { defineConfig, type Plugin } from "vitest/config";
-import react from "@vitejs/plugin-react";
-import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
-import { playwright } from "@vitest/browser-playwright";
-import path from "path";
+import type { Plugin } from "vitest/config"
+import path from "node:path"
+import { storybookTest } from "@storybook/addon-vitest/vitest-plugin"
+import react from "@vitejs/plugin-react"
+import { playwright } from "@vitest/browser-playwright"
+import { defineConfig } from "vitest/config"
 
 export default defineConfig({
   test: {
+    coverage: {
+      exclude: ["src/components/ui/**"],
+    },
     projects: [
       {
         resolve: {
           alias: { "@": path.resolve(__dirname, "./src") },
         },
         plugins: [
-          react({
-            babel: {
-              plugins: ["babel-plugin-react-compiler"],
-            },
-          }),
+          // React Compiler is intentionally disabled in tests — it generates
+          // internal memoization branches that skew coverage metrics.
+          react(),
         ],
         test: {
           name: "unit",
@@ -47,4 +49,4 @@ export default defineConfig({
       },
     ],
   },
-});
+})

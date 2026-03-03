@@ -1,5 +1,5 @@
-import { CDN_BASE } from "@/config/cdn"
-import { WowClassConfig } from "."
+import type { WowClassConfig } from "./classes-config"
+import { CDN_BASE } from "@/config/cdn-config"
 
 const MageConfig: WowClassConfig = {
   id: 8,

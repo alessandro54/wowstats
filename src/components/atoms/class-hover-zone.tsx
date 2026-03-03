@@ -1,10 +1,10 @@
 "use client"
 
+import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { useSetHoverSlug } from "@/components/providers/hover-provider"
-import type { WowClassSlug } from "@/config/wow/classes"
 import { cn } from "@/lib/utils"
 
-type Props = {
+interface Props {
   slug: WowClassSlug
   className?: string
   children: React.ReactNode

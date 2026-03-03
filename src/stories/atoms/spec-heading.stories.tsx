@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { SpecHeading } from "../../components/atoms/spec-heading";
+import type { Meta, StoryObj } from "@storybook/react-vite"
+import { SpecHeading } from "../../components/atoms/spec-heading"
 
 const meta = {
   title: "Atoms/SpecHeading",
@@ -20,7 +20,21 @@ const meta = {
     },
     classSlug: {
       control: "select",
-      options: ["warrior", "paladin", "death-knight", "mage", "priest", "warlock", "rogue", "druid", "hunter", "shaman", "monk", "demon-hunter", "evoker"],
+      options: [
+        "warrior",
+        "paladin",
+        "death-knight",
+        "mage",
+        "priest",
+        "warlock",
+        "rogue",
+        "druid",
+        "hunter",
+        "shaman",
+        "monk",
+        "demon-hunter",
+        "evoker",
+      ],
       description: "WoW class slug for CSS variable theming",
     },
     specSlug: {
@@ -28,10 +42,10 @@ const meta = {
       description: "Spec name (e.g., 'arms', 'holy', 'frost')",
     },
   },
-} satisfies Meta<typeof SpecHeading>;
+} satisfies Meta<typeof SpecHeading>
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
@@ -39,7 +53,7 @@ export const Default: Story = {
     classSlug: "warrior",
     specSlug: "arms",
   },
-};
+}
 
 export const DeathKnight: Story = {
   args: {
@@ -54,7 +68,7 @@ export const DeathKnight: Story = {
       },
     },
   },
-};
+}
 
 export const AllClasses: Story = {
   args: {
@@ -81,4 +95,4 @@ export const AllClasses: Story = {
       <SpecHeading className="Hunter" classSlug="hunter" specSlug="marksmanship" />
     </div>
   ),
-};
+}
