@@ -1,8 +1,9 @@
 import type { Metadata } from "next"
-import type { MetaEnchant, MetaGem, MetaItem, MetaTalent } from "@/lib/api"
+import type { MetaEnchant, MetaGem, MetaItem, MetaTalent, TopPlayersResponse } from "@/lib/api"
 import { notFound } from "next/navigation"
 import { Equipment } from "@/components/organisms/equipment"
 import { Talents } from "@/components/organisms/talents"
+import { TopPlayers } from "@/components/organisms/top-players"
 import { BRACKETS } from "@/config/wow/brackets-config"
 import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
 import {
@@ -10,7 +11,7 @@ import {
   fetchGems,
   fetchItems,
   fetchTalents,
-
+  fetchTopPlayers,
 } from "@/lib/api"
 
 const SLOT_ORDER = [
@@ -117,11 +118,14 @@ export default async function SpecPage({ params }: PageProps) {
 
   const resolvedBracket = apiBracket(bracket, classSlug, specSlug)
 
-  const [items, enchants, gems, talents] = await Promise.all([
+  const [items, enchants, gems, talents, topAll, topUs, topEu] = await Promise.all([
     fetchItems(resolvedBracket, spec.id).catch((): MetaItem[] => []),
     fetchEnchants(resolvedBracket, spec.id).catch((): MetaEnchant[] => []),
     fetchGems(resolvedBracket, spec.id).catch((): MetaGem[] => []),
     fetchTalents(resolvedBracket, spec.id).catch((): MetaTalent[] => []),
+    fetchTopPlayers(resolvedBracket, spec.id).catch((): TopPlayersResponse => ({ bracket: resolvedBracket, spec_id: spec.id, regions: [], players: [], snapshot_at: null })),
+    fetchTopPlayers(resolvedBracket, spec.id, "us").catch((): TopPlayersResponse => ({ bracket: resolvedBracket, spec_id: spec.id, regions: [], players: [], snapshot_at: null })),
+    fetchTopPlayers(resolvedBracket, spec.id, "eu").catch((): TopPlayersResponse => ({ bracket: resolvedBracket, spec_id: spec.id, regions: [], players: [], snapshot_at: null })),
   ])
 
   const itemGroups = sortedBySlotOrder(groupBy(items, i => i.slot.toUpperCase()))
@@ -144,6 +148,7 @@ export default async function SpecPage({ params }: PageProps) {
         fiberGems={fiberGems}
       />
       <Talents classSlug={cls.slug} talents={talents} />
+      <TopPlayers playersByRegion={{ all: topAll.players, us: topUs.players, eu: topEu.players }} />
     </div>
   )
 }

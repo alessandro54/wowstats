@@ -77,7 +77,7 @@ describe("talentTree", () => {
     const { container } = render(
       <TalentTree talents={tree} activeColor="#c79c6e" budget={3} />,
     )
-    expect(container.textContent).toContain("BIS")
+    expect(container.textContent).toContain("BiS")
     expect(container.textContent).toContain("Situational")
   })
 
@@ -85,7 +85,7 @@ describe("talentTree", () => {
     const { container } = render(
       <TalentTree talents={tree} activeColor="#c79c6e" />,
     )
-    expect(container.textContent).not.toContain("BIS")
+    expect(container.textContent).not.toContain("BiS")
   })
 
   it("hasTreeData returns true when rows/cols exist", () => {

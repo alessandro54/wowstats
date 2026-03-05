@@ -10,7 +10,7 @@ function makeItem(slot: string, name: string, pct: number, quality = "EPIC", cra
       id: Math.random() * 100000 | 0,
       blizzard_id: 200000 + (Math.random() * 1000 | 0),
       name,
-      icon_url: "https://wow.zamimg.com/images/wow/icons/large/inv_helmet_plate_raidwarrior_s_01.jpg",
+      icon_url: "https://wow.zamimg.com/images/wow/icons/large/inv_helmet_154.jpg",
       quality,
     },
     slot,

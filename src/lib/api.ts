@@ -95,3 +95,36 @@ export interface MetaTalent {
 export function fetchTalents(bracket: string, specId: number): Promise<MetaTalent[]> {
   return apiFetch("/api/v1/pvp/meta/talents", { bracket, spec_id: String(specId) })
 }
+
+export interface TopPlayer {
+  name: string
+  realm: string
+  region: string
+  rating: number
+  wins: number
+  losses: number
+  rank: number | null
+  score: number
+  avatar_url: string | null
+  class_slug: string
+  hero_talent_tree_name: string | null
+}
+
+export interface TopPlayersResponse {
+  bracket: string
+  spec_id: number
+  regions: string[]
+  players: TopPlayer[]
+  snapshot_at: string | null
+}
+
+export function fetchTopPlayers(
+  bracket: string,
+  specId: number,
+  region?: string,
+): Promise<TopPlayersResponse> {
+  const params: Record<string, string> = { bracket, spec_id: String(specId) }
+  if (region)
+    params.region = region
+  return apiFetch("/api/v1/pvp/meta/top_players", params)
+}

@@ -116,7 +116,7 @@ export function TalentTree({
         <div className="text-muted-foreground mt-auto flex justify-center gap-5 pt-5 text-[11px] lg:justify-start">
           <div className="flex items-center gap-1.5">
             <div className={`h-3 w-3 shrink-0 rounded border-2 ${BORDER_BIS}`} />
-            BIS
+            BiS
           </div>
           <div className="flex items-center gap-1.5">
             <div className={`h-3 w-3 shrink-0 rounded border-2 ${BORDER_SITUATIONAL}`} />
