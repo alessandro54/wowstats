@@ -11,19 +11,19 @@ const WarriorConfig: WowClassConfig = {
     {
       id: 71,
       name: "arms",
-      url: "/warrior/arms",
+      url: "/pvp/warrior/arms",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_warrior_savageblow.jpg",
     },
     {
       id: 72,
       name: "fury",
-      url: "/warrior/fury",
+      url: "/pvp/warrior/fury",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_warrior_innerrage.jpg",
     },
     {
       id: 73,
       name: "protection",
-      url: "/warrior/protection",
+      url: "/pvp/warrior/protection",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_warrior_defensivestance.jpg",
     },
   ],

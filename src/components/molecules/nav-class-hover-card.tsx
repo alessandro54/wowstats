@@ -69,7 +69,7 @@ export function NavClassHoverCard({ item, onMouseEnter }: Props) {
                     {QUICK_BRACKETS.map(({ slug, label }) => (
                       <Link
                         key={slug}
-                        href={`${spec.url}/pvp/${slug}`}
+                        href={`${spec.url}/${slug}`}
                         className="class-pill rounded px-1.5 py-0.5 text-[10px] font-semibold"
                         style={{ "--pill-color": classColor } as React.CSSProperties}
                       >

@@ -22,7 +22,7 @@ export const navMain: NavMain = WOW_CLASSES.map((cls: WowClassConfig) => ({
   id: cls.id,
   title: cls.name,
   slug: cls.slug,
-  url: `/${cls.slug}`,
+  url: `/pvp/${cls.slug}`,
   iconUrl: cls.iconUrl,
   color: cls.color,
   items: cls.specs.map(spec => ({

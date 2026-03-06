@@ -11,19 +11,19 @@ const PaladinConfig: WowClassConfig = {
     {
       id: 65,
       name: "holy",
-      url: "/paladin/holy",
+      url: "/pvp/paladin/holy",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_holy_holybolt.jpg",
     },
     {
       id: 66,
       name: "protection",
-      url: "/paladin/protection",
+      url: "/pvp/paladin/protection",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_holy_devotionaura.jpg",
     },
     {
       id: 70,
       name: "retribution",
-      url: "/paladin/retribution",
+      url: "/pvp/paladin/retribution",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_holy_auraoflight.jpg",
     },
   ],

@@ -11,19 +11,19 @@ const PriestConfig: WowClassConfig = {
     {
       id: 256,
       name: "discipline",
-      url: "/priest/discipline",
+      url: "/pvp/priest/discipline",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_holy_powerwordshield.jpg",
     },
     {
       id: 257,
       name: "holy",
-      url: "/priest/holy",
+      url: "/pvp/priest/holy",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_holy_guardianspirit.jpg",
     },
     {
       id: 258,
       name: "shadow",
-      url: "/priest/shadow",
+      url: "/pvp/priest/shadow",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_shadow_shadowwordpain.jpg",
     },
   ],

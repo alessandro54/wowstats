@@ -2,6 +2,8 @@
 
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import type { MetaTalent } from "@/lib/api"
+import { TalentCard } from "@/components/atoms/talent-card"
+import { PvpTalents } from "@/components/molecules/pvp-talents"
 import { TalentList } from "@/components/molecules/talent-list"
 import { HeroSection } from "@/components/organisms/hero-section"
 import { hasTreeData, TalentTree } from "@/components/organisms/talent-tree"
@@ -43,10 +45,19 @@ export function Talents({ classSlug, talents }: Props) {
 
   return (
     <div className="space-y-8">
-      {/* hero: dominant tree shown, alt revealed on hover */}
-      {heroEntries && (
+      {/* hero always centered, pvp floats to its right */}
+      {(heroEntries || pvpEntries) && (
         <div className="flex flex-col items-center">
-          <HeroSection heroEntries={heroEntries} activeColor={activeColor} />
+          <div className="relative inline-flex">
+            {heroEntries && (
+              <HeroSection heroEntries={heroEntries} activeColor={activeColor} />
+            )}
+            {pvpEntries && (
+              <div className="absolute top-1/2 z-20 -translate-y-1/2" style={{ left: "calc(100% + 50px)" }}>
+                <PvpTalents talents={pvpEntries} activeColor={activeColor} classSlug={classSlug} />
+              </div>
+            )}
+          </div>
         </div>
       )}
 
@@ -57,29 +68,21 @@ export function Talents({ classSlug, talents }: Props) {
             {classEntries && (
               <div className="flex flex-1 flex-col">
                 <h2 className="mb-3 text-center text-lg font-semibold">{TYPE_LABELS.class}</h2>
-                <section className="border-border/40 bg-card/30 flex flex-1 flex-col overflow-x-auto rounded-xl border p-4 backdrop-blur-sm">
+                <TalentCard classSlug={classSlug} className="flex flex-1 flex-col overflow-x-auto">
                   {renderTree(classEntries)}
-                </section>
+                </TalentCard>
               </div>
             )}
             {specEntries && (
               <div className="flex flex-1 flex-col">
                 <h2 className="mb-3 text-center text-lg font-semibold">{TYPE_LABELS.spec}</h2>
-                <section className="border-border/40 bg-card/30 flex flex-1 flex-col overflow-x-auto rounded-xl border p-4 backdrop-blur-sm">
+                <TalentCard classSlug={classSlug} className="flex flex-1 flex-col overflow-x-auto">
                   {renderTree(specEntries)}
-                </section>
+                </TalentCard>
               </div>
             )}
           </div>
         </div>
-      )}
-
-      {/* pvp: always flat list */}
-      {pvpEntries && (
-        <section className="space-y-3">
-          <h2 className="text-lg font-semibold">{TYPE_LABELS.pvp}</h2>
-          <TalentList talents={pvpEntries} activeColor={activeColor} />
-        </section>
       )}
     </div>
   )

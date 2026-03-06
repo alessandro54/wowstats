@@ -11,19 +11,19 @@ const MonkConfig: WowClassConfig = {
     {
       id: 268,
       name: "brewmaster",
-      url: "/monk/brewmaster",
+      url: "/pvp/monk/brewmaster",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_monk_brewmaster_spec.jpg",
     },
     {
       id: 270,
       name: "mistweaver",
-      url: "/monk/mistweaver",
+      url: "/pvp/monk/mistweaver",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_monk_mistweaver_spec.jpg",
     },
     {
       id: 269,
       name: "windwalker",
-      url: "/monk/windwalker",
+      url: "/pvp/monk/windwalker",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_monk_windwalker_spec.jpg",
     },
   ],

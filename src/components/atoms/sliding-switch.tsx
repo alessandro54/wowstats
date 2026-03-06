@@ -28,7 +28,8 @@ export function SlidingSwitch<T extends string>({
   const pathname = usePathname()
   const hoverSlug = useHoverSlug()
 
-  const activeSlug = hoverSlug ?? pathname.split("/").filter(Boolean)[0]
+  const segments = pathname.split("/").filter(Boolean)
+  const activeSlug = hoverSlug ?? (segments[0] === "pvp" ? segments[1] : segments[0])
   const accentColor = activeSlug
     ? `var(--color-class-${activeSlug}, var(--border))`
     : "var(--border)"

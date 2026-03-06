@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { cookies } from "next/headers"
 import { AppSidebar } from "@/components/organisms/app-sidebar"
 import DynamicBackground from "@/components/organisms/dynamic-background"
 import { HoverProvider } from "@/components/providers/hover-provider"
@@ -23,13 +24,19 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const cookieStore = await cookies()
+  const widthCookie = cookieStore.get("sidebar_width")
+  const stateCookie = cookieStore.get("sidebar_state")
+  const defaultWidth = widthCookie ? Number(widthCookie.value) : undefined
+  const defaultOpen = stateCookie ? stateCookie.value === "true" : true
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="bg-background text-foreground min-h-screen antialiased">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <HoverProvider>
-            <SidebarProvider>
+            <SidebarProvider defaultOpen={defaultOpen} defaultWidth={defaultWidth}>
               <DynamicBackground />
               <AppSidebar />
               <SidebarInset>

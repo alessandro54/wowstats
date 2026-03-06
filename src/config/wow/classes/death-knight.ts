@@ -13,7 +13,7 @@ const DeathKnightConfig: WowClassConfig = {
     {
       id: 251,
       name: "frost",
-      url: "/death-knight/frost",
+      url: "/pvp/death-knight/frost",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_deathknight_frostpresence.jpg",
       iconRemasteredUrl: `${CDN}/icons-remastered/deathknight_frost.png`,
       animationUrl: `${CDN}/animations/deathknight_frost.mp4`,
@@ -21,7 +21,7 @@ const DeathKnightConfig: WowClassConfig = {
     {
       id: 252,
       name: "unholy",
-      url: "/death-knight/unholy",
+      url: "/pvp/death-knight/unholy",
       iconUrl:
         "https://render.worldofwarcraft.com/us/icons/56/spell_deathknight_unholypresence.jpg",
       iconRemasteredUrl: `${CDN}/icons-remastered/deathknight_unholy.png`,
@@ -30,7 +30,7 @@ const DeathKnightConfig: WowClassConfig = {
     {
       id: 250,
       name: "blood",
-      url: "/death-knight/blood",
+      url: "/pvp/death-knight/blood",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_deathknight_bloodpresence.jpg",
       iconRemasteredUrl: `${CDN}/icons-remastered/deathknight_blood.png`,
       animationUrl: `${CDN}/animations/deathknight_blood.mp4`,

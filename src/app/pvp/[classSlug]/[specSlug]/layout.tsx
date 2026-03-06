@@ -30,17 +30,19 @@ export default async function PvpLayout({ children, params }: Props) {
       <PageHeader centerSlot={<BracketSelector classSlug={cls.slug} specSlug={specSlug} />}>
         <Breadcrumb className="min-w-0 flex-1">
           <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbPage>PvP</BreadcrumbPage>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
             <BreadcrumbItem className="hidden md:block">
-              <BreadcrumbLink href={`/${classSlug}`}>{cls.name}</BreadcrumbLink>
+              <BreadcrumbLink href="#">{cls.name}</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator className="hidden md:block" />
             <BreadcrumbItem>
               <BreadcrumbPage className="capitalize">{specSlug}</BreadcrumbPage>
             </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>PvP</BreadcrumbPage>
-            </BreadcrumbItem>
+
+
           </BreadcrumbList>
         </Breadcrumb>
       </PageHeader>

@@ -118,7 +118,7 @@ export function NavMain() {
                               {(["2v2", "3v3", "shuffle"] as const).map(bracket => (
                                 <Link
                                   key={bracket}
-                                  href={`/${item.slug}/${subItem.title}/pvp/${bracket}`}
+                                  href={`/pvp/${item.slug}/${subItem.title}/${bracket}`}
                                   className="class-pill rounded px-1.5 py-0.5 text-[10px] font-semibold"
                                   style={pillStyle}
                                 >

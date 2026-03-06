@@ -12,14 +12,14 @@ const ShamanConfig: WowClassConfig = {
     {
       id: 262,
       name: "elemental",
-      url: "/shaman/elemental",
+      url: "/pvp/shaman/elemental",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_nature_lightning.jpg",
       iconRemasteredUrl: `${CDN_BASE}/icons-remastered/shaman_elemental.png`,
     },
     {
       id: 263,
       name: "enhancement",
-      url: "/shaman/enhancement",
+      url: "/pvp/shaman/enhancement",
       iconUrl:
         "https://render.worldofwarcraft.com/us/icons/56/spell_shaman_improvedstormstrike.jpg",
       iconRemasteredUrl: `${CDN_BASE}/icons-remastered/shaman_enhancement.png`,
@@ -27,7 +27,7 @@ const ShamanConfig: WowClassConfig = {
     {
       id: 264,
       name: "restoration",
-      url: "/shaman/restoration",
+      url: "/pvp/shaman/restoration",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_nature_magicimmunity.jpg",
       iconRemasteredUrl: `${CDN_BASE}/icons-remastered/shaman_restoration.png`,
     },

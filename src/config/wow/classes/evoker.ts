@@ -11,19 +11,19 @@ const EvokerConfig: WowClassConfig = {
     {
       id: 1467,
       name: "devastation",
-      url: "/evoker/devastation",
+      url: "/pvp/evoker/devastation",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/classicon_evoker_devastation.jpg",
     },
     {
       id: 1468,
       name: "preservation",
-      url: "/evoker/preservation",
+      url: "/pvp/evoker/preservation",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/classicon_evoker_preservation.jpg",
     },
     {
       id: 1473,
       name: "augmentation",
-      url: "/evoker/augmentation",
+      url: "/pvp/evoker/augmentation",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/classicon_evoker_augmentation.jpg",
     },
   ],

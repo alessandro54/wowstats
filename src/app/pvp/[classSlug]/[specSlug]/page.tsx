@@ -75,7 +75,7 @@ export default async function SpecIndexPage({ params }: PageProps) {
           {BRACKETS.map(bracket => (
             <Link
               key={bracket.slug}
-              href={`/${classSlug}/${specSlug}/pvp/${bracket.slug}`}
+              href={`/pvp/${classSlug}/${specSlug}/${bracket.slug}`}
               className="group bg-card hover:border-primary/50 hover:bg-card/80 flex items-center justify-between rounded-xl border p-5 transition-colors"
             >
               <div className="space-y-1">

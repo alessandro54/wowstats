@@ -140,6 +140,7 @@ export default async function SpecPage({ params }: PageProps) {
 
   return (
     <div className="animate-page-in space-y-8 px-6 pb-8">
+      <TopPlayers playersByRegion={{ all: topAll.players, us: topUs.players, eu: topEu.players }} />
       <Equipment
         classSlug={cls.slug}
         itemGroups={itemGroups}
@@ -148,7 +149,6 @@ export default async function SpecPage({ params }: PageProps) {
         fiberGems={fiberGems}
       />
       <Talents classSlug={cls.slug} talents={talents} />
-      <TopPlayers playersByRegion={{ all: topAll.players, us: topUs.players, eu: topEu.players }} />
     </div>
   )
 }

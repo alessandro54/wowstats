@@ -12,19 +12,19 @@ const DemonHunterConfig: WowClassConfig = {
     {
       id: 577,
       name: "havoc",
-      url: "/demon-hunter/havoc",
+      url: "/pvp/demon-hunter/havoc",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_demonhunter_specdps.jpg",
     },
     {
       id: 581,
       name: "vengeance",
-      url: "/demon-hunter/vengeance",
+      url: "/pvp/demon-hunter/vengeance",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_demonhunter_spectank.jpg",
     },
     {
       id: 1480,
       name: "devourer",
-      url: "/demon-hunter/devourer",
+      url: "/pvp/demon-hunter/devourer",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/classicon_demonhunter_void.jpg",
       iconRemasteredUrl: `${CDN_BASE}/icons-remastered/demonhunter_devourer.png`,
     },

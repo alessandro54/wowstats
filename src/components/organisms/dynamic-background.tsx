@@ -9,9 +9,11 @@ export default function DynamicBackground() {
   const pathname = usePathname()
 
   const segments = pathname.split("/").filter(Boolean)
-  const classSlug = (segments[0] as WowClassSlug | undefined) ?? null
-  const specSlug = segments[1] ?? null
-  const isSpecPage = classSlug && specSlug && segments[2] === "pvp"
+  // Routes: /pvp/[classSlug]/[specSlug]/[bracket]
+  const isPvpRoute = segments[0] === "pvp"
+  const classSlug = (isPvpRoute ? segments[1] : segments[0]) as WowClassSlug | undefined ?? null
+  const specSlug = (isPvpRoute ? segments[2] : segments[1]) ?? null
+  const isSpecPage = isPvpRoute && classSlug && specSlug
 
   const activeSlug = hoverSlug ?? classSlug
   const background = activeSlug ? `var(--color-class-${activeSlug})` : "oklch(0.7 0.15 340)"

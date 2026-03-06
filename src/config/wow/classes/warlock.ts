@@ -12,7 +12,7 @@ const WarlockConfig: WowClassConfig = {
     {
       id: 265,
       name: "affliction",
-      url: "/warlock/affliction",
+      url: "/pvp/warlock/affliction",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_shadow_deathcoil.jpg",
       iconRemasteredUrl: `${CDN_BASE}/icons-remastered/warlock_affliction.png`,
       animationUrl: `${CDN_BASE}/animations/warlock_affliction.mp4`,
@@ -20,7 +20,7 @@ const WarlockConfig: WowClassConfig = {
     {
       id: 266,
       name: "demonology",
-      url: "/warlock/demonology",
+      url: "/pvp/warlock/demonology",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_shadow_metamorphosis.jpg",
       iconRemasteredUrl: `${CDN_BASE}/icons-remastered/warlock_demonology.png`,
       animationUrl: `${CDN_BASE}/animations/warlock_demonology.mp4`,
@@ -28,7 +28,7 @@ const WarlockConfig: WowClassConfig = {
     {
       id: 267,
       name: "destruction",
-      url: "/warlock/destruction",
+      url: "/pvp/warlock/destruction",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_shadow_rainoffire.jpg",
       iconRemasteredUrl: `${CDN_BASE}/icons-remastered/warlock_destruction.png`,
       animationUrl: `${CDN_BASE}/animations/warlock_destruction.mp4`,
