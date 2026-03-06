@@ -5,6 +5,7 @@ import type { TopPlayer } from "@/lib/api"
 import { classColor } from "@/hooks/use-active-color"
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import Image from "next/image"
+import { SlidingSwitch } from "@/components/atoms/sliding-switch"
 
 type Region = "all" | "us" | "eu"
 
@@ -18,10 +19,10 @@ function winrate(wins: number, losses: number): string {
   return `${Math.round((wins / total) * 100)}%`
 }
 
-const REGION_LABELS: { value: Region; label: string }[] = [
-  { value: "all", label: "US + EU" },
-  { value: "us", label: "US" },
-  { value: "eu", label: "EU" },
+const REGION_OPTIONS = [
+  { value: "all" as const, label: <span className="px-3 py-1.5 block text-xs font-medium">US + EU</span> },
+  { value: "us" as const, label: <span className="px-3 py-1.5 block text-xs font-medium">US</span> },
+  { value: "eu" as const, label: <span className="px-3 py-1.5 block text-xs font-medium">EU</span> },
 ]
 
 export function TopPlayers({ playersByRegion }: Props) {
@@ -35,23 +36,11 @@ export function TopPlayers({ playersByRegion }: Props) {
     <section className="space-y-3">
       <div className="flex items-center justify-between gap-4">
         <h2 className="text-lg font-semibold">Top Players</h2>
-        <div className="flex rounded-md border border-border overflow-hidden text-xs font-medium">
-          {REGION_LABELS.map(({ value, label }) => (
-            <button
-              key={value}
-              type="button"
-              onClick={() => setRegion(value)}
-              className={[
-                "px-3 py-1.5 transition-colors",
-                region === value
-                  ? "bg-foreground text-background"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
-              ].join(" ")}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
+        <SlidingSwitch
+          options={REGION_OPTIONS}
+          value={region}
+          onValueChange={setRegion}
+        />
       </div>
       <div className="overflow-hidden rounded-lg border border-border">
         <table className="w-full text-sm">

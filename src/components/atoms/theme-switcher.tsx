@@ -2,62 +2,38 @@
 
 import { Monitor, Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
-import { usePathname } from "next/navigation"
 import { useEffect, useMemo, useState } from "react"
-import { useHoverSlug } from "@/components/providers/hover-provider"
-import { cn } from "@/lib/utils"
+import { SlidingSwitch } from "@/components/atoms/sliding-switch"
 
 const OPTIONS = [
-  { value: "system", icon: Monitor },
-  { value: "light", icon: Sun },
-  { value: "dark", icon: Moon },
+  { value: "system", label: <Monitor size={14} /> },
+  { value: "light", label: <Sun size={14} /> },
+  { value: "dark", label: <Moon size={14} /> },
 ] as const
+
+type ThemeValue = (typeof OPTIONS)[number]["value"]
 
 export function ThemeSwitcher() {
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
-  const pathname = usePathname()
-  const hoverSlug = useHoverSlug()
 
   useEffect(() => setMounted(true), [])
 
-  // Stable click handlers — only recreated if setTheme changes (never in practice)
-  const handlers = useMemo(
-    () => Object.fromEntries(OPTIONS.map(({ value }) => [value, () => setTheme(value)])),
-    [setTheme],
+  const options = useMemo(
+    () => OPTIONS.map(({ value, label }) => ({
+      value,
+      label: <span className="p-1.5 block">{label}</span>,
+    })),
+    [],
   )
 
-  // Recomputed only when pathname or hoverSlug changes, not on every hover-unrelated render
-  const classColor = useMemo(() => {
-    const pathClassSlug = pathname.split("/").filter(Boolean)[0]
-    const activeSlug = hoverSlug ?? pathClassSlug
-    return activeSlug ? `var(--color-class-${activeSlug}, var(--border))` : "var(--border)"
-  }, [hoverSlug, pathname])
+  if (!mounted) return null
 
   return (
-    <div
-      className="flex items-center gap-0.5 rounded-md border bg-transparent p-0.5"
-      style={{ borderColor: classColor }}
-    >
-      {OPTIONS.map(({ value, icon: Icon }) => {
-        const isActive = mounted && theme === value
-        return (
-          <button
-            key={value}
-            onClick={handlers[value]}
-            style={
-              isActive ? { backgroundColor: classColor, color: "var(--background)" } : undefined
-            }
-            className={cn(
-              "rounded p-1.5 transition-colors",
-              isActive ? "shadow-sm" : "text-muted-foreground",
-            )}
-            aria-label={value}
-          >
-            <Icon size={14} />
-          </button>
-        )
-      })}
-    </div>
+    <SlidingSwitch
+      options={options}
+      value={(theme ?? "system") as ThemeValue}
+      onValueChange={setTheme}
+    />
   )
 }
