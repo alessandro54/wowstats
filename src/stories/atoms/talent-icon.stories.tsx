@@ -14,6 +14,7 @@ const sampleTalent = {
     display_row: 1,
     display_col: 1,
     max_rank: 1,
+    default_points: 0,
     icon_url: "https://wow.zamimg.com/images/wow/icons/large/ability_warrior_savageblow.jpg",
     prerequisite_node_ids: [],
   },

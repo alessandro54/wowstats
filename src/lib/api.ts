@@ -82,6 +82,7 @@ export interface MetaTalent {
     display_row: number | null
     display_col: number | null
     max_rank: number
+    default_points: number
     icon_url: string | null
     prerequisite_node_ids: number[]
   }

@@ -1,31 +1,25 @@
 import type { MetaTalent } from "@/lib/api"
-import { render } from "@testing-library/react"
+import { fireEvent, render } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
 
 import { HeroSection } from "../hero-section"
 
-vi.mock("@/components/molecules/talent-list", () => ({
-  TalentList: ({ talents }: any) => (
-    <div data-testid="talent-list">{talents.map((t: any) => t.talent.name).join(",")}</div>
+vi.mock("@/components/molecules/hero-tree", () => ({
+  HeroTree: ({ talents }: any) => (
+    <div data-testid="hero-tree">{talents.length} nodes</div>
   ),
 }))
 
-vi.mock("@/components/organisms/talent-tree", () => ({
-  TalentTree: ({ talents }: any) => (
-    <div data-testid="talent-tree">
-      {talents.length}
-      {" "}
-      nodes
-    </div>
+vi.mock("@/components/atoms/talent-card", () => ({
+  TalentCard: ({ children, style, className }: any) => (
+    <div data-testid="talent-card" style={style} className={className}>{children}</div>
   ),
-  hasTreeData: (talents: MetaTalent[]) =>
-    talents.some(t => t.talent.display_row != null && t.talent.display_col != null),
 }))
 
-vi.mock("@/components/ui/tooltip", () => ({
-  Tooltip: ({ children }: any) => <div>{children}</div>,
-  TooltipContent: ({ children }: any) => <div data-testid="tooltip-content">{children}</div>,
-  TooltipTrigger: ({ children }: any) => <div>{children}</div>,
+vi.mock("@/components/atoms/corner-peel", () => ({
+  CornerPeel: ({ onClick, label }: any) => (
+    <button data-testid="corner-peel" onClick={onClick}>{label}</button>
+  ),
 }))
 
 function makeTalent(
@@ -47,6 +41,7 @@ function makeTalent(
       display_row: opts.row ?? 0,
       display_col: opts.col ?? 0,
       max_rank: 1,
+      default_points: 0,
       icon_url: null,
       prerequisite_node_ids: opts.prereqs ?? [],
     },
@@ -71,47 +66,55 @@ const altTree = [
 describe("heroSection", () => {
   it("renders the Hero Talents heading", () => {
     const { container } = render(
-      <HeroSection heroEntries={[...primaryTree, ...altTree]} activeColor="#c79c6e" />,
+      <HeroSection heroEntries={[...primaryTree, ...altTree]} activeColor="#c79c6e" classSlug="warrior" />,
     )
     expect(container.textContent).toContain("Hero Talents")
   })
 
   it("renders the primary tree", () => {
-    const { getByTestId } = render(
-      <HeroSection heroEntries={primaryTree} activeColor="#c79c6e" />,
+    const { getAllByTestId } = render(
+      <HeroSection heroEntries={primaryTree} activeColor="#c79c6e" classSlug="warrior" />,
     )
-    expect(getByTestId("talent-tree").textContent).toContain("2 nodes")
+    expect(getAllByTestId("hero-tree")[0].textContent).toContain("2 nodes")
   })
 
-  it("shows tooltip with alt tree when two trees exist", () => {
+  it("shows corner peel when two trees exist", () => {
     const { getByTestId } = render(
-      <HeroSection heroEntries={[...primaryTree, ...altTree]} activeColor="#c79c6e" />,
+      <HeroSection heroEntries={[...primaryTree, ...altTree]} activeColor="#c79c6e" classSlug="warrior" />,
     )
-    expect(getByTestId("tooltip-content").textContent).toContain("Alt")
+    expect(getByTestId("corner-peel")).toBeInTheDocument()
+    expect(getByTestId("corner-peel").textContent).toContain("Alt")
   })
 
-  it("does not render tooltip when only one tree exists", () => {
+  it("does not render corner peel when only one tree exists", () => {
     const { queryByTestId } = render(
-      <HeroSection heroEntries={primaryTree} activeColor="#c79c6e" />,
+      <HeroSection heroEntries={primaryTree} activeColor="#c79c6e" classSlug="warrior" />,
     )
-    expect(queryByTestId("tooltip-content")).toBeNull()
+    expect(queryByTestId("corner-peel")).toBeNull()
   })
 
   it("returns null for empty entries", () => {
     const { container } = render(
-      <HeroSection heroEntries={[]} activeColor="#c79c6e" />,
+      <HeroSection heroEntries={[]} activeColor="#c79c6e" classSlug="warrior" />,
     )
     expect(container.innerHTML).toBe("")
   })
 
-  it("falls back to TalentList when no tree data", () => {
-    const flat = primaryTree.map(t => ({
-      ...t,
-      talent: { ...t.talent, display_row: null, display_col: null },
-    }))
-    const { getByTestId } = render(
-      <HeroSection heroEntries={flat} activeColor="#c79c6e" />,
+  it("renders both primary and alt tree cards when two trees exist", () => {
+    const { getAllByTestId } = render(
+      <HeroSection heroEntries={[...primaryTree, ...altTree]} activeColor="#c79c6e" classSlug="warrior" />,
     )
-    expect(getByTestId("talent-list")).toBeDefined()
+    const cards = getAllByTestId("talent-card")
+    expect(cards.length).toBe(2)
+  })
+
+  it("toggles corner peel label on click", () => {
+    const { getByTestId } = render(
+      <HeroSection heroEntries={[...primaryTree, ...altTree]} activeColor="#c79c6e" classSlug="warrior" />,
+    )
+    const peel = getByTestId("corner-peel")
+    expect(peel.textContent).toContain("Alt")
+    fireEvent.click(peel)
+    expect(peel.textContent).toContain("Main")
   })
 })

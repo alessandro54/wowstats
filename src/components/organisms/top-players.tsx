@@ -20,7 +20,7 @@ function winrate(wins: number, losses: number): string {
 }
 
 const REGION_OPTIONS = [
-  { value: "all" as const, label: <span className="px-3 py-1.5 block text-xs font-medium">US + EU</span> },
+  { value: "all" as const, label: <span className="px-3 py-1.5 block text-xs font-medium">ALL</span> },
   { value: "us" as const, label: <span className="px-3 py-1.5 block text-xs font-medium">US</span> },
   { value: "eu" as const, label: <span className="px-3 py-1.5 block text-xs font-medium">EU</span> },
 ]

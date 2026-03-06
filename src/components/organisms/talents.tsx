@@ -50,7 +50,7 @@ export function Talents({ classSlug, talents }: Props) {
         <div className="flex flex-col items-center">
           <div className="relative inline-flex">
             {heroEntries && (
-              <HeroSection heroEntries={heroEntries} activeColor={activeColor} />
+              <HeroSection heroEntries={heroEntries} activeColor={activeColor} classSlug={classSlug} />
             )}
             {pvpEntries && (
               <div className="absolute top-1/2 z-20 -translate-y-1/2" style={{ left: "calc(100% + 50px)" }}>

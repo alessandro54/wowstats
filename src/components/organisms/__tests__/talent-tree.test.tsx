@@ -33,6 +33,7 @@ function makeTalent(
       display_row: row,
       display_col: col,
       max_rank: 1,
+      default_points: 0,
       icon_url: null,
       prerequisite_node_ids: prereqs,
     },

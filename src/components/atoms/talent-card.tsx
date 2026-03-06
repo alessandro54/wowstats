@@ -4,10 +4,11 @@ import { cn } from "@/lib/utils"
 interface Props {
   classSlug?: WowClassSlug
   className?: string
+  style?: React.CSSProperties
   children: React.ReactNode
 }
 
-export function TalentCard({ classSlug, className, children }: Props) {
+export function TalentCard({ classSlug, className, style, children }: Props) {
   const gradientColor = classSlug
     ? `var(--color-class-${classSlug})`
     : undefined
@@ -20,8 +21,9 @@ export function TalentCard({ classSlug, className, children }: Props) {
       )}
       style={{
         background: gradientColor
-          ? `linear-gradient(135deg, color-mix(in oklch, ${gradientColor} 8%, transparent), transparent 60%)`
+          ? `linear-gradient(-45deg, color-mix(in oklch, ${gradientColor} 8%, transparent), transparent 60%)`
           : "hsl(var(--card) / 0.3)",
+        ...style,
       }}
     >
       {children}

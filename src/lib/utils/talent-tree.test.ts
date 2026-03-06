@@ -1,6 +1,6 @@
 import type { MetaTalent } from "@/lib/api"
 import { describe, expect, it } from "vitest"
-import { buildEdgeSet, buildNodeMap, buildTopNodeIds, hasTreeData } from "./talent-tree"
+import { buildEdgeSet, buildNodeMap, buildTopNodeIds, hasTreeData, splitHeroTrees } from "./talent-tree"
 
 // ─── helpers ─────────────────────────────────────────────────────────────────
 
@@ -26,6 +26,7 @@ function makeTalent(
       display_row: row,
       display_col: col,
       max_rank: maxRank,
+      default_points: 0,
       icon_url: null,
       prerequisite_node_ids: prereqs,
     },
@@ -129,6 +130,22 @@ describe("buildTopNodeIds", () => {
   it("returns an empty set for an empty node list", () => {
     expect(buildTopNodeIds([], 10).size).toBe(0)
   })
+
+  it("includes free talents (default_points >= maxRank) without spending budget", () => {
+    const freeTalent = makeTalent(9, 9, 1, 9, 80)
+    const freeNode = { ...buildNodeMap([freeTalent]).get(9)!, defaultPoints: 1 }
+    const ids = buildTopNodeIds([freeNode, ...nodes], 2)
+    // free node included + 2 top nodes within budget
+    expect(ids).toEqual(new Set([9, 1, 2]))
+  })
+
+  it("reduces cost for partially free talents", () => {
+    const partialFree = makeTalent(8, 8, 1, 8, 95, 2)
+    const partialNode = { ...buildNodeMap([partialFree]).get(8)!, defaultPoints: 1 }
+    // maxRank=2, defaultPoints=1 → costs 1 instead of 2
+    const ids = buildTopNodeIds([partialNode, ...nodes], 2)
+    expect(ids).toEqual(new Set([8, 1]))
+  })
 })
 
 // ─── buildEdgeSet ─────────────────────────────────────────────────────────────
@@ -194,5 +211,58 @@ describe("hasTreeData", () => {
 
   it("returns false for an empty list", () => {
     expect(hasTreeData([])).toBe(false)
+  })
+})
+
+// ─── splitHeroTrees ──────────────────────────────────────────────────────────
+
+describe("splitHeroTrees", () => {
+  it("splits two disconnected components into two trees", () => {
+    const talents = [
+      makeTalent(1, 1, 0, 0, 90, 1, []),
+      makeTalent(2, 2, 1, 0, 85, 1, [1]),
+      makeTalent(10, 10, 0, 1, 40, 1, []),
+      makeTalent(11, 11, 1, 1, 35, 1, [10]),
+    ]
+    const trees = splitHeroTrees(talents)
+    expect(trees).toHaveLength(2)
+  })
+
+  it("sorts trees by highest usage_pct (dominant first)", () => {
+    const talents = [
+      makeTalent(10, 10, 0, 1, 40, 1, []),
+      makeTalent(11, 11, 1, 1, 35, 1, [10]),
+      makeTalent(1, 1, 0, 0, 90, 1, []),
+      makeTalent(2, 2, 1, 0, 85, 1, [1]),
+    ]
+    const trees = splitHeroTrees(talents)
+    expect(Math.max(...trees[0].map(t => t.usage_pct))).toBeGreaterThan(
+      Math.max(...trees[1].map(t => t.usage_pct)),
+    )
+  })
+
+  it("keeps connected talents in the same tree", () => {
+    const talents = [
+      makeTalent(1, 1, 0, 0, 90, 1, []),
+      makeTalent(2, 2, 1, 0, 85, 1, [1]),
+      makeTalent(3, 3, 2, 0, 80, 1, [2]),
+    ]
+    const trees = splitHeroTrees(talents)
+    expect(trees).toHaveLength(1)
+    expect(trees[0]).toHaveLength(3)
+  })
+
+  it("returns empty array for empty input", () => {
+    expect(splitHeroTrees([])).toEqual([])
+  })
+
+  it("skips talents with null node_id", () => {
+    const talents = [
+      makeTalent(1, null, 0, 0, 90),
+      makeTalent(2, 2, 0, 0, 80),
+    ]
+    const trees = splitHeroTrees(talents)
+    expect(trees).toHaveLength(1)
+    expect(trees[0]).toHaveLength(1)
   })
 })

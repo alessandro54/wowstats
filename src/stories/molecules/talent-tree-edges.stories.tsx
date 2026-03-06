@@ -18,6 +18,7 @@ function makeTalent(id: number, row: number, col: number): MetaTalent {
       display_row: row,
       display_col: col,
       max_rank: 1,
+      default_points: 0,
       icon_url: null,
       prerequisite_node_ids: [],
     },
@@ -36,11 +37,11 @@ const SVG_W = COLS * COL_W + NODE_SIZE
 const SVG_H = 3 * ROW_H + NODE_SIZE
 
 const nodes: TalentNode[] = [
-  { nodeId: 1, row: 1, col: 1, maxRank: 1, primary: makeTalent(1, 1, 1), isChoice: false, all: [] },
-  { nodeId: 2, row: 1, col: 3, maxRank: 1, primary: makeTalent(2, 1, 3), isChoice: false, all: [] },
-  { nodeId: 3, row: 2, col: 2, maxRank: 1, primary: makeTalent(3, 2, 2), isChoice: false, all: [] },
-  { nodeId: 4, row: 3, col: 1, maxRank: 1, primary: makeTalent(4, 3, 1), isChoice: false, all: [] },
-  { nodeId: 5, row: 3, col: 3, maxRank: 1, primary: makeTalent(5, 3, 3), isChoice: false, all: [] },
+  { nodeId: 1, row: 1, col: 1, maxRank: 1, defaultPoints: 0, primary: makeTalent(1, 1, 1), isChoice: false, all: [] },
+  { nodeId: 2, row: 1, col: 3, maxRank: 1, defaultPoints: 0, primary: makeTalent(2, 1, 3), isChoice: false, all: [] },
+  { nodeId: 3, row: 2, col: 2, maxRank: 1, defaultPoints: 0, primary: makeTalent(3, 2, 2), isChoice: false, all: [] },
+  { nodeId: 4, row: 3, col: 1, maxRank: 1, defaultPoints: 0, primary: makeTalent(4, 3, 1), isChoice: false, all: [] },
+  { nodeId: 5, row: 3, col: 3, maxRank: 1, defaultPoints: 0, primary: makeTalent(5, 3, 3), isChoice: false, all: [] },
 ]
 
 const nodeMap = new Map(nodes.map(n => [n.nodeId, n]))

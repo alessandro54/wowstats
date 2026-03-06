@@ -38,7 +38,7 @@ export function TalentNodeCard({
   const isPartialRank
     = inTopBuild
       && node.maxRank > 1
-      && node.primary.top_build_rank > 0
+      && node.primary.top_build_rank > node.defaultPoints
       && node.primary.top_build_rank < node.maxRank
 
   const alternatives = node.isChoice

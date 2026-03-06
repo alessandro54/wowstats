@@ -41,6 +41,16 @@ vi.mock("@/components/organisms/hero-section", () => ({
   ),
 }))
 
+vi.mock("@/components/molecules/pvp-talents", () => ({
+  PvpTalents: ({ talents }: any) => (
+    <div data-testid="pvp-talents">
+      {talents.length}
+      {" "}
+      pvp talents
+    </div>
+  ),
+}))
+
 function makeTalent(
   id: number,
   name: string,
@@ -61,6 +71,7 @@ function makeTalent(
       display_row: opts.row ?? null,
       display_col: opts.col ?? null,
       max_rank: 1,
+      default_points: 0,
       icon_url: null,
       prerequisite_node_ids: opts.prereqs ?? [],
     },
@@ -100,7 +111,7 @@ describe("talents", () => {
     expect(getByTestId("hero-section")).toBeDefined()
     expect(container.textContent).toContain("Class Talents")
     expect(container.textContent).toContain("Spec Talents")
-    expect(container.textContent).toContain("PvP Talents")
+    expect(container.textContent).toContain("pvp talents")
   })
 
   it("renders spec talents as a tree when tree data exists", () => {
@@ -110,9 +121,9 @@ describe("talents", () => {
     expect(trees[0].textContent).toContain("budget=34")
   })
 
-  it("renders pvp talents as a flat list", () => {
+  it("renders pvp talents component", () => {
     const { getByTestId } = render(<Talents classSlug="warrior" talents={pvpTalents} />)
-    expect(getByTestId("talent-list").textContent).toContain("2 talents")
+    expect(getByTestId("pvp-talents").textContent).toContain("2 pvp talents")
   })
 
   it("renders spec as list when no tree data", () => {
