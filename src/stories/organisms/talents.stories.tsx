@@ -23,6 +23,7 @@ function makeTalent(
       display_row: opts.row ?? null,
       display_col: opts.col ?? null,
       max_rank: opts.maxRank ?? 1,
+      default_points: 0,
       icon_url: "https://wow.zamimg.com/images/wow/icons/large/ability_warrior_savageblow.jpg",
       prerequisite_node_ids: opts.prereqs ?? [],
     },

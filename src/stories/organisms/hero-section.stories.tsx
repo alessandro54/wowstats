@@ -52,6 +52,9 @@ const meta = {
   title: "Organisms/HeroSection",
   component: HeroSection,
   tags: ["autodocs"],
+  args: {
+    classSlug: "warrior",
+  },
   parameters: {
     docs: {
       description: {

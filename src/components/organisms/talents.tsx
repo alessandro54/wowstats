@@ -45,15 +45,15 @@ export function Talents({ classSlug, talents }: Props) {
 
   return (
     <div className="space-y-8">
-      {/* hero always centered, pvp floats to its right */}
+      {/* hero always centered, pvp below on mobile, floating right on lg+ */}
       {(heroEntries || pvpEntries) && (
         <div className="flex flex-col items-center">
-          <div className="relative inline-flex">
+          <div className="relative inline-flex flex-col items-center md:block">
             {heroEntries && (
               <HeroSection heroEntries={heroEntries} activeColor={activeColor} classSlug={classSlug} />
             )}
             {pvpEntries && (
-              <div className="absolute top-1/2 z-20 -translate-y-1/2" style={{ left: "calc(100% + 50px)" }}>
+              <div className="mt-6 md:absolute md:top-1/2 md:z-20 md:mt-0 md:left-[calc(100%+50px)] md:-translate-y-1/2">
                 <PvpTalents talents={pvpEntries} activeColor={activeColor} classSlug={classSlug} />
               </div>
             )}

@@ -57,6 +57,9 @@ export const NoClassColor: Story = {
 }
 
 export const AllClasses: Story = {
+  args: {
+    children: null,
+  },
   render: () => (
     <div className="flex flex-wrap gap-4">
       {(["warrior", "paladin", "hunter", "rogue", "priest", "death-knight", "shaman", "mage", "warlock", "monk", "druid", "demon-hunter", "evoker"] as const).map(slug => (
