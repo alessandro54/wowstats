@@ -5,7 +5,7 @@ import { useSidebar } from "@/components/ui/sidebar"
 import { NavMain } from "../nav-main"
 
 vi.mock("next/navigation", () => ({
-  usePathname: vi.fn(() => "/warrior/arms/pvp/3v3"),
+  usePathname: vi.fn(() => "/pvp/warrior/arms/3v3"),
 }))
 
 vi.mock("next/image", () => ({
@@ -73,7 +73,7 @@ describe("navMain", () => {
 
     fireEvent.mouseEnter(collapsibles[0])
     act(() => {
-      vi.advanceTimersByTime(100)
+      vi.advanceTimersByTime(80)
     })
 
     // After timer fires, one should be open
@@ -90,7 +90,7 @@ describe("navMain", () => {
     // Open one
     fireEvent.mouseEnter(getAllByTestId("collapsible")[0])
     act(() => {
-      vi.advanceTimersByTime(100)
+      vi.advanceTimersByTime(80)
     })
 
     // Leave the menu
@@ -108,16 +108,16 @@ describe("navMain", () => {
 
     fireEvent.mouseEnter(getAllByTestId("collapsible")[0])
     act(() => {
-      vi.advanceTimersByTime(100)
+      vi.advanceTimersByTime(80)
     })
 
     const links = container.querySelectorAll("a")
     const hrefs = Array.from(links).map(l => l.getAttribute("href"))
 
     // Should have spec links and bracket links (2v2, 3v3, shuffle)
-    expect(hrefs.some(h => h?.includes("/pvp/2v2"))).toBe(true)
-    expect(hrefs.some(h => h?.includes("/pvp/3v3"))).toBe(true)
-    expect(hrefs.some(h => h?.includes("/pvp/shuffle"))).toBe(true)
+    expect(hrefs.some(h => h?.includes("/pvp/") && h?.includes("/2v2"))).toBe(true)
+    expect(hrefs.some(h => h?.includes("/pvp/") && h?.includes("/3v3"))).toBe(true)
+    expect(hrefs.some(h => h?.includes("/pvp/") && h?.includes("/shuffle"))).toBe(true)
 
     vi.useRealTimers()
   })
@@ -136,7 +136,7 @@ describe("navMain", () => {
     const { getAllByTestId } = render(<NavMain />)
     fireEvent.mouseEnter(getAllByTestId("collapsible")[0])
     act(() => {
-      vi.advanceTimersByTime(100)
+      vi.advanceTimersByTime(80)
     })
 
     expect(fetchSpy).toHaveBeenCalled()
@@ -157,7 +157,7 @@ describe("navMain", () => {
     // First hover
     fireEvent.mouseEnter(first)
     act(() => {
-      vi.advanceTimersByTime(100)
+      vi.advanceTimersByTime(80)
     })
     const callCount = fetchSpy.mock.calls.length
 
@@ -165,7 +165,7 @@ describe("navMain", () => {
     fireEvent.mouseLeave(getByTestId("sidebar-menu"))
     fireEvent.mouseEnter(first)
     act(() => {
-      vi.advanceTimersByTime(100)
+      vi.advanceTimersByTime(80)
     })
 
     expect(fetchSpy.mock.calls.length).toBe(callCount)

@@ -47,7 +47,7 @@ export default async function PvpLayout({ children, params }: Props) {
         </Breadcrumb>
       </PageHeader>
 
-      <div className="mx-auto flex max-w-5xl flex-col" style={{ height: "calc(100vh - 60px)" }}>
+      <div className="mx-auto flex max-w-screen-ok2xl flex-col" style={{ height: "calc(100vh - 60px)" }}>
         <div className="flex shrink-0 items-center gap-3 px-6 py-3">
           <span className="icon-vignette icon-vignette-lg rounded-full">
             <video

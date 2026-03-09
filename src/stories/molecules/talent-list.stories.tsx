@@ -24,6 +24,7 @@ function makeTalent(id: number, name: string, iconUrl: string, usagePct: number,
     usage_pct: usagePct,
     in_top_build: inTopBuild,
     top_build_rank: 1,
+    tier: (usagePct > 50 ? "bis" : usagePct > 15 ? "situational" : "common") as "bis" | "situational" | "common",
     snapshot_at: "2026-03-02T00:00:00Z",
   }
 }

@@ -9,7 +9,6 @@ import {
   BORDER_SITUATIONAL,
   buildEdgeSet,
   buildNodeMap,
-  buildTopNodeIds,
   CELL_SIZE,
   NODE_SIZE,
 } from "@/lib/utils/talent-tree"
@@ -40,8 +39,6 @@ export function TalentTree({
 
   if (nodes.length === 0)
     return null
-
-  const topNodeIds = budget ? buildTopNodeIds(nodes, budget) : new Set<number>()
 
   // Normalize rows and cols to contiguous indices so gaps in Blizzard's
   // display_row / display_col values don't produce extra whitespace.
@@ -94,7 +91,6 @@ export function TalentTree({
             svgH={svgH}
             activeColor={activeColor}
             budget={budget}
-            topNodeIds={topNodeIds}
           />
           {nodes.map(node => (
             <TalentNodeCard
@@ -102,7 +98,6 @@ export function TalentTree({
               node={node}
               left={nodeCX(node) - NODE_SIZE / 2}
               top={nodeY(node.row) - NODE_SIZE / 2}
-              topNodeIds={topNodeIds}
               budget={budget}
               fullOpacity={fullOpacity}
               onlyChoicePct={onlyChoicePct}

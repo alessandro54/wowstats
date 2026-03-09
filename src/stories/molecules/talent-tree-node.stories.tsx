@@ -26,6 +26,7 @@ function makeTalent(id: number, name: string, usagePct: number, inTopBuild = tru
     usage_pct: usagePct,
     in_top_build: inTopBuild,
     top_build_rank: topBuildRank,
+    tier: (usagePct > 50 ? "bis" : usagePct > 15 ? "situational" : "common") as "bis" | "situational" | "common",
     snapshot_at: "2026-03-02T00:00:00Z",
   }
 }
@@ -36,6 +37,7 @@ const topBuildNode: TalentNode = {
   col: 1,
   maxRank: 1,
   defaultPoints: 0,
+  prereqIds: [],
   primary: makeTalent(1, "Mortal Strike", 98.4),
   isChoice: false,
   all: [makeTalent(1, "Mortal Strike", 98.4)],
@@ -47,6 +49,7 @@ const choiceNode: TalentNode = {
   col: 2,
   maxRank: 1,
   defaultPoints: 0,
+  prereqIds: [],
   primary: makeTalent(2, "Bladestorm", 62.1),
   isChoice: true,
   all: [makeTalent(2, "Bladestorm", 62.1), makeTalent(3, "Ravager", 37.9, true, 1)],
@@ -58,6 +61,7 @@ const partialRankNode: TalentNode = {
   col: 1,
   maxRank: 2,
   defaultPoints: 0,
+  prereqIds: [],
   primary: makeTalent(4, "Dreadnaught", 88.0, true, 1, 2),
   isChoice: false,
   all: [makeTalent(4, "Dreadnaught", 88.0, true, 1, 2)],
@@ -69,6 +73,7 @@ const dimNode: TalentNode = {
   col: 1,
   maxRank: 1,
   defaultPoints: 0,
+  prereqIds: [],
   primary: makeTalent(5, "Fervor of Battle", 12.0, false),
   isChoice: false,
   all: [makeTalent(5, "Fervor of Battle", 12.0, false)],
@@ -93,7 +98,6 @@ const meta = {
     node: topBuildNode,
     left: PAD,
     top: PAD,
-    topNodeIds: new Set([1]),
     fullOpacity: false,
     onlyChoicePct: false,
     activeColor: "#c79c6e",
@@ -124,7 +128,7 @@ export const TopBuild: Story = {
 }
 
 export const ChoiceNode: Story = {
-  args: { node: choiceNode, topNodeIds: new Set([2, 3]) },
+  args: { node: choiceNode },
   decorators: [canvas],
   parameters: {
     docs: {
@@ -137,7 +141,7 @@ export const ChoiceNode: Story = {
 }
 
 export const PartialRank: Story = {
-  args: { node: partialRankNode, topNodeIds: new Set([4]) },
+  args: { node: partialRankNode },
   decorators: [canvas],
   parameters: {
     docs: {
@@ -150,7 +154,7 @@ export const PartialRank: Story = {
 }
 
 export const DimmedUnused: Story = {
-  args: { node: dimNode, topNodeIds: new Set() },
+  args: { node: dimNode },
   decorators: [canvas],
   parameters: {
     docs: {

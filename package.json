@@ -2,6 +2,9 @@
   "name": "wow-bis",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "dev": "next dev -p 5123",
     "build": "next build",

@@ -1,15 +1,17 @@
 import type { Metadata } from "next"
-import type { MetaEnchant, MetaGem, MetaItem, MetaTalent, TopPlayersResponse } from "@/lib/api"
+import type { MetaEnchant, MetaGem, MetaItem, TalentsResponse, TopPlayersResponse } from "@/lib/api"
 import { notFound } from "next/navigation"
 import { Equipment } from "@/components/organisms/equipment"
 import { Talents } from "@/components/organisms/talents"
 import { TopPlayers } from "@/components/organisms/top-players"
+import { StatPriority } from "@/components/organisms/stat-priority"
 import { BRACKETS } from "@/config/wow/brackets-config"
 import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
 import {
   fetchEnchants,
   fetchGems,
   fetchItems,
+  fetchStatPriority,
   fetchTalents,
   fetchTopPlayers,
 } from "@/lib/api"
@@ -93,7 +95,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export const dynamic = "force-dynamic"
+export const revalidate = 3600 // ISR — regenerate at most once per hour
 
 const API_CLASS_SLUG: Record<string, string> = {
   "death-knight": "deathknight",
@@ -118,14 +120,15 @@ export default async function SpecPage({ params }: PageProps) {
 
   const resolvedBracket = apiBracket(bracket, classSlug, specSlug)
 
-  const [items, enchants, gems, talents, topAll, topUs, topEu] = await Promise.all([
+  const [items, enchants, gems, talentsResponse, topAll, topUs, topEu, statPriority] = await Promise.all([
     fetchItems(resolvedBracket, spec.id).catch((): MetaItem[] => []),
     fetchEnchants(resolvedBracket, spec.id).catch((): MetaEnchant[] => []),
     fetchGems(resolvedBracket, spec.id).catch((): MetaGem[] => []),
-    fetchTalents(resolvedBracket, spec.id).catch((): MetaTalent[] => []),
+    fetchTalents(resolvedBracket, spec.id).catch((): TalentsResponse => ({ meta: { bracket: resolvedBracket, spec_id: spec.id, total_players: 0, total_weighted: 0, snapshot_at: null }, talents: [] })),
     fetchTopPlayers(resolvedBracket, spec.id).catch((): TopPlayersResponse => ({ bracket: resolvedBracket, spec_id: spec.id, regions: [], players: [], snapshot_at: null })),
     fetchTopPlayers(resolvedBracket, spec.id, "us").catch((): TopPlayersResponse => ({ bracket: resolvedBracket, spec_id: spec.id, regions: [], players: [], snapshot_at: null })),
     fetchTopPlayers(resolvedBracket, spec.id, "eu").catch((): TopPlayersResponse => ({ bracket: resolvedBracket, spec_id: spec.id, regions: [], players: [], snapshot_at: null })),
+    fetchStatPriority(resolvedBracket, spec.id).catch(() => ({ bracket: resolvedBracket, spec_id: spec.id, stats: [] })),
   ])
 
   const itemGroups = sortedBySlotOrder(groupBy(items, i => i.slot.toUpperCase()))
@@ -140,8 +143,11 @@ export default async function SpecPage({ params }: PageProps) {
 
   return (
     <div className="animate-page-in space-y-8 px-6 pb-8">
-      <TopPlayers playersByRegion={{ all: topAll.players, us: topUs.players, eu: topEu.players }} />
-      <Talents classSlug={cls.slug} talents={talents} />
+      <div className="grid gap-8 xl:grid-cols-[1fr_280px]">
+        <TopPlayers playersByRegion={{ all: topAll.players, us: topUs.players, eu: topEu.players }} />
+        <StatPriority stats={statPriority.stats} />
+      </div>
+      <Talents classSlug={cls.slug} talents={talentsResponse.talents} talentsMeta={talentsResponse.meta} />
       <Equipment
         classSlug={cls.slug}
         itemGroups={itemGroups}

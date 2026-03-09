@@ -37,6 +37,7 @@ function makeTalent(
     usage_pct: usagePct,
     in_top_build: opts.inTopBuild ?? usagePct > 50,
     top_build_rank: opts.topBuildRank ?? 1,
+    tier: (usagePct > 50 ? "bis" : usagePct > 15 ? "situational" : "common") as "bis" | "situational" | "common",
     snapshot_at: "2026-03-03T00:00:00Z",
   }
 }

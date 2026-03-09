@@ -26,6 +26,7 @@ function makeTalent(id: number, row: number, col: number): MetaTalent {
     usage_pct: 80,
     in_top_build: true,
     top_build_rank: 1,
+    tier: "bis" as const,
     snapshot_at: "2026-03-02T00:00:00Z",
   }
 }
@@ -37,17 +38,15 @@ const SVG_W = COLS * COL_W + NODE_SIZE
 const SVG_H = 3 * ROW_H + NODE_SIZE
 
 const nodes: TalentNode[] = [
-  { nodeId: 1, row: 1, col: 1, maxRank: 1, defaultPoints: 0, primary: makeTalent(1, 1, 1), isChoice: false, all: [] },
-  { nodeId: 2, row: 1, col: 3, maxRank: 1, defaultPoints: 0, primary: makeTalent(2, 1, 3), isChoice: false, all: [] },
-  { nodeId: 3, row: 2, col: 2, maxRank: 1, defaultPoints: 0, primary: makeTalent(3, 2, 2), isChoice: false, all: [] },
-  { nodeId: 4, row: 3, col: 1, maxRank: 1, defaultPoints: 0, primary: makeTalent(4, 3, 1), isChoice: false, all: [] },
-  { nodeId: 5, row: 3, col: 3, maxRank: 1, defaultPoints: 0, primary: makeTalent(5, 3, 3), isChoice: false, all: [] },
+  { nodeId: 1, row: 1, col: 1, maxRank: 1, defaultPoints: 0, prereqIds: [], primary: makeTalent(1, 1, 1), isChoice: false, all: [] },
+  { nodeId: 2, row: 1, col: 3, maxRank: 1, defaultPoints: 0, prereqIds: [], primary: makeTalent(2, 1, 3), isChoice: false, all: [] },
+  { nodeId: 3, row: 2, col: 2, maxRank: 1, defaultPoints: 0, prereqIds: [], primary: makeTalent(3, 2, 2), isChoice: false, all: [] },
+  { nodeId: 4, row: 3, col: 1, maxRank: 1, defaultPoints: 0, prereqIds: [], primary: makeTalent(4, 3, 1), isChoice: false, all: [] },
+  { nodeId: 5, row: 3, col: 3, maxRank: 1, defaultPoints: 0, prereqIds: [], primary: makeTalent(5, 3, 3), isChoice: false, all: [] },
 ]
 
 const nodeMap = new Map(nodes.map(n => [n.nodeId, n]))
 const edgeSet = new Set(["1→3", "2→3", "3→4", "3→5"])
-const topNodeIds = new Set([1, 2, 3, 4, 5])
-
 const nodeCX = (n: TalentNode) => n.col * COL_W
 const nodeY = (row: number) => row * ROW_H
 
@@ -72,7 +71,6 @@ const meta = {
     svgW: SVG_W,
     svgH: SVG_H,
     activeColor: "#c79c6e",
-    topNodeIds,
   },
 } satisfies Meta<typeof TalentEdges>
 
@@ -99,7 +97,7 @@ export const Default: Story = {
 }
 
 export const NoTopBuildEdges: Story = {
-  args: { topNodeIds: new Set(), budget: 10 },
+  args: { budget: 10 },
   decorators: [canvas],
   parameters: {
     docs: { description: { story: "No nodes are in the top build — all edges are dimmed." } },
@@ -107,7 +105,7 @@ export const NoTopBuildEdges: Story = {
 }
 
 export const PartialTopBuild: Story = {
-  args: { topNodeIds: new Set([1, 3, 4]), budget: 10 },
+  args: { budget: 10 },
   decorators: [canvas],
   parameters: {
     docs: { description: { story: "Only 1→3 and 3→4 are top-build edges; others are dimmed." } },

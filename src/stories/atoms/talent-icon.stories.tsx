@@ -22,6 +22,7 @@ const sampleTalent = {
   usage_pct: 74.2,
   in_top_build: true,
   top_build_rank: 1,
+  tier: "bis" as const,
   snapshot_at: "2026-03-02T00:00:00Z",
 }
 

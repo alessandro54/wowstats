@@ -6,7 +6,7 @@ import { useHoverSlug } from "@/components/providers/hover-provider"
 import DynamicBackground from "../dynamic-background"
 
 vi.mock("next/navigation", () => ({
-  usePathname: vi.fn(() => "/warrior/arms/pvp/3v3"),
+  usePathname: vi.fn(() => "/pvp/warrior/arms/3v3"),
 }))
 
 vi.mock("@/components/providers/hover-provider", () => ({
@@ -29,7 +29,7 @@ describe("dynamicBackground", () => {
   })
 
   it("prefers hoverSlug over pathname slug", () => {
-    vi.mocked(usePathname).mockReturnValue("/warrior/arms/pvp/3v3")
+    vi.mocked(usePathname).mockReturnValue("/pvp/warrior/arms/3v3")
     vi.mocked(useHoverSlug).mockReturnValue("mage")
     const { container } = render(<DynamicBackground />)
     const blob = container.firstElementChild as HTMLElement
@@ -37,7 +37,7 @@ describe("dynamicBackground", () => {
   })
 
   it("renders spec gradient on spec pages", () => {
-    vi.mocked(usePathname).mockReturnValue("/warrior/arms/pvp/3v3")
+    vi.mocked(usePathname).mockReturnValue("/pvp/warrior/arms/3v3")
     vi.mocked(useHoverSlug).mockReturnValue(null)
     const { container } = render(<DynamicBackground />)
     const children = container.querySelectorAll("div")
@@ -47,7 +47,7 @@ describe("dynamicBackground", () => {
   })
 
   it("does not render spec gradient on non-spec pages", () => {
-    vi.mocked(usePathname).mockReturnValue("/warrior")
+    vi.mocked(usePathname).mockReturnValue("/pvp")
     vi.mocked(useHoverSlug).mockReturnValue(null)
     const { container } = render(<DynamicBackground />)
     const children = container.querySelectorAll("div")

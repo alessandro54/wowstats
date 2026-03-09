@@ -39,6 +39,7 @@ const mockTalent: MetaTalent = {
   usage_pct: 0.5,
   in_top_build: false,
   top_build_rank: 0,
+  tier: "common" as const,
   snapshot_at: null,
 }
 

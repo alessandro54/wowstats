@@ -1,13 +1,12 @@
 import type { TalentNode } from "@/lib/utils/talent-tree"
 import Image from "next/image"
 import { TalentIcon } from "@/components/atoms/talent-icon"
-import { BORDER_BIS, BORDER_SITUATIONAL, NODE_SIZE } from "@/lib/utils/talent-tree"
+import { BORDER_BIS, BORDER_DEFAULT, BORDER_SITUATIONAL, NODE_SIZE } from "@/lib/utils/talent-tree"
 
 interface Props {
   node: TalentNode
   left: number
   top: number
-  topNodeIds: Set<number>
   budget?: number
   fullOpacity: boolean
   onlyChoicePct: boolean
@@ -18,22 +17,26 @@ export function TalentNodeCard({
   node,
   left,
   top,
-  topNodeIds,
   budget,
   fullOpacity,
   onlyChoicePct,
   activeColor,
 }: Props) {
-  const inTopBuild
-    = fullOpacity || (budget ? topNodeIds.has(node.nodeId) : node.all.some(t => t.in_top_build))
-  const isSituational = !inTopBuild && node.primary.usage_pct >= 30
-  const opacity = inTopBuild ? 1 : isSituational ? 0.75 : 0.25
+  const tier = node.primary.tier ?? (node.all.some(t => t.in_top_build) ? "bis" : "common")
+  const isBis = tier === "bis"
+  const isSituational = tier === "situational"
+  const isRelevant = isBis || isSituational
+  const inTopBuild = fullOpacity || isRelevant
+  const opacity = fullOpacity || isBis ? 1 : isSituational ? 0.75 : 0.25
+  const isFree = node.defaultPoints >= node.maxRank
   const borderClass = budget
-    ? inTopBuild
-      ? BORDER_BIS
-      : isSituational
-        ? BORDER_SITUATIONAL
-        : undefined
+    ? isFree
+      ? BORDER_DEFAULT
+      : isBis
+        ? BORDER_BIS
+        : isSituational
+          ? BORDER_SITUATIONAL
+          : undefined
     : undefined
   const isPartialRank
     = inTopBuild

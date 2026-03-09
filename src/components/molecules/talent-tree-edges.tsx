@@ -12,7 +12,6 @@ interface Props {
   svgH: number
   activeColor: string
   budget?: number
-  topNodeIds: Set<number>
 }
 
 export function TalentEdges({
@@ -24,7 +23,6 @@ export function TalentEdges({
   svgH,
   activeColor,
   budget,
-  topNodeIds,
 }: Props) {
   const [hoveredEdge, setHoveredEdge] = useState<string | null>(null)
 
@@ -37,7 +35,9 @@ export function TalentEdges({
         if (!from || !to)
           return null
         const hovered = hoveredEdge === key
-        const edgeTopBuild = !budget || (topNodeIds.has(fromId) && topNodeIds.has(toId))
+        const fromTier = from.primary.tier ?? "common"
+        const toTier = to.primary.tier ?? "common"
+        const edgeTopBuild = !budget || (fromTier !== "common" && toTier !== "common")
         return (
           <g
             key={key}

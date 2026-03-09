@@ -1,9 +1,12 @@
 import type { Metadata } from "next"
 import type { MetaBarEntry } from "@/components/molecules/meta-bar-chart"
+import type { DonutSlice } from "@/components/molecules/meta-donut-chart"
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { MetaBarChart } from "@/components/molecules/meta-bar-chart"
+import { MetaDonutChart } from "@/components/molecules/meta-donut-chart"
+import { MetaKpiRow } from "@/components/molecules/meta-kpi-row"
+import { MetaSpecTable } from "@/components/molecules/meta-spec-table"
 import { PageHeader } from "@/components/molecules/page-header"
-// app/[classSlug]/[specSlug]/pvp/[bracket]/page.tsx
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -13,6 +16,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
+import { fetchClassDistribution } from "@/lib/api"
 
 type Bracket = "2v2" | "3v3" | "rbg" | "shuffle-overall" | "blitz-overall"
 
@@ -31,27 +35,7 @@ export const metadata: Metadata = {
   title: "PvP Meta",
 }
 
-export const dynamic = "force-dynamic"
-
-async function fetchClassDistribution(params: {
-  seasonId: string
-  role: string
-  bracket: string
-  region: string
-}) {
-  const baseUrl = process.env.BACKEND_URL ?? "http://localhost:3000"
-  const url = new URL("/api/v1/pvp/meta/class_distribution", baseUrl)
-  url.searchParams.set("season_id", params.seasonId)
-  url.searchParams.set("role", params.role)
-  url.searchParams.set("bracket", params.bracket)
-  url.searchParams.set("region", params.region)
-
-  const res = await fetch(url.toString(), { next: { revalidate: 300 } })
-  if (!res.ok) {
-    throw new Error(`Backend request failed: ${res.status} ${res.statusText}`)
-  }
-  return res.json()
-}
+export const revalidate = 3600 // ISR — regenerate at most once per hour
 
 function normalizeClassSlug(value: string): string {
   return value.trim().toLowerCase().replace(/_/g, "-")
@@ -62,6 +46,14 @@ function normalizeSpecName(value: string): string {
     .trim()
     .toLowerCase()
     .replace(/[-_\s]/g, "")
+}
+
+function tier(normPct: number): "S" | "A" | "B" | "C" | "D" {
+  if (normPct >= 85) return "S"
+  if (normPct >= 65) return "A"
+  if (normPct >= 45) return "B"
+  if (normPct >= 25) return "C"
+  return "D"
 }
 
 export default async function PvpBracketPage({ params, searchParams }: PageProps) {
@@ -77,28 +69,62 @@ export default async function PvpBracketPage({ params, searchParams }: PageProps
     region,
   })
 
-  const topRows = (Array.isArray(data?.classes) ? data.classes : [])
-    .slice()
-    .sort((a: any, b: any) => Number(b?.meta_score ?? 0) - Number(a?.meta_score ?? 0))
-
-  // Pre-build lookup map to avoid O(n) WOW_CLASSES.find() inside the render loop
   const classMap = new Map(WOW_CLASSES.map(c => [c.slug, c]))
-  const maxScore = Number(topRows[0]?.meta_score ?? 1)
-  const barEntries: MetaBarEntry[] = topRows.map((row: any) => {
-    const classSlug = typeof row?.class === "string" ? normalizeClassSlug(row.class) : null
-    const classConfig = classSlug ? classMap.get(classSlug as WowClassSlug) : undefined
-    const specName = row?.spec ?? ""
+  const sorted = [...data.classes].sort((a, b) => b.meta_score - a.meta_score)
+  const maxScore = sorted[0]?.meta_score ?? 1
+
+  const barEntries: MetaBarEntry[] = sorted.map(row => {
+    const classSlug = normalizeClassSlug(row.class) as WowClassSlug
+    const classConfig = classMap.get(classSlug)
     const specConfig = classConfig?.specs.find(
-      s => normalizeSpecName(s.name) === normalizeSpecName(specName),
+      s => normalizeSpecName(s.name) === normalizeSpecName(row.spec),
+    )
+    const normPct = (row.meta_score / maxScore) * 100
+    return {
+      key: `${row.class}-${row.spec_id}`,
+      specName: row.spec,
+      normPct,
+      metaScore: row.meta_score,
+      meanRating: row.mean_rating,
+      winRate: row.shrunk_winrate,
+      presence: row.games_share,
+      color: classConfig?.color ?? "#888",
+      iconUrl: specConfig?.iconUrl,
+      tier: tier(normPct),
+    }
+  })
+
+  const donutSlices: DonutSlice[] = sorted.map(row => {
+    const classSlug = normalizeClassSlug(row.class) as WowClassSlug
+    const classConfig = classMap.get(classSlug)
+    const specConfig = classConfig?.specs.find(
+      s => normalizeSpecName(s.name) === normalizeSpecName(row.spec),
     )
     return {
-      key: `bar-${row?.class ?? "unknown"}-${row?.spec_id ?? ""}`,
-      specName,
-      percentage: (Number(row?.meta_score ?? 0) / maxScore) * 100,
+      key: `${row.class}-${row.spec_id}`,
+      label: row.spec,
+      value: row.games_share,
       color: classConfig?.color ?? "#888",
       iconUrl: specConfig?.iconUrl,
     }
   })
+
+  // KPIs
+  const totalCount = data.total_entries
+  const weightedRating = sorted.reduce((s, r) => s + r.mean_rating * r.count, 0) / (totalCount || 1)
+  const weightedWR = sorted.reduce((s, r) => s + r.shrunk_winrate * r.count, 0) / (totalCount || 1)
+  const topRow = sorted[0]
+  const topClassConfig = topRow
+    ? classMap.get(normalizeClassSlug(topRow.class) as WowClassSlug)
+    : undefined
+  const topSpec = {
+    name: topRow?.spec ?? "",
+    className: topRow?.class ?? "",
+    color: topClassConfig?.color ?? "#888",
+    iconUrl: topClassConfig?.specs.find(
+      s => normalizeSpecName(s.name) === normalizeSpecName(topRow?.spec ?? ""),
+    )?.iconUrl,
+  }
 
   return (
     <>
@@ -123,32 +149,45 @@ export default async function PvpBracketPage({ params, searchParams }: PageProps
           </BreadcrumbList>
         </Breadcrumb>
       </PageHeader>
-      <section className="mx-auto flex min-h-[calc(100vh-60px)] max-w-6xl flex-1 flex-col space-y-4 p-4">
-        <h1 className="text-3xl font-bold">
-          PvP meta –
-          {" "}
-          {bracket}
-          {" "}
-          {role.toUpperCase()}
-        </h1>
 
-        <p className="text-muted-foreground text-sm">
-          Region:
-          {" "}
-          <span className="font-mono">{region}</span>
-          {" "}
-          · Season:
-          {" "}
-          <span className="font-mono">{season}</span>
-        </p>
+      <div className="space-y-6 p-4 lg:p-6">
+        {/* KPIs */}
+        <MetaKpiRow
+          totalPlayers={totalCount}
+          weightedAvgRating={weightedRating}
+          weightedAvgWinRate={weightedWR}
+          topSpec={topSpec}
+        />
 
-        <div className="flex min-h-[300px] flex-1 flex-col items-center justify-center rounded-lg py-4">
-          <h2 className="mb-4 text-lg font-semibold">Meta Score by Spec</h2>
-          <div className="flex h-full w-full flex-1 items-center justify-center">
+        {/* Charts row */}
+        <div className="grid gap-6 xl:grid-cols-[1fr_320px]">
+          {/* Bar chart card */}
+          <div className="rounded-lg border border-border bg-card/80 px-4 pb-2 pt-4">
+            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+              Meta Score by Spec
+            </h2>
             <MetaBarChart entries={barEntries} />
           </div>
+
+          {/* Donut card */}
+          <div className="rounded-lg border border-border bg-card/80 p-4">
+            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+              Spec Presence
+            </h2>
+            <MetaDonutChart slices={donutSlices} />
+          </div>
         </div>
-      </section>
+
+        {/* Table */}
+        <div className="rounded-lg border border-border bg-card/80">
+          <div className="border-b border-border px-4 py-3">
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+              Spec Rankings
+            </h2>
+          </div>
+          <MetaSpecTable entries={barEntries} />
+        </div>
+      </div>
     </>
   )
 }

@@ -22,8 +22,7 @@ export function SpecHeading({ className, classSlug, specSlug }: Props) {
         style={{ color: `var(--color-class-${classSlug})` }}
       >
         {className}
-        {" "}
-        —
+        {" • "}
         {specSlug}
       </h1>
       <p className="text-muted-foreground text-sm capitalize">

@@ -34,6 +34,7 @@ function makeTalent(
     usage_pct: usagePct,
     in_top_build: true,
     top_build_rank: maxRank,
+    tier: usagePct > 50 ? "bis" : usagePct > 15 ? "situational" : "common",
     snapshot_at: "2026-03-02T00:00:00Z",
   }
 }
@@ -145,6 +146,64 @@ describe("buildTopNodeIds", () => {
     // maxRank=2, defaultPoints=1 → costs 1 instead of 2
     const ids = buildTopNodeIds([partialNode, ...nodes], 2)
     expect(ids).toEqual(new Set([8, 1]))
+  })
+
+  it("pulls in prerequisites when picking a high-usage node", () => {
+    // A → B → C chain; C has highest usage but requires B which requires A
+    const a = makeTalent(1, 1, 1, 1, 10, 1, [])
+    const b = makeTalent(2, 2, 2, 1, 20, 1, [1])
+    const c = makeTalent(3, 3, 3, 1, 90, 1, [2])
+    const chain = [a, b, c].map(t => buildNodeMap([t]).get(t.talent.node_id!)!)
+    // Give them correct prereqIds
+    chain[0].prereqIds = []
+    chain[1].prereqIds = [1]
+    chain[2].prereqIds = [2]
+    const ids = buildTopNodeIds(chain, 3)
+    // All three should be picked — C pulls in B which pulls in A
+    expect(ids).toEqual(new Set([1, 2, 3]))
+  })
+
+  it("skips nodes whose prerequisite chain exceeds remaining budget", () => {
+    // A(10%) → B(90%) but budget=1, so only A or B alone
+    // B requires A, so picking B costs 2 — too much
+    // A alone costs 1 — fits
+    const a = makeTalent(1, 1, 1, 1, 10, 1, [])
+    const b = makeTalent(2, 2, 2, 1, 90, 1, [1])
+    const chain = [a, b].map(t => buildNodeMap([t]).get(t.talent.node_id!)!)
+    chain[0].prereqIds = []
+    chain[1].prereqIds = [1]
+    const ids = buildTopNodeIds(chain, 1)
+    // B costs 2 (itself + prereq A) — skipped; A costs 1 — picked
+    expect(ids).toEqual(new Set([1]))
+  })
+
+  it("treats prerequisites outside the tree as satisfied", () => {
+    // Node B requires node 999 which is not in the tree (gate node / different section)
+    const a = makeTalent(1, 1, 1, 1, 80, 1, [])
+    const b = makeTalent(2, 2, 2, 1, 90, 1, [999])
+    const nodeList = [a, b].map(t => buildNodeMap([t]).get(t.talent.node_id!)!)
+    nodeList[0].prereqIds = []
+    nodeList[1].prereqIds = [999] // missing from tree
+    const ids = buildTopNodeIds(nodeList, 2)
+    // Both picked — missing prereq 999 is ignored
+    expect(ids).toEqual(new Set([1, 2]))
+  })
+
+  it("does not double-count shared prerequisites", () => {
+    //   A(30%)
+    //  / \
+    // B(80%) C(70%)
+    const a = makeTalent(1, 1, 1, 1, 30, 1, [])
+    const b = makeTalent(2, 2, 2, 1, 80, 1, [1])
+    const c = makeTalent(3, 3, 2, 2, 70, 1, [1])
+    const nodeList = [a, b, c].map(t => buildNodeMap([t]).get(t.talent.node_id!)!)
+    nodeList[0].prereqIds = []
+    nodeList[1].prereqIds = [1]
+    nodeList[2].prereqIds = [1]
+    const ids = buildTopNodeIds(nodeList, 3)
+    // B(80%) picked first → pulls in A → cost=2, remaining=1
+    // C(70%) needs A (already picked) → cost=1, remaining=0
+    expect(ids).toEqual(new Set([1, 2, 3]))
   })
 })
 

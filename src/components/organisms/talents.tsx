@@ -1,7 +1,7 @@
 "use client"
 
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
-import type { MetaTalent } from "@/lib/api"
+import type { MetaTalent, TalentsMeta } from "@/lib/api"
 import { TalentCard } from "@/components/atoms/talent-card"
 import { PvpTalents } from "@/components/molecules/pvp-talents"
 import { TalentList } from "@/components/molecules/talent-list"
@@ -19,15 +19,17 @@ const TYPE_LABELS: Record<string, string> = {
 interface Props {
   classSlug: WowClassSlug
   talents: MetaTalent[]
+  talentsMeta?: TalentsMeta
 }
 
-export function Talents({ classSlug, talents }: Props) {
+export function Talents({ classSlug, talents, talentsMeta }: Props) {
   const activeColor = useActiveColor(classSlug)
 
-  if (talents.length === 0)
+  const safeTalents = Array.isArray(talents) ? talents : []
+  if (safeTalents.length === 0)
     return null
 
-  const byType = Map.groupBy(talents, t => t.talent.talent_type)
+  const byType = Map.groupBy(safeTalents, t => t.talent.talent_type)
 
   const specEntries = byType.get("spec")
   const classEntries = byType.get("class")
@@ -45,6 +47,14 @@ export function Talents({ classSlug, talents }: Props) {
 
   return (
     <div className="space-y-8">
+      {talentsMeta && talentsMeta.total_players > 0 && (
+        <p className="text-muted-foreground text-center text-sm">
+          Based on {talentsMeta.total_players.toLocaleString()} players
+          {talentsMeta.total_weighted !== talentsMeta.total_players && (
+            <span> (weighted score: {talentsMeta.total_weighted.toLocaleString()})</span>
+          )}
+        </p>
+      )}
       {/* hero always centered, pvp below on mobile, floating right on lg+ */}
       {(heroEntries || pvpEntries) && (
         <div className="flex flex-col items-center">

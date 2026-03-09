@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from "vitest"
 import { BracketSelector } from "../bracket-selector"
 
 vi.mock("next/navigation", () => ({
-  usePathname: vi.fn(() => "/warrior/arms/pvp/3v3"),
+  usePathname: vi.fn(() => "/pvp/warrior/arms/3v3"),
 }))
 
 vi.mock("@/hooks/use-active-color", () => ({
@@ -28,10 +28,10 @@ describe("bracketSelector", () => {
     expect(links.length).toBeGreaterThan(0)
 
     const hrefs = Array.from(links).map(l => l.getAttribute("href"))
-    expect(hrefs).toContain("/warrior/arms/pvp/2v2")
-    expect(hrefs).toContain("/warrior/arms/pvp/3v3")
-    expect(hrefs).toContain("/warrior/arms/pvp/shuffle")
-    expect(hrefs).toContain("/warrior/arms/pvp/rbg")
+    expect(hrefs).toContain("/pvp/warrior/arms/2v2")
+    expect(hrefs).toContain("/pvp/warrior/arms/3v3")
+    expect(hrefs).toContain("/pvp/warrior/arms/shuffle")
+    expect(hrefs).toContain("/pvp/warrior/arms/rbg")
   })
 
   it("highlights current bracket correctly", () => {
@@ -58,7 +58,7 @@ describe("bracketSelector", () => {
   })
 
   it("marks all brackets inactive when no bracket segment in pathname", () => {
-    vi.mocked(usePathname).mockReturnValue("/warrior/arms/pvp")
+    vi.mocked(usePathname).mockReturnValue("/pvp/warrior/arms")
     const { container } = render(<BracketSelector classSlug="warrior" specSlug="arms" />)
     const links = container.querySelectorAll("a")
     links.forEach((link) => {
@@ -68,11 +68,12 @@ describe("bracketSelector", () => {
   })
 
   it("works with different class and spec combinations", () => {
+    vi.mocked(usePathname).mockReturnValue("/pvp/mage/fire/3v3")
     const { container } = render(<BracketSelector classSlug="mage" specSlug="fire" />)
 
     const links = container.querySelectorAll("a")
     const hrefs = Array.from(links).map(l => l.getAttribute("href"))
-    expect(hrefs).toContain("/mage/fire/pvp/2v2")
-    expect(hrefs).toContain("/mage/fire/pvp/3v3")
+    expect(hrefs).toContain("/pvp/mage/fire/2v2")
+    expect(hrefs).toContain("/pvp/mage/fire/3v3")
   })
 })

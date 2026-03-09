@@ -24,6 +24,7 @@ function makeTalent(id: number, name: string, pct: number): MetaTalent {
     usage_pct: pct,
     in_top_build: pct > 50,
     top_build_rank: 1,
+    tier: (pct > 50 ? "bis" : pct > 15 ? "situational" : "common") as "bis" | "situational" | "common",
     snapshot_at: "2026-03-03T00:00:00Z",
   }
 }

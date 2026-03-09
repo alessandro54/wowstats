@@ -7,6 +7,7 @@ export const APEX_EXTRA = 20 // extra px pushed outward for single-node apex row
 // Border tiers — Tailwind classes with dark: variants
 export const BORDER_BIS = "border-rose-400 dark:border-amber-300 border-4 dark:border-2"
 export const BORDER_SITUATIONAL = "border-purple-500 dark:border-purple-400 border-4 dark:border-2"
+export const BORDER_DEFAULT = "border-sky-300 dark:border-sky-400 border-2"
 
 export interface TalentNode {
   nodeId: number
@@ -14,6 +15,7 @@ export interface TalentNode {
   col: number
   maxRank: number
   defaultPoints: number // points granted for free (not counted against budget)
+  prereqIds: number[] // prerequisite node IDs (must be picked before this node)
   primary: MetaTalent // highest usage_pct — shown as the main icon
   isChoice: boolean // two talents share this node
   all: MetaTalent[]
@@ -41,6 +43,7 @@ export function buildNodeMap(talents: MetaTalent[]): Map<number, TalentNode> {
         col: display_col,
         maxRank: max_rank,
         defaultPoints: t.talent.default_points,
+        prereqIds: t.talent.prerequisite_node_ids,
         primary: t,
         isChoice: false,
         all: [t],
@@ -52,27 +55,71 @@ export function buildNodeMap(talents: MetaTalent[]): Map<number, TalentNode> {
 }
 
 /**
- * Top nodes by usage_pct until budget (talent points) is exhausted.
- * Each node costs (maxRank - defaultPoints) points — talents with
- * default_points are free and always included.
+ * Graph-aware talent selection: picks top nodes by usage_pct while
+ * respecting prerequisite edges. A node can only be picked if all its
+ * prerequisites are already picked. Free talents (defaultPoints >= maxRank)
+ * are always included at zero cost.
+ *
+ * For each candidate the algorithm computes the full prerequisite chain
+ * and its total unlock cost. High-usage nodes "pull in" their ancestors
+ * automatically, just like the in-game talent picker.
  */
 export function buildTopNodeIds(nodes: TalentNode[], budget: number): Set<number> {
-  const sorted = [...nodes].sort((a, b) => b.primary.usage_pct - a.primary.usage_pct)
-  const ids = new Set<number>()
+  const nodeById = new Map(nodes.map(n => [n.nodeId, n]))
+  const picked = new Set<number>()
   let remaining = budget
-  for (const node of sorted) {
-    const cost = node.maxRank - node.defaultPoints
-    if (cost <= 0) {
-      // Free talent — always included, no budget cost
-      ids.add(node.nodeId)
-      continue
-    }
-    if (remaining <= 0)
-      break
-    ids.add(node.nodeId)
-    remaining -= cost
+
+  // Cost of a single node (0 for free talents)
+  const nodeCost = (n: TalentNode) => Math.max(0, n.maxRank - n.defaultPoints)
+
+  // Free talents — always included, no budget cost
+  for (const node of nodes) {
+    if (nodeCost(node) <= 0)
+      picked.add(node.nodeId)
   }
-  return ids
+
+  // Collect the full prerequisite chain (transitive) for a node,
+  // returning only the unpicked ancestors + the node itself.
+  // Prerequisites referencing nodes outside the current tree (e.g. gate
+  // nodes without display coordinates) are treated as already satisfied.
+  function unlockChain(nodeId: number): TalentNode[] {
+    const chain: TalentNode[] = []
+    const visited = new Set<number>()
+    const stack = [nodeId]
+    while (stack.length > 0) {
+      const id = stack.pop()!
+      if (picked.has(id) || visited.has(id))
+        continue
+      visited.add(id)
+      const n = nodeById.get(id)
+      if (!n)
+        continue // outside our tree — treat as satisfied
+      chain.push(n)
+      for (const prereqId of n.prereqIds)
+        stack.push(prereqId)
+    }
+    return chain
+  }
+
+  // Sort candidates by usage_pct descending — highest value first
+  const sorted = [...nodes].sort((a, b) => b.primary.usage_pct - a.primary.usage_pct)
+
+  for (const node of sorted) {
+    if (picked.has(node.nodeId))
+      continue
+
+    const chain = unlockChain(node.nodeId)
+    const totalCost = chain.reduce((sum, n) => sum + nodeCost(n), 0)
+    if (totalCost > remaining)
+      continue
+
+    // Pick the entire chain
+    for (const n of chain)
+      picked.add(n.nodeId)
+    remaining -= totalCost
+  }
+
+  return picked
 }
 
 export function buildEdgeSet(talents: MetaTalent[]): Set<string> {
