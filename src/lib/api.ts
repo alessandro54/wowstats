@@ -51,7 +51,7 @@ async function apiFetch<T>(path: string, params: Record<string, string>): Promis
   for (const [key, value] of Object.entries(params)) {
     url.searchParams.set(key, value)
   }
-  const res = await fetch(url.toString(), { next: { revalidate: 3600 } })
+  const res = await fetch(url.toString(), { cache: "no-store" })
   if (!res.ok)
     throw new Error(`Backend ${path} failed: ${res.status} ${res.statusText}`)
   const json = await res.json()

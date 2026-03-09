@@ -1,6 +1,8 @@
 
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
+
+export const dynamic = "force-dynamic"
 import Image from "next/image"
 import { fetchCharacter } from "@/lib/api"
 import type { CharacterPvpEntry } from "@/lib/api"

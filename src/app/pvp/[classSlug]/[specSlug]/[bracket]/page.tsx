@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
 import type { MetaEnchant, MetaGem, MetaItem, TalentsResponse, TopPlayersResponse } from "@/lib/api"
 import { notFound } from "next/navigation"
+
+export const dynamic = "force-dynamic"
 import { Equipment } from "@/components/organisms/equipment"
 import { Talents } from "@/components/organisms/talents"
 import { TopPlayers } from "@/components/organisms/top-players"
@@ -94,8 +96,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     },
   }
 }
-
-export const revalidate = 3600 // ISR — regenerate at most once per hour
 
 const API_CLASS_SLUG: Record<string, string> = {
   "death-knight": "deathknight",

@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
 import type { MetaBarEntry } from "@/components/molecules/meta-bar-chart"
 import type { DonutSlice } from "@/components/molecules/meta-donut-chart"
+
+export const dynamic = "force-dynamic"
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { MetaBarChart } from "@/components/molecules/meta-bar-chart"
 import { MetaDonutChart } from "@/components/molecules/meta-donut-chart"
@@ -34,8 +36,6 @@ interface PageProps {
 export const metadata: Metadata = {
   title: "PvP Meta",
 }
-
-export const revalidate = 3600 // ISR — regenerate at most once per hour
 
 function normalizeClassSlug(value: string): string {
   return value.trim().toLowerCase().replace(/_/g, "-")
