@@ -40,6 +40,11 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   render: () => <SlidingSwitchDemo />,
+  args: {
+    options,
+    value: "all",
+    onValueChange: () => {},
+  },
   parameters: {
     docs: { description: { story: "Region selector with ALL / US / EU options." } },
   },
@@ -47,6 +52,12 @@ export const Default: Story = {
 
 export const NoBorder: Story = {
   render: () => <SlidingSwitchDemo bordered={false} />,
+  args: {
+    options,
+    value: "all",
+    onValueChange: () => {},
+    bordered: false,
+  },
   parameters: {
     docs: { description: { story: "Without the outer border." } },
   },
