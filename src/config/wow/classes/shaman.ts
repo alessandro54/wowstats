@@ -1,14 +1,13 @@
 import type { WowClassConfig } from "./classes-config"
 import { CDN_BASE } from "@/config/cdn-config"
 
+// Class color: #0070DE
 const ShamanConfig: WowClassConfig = {
   id: 7,
   name: "Shaman",
   slug: "shaman",
   iconUrl: "https://render.worldofwarcraft.com/us/icons/56/classicon_shaman.jpg",
   iconRemasteredUrl: `${CDN_BASE}/class_media/shaman/class_icon.png`,
-  color: "#0070DE",
-  colorOlkch: "oklch(0.5373 0.2243 255.11)",
   specs: [
     {
       id: 262,

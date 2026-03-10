@@ -4,15 +4,34 @@ import { StatPriority } from "../stat-priority"
 
 vi.mock("@/config/equipment-config", () => ({
   getStatMeta: (stat: string) => ({
-    label: stat === "HASTE_RATING" ? "Haste" : stat === "CRIT_RATING" ? "Crit" : stat === "VERSATILITY" ? "Versatility" : stat,
+    label:
+      stat === "HASTE_RATING"
+        ? "Haste"
+        : stat === "CRIT_RATING"
+          ? "Crit"
+          : stat === "VERSATILITY"
+            ? "Versatility"
+            : stat,
     color: "#ff0000",
   }),
 }))
 
 const stats = [
-  { stat: "HASTE_RATING", count: 800, pct: 85.2 },
-  { stat: "VERSATILITY", count: 650, pct: 69.1 },
-  { stat: "CRIT_RATING", count: 150, pct: 16.0 },
+  {
+    stat: "HASTE_RATING",
+    count: 800,
+    pct: 85.2,
+  },
+  {
+    stat: "VERSATILITY",
+    count: 650,
+    pct: 69.1,
+  },
+  {
+    stat: "CRIT_RATING",
+    count: 150,
+    pct: 16.0,
+  },
 ]
 
 describe("statPriority", () => {

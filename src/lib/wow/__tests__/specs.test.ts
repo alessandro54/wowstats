@@ -59,7 +59,7 @@ describe("getSpecsByClassSlug", () => {
   it("returns array of warrior specs", () => {
     const specs = getSpecsByClassSlug("warrior")
     expect(specs).toHaveLength(3)
-    const names = specs.map(s => s.name)
+    const names = specs.map((s) => s.name)
     expect(names).toContain("arms")
     expect(names).toContain("fury")
     expect(names).toContain("protection")
@@ -73,7 +73,7 @@ describe("getSpecsByClassSlug", () => {
   it("returns correct number of mage specs", () => {
     const specs = getSpecsByClassSlug("mage")
     expect(specs.length).toBeGreaterThan(0)
-    const names = specs.map(s => s.name)
+    const names = specs.map((s) => s.name)
     expect(names).toContain("fire")
     expect(names).toContain("frost")
     expect(names).toContain("arcane")
@@ -146,7 +146,7 @@ describe("getAllSpecs", () => {
 
   it("includes warrior arms", () => {
     const specs = getAllSpecs()
-    const arms = specs.find(s => s.class.slug === "warrior" && s.spec.name === "arms")
+    const arms = specs.find((s) => s.class.slug === "warrior" && s.spec.name === "arms")
     expect(arms).toBeTruthy()
   })
 })

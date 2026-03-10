@@ -17,7 +17,11 @@ export function TopNavConfig({ left, center, hidden }: Props) {
   const { set, reset } = useTopNav()
 
   useEffect(() => {
-    set({ left, center, hidden })
+    set({
+      left,
+      center,
+      hidden,
+    })
     return reset
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

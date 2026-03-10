@@ -1,14 +1,13 @@
 import type { WowClassConfig } from "./classes-config"
 import { CDN_BASE } from "@/config/cdn-config"
 
+// Class color: #AAD372
 const HunterConfig: WowClassConfig = {
   id: 3,
   name: "Hunter",
   slug: "hunter",
   iconUrl: "https://render.worldofwarcraft.com/us/icons/56/classicon_hunter.jpg",
   iconRemasteredUrl: `${CDN_BASE}/class_media/hunter/class_icon.png`,
-  color: "#AAD372",
-  colorOlkch: "oklch(0.7843 0.1373 125.11)",
   specs: [
     {
       id: 253,

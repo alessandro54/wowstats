@@ -12,8 +12,8 @@ import PriestConfig from "./priest"
 import RogueConfig from "./rogue"
 import WarriorConfig from "./warrior"
 
-export type WowClassSlug
-  = | "death-knight"
+export type WowClassSlug =
+  | "death-knight"
   | "demon-hunter"
   | "druid"
   | "hunter"
@@ -27,8 +27,8 @@ export type WowClassSlug
   | "warrior"
   | "evoker"
 
-export type WowClassSpecSlug
-  = | "frost"
+export type WowClassSpecSlug =
+  | "frost"
   | "unholy"
   | "blood"
   | "havoc"
@@ -75,10 +75,12 @@ export interface WowClassSpec {
   url: string
   iconUrl: string
   iconRemasteredUrl?: string
-  splash?: { url: string , position?: string } // position is CSS object-position, e.g. "80% center" or "right top"
+  splash?: {
+    url: string
+    position?: string
+  } // position is CSS object-position, e.g. "80% center" or "right top"
   splashPosition?: string // CSS object-position, e.g. "80% center" or "right top"
   animationUrl?: string
-  colorOlkch?: string
 }
 
 export interface WowClassConfig {
@@ -88,8 +90,6 @@ export interface WowClassConfig {
   iconUrl: string
   iconRemasteredUrl?: string
   bannerUrl?: string
-  color: string
-  colorOlkch: string
   bgGradient?: string
   specs: WowClassSpec[]
 }

@@ -38,7 +38,12 @@ export function MetaBarChart({ entries }: { entries: MetaBarEntry[] }) {
   const containerRef = useRef<HTMLDivElement>(null)
 
   const handleMouseEnter = (entry: MetaBarEntry, index: number) => {
-    setTooltip({ entry, x: 0, colIndex: index, totalCols: entries.length })
+    setTooltip({
+      entry,
+      x: 0,
+      colIndex: index,
+      totalCols: entries.length,
+    })
   }
 
   const handleMouseLeave = () => {
@@ -48,55 +53,65 @@ export function MetaBarChart({ entries }: { entries: MetaBarEntry[] }) {
   return (
     <div className="relative w-full overflow-x-auto" ref={containerRef}>
       {/* Tooltip */}
-      {tooltip && (() => {
-        const { entry, colIndex, totalCols } = tooltip
-        // Align tooltip: if in the right half, anchor right; else anchor left
-        const isRight = colIndex > totalCols / 2
-        const offsetPct = (colIndex / totalCols) * 100
-        return (
-          <div
-            className="pointer-events-none absolute z-50 -top-1 w-44 rounded-lg border border-border bg-popover px-3 py-2 shadow-lg"
-            style={
-              isRight
-                ? { right: `${100 - offsetPct}%`, transform: "translateY(-100%) translateX(50%)" }
-                : { left: `${offsetPct}%`, transform: "translateY(-100%) translateX(-50%)" }
-            }
-          >
-            <div className="mb-1.5 flex items-center justify-between gap-2">
-              <span className="truncate text-[12px] font-semibold text-foreground">{entry.specName}</span>
-              <span className={`shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold ${TIER_COLORS[entry.tier]}`}>
-                {entry.tier}
-              </span>
+      {tooltip &&
+        (() => {
+          const { entry, colIndex, totalCols } = tooltip
+          // Align tooltip: if in the right half, anchor right; else anchor left
+          const isRight = colIndex > totalCols / 2
+          const offsetPct = (colIndex / totalCols) * 100
+          return (
+            <div
+              className="pointer-events-none absolute z-50 -top-1 w-44 rounded-lg border border-border bg-popover px-3 py-2 shadow-lg"
+              style={
+                isRight
+                  ? {
+                      right: `${100 - offsetPct}%`,
+                      transform: "translateY(-100%) translateX(50%)",
+                    }
+                  : {
+                      left: `${offsetPct}%`,
+                      transform: "translateY(-100%) translateX(-50%)",
+                    }
+              }
+            >
+              <div className="mb-1.5 flex items-center justify-between gap-2">
+                <span className="truncate text-[12px] font-semibold text-foreground">
+                  {entry.specName}
+                </span>
+                <span
+                  className={`shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold ${TIER_COLORS[entry.tier]}`}
+                >
+                  {entry.tier}
+                </span>
+              </div>
+              <dl className="grid grid-cols-2 gap-x-2 gap-y-0.5 text-[11px]">
+                <dt className="text-muted-foreground">Meta</dt>
+                <dd className="text-right font-mono tabular-nums text-foreground">
+                  {(entry.metaScore * 100).toFixed(1)}%
+                </dd>
+                <dt className="text-muted-foreground">Avg Rating</dt>
+                <dd className="text-right font-mono tabular-nums text-foreground">
+                  {entry.meanRating.toFixed(0)}
+                </dd>
+                <dt className="text-muted-foreground">Win Rate</dt>
+                <dd className="text-right font-mono tabular-nums text-foreground">
+                  {(entry.winRate * 100).toFixed(1)}%
+                </dd>
+                <dt className="text-muted-foreground">Presence</dt>
+                <dd className="text-right font-mono tabular-nums text-foreground">
+                  {(entry.presence * 100).toFixed(1)}%
+                </dd>
+              </dl>
             </div>
-            <dl className="grid grid-cols-2 gap-x-2 gap-y-0.5 text-[11px]">
-              <dt className="text-muted-foreground">Meta</dt>
-              <dd className="text-right font-mono tabular-nums text-foreground">
-                {(entry.metaScore * 100).toFixed(1)}
-                %
-              </dd>
-              <dt className="text-muted-foreground">Avg Rating</dt>
-              <dd className="text-right font-mono tabular-nums text-foreground">
-                {entry.meanRating.toFixed(0)}
-              </dd>
-              <dt className="text-muted-foreground">Win Rate</dt>
-              <dd className="text-right font-mono tabular-nums text-foreground">
-                {(entry.winRate * 100).toFixed(1)}
-                %
-              </dd>
-              <dt className="text-muted-foreground">Presence</dt>
-              <dd className="text-right font-mono tabular-nums text-foreground">
-                {(entry.presence * 100).toFixed(1)}
-                %
-              </dd>
-            </dl>
-          </div>
-        )
-      })()}
+          )
+        })()}
 
       {/* Bar chart row */}
       <div
         className="flex flex-row items-end gap-1.5 pb-2 pt-8"
-        style={{ minHeight: 220 }}
+        style={{
+          minHeight: 220,
+        }}
       >
         {entries.map((entry, index) => {
           const isHovered = tooltip?.entry.key === entry.key
@@ -117,8 +132,7 @@ export function MetaBarChart({ entries }: { entries: MetaBarEntry[] }) {
                   opacity: isHovered ? 1 : 0.7,
                 }}
               >
-                {entry.normPct.toFixed(0)}
-                %
+                {entry.normPct.toFixed(0)}%
               </span>
 
               {/* Bar track */}
@@ -143,28 +157,27 @@ export function MetaBarChart({ entries }: { entries: MetaBarEntry[] }) {
               </div>
 
               {/* Spec icon */}
-              {entry.iconUrl
-                ? (
-                    <Image
-                      src={entry.iconUrl}
-                      alt={entry.specName}
-                      width={20}
-                      height={20}
-                      className="mt-1.5 mb-1 rounded-sm"
-                      unoptimized
-                    />
-                  )
-                : (
-                    <div
-                      className="mt-1.5 mb-1 h-5 w-5 rounded-sm"
-                      style={{ backgroundColor: entry.color, opacity: 0.6 }}
-                    />
-                  )}
+              {entry.iconUrl ? (
+                <Image
+                  src={entry.iconUrl}
+                  alt={entry.specName}
+                  width={20}
+                  height={20}
+                  className="mt-1.5 mb-1 rounded-sm"
+                  unoptimized
+                />
+              ) : (
+                <div
+                  className="mt-1.5 mb-1 h-5 w-5 rounded-sm"
+                  style={{
+                    backgroundColor: entry.color,
+                    opacity: 0.6,
+                  }}
+                />
+              )}
 
               {/* Spec name */}
-              <span
-                className="max-w-10 truncate text-center text-[9px] font-medium text-muted-foreground"
-              >
+              <span className="max-w-10 truncate text-center text-[9px] font-medium text-muted-foreground">
                 {entry.specName}
               </span>
             </div>

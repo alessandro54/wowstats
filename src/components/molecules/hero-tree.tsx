@@ -8,7 +8,9 @@ interface Props {
 }
 
 export function HeroTree({ talents, activeColor }: Props) {
-  return hasTreeData(talents)
-    ? <TalentTree talents={talents} activeColor={activeColor} onlyChoicePct fullOpacity apexExtra />
-    : <TalentList talents={talents} activeColor={activeColor} />
+  return hasTreeData(talents) ? (
+    <TalentTree talents={talents} activeColor={activeColor} onlyChoicePct fullOpacity apexExtra />
+  ) : (
+    <TalentList talents={talents} activeColor={activeColor} />
+  )
 }

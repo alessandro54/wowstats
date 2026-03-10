@@ -32,8 +32,7 @@ export function TalentEdges({
         const [fromId, toId] = key.split("→").map(Number)
         const from = nodeMap.get(fromId)
         const to = nodeMap.get(toId)
-        if (!from || !to)
-          return null
+        if (!from || !to) return null
         const hovered = hoveredEdge === key
         const fromTier = from.primary.tier ?? "common"
         const toTier = to.primary.tier ?? "common"
@@ -61,7 +60,9 @@ export function TalentEdges({
               strokeOpacity={hovered ? 1 : edgeTopBuild ? 0.6 : 0.12}
               strokeWidth={hovered ? 3 : edgeTopBuild ? 2 : 1.5}
               strokeLinecap="round"
-              style={{ transition: "stroke-opacity 0.15s ease, stroke-width 0.15s ease" }}
+              style={{
+                transition: "stroke-opacity 0.15s ease, stroke-width 0.15s ease",
+              }}
             />
           </g>
         )

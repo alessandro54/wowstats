@@ -11,9 +11,18 @@ vi.mock("@/components/providers/hover-provider", () => ({
 }))
 
 const options = [
-  { value: "a" as const, label: <span>Option A</span> },
-  { value: "b" as const, label: <span>Option B</span> },
-  { value: "c" as const, label: <span>Option C</span> },
+  {
+    value: "a" as const,
+    label: <span>Option A</span>,
+  },
+  {
+    value: "b" as const,
+    label: <span>Option B</span>,
+  },
+  {
+    value: "c" as const,
+    label: <span>Option C</span>,
+  },
 ]
 
 describe("slidingSwitch", () => {

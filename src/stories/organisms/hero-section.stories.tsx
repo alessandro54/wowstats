@@ -6,7 +6,12 @@ function makeTalent(
   id: number,
   name: string,
   usagePct: number,
-  opts: { row?: number, col?: number, prereqs?: number[], nodeId?: number } = {},
+  opts: {
+    row?: number
+    col?: number
+    prereqs?: number[]
+    nodeId?: number
+  } = {},
 ): MetaTalent {
   return {
     id,
@@ -29,30 +34,75 @@ function makeTalent(
     usage_pct: usagePct,
     in_top_build: usagePct > 50,
     top_build_rank: 1,
-    tier: (usagePct > 50 ? "bis" : usagePct > 15 ? "situational" : "common") as "bis" | "situational" | "common",
+    tier: (usagePct > 50 ? "bis" : usagePct > 15 ? "situational" : "common") as
+      | "bis"
+      | "situational"
+      | "common",
     snapshot_at: "2026-03-03T00:00:00Z",
   }
 }
 
 // Primary hero tree (higher usage)
 const primaryTree: MetaTalent[] = [
-  makeTalent(1, "Slayer's Strike", 95.0, { row: 0, col: 1 }),
-  makeTalent(2, "Reap the Storm", 88.0, { row: 1, col: 0, prereqs: [1] }),
-  makeTalent(3, "Imminent Demise", 82.0, { row: 1, col: 2, prereqs: [1] }),
-  makeTalent(4, "Culling Cyclone", 91.0, { row: 2, col: 1, prereqs: [2, 3] }),
+  makeTalent(1, "Slayer's Strike", 95.0, {
+    row: 0,
+    col: 1,
+  }),
+  makeTalent(2, "Reap the Storm", 88.0, {
+    row: 1,
+    col: 0,
+    prereqs: [
+      1,
+    ],
+  }),
+  makeTalent(3, "Imminent Demise", 82.0, {
+    row: 1,
+    col: 2,
+    prereqs: [
+      1,
+    ],
+  }),
+  makeTalent(4, "Culling Cyclone", 91.0, {
+    row: 2,
+    col: 1,
+    prereqs: [
+      2,
+      3,
+    ],
+  }),
 ]
 
 // Alternate hero tree (lower usage)
 const altTree: MetaTalent[] = [
-  makeTalent(101, "Colossus Smash", 40.0, { row: 0, col: 1, nodeId: 101 }),
-  makeTalent(102, "Tide of Battle", 35.0, { row: 1, col: 0, nodeId: 102, prereqs: [101] }),
-  makeTalent(103, "No Stranger to Pain", 32.0, { row: 1, col: 2, nodeId: 103, prereqs: [101] }),
+  makeTalent(101, "Colossus Smash", 40.0, {
+    row: 0,
+    col: 1,
+    nodeId: 101,
+  }),
+  makeTalent(102, "Tide of Battle", 35.0, {
+    row: 1,
+    col: 0,
+    nodeId: 102,
+    prereqs: [
+      101,
+    ],
+  }),
+  makeTalent(103, "No Stranger to Pain", 32.0, {
+    row: 1,
+    col: 2,
+    nodeId: 103,
+    prereqs: [
+      101,
+    ],
+  }),
 ]
 
 const meta = {
   title: "Organisms/HeroSection",
   component: HeroSection,
-  tags: ["autodocs"],
+  tags: [
+    "autodocs",
+  ],
   args: {
     classSlug: "warrior",
   },
@@ -72,7 +122,10 @@ type Story = StoryObj<typeof meta>
 
 export const WithAltTree: Story = {
   args: {
-    heroEntries: [...primaryTree, ...altTree],
+    heroEntries: [
+      ...primaryTree,
+      ...altTree,
+    ],
     activeColor: "#c79c6e",
   },
   parameters: {
@@ -91,7 +144,9 @@ export const SingleTree: Story = {
   },
   parameters: {
     docs: {
-      description: { story: "Only one hero tree available — rendered without the tooltip wrapper." },
+      description: {
+        story: "Only one hero tree available — rendered without the tooltip wrapper.",
+      },
     },
   },
 }
@@ -99,8 +154,22 @@ export const SingleTree: Story = {
 export const FlatList: Story = {
   args: {
     heroEntries: [
-      { ...primaryTree[0], talent: { ...primaryTree[0].talent, display_row: null, display_col: null } },
-      { ...primaryTree[1], talent: { ...primaryTree[1].talent, display_row: null, display_col: null } },
+      {
+        ...primaryTree[0],
+        talent: {
+          ...primaryTree[0].talent,
+          display_row: null,
+          display_col: null,
+        },
+      },
+      {
+        ...primaryTree[1],
+        talent: {
+          ...primaryTree[1].talent,
+          display_row: null,
+          display_col: null,
+        },
+      },
     ],
     activeColor: "#abd473",
   },

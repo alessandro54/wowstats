@@ -9,45 +9,29 @@ vi.mock("@/hooks/use-active-color", () => ({
 }))
 
 vi.mock("@/components/molecules/talent-list", () => ({
-  TalentList: ({ talents }: any) => (
-    <div data-testid="talent-list">
-      {talents.length}
-      {" "}
-      talents
-    </div>
-  ),
+  TalentList: ({ talents }: any) => <div data-testid="talent-list">{talents.length} talents</div>,
 }))
 
 vi.mock("@/components/organisms/talent-tree", () => ({
   TalentTree: ({ talents, budget }: any) => (
     <div data-testid="talent-tree">
-      {talents.length}
-      {" "}
-      nodes, budget=
+      {talents.length} nodes, budget=
       {budget}
     </div>
   ),
   hasTreeData: (talents: MetaTalent[]) =>
-    talents.some(t => t.talent.display_row != null && t.talent.display_col != null),
+    talents.some((t) => t.talent.display_row != null && t.talent.display_col != null),
 }))
 
 vi.mock("@/components/organisms/hero-section", () => ({
   HeroSection: ({ heroEntries }: any) => (
-    <div data-testid="hero-section">
-      {heroEntries.length}
-      {" "}
-      hero talents
-    </div>
+    <div data-testid="hero-section">{heroEntries.length} hero talents</div>
   ),
 }))
 
 vi.mock("@/components/molecules/pvp-talents", () => ({
   PvpTalents: ({ talents }: any) => (
-    <div data-testid="pvp-talents">
-      {talents.length}
-      {" "}
-      pvp talents
-    </div>
+    <div data-testid="pvp-talents">{talents.length} pvp talents</div>
   ),
 }))
 
@@ -56,7 +40,11 @@ function makeTalent(
   name: string,
   pct: number,
   type: string,
-  opts: { row?: number | null, col?: number | null, prereqs?: number[] } = {},
+  opts: {
+    row?: number | null
+    col?: number | null
+    prereqs?: number[]
+  } = {},
 ): MetaTalent {
   return {
     id,
@@ -85,14 +73,29 @@ function makeTalent(
 }
 
 const specTalents = [
-  makeTalent(1, "Spec A", 95, "spec", { row: 0, col: 0 }),
-  makeTalent(2, "Spec B", 85, "spec", { row: 1, col: 0, prereqs: [1] }),
+  makeTalent(1, "Spec A", 95, "spec", {
+    row: 0,
+    col: 0,
+  }),
+  makeTalent(2, "Spec B", 85, "spec", {
+    row: 1,
+    col: 0,
+    prereqs: [
+      1,
+    ],
+  }),
 ]
 const classTalents = [
-  makeTalent(11, "Class A", 90, "class", { row: 0, col: 0 }),
+  makeTalent(11, "Class A", 90, "class", {
+    row: 0,
+    col: 0,
+  }),
 ]
 const heroTalents = [
-  makeTalent(21, "Hero A", 88, "hero", { row: 0, col: 0 }),
+  makeTalent(21, "Hero A", 88, "hero", {
+    row: 0,
+    col: 0,
+  }),
 ]
 const pvpTalents = [
   makeTalent(31, "PvP A", 75, "pvp"),
@@ -106,7 +109,12 @@ describe("talents", () => {
   })
 
   it("renders all four talent sections", () => {
-    const all = [...specTalents, ...classTalents, ...heroTalents, ...pvpTalents]
+    const all = [
+      ...specTalents,
+      ...classTalents,
+      ...heroTalents,
+      ...pvpTalents,
+    ]
     const { getByTestId, container } = render(<Talents classSlug="warrior" talents={all} />)
 
     expect(getByTestId("hero-section")).toBeDefined()
@@ -128,18 +136,20 @@ describe("talents", () => {
   })
 
   it("renders spec as list when no tree data", () => {
-    const flat = specTalents.map(t => ({
+    const flat = specTalents.map((t) => ({
       ...t,
-      talent: { ...t.talent, display_row: null, display_col: null },
+      talent: {
+        ...t.talent,
+        display_row: null,
+        display_col: null,
+      },
     }))
     const { getByTestId } = render(<Talents classSlug="warrior" talents={flat} />)
     expect(getByTestId("talent-list")).toBeDefined()
   })
 
   it("renders hero section when hero talents exist", () => {
-    const { getByTestId } = render(
-      <Talents classSlug="warrior" talents={heroTalents} />,
-    )
+    const { getByTestId } = render(<Talents classSlug="warrior" talents={heroTalents} />)
     expect(getByTestId("hero-section").textContent).toContain("1 hero talents")
   })
 })

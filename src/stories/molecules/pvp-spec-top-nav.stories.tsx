@@ -21,8 +21,12 @@ function withProviders(Story: React.ComponentType) {
 const meta = {
   title: "Molecules/PvpSpecTopNav",
   component: PvpSpecTopNav,
-  tags: ["autodocs"],
-  decorators: [withProviders],
+  tags: [
+    "autodocs",
+  ],
+  decorators: [
+    withProviders,
+  ],
   parameters: {
     docs: {
       description: {
@@ -53,15 +57,31 @@ export const OnBracketPage: Story = {
 }
 
 export const DeathKnight: Story = {
-  args: { className: "Death Knight", classSlug: "death-knight", specSlug: "frost" },
+  args: {
+    className: "Death Knight",
+    classSlug: "death-knight",
+    specSlug: "frost",
+  },
   parameters: {
-    docs: { description: { story: "Death Knight class name in breadcrumb." } },
+    docs: {
+      description: {
+        story: "Death Knight class name in breadcrumb.",
+      },
+    },
   },
 }
 
 export const Paladin: Story = {
-  args: { className: "Paladin", classSlug: "paladin", specSlug: "retribution" },
+  args: {
+    className: "Paladin",
+    classSlug: "paladin",
+    specSlug: "retribution",
+  },
   parameters: {
-    docs: { description: { story: "Paladin retribution spec." } },
+    docs: {
+      description: {
+        story: "Paladin retribution spec.",
+      },
+    },
   },
 }

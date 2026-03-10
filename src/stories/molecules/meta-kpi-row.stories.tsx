@@ -4,16 +4,29 @@ import { MetaKpiRow } from "../../components/molecules/meta-kpi-row"
 const meta = {
   title: "Molecules/MetaKpiRow",
   component: MetaKpiRow,
-  tags: ["autodocs"],
+  tags: [
+    "autodocs",
+  ],
   parameters: {
     docs: {
       description: {
-        component: "KPI row showing total players, weighted avg rating, weighted avg win rate, and the top spec.",
+        component:
+          "KPI row showing total players, weighted avg rating, weighted avg win rate, and the top spec.",
       },
     },
     layout: "padded",
   },
-  decorators: [Story => <div style={{ maxWidth: 900 }}><Story /></div>],
+  decorators: [
+    (Story) => (
+      <div
+        style={{
+          maxWidth: 900,
+        }}
+      >
+        <Story />
+      </div>
+    ),
+  ],
 } satisfies Meta<typeof MetaKpiRow>
 
 export default meta
@@ -38,7 +51,17 @@ export const NoIcon: Story = {
     totalPlayers: 500,
     weightedAvgRating: 2100,
     weightedAvgWinRate: 0.618,
-    topSpec: { name: "Frost", className: "Mage", color: "#69ccf0" },
+    topSpec: {
+      name: "Frost",
+      className: "Mage",
+      color: "#69ccf0",
+    },
   },
-  parameters: { docs: { description: { story: "Top spec without an icon URL." } } },
+  parameters: {
+    docs: {
+      description: {
+        story: "Top spec without an icon URL.",
+      },
+    },
+  },
 }

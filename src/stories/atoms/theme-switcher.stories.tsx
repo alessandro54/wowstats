@@ -4,7 +4,9 @@ import { ThemeSwitcher } from "../../components/atoms/theme-switcher"
 const meta = {
   title: "Atoms/ThemeSwitcher",
   component: ThemeSwitcher,
-  tags: ["autodocs"],
+  tags: [
+    "autodocs",
+  ],
   parameters: {
     docs: {
       description: {

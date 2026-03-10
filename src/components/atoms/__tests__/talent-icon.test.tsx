@@ -99,7 +99,10 @@ describe("talentIcon", () => {
   it("renders grey placeholder when icon_url is null", () => {
     const nullIconTalent: MetaTalent = {
       ...mockTalent,
-      talent: { ...mockTalent.talent, icon_url: null as unknown as string },
+      talent: {
+        ...mockTalent.talent,
+        icon_url: null as unknown as string,
+      },
     }
     const { container } = render(
       <TalentIcon talent={nullIconTalent} size={48} activeColor="#ff0000" />,
@@ -124,7 +127,12 @@ describe("talentIcon", () => {
   })
 
   it("handles different sizes correctly", () => {
-    const sizes = [32, 44, 48, 64]
+    const sizes = [
+      32,
+      44,
+      48,
+      64,
+    ]
 
     sizes.forEach((size) => {
       const { container, unmount } = render(

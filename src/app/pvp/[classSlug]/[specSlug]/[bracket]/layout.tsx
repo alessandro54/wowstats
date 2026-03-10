@@ -6,20 +6,27 @@ import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
 
 interface Props {
   children: React.ReactNode
-  params: Promise<{ classSlug: string, specSlug: string }>
+  params: Promise<{
+    classSlug: string
+    specSlug: string
+  }>
 }
 
 export default async function PvpBracketLayout({ children, params }: Props) {
   const { classSlug, specSlug } = await params
 
-  const cls = WOW_CLASSES.find(c => c.slug === classSlug)
-  const spec = cls?.specs.find(s => s.name === specSlug)
-  if (!cls || !spec)
-    notFound()
+  const cls = WOW_CLASSES.find((c) => c.slug === classSlug)
+  const spec = cls?.specs.find((s) => s.name === specSlug)
+  if (!cls || !spec) notFound()
 
   return (
     <>
-      <div className="mx-auto flex max-w-screen-ok2xl flex-col" style={{ height: "calc(100vh - 60px)" }}>
+      <div
+        className="mx-auto flex max-w-screen-ok2xl flex-col"
+        style={{
+          height: "calc(100vh - 60px)",
+        }}
+      >
         <div className="flex shrink-0 items-center gap-3 px-6 py-3">
           <span className="icon-vignette icon-vignette-lg rounded-full">
             <video

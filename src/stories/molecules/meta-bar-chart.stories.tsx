@@ -4,7 +4,9 @@ import { MetaBarChart } from "../../components/molecules/meta-bar-chart"
 const meta = {
   title: "Molecules/MetaBarChart",
   component: MetaBarChart,
-  tags: ["autodocs"],
+  tags: [
+    "autodocs",
+  ],
   parameters: {
     docs: {
       description: {
@@ -95,10 +97,18 @@ const sampleEntries = [
 ]
 
 export const Default: Story = {
-  args: { entries: sampleEntries },
+  args: {
+    entries: sampleEntries,
+  },
   decorators: [
-    Story => (
-      <div style={{ height: 300, width: 500, display: "flex" }}>
+    (Story) => (
+      <div
+        style={{
+          height: 300,
+          width: 500,
+          display: "flex",
+        }}
+      >
         <Story />
       </div>
     ),
@@ -106,16 +116,28 @@ export const Default: Story = {
 }
 
 export const FewEntries: Story = {
-  args: { entries: sampleEntries.slice(0, 3) },
+  args: {
+    entries: sampleEntries.slice(0, 3),
+  },
   decorators: [
-    Story => (
-      <div style={{ height: 300, width: 200, display: "flex" }}>
+    (Story) => (
+      <div
+        style={{
+          height: 300,
+          width: 200,
+          display: "flex",
+        }}
+      >
         <Story />
       </div>
     ),
   ],
   parameters: {
-    docs: { description: { story: "Fewer entries — bars spread out more." } },
+    docs: {
+      description: {
+        story: "Fewer entries — bars spread out more.",
+      },
+    },
   },
 }
 
@@ -124,13 +146,23 @@ export const WithoutIcons: Story = {
     entries: sampleEntries.map(({ iconUrl: _, ...e }) => e),
   },
   decorators: [
-    Story => (
-      <div style={{ height: 300, width: 500, display: "flex" }}>
+    (Story) => (
+      <div
+        style={{
+          height: 300,
+          width: 500,
+          display: "flex",
+        }}
+      >
         <Story />
       </div>
     ),
   ],
   parameters: {
-    docs: { description: { story: "Entries without icon URLs — colored squares shown instead." } },
+    docs: {
+      description: {
+        story: "Entries without icon URLs — colored squares shown instead.",
+      },
+    },
   },
 }

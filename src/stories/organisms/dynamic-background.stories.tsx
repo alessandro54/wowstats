@@ -25,7 +25,10 @@ function SlugInjector({ slug }: { slug: WowClassSlug | null }) {
   const set = useSetHoverSlug()
   useEffect(() => {
     set(slug)
-  }, [slug, set])
+  }, [
+    slug,
+    set,
+  ])
   return null
 }
 
@@ -33,18 +36,21 @@ function InteractiveWrapper({ slug }: { slug: WowClassSlug | null }) {
   return (
     <HoverProvider>
       <SlugInjector slug={slug} />
-      <div className="relative h-[500px] w-full overflow-hidden" style={{ isolation: "isolate", transform: "translateZ(0)" }}>
+      <div
+        className="relative h-[500px] w-full overflow-hidden"
+        style={{
+          isolation: "isolate",
+          transform: "translateZ(0)",
+        }}
+      >
         <DynamicBackground />
         <div className="relative z-10 flex h-full flex-col items-center justify-center gap-3">
           <p className="text-foreground text-lg font-semibold">
-            {slug ? slug.replace("-", " ").replace(/\b\w/g, c => c.toUpperCase()) : "No class"}
+            {slug ? slug.replace("-", " ").replace(/\b\w/g, (c) => c.toUpperCase()) : "No class"}
           </p>
           <p className="text-muted-foreground text-sm">
-            Use the
-            {" "}
-            <code className="bg-muted rounded px-1 text-xs">slug</code>
-            {" "}
-            control below to switch classes
+            Use the <code className="bg-muted rounded px-1 text-xs">slug</code> control below to
+            switch classes
           </p>
         </div>
       </div>
@@ -55,7 +61,9 @@ function InteractiveWrapper({ slug }: { slug: WowClassSlug | null }) {
 const meta = {
   title: "Organisms/DynamicBackground",
   component: DynamicBackground,
-  tags: ["autodocs"],
+  tags: [
+    "autodocs",
+  ],
   parameters: {
     docs: {
       description: {
@@ -71,11 +79,16 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Interactive: Story = {
-  args: { slug: "warrior" } as any,
+  args: {
+    slug: "warrior",
+  } as any,
   argTypes: {
     slug: {
       control: "select",
-      options: [null, ...ALL_SLUGS],
+      options: [
+        null,
+        ...ALL_SLUGS,
+      ],
       description: "WoW class slug injected into hover context",
     },
   } as any,
@@ -83,7 +96,8 @@ export const Interactive: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Pick any class from the dropdown to see the background blob change color in real-time.",
+        story:
+          "Pick any class from the dropdown to see the background blob change color in real-time.",
       },
     },
   },
@@ -92,10 +106,16 @@ export const Interactive: Story = {
 export const AllClasses: Story = {
   render: () => (
     <div className="grid grid-cols-2 gap-0 sm:grid-cols-3 lg:grid-cols-4">
-      {ALL_SLUGS.map(slug => (
+      {ALL_SLUGS.map((slug) => (
         <HoverProvider key={slug}>
           <SlugInjector slug={slug} />
-          <div className="relative h-48 overflow-hidden border" style={{ isolation: "isolate", transform: "translateZ(0)" }}>
+          <div
+            className="relative h-48 overflow-hidden border"
+            style={{
+              isolation: "isolate",
+              transform: "translateZ(0)",
+            }}
+          >
             <DynamicBackground />
             <div className="relative z-10 flex h-full items-center justify-center">
               <span className="text-foreground bg-background/60 rounded-md px-2 py-1 text-xs font-medium capitalize backdrop-blur-sm">
@@ -109,7 +129,9 @@ export const AllClasses: Story = {
   ),
   parameters: {
     docs: {
-      description: { story: "Gallery of all 13 class color blobs side-by-side." },
+      description: {
+        story: "Gallery of all 13 class color blobs side-by-side.",
+      },
     },
   },
 }
@@ -118,7 +140,9 @@ export const NoClass: Story = {
   render: () => <InteractiveWrapper slug={null} />,
   parameters: {
     docs: {
-      description: { story: "Fallback pink blob when no class is active." },
+      description: {
+        story: "Fallback pink blob when no class is active.",
+      },
     },
   },
 }

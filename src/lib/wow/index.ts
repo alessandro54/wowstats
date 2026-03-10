@@ -22,10 +22,7 @@ export { getWowClassBySlug } from "./classes"
 export {
   getClassBgGradient,
   getClassColor,
-  getClassColorOklch,
-  getClassColors,
   getClassColorVar,
-  getSpecColor,
 } from "./colors"
 
 // Re-export all spec utilities

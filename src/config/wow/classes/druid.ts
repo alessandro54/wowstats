@@ -1,12 +1,11 @@
 import type { WowClassConfig } from "./classes-config"
 
+// Class color: #FF7D0A
 const DruidConfig: WowClassConfig = {
   id: 11,
   name: "Druid",
   slug: "druid",
   iconUrl: "https://render.worldofwarcraft.com/us/icons/56/classicon_druid.jpg",
-  color: "#FF7D0A",
-  colorOlkch: "oklch(0.6031 0.2533 64.27)",
   specs: [
     {
       id: 102,

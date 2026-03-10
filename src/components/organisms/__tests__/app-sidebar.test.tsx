@@ -16,7 +16,9 @@ vi.mock("@/components/ui/sidebar", () => ({
   SidebarContent: ({ children }: any) => <div>{children}</div>,
   SidebarHeader: ({ children }: any) => <div>{children}</div>,
   SidebarRail: () => <div data-testid="sidebar-rail" />,
-  useSidebar: () => ({ open: true }),
+  useSidebar: () => ({
+    open: true,
+  }),
 }))
 
 describe("appSidebar", () => {

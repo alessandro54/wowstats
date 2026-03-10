@@ -23,7 +23,12 @@ function NavReader() {
 }
 
 function wrap(ui: React.ReactNode) {
-  return render(<TopNavProvider>{ui}<NavReader /></TopNavProvider>)
+  return render(
+    <TopNavProvider>
+      {ui}
+      <NavReader />
+    </TopNavProvider>,
+  )
 }
 
 describe("pvpSpecTopNav", () => {
@@ -48,7 +53,11 @@ describe("pvpSpecTopNav", () => {
   })
 
   it("renders BracketSelector for all bracket slugs", () => {
-    for (const bracket of ["2v2", "3v3", "shuffle"]) {
+    for (const bracket of [
+      "2v2",
+      "3v3",
+      "shuffle",
+    ]) {
       vi.mocked(usePathname).mockReturnValue(`/pvp/warrior/arms/${bracket}`)
       const { unmount } = wrap(
         <PvpSpecTopNav className="Warrior" classSlug="warrior" specSlug="arms" />,

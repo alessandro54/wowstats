@@ -2,13 +2,17 @@
 import type { ImgHTMLAttributes } from "react"
 
 type NextImageProps = Omit<ImgHTMLAttributes<HTMLImageElement>, "src"> & {
-  src: string | { src: string }
+  src:
+    | string
+    | {
+        src: string
+      }
   unoptimized?: boolean
   priority?: boolean
   quality?: number | string
   fill?: boolean
   sizes?: string
-  loader?: (props: { src: string, width: number, quality?: number }) => string
+  loader?: (props: { src: string; width: number; quality?: number }) => string
 }
 
 export default function Image({

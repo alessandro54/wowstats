@@ -1,12 +1,11 @@
 import type { WowClassConfig } from "./classes-config"
 
+// Class color: #FFFFFF
 const PriestConfig: WowClassConfig = {
   id: 5,
   name: "Priest",
   slug: "priest",
   iconUrl: "https://render.worldofwarcraft.com/us/icons/56/classicon_priest.jpg",
-  color: "#FFFFFF",
-  colorOlkch: "oklch(0.9275 0.0 0.0)",
   specs: [
     {
       id: 256,

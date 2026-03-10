@@ -14,7 +14,11 @@ vi.mock("next/image", () => ({
 }))
 
 vi.mock("next/link", () => ({
-  default: ({ children, href, ...props }: any) => <a href={href} {...props}>{children}</a>,
+  default: ({ children, href, ...props }: any) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
+  ),
 }))
 
 vi.mock("@/components/providers/hover-provider", () => ({
@@ -24,21 +28,40 @@ vi.mock("@/components/providers/hover-provider", () => ({
 vi.mock("@/components/ui/sidebar", () => ({
   SidebarGroup: ({ children }: any) => <div data-testid="sidebar-group">{children}</div>,
   SidebarGroupLabel: ({ children }: any) => <div data-testid="sidebar-group-label">{children}</div>,
-  SidebarMenu: ({ children, ...props }: any) => <div data-testid="sidebar-menu" {...props}>{children}</div>,
+  SidebarMenu: ({ children, ...props }: any) => (
+    <div data-testid="sidebar-menu" {...props}>
+      {children}
+    </div>
+  ),
   SidebarMenuItem: ({ children }: any) => <div data-testid="sidebar-menu-item">{children}</div>,
-  SidebarMenuButton: ({ children, tooltip: _tooltip, ...props }: any) => <button {...props}>{children}</button>,
+  SidebarMenuButton: ({ children, tooltip: _tooltip, ...props }: any) => (
+    <button {...props}>{children}</button>
+  ),
   SidebarMenuSub: ({ children }: any) => <div data-testid="sidebar-menu-sub">{children}</div>,
-  SidebarMenuSubItem: ({ children, ...props }: any) => <div data-testid="sidebar-menu-sub-item" {...props}>{children}</div>,
+  SidebarMenuSubItem: ({ children, ...props }: any) => (
+    <div data-testid="sidebar-menu-sub-item" {...props}>
+      {children}
+    </div>
+  ),
   SidebarMenuSubButton: ({ children, asChild: _asChild }: any) => <div>{children}</div>,
-  useSidebar: vi.fn(() => ({ open: true, isMobile: false })),
+  useSidebar: vi.fn(() => ({
+    open: true,
+    isMobile: false,
+  })),
 }))
 
 vi.mock("@/components/ui/collapsible", () => ({
   Collapsible: ({ children, open, onMouseEnter, ...props }: any) => (
-    <div data-testid="collapsible" data-open={open} onMouseEnter={onMouseEnter} {...props}>{children}</div>
+    <div data-testid="collapsible" data-open={open} onMouseEnter={onMouseEnter} {...props}>
+      {children}
+    </div>
   ),
-  CollapsibleTrigger: ({ children, asChild: _asChild }: any) => <div data-testid="collapsible-trigger">{children}</div>,
-  CollapsibleContent: ({ children }: any) => <div data-testid="collapsible-content">{children}</div>,
+  CollapsibleTrigger: ({ children, asChild: _asChild }: any) => (
+    <div data-testid="collapsible-trigger">{children}</div>
+  ),
+  CollapsibleContent: ({ children }: any) => (
+    <div data-testid="collapsible-content">{children}</div>
+  ),
 }))
 
 vi.mock("@/components/molecules/nav-class-hover-card", () => ({
@@ -77,7 +100,7 @@ describe("navMain", () => {
     })
 
     // After timer fires, one should be open
-    const openItem = getAllByTestId("collapsible").find(el => el.dataset.open === "true")
+    const openItem = getAllByTestId("collapsible").find((el) => el.dataset.open === "true")
     expect(openItem).toBeDefined()
 
     vi.useRealTimers()
@@ -96,7 +119,7 @@ describe("navMain", () => {
     // Leave the menu
     fireEvent.mouseLeave(getByTestId("sidebar-menu"))
 
-    const openItem = getAllByTestId("collapsible").find(el => el.dataset.open === "true")
+    const openItem = getAllByTestId("collapsible").find((el) => el.dataset.open === "true")
     expect(openItem).toBeUndefined()
 
     vi.useRealTimers()
@@ -112,18 +135,21 @@ describe("navMain", () => {
     })
 
     const links = container.querySelectorAll("a")
-    const hrefs = Array.from(links).map(l => l.getAttribute("href"))
+    const hrefs = Array.from(links).map((l) => l.getAttribute("href"))
 
     // Should have spec links and bracket links (2v2, 3v3, shuffle)
-    expect(hrefs.some(h => h?.includes("/pvp/") && h?.includes("/2v2"))).toBe(true)
-    expect(hrefs.some(h => h?.includes("/pvp/") && h?.includes("/3v3"))).toBe(true)
-    expect(hrefs.some(h => h?.includes("/pvp/") && h?.includes("/shuffle"))).toBe(true)
+    expect(hrefs.some((h) => h?.includes("/pvp/") && h?.includes("/2v2"))).toBe(true)
+    expect(hrefs.some((h) => h?.includes("/pvp/") && h?.includes("/3v3"))).toBe(true)
+    expect(hrefs.some((h) => h?.includes("/pvp/") && h?.includes("/shuffle"))).toBe(true)
 
     vi.useRealTimers()
   })
 
   it("shows NavClassHoverCard when sidebar is collapsed", () => {
-    vi.mocked(useSidebar).mockReturnValue({ open: false, isMobile: false } as any)
+    vi.mocked(useSidebar).mockReturnValue({
+      open: false,
+      isMobile: false,
+    } as any)
     const { getAllByTestId } = render(<NavMain />)
     const hoverCards = getAllByTestId("hover-card")
     expect(hoverCards.length).toBeGreaterThan(0)

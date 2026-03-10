@@ -18,21 +18,25 @@ export function HeroSection({ heroEntries, activeColor, classSlug }: Props) {
   const trees = splitHeroTrees(heroEntries)
   const [flipped, setFlipped] = useState(false)
 
-  if (trees.length === 0)
-    return null
+  if (trees.length === 0) return null
 
   const primary = trees[0]
   const alt = trees[1]
-  const altPct = alt ? Math.max(...alt.map(t => t.usage_pct)).toFixed(0) : null
-  const primaryPct = Math.max(...primary.map(t => t.usage_pct)).toFixed(0)
+  const altPct = alt ? Math.max(...alt.map((t) => t.usage_pct)).toFixed(0) : null
+  const primaryPct = Math.max(...primary.map((t) => t.usage_pct)).toFixed(0)
 
-  const toggle = () => setFlipped(f => !f)
+  const toggle = () => setFlipped((f) => !f)
 
   return (
     <section className="w-full space-y-3 lg:w-auto">
       <h2 className="text-center text-lg font-semibold lg:text-left">Hero Talents</h2>
 
-      <div className="relative inline-block" style={{ perspective: "1200px" }}>
+      <div
+        className="relative inline-block"
+        style={{
+          perspective: "1200px",
+        }}
+      >
         <div
           className="relative transition-transform duration-500 ease-in-out"
           style={{
@@ -41,12 +45,19 @@ export function HeroSection({ heroEntries, activeColor, classSlug }: Props) {
           }}
         >
           {/* Both faces stacked in a grid so the taller one sizes the container */}
-          <div className="grid [&>*]:col-start-1 [&>*]:row-start-1" style={{ transformStyle: "preserve-3d" }}>
+          <div
+            className="grid [&>*]:col-start-1 [&>*]:row-start-1"
+            style={{
+              transformStyle: "preserve-3d",
+            }}
+          >
             {/* Front — primary tree */}
             <TalentCard
               classSlug={classSlug}
               className={`flex items-center justify-center ${flipped ? "pointer-events-none" : ""}`}
-              style={{ backfaceVisibility: "hidden" }}
+              style={{
+                backfaceVisibility: "hidden",
+              }}
             >
               <HeroTree talents={primary} activeColor={activeColor} />
             </TalentCard>

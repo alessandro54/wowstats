@@ -13,8 +13,7 @@ export function StickySpecHeader({ children, className }: Props) {
   useEffect(() => {
     const el = ref.current
     const container = el?.parentElement
-    if (!el || !container)
-      return // v8 ignore next
+    if (!el || !container) return // v8 ignore next
 
     const onScroll = () => {
       const t = Math.min(container.scrollTop / 80, 1)
@@ -22,7 +21,9 @@ export function StickySpecHeader({ children, className }: Props) {
       el.style.backdropFilter = t > 0.05 ? `blur(${t * 12}px)` : "none"
     }
 
-    container.addEventListener("scroll", onScroll, { passive: true })
+    container.addEventListener("scroll", onScroll, {
+      passive: true,
+    })
     return () => container.removeEventListener("scroll", onScroll)
   }, [])
 

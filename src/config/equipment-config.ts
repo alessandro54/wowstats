@@ -45,10 +45,10 @@ export const QUALITY_COLORS: Record<string, string> = {
 
 export function formatSlot(slot: string): string {
   return (
-    SLOT_LABELS[slot.toUpperCase()]
-    ?? slot
+    SLOT_LABELS[slot.toUpperCase()] ??
+    slot
       .split("_")
-      .map(w => w.charAt(0) + w.slice(1).toLowerCase())
+      .map((w) => w.charAt(0) + w.slice(1).toLowerCase())
       .join(" ")
   )
 }
@@ -71,14 +71,20 @@ const STAT_COLOR_VARS: Record<string, string> = {
   VERSATILITY: "var(--color-stat-versatility)",
 }
 
-export function getStatMeta(stat: string): { label: string, color?: string } {
-  const label
-    = STAT_LABELS[stat]
-      ?? stat
-        .split("_")
-        .map(w => w.charAt(0) + w.slice(1).toLowerCase())
-        .join(" ")
-  return { label, color: STAT_COLOR_VARS[stat] }
+export function getStatMeta(stat: string): {
+  label: string
+  color?: string
+} {
+  const label =
+    STAT_LABELS[stat] ??
+    stat
+      .split("_")
+      .map((w) => w.charAt(0) + w.slice(1).toLowerCase())
+      .join(" ")
+  return {
+    label,
+    color: STAT_COLOR_VARS[stat],
+  }
 }
 
 export function isReshiiWraps(name: string | null | undefined): boolean {

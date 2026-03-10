@@ -6,7 +6,9 @@ import { SidebarProvider } from "../../components/ui/sidebar"
 const meta = {
   title: "Organisms/NavProjects",
   component: NavProjects,
-  tags: ["autodocs"],
+  tags: [
+    "autodocs",
+  ],
   parameters: {
     docs: {
       description: {
@@ -17,9 +19,13 @@ const meta = {
     layout: "centered",
   },
   decorators: [
-    Story => (
+    (Story) => (
       <SidebarProvider>
-        <div style={{ width: 260 }}>
+        <div
+          style={{
+            width: 260,
+          }}
+        >
           <Story />
         </div>
       </SidebarProvider>
@@ -33,18 +39,40 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   args: {
     projects: [
-      { name: "Arms PvP Guide", url: "#", icon: Frame },
-      { name: "Arena Analytics", url: "#", icon: PieChart },
-      { name: "Ladder Map", url: "#", icon: Map },
+      {
+        name: "Arms PvP Guide",
+        url: "#",
+        icon: Frame,
+      },
+      {
+        name: "Arena Analytics",
+        url: "#",
+        icon: PieChart,
+      },
+      {
+        name: "Ladder Map",
+        url: "#",
+        icon: Map,
+      },
     ],
   },
 }
 
 export const SingleProject: Story = {
   args: {
-    projects: [{ name: "My Solo Project", url: "#", icon: Frame }],
+    projects: [
+      {
+        name: "My Solo Project",
+        url: "#",
+        icon: Frame,
+      },
+    ],
   },
   parameters: {
-    docs: { description: { story: "Single project — the 'More' overflow button is still shown." } },
+    docs: {
+      description: {
+        story: "Single project — the 'More' overflow button is still shown.",
+      },
+    },
   },
 }

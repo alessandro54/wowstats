@@ -11,8 +11,16 @@ vi.mock("@/lib/utils", () => ({
 }))
 
 const player: TopPlayer = {
-  name: "Cdew", realm: "Tichondrius", region: "us", rating: 2450,
-  wins: 200, losses: 80, rank: 1, score: 2800, avatar_url: null, class_slug: "shaman",
+  name: "Cdew",
+  realm: "Tichondrius",
+  region: "us",
+  rating: 2450,
+  wins: 200,
+  losses: 80,
+  rank: 1,
+  score: 2800,
+  avatar_url: null,
+  class_slug: "shaman",
 }
 
 describe("characterUrl", () => {
@@ -21,7 +29,12 @@ describe("characterUrl", () => {
   })
 
   it("handles multi-word realms", () => {
-    expect(characterUrl({ ...player, realm: "Bleeding Hollow" })).toBe("/character/us/bleeding-hollow/cdew")
+    expect(
+      characterUrl({
+        ...player,
+        realm: "Bleeding Hollow",
+      }),
+    ).toBe("/character/us/bleeding-hollow/cdew")
   })
 })
 
@@ -53,7 +66,14 @@ describe("playerTooltip", () => {
   })
 
   it("renders dash when rank is null", () => {
-    const { container } = render(<PlayerTooltip player={{ ...player, rank: null }} />)
+    const { container } = render(
+      <PlayerTooltip
+        player={{
+          ...player,
+          rank: null,
+        }}
+      />,
+    )
     expect(container.textContent).toContain("—")
   })
 

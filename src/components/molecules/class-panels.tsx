@@ -13,10 +13,21 @@ interface Props {
   classes: WowClassConfig[]
 }
 
-const MAGNIFY_FLEX = [12, 2.5, 1.6, 1.1, 0.7, 0.4]
+const MAGNIFY_FLEX = [
+  12,
+  2.5,
+  1.6,
+  1.1,
+  0.7,
+  0.4,
+]
 
 function flexForDistance(distance: number): number {
   return MAGNIFY_FLEX[Math.min(distance, MAGNIFY_FLEX.length - 1)]
+}
+
+function cssColor(slug: string): string {
+  return `var(--color-class-${slug})`
 }
 
 export function ClassPanels({ classes }: Props) {
@@ -26,7 +37,7 @@ export function ClassPanels({ classes }: Props) {
   const [activeSpec, setActiveSpec] = useState<number | null>(null)
   const [isDragging, setIsDragging] = useState(false)
   const setHoverSlug = useSetHoverSlug()
-  const activeIndex = active ? classes.findIndex(c => c.slug === active) : -1
+  const activeIndex = active ? classes.findIndex((c) => c.slug === active) : -1
   const activeClass = activeIndex >= 0 ? classes[activeIndex] : null
   const sliderRef = useRef<HTMLDivElement>(null)
   const N = classes.length
@@ -65,7 +76,7 @@ export function ClassPanels({ classes }: Props) {
 
   function handleSliderPointerDown(e: React.PointerEvent) {
     setIsDragging(true)
-      ; (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
+    ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
     selectIndex(indexFromPointer(e.clientX))
   }
 
@@ -83,9 +94,14 @@ export function ClassPanels({ classes }: Props) {
   // Preload all class banners and spec splashes so they're cached on first use
   for (const cls of classes) {
     const banner = cls.bannerUrl || cls.iconRemasteredUrl || cls.iconUrl
-    preload(banner, { as: "image" })
+    preload(banner, {
+      as: "image",
+    })
     for (const spec of cls.specs) {
-      if (spec.splash?.url) preload(spec.splash.url, { as: "image" })
+      if (spec.splash?.url)
+        preload(spec.splash.url, {
+          as: "image",
+        })
     }
   }
 
@@ -94,7 +110,10 @@ export function ClassPanels({ classes }: Props) {
       {/* Panels */}
       <div
         className="flex min-h-0 flex-1 overflow-x-auto"
-        onMouseLeave={() => { setHovered(null); if (!active) setHoverSlug(null) }}
+        onMouseLeave={() => {
+          setHovered(null)
+          if (!active) setHoverSlug(null)
+        }}
       >
         {classes.map((cls, index) => {
           const isActive = active === cls.slug
@@ -112,15 +131,18 @@ export function ClassPanels({ classes }: Props) {
                 "relative flex h-full shrink-0 overflow-hidden bg-transparent transition-all duration-300 ease-in-out",
                 isActive ? "cursor-default" : "cursor-pointer",
               )}
-              style={{
-                "--cls-color": cls.color,
-                flexGrow,
-                flexShrink: 1,
-                flexBasis: 0,
-                backgroundColor: !isActive && isHovered
-                  ? `color-mix(in srgb, ${cls.color} 6%, transparent)`
-                  : undefined,
-              } as React.CSSProperties}
+              style={
+                {
+                  "--cls-color": cssColor(cls.slug),
+                  flexGrow,
+                  flexShrink: 1,
+                  flexBasis: 0,
+                  backgroundColor:
+                    !isActive && isHovered
+                      ? `color-mix(in srgb, ${cssColor(cls.slug)} 6%, transparent)`
+                      : undefined,
+                } as React.CSSProperties
+              }
             >
               {/* Collapsed — icon only */}
               <div
@@ -128,11 +150,15 @@ export function ClassPanels({ classes }: Props) {
                   "absolute inset-0 flex items-center justify-center transition-opacity duration-200",
                   isActive ? "opacity-0 pointer-events-none" : "opacity-100",
                 )}
-                style={{ opacity: active && !isActive ? 0.4 : undefined }}
+                style={{
+                  opacity: active && !isActive ? 0.4 : undefined,
+                }}
               >
                 <div
                   className="relative w-[clamp(28px,70%,60px)] aspect-square animate-icon-in"
-                  style={{ animationDelay: `${index * 60}ms` }}
+                  style={{
+                    animationDelay: `${index * 60}ms`,
+                  }}
                 >
                   <Image
                     src={cls.iconRemasteredUrl || cls.iconUrl}
@@ -154,9 +180,11 @@ export function ClassPanels({ classes }: Props) {
                 <div
                   className="relative flex w-3/5 shrink-0 items-center justify-center overflow-hidden"
                   style={{
-                    background: `linear-gradient(135deg, color-mix(in srgb, ${cls.color} 20%, transparent), color-mix(in srgb, ${cls.color} 5%, transparent))`,
-                    maskImage: "linear-gradient(to bottom, transparent 0%, black 3%, black 97%, transparent 100%)",
-                    WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 3%, black 97%, transparent 100%)",
+                    background: `linear-gradient(135deg, color-mix(in srgb, ${cssColor(cls.slug)} 20%, transparent), color-mix(in srgb, ${cssColor(cls.slug)} 5%, transparent))`,
+                    maskImage:
+                      "linear-gradient(to bottom, transparent 0%, black 3%, black 97%, transparent 100%)",
+                    WebkitMaskImage:
+                      "linear-gradient(to bottom, transparent 0%, black 3%, black 97%, transparent 100%)",
                   }}
                 >
                   {/* Base: class banner */}
@@ -165,30 +193,40 @@ export function ClassPanels({ classes }: Props) {
                     alt={cls.name}
                     fill
                     className="object-cover object-right opacity-40 transition-opacity duration-500"
-                    style={{ opacity: hoveredSpec ? 0 : undefined }}
+                    style={{
+                      opacity: hoveredSpec ? 0 : undefined,
+                    }}
                   />
                   {/* Spec splashes — crossfade on hover */}
-                  {cls.specs.map(spec => spec.splash?.url && (
-                    <Image
-                      key={spec.id}
-                      src={spec.splash.url}
-                      alt={spec.name}
-                      fill
-                      className="object-cover transition-opacity duration-500"
-                      style={{
-                        opacity: hoveredSpec === spec.id ? 0.45 : 0,
-                        objectPosition: spec.splash.position ?? "right center",
-                      }}
-                    />
-                  ))}
+                  {cls.specs.map(
+                    (spec) =>
+                      spec.splash?.url && (
+                        <Image
+                          key={spec.id}
+                          src={spec.splash.url}
+                          alt={spec.name}
+                          fill
+                          className="object-cover transition-opacity duration-500"
+                          style={{
+                            opacity: hoveredSpec === spec.id ? 0.45 : 0,
+                            objectPosition: spec.splash.position ?? "right center",
+                          }}
+                        />
+                      ),
+                  )}
                 </div>
 
                 {/* Right: name + specs */}
                 <div className="flex min-w-0 flex-1 flex-col justify-center gap-0.5 px-4 py-3 select-none">
-                  <p className="mb-1 text-base font-bold" style={{ color: cls.color }}>
+                  <p
+                    className="mb-1 text-base font-bold"
+                    style={{
+                      color: cssColor(cls.slug),
+                    }}
+                  >
                     {cls.name}
                   </p>
-                  {cls.specs.map(spec => {
+                  {cls.specs.map((spec) => {
                     const isSpecActive = activeSpec === spec.id
                     const showPills = isSpecActive || hoveredSpec === spec.id
                     return (
@@ -205,9 +243,13 @@ export function ClassPanels({ classes }: Props) {
                               setActiveSpec(isSpecActive ? null : spec.id)
                           }}
                           className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 transition-all duration-200"
-                          style={isSpecActive || hoveredSpec === spec.id
-                            ? { backgroundColor: `color-mix(in srgb, ${cls.color} 15%, transparent)` }
-                            : undefined}
+                          style={
+                            isSpecActive || hoveredSpec === spec.id
+                              ? {
+                                  backgroundColor: `color-mix(in srgb, ${cssColor(cls.slug)} 15%, transparent)`,
+                                }
+                              : undefined
+                          }
                         >
                           <Image
                             src={spec.iconRemasteredUrl || spec.iconUrl}
@@ -238,19 +280,19 @@ export function ClassPanels({ classes }: Props) {
                                   href={`/pvp/${cls.slug}/${spec.name}/${bracket.slug}`}
                                   className="animate-pill-in rounded-full px-3 py-1 text-sm font-semibold transition-all"
                                   style={{
-                                    border: `1px solid ${cls.color}`,
-                                    color: cls.color,
+                                    border: `1px solid ${cssColor(cls.slug)}`,
+                                    color: cssColor(cls.slug),
                                     animationDelay: `${i * 100}ms`,
                                   }}
-                                  onMouseEnter={e => {
+                                  onMouseEnter={(e) => {
                                     const el = e.currentTarget
-                                    el.style.backgroundColor = `color-mix(in srgb, ${cls.color} 75%, transparent)`
+                                    el.style.backgroundColor = `color-mix(in srgb, ${cssColor(cls.slug)} 75%, transparent)`
                                     el.style.color = "oklch(10% 0 0)"
                                   }}
-                                  onMouseLeave={e => {
+                                  onMouseLeave={(e) => {
                                     const el = e.currentTarget
                                     el.style.backgroundColor = "transparent"
-                                    el.style.color = cls.color
+                                    el.style.color = cssColor(cls.slug)
                                   }}
                                 >
                                   {bracket.label}
@@ -268,12 +310,12 @@ export function ClassPanels({ classes }: Props) {
               {/* Separator */}
               {cls.slug !== classes[classes.length - 1].slug && (
                 <div
-                  className="pointer-events-none absolute right-0 top-0 h-full w-px bg-linear-to-b from-transparent via-white/10 to-transparent"
+                  className="pointer-events-none absolute right-0 top-0 h-full w-px bg-linear-to-b from-transparent via-black/10 to-transparent dark:via-white/10"
                   style={{
                     transition: "opacity 400ms ease",
                     opacity: (() => {
                       if (activeIndex < 0) return 1
-                      const dist = (index + 0.5) - activeIndex
+                      const dist = index + 0.5 - activeIndex
                       const maxD = dist < 0 ? activeIndex - 0.5 : N - 1.5 - activeIndex
                       return maxD > 0 ? 1 - Math.abs(dist) / maxD : 1
                     })(),
@@ -297,7 +339,7 @@ export function ClassPanels({ classes }: Props) {
           onPointerCancel={handleSliderPointerUp}
         >
           {/* Track line */}
-          <div className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 rounded-full bg-white/10" />
+          <div className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 rounded-full bg-black/15 dark:bg-white/10" />
 
           {/* Class icon stops */}
           {classes.map((cls, i) => {
@@ -306,15 +348,20 @@ export function ClassPanels({ classes }: Props) {
               <div
                 key={cls.slug}
                 className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-200"
-                style={{ left: `${(i / (N - 1)) * 100}%` }}
+                style={{
+                  left: `${(i / (N - 1)) * 100}%`,
+                }}
               >
                 <div
-                  className="rounded-full transition-all duration-200"
+                  className={cn(
+                    "rounded-full transition-all duration-200",
+                    !isStop && "bg-black/20 dark:bg-white/20",
+                  )}
                   style={{
                     width: isStop ? 6 : 4,
                     height: isStop ? 6 : 4,
-                    backgroundColor: isStop ? cls.color : "rgba(255,255,255,0.2)",
-                    boxShadow: isStop ? `0 0 6px ${cls.color}` : undefined,
+                    backgroundColor: isStop ? cssColor(cls.slug) : undefined,
+                    boxShadow: isStop ? `0 0 6px ${cssColor(cls.slug)}` : undefined,
                   }}
                 />
               </div>
@@ -325,15 +372,19 @@ export function ClassPanels({ classes }: Props) {
           {thumbPercent !== null && activeClass && (
             <div
               className="pointer-events-none absolute top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-200"
-              style={{ left: `${thumbPercent}%` }}
+              style={{
+                left: `${thumbPercent}%`,
+              }}
             >
               <div
                 className="h-3 w-3 rounded-full ring-2 ring-offset-1 ring-offset-background"
-                style={{
-                  backgroundColor: activeClass.color,
-                  "--tw-ring-color": activeClass.color,
-                  boxShadow: `0 0 8px ${activeClass.color}`,
-                } as React.CSSProperties}
+                style={
+                  {
+                    backgroundColor: cssColor(activeClass.slug),
+                    "--tw-ring-color": cssColor(activeClass.slug),
+                    boxShadow: `0 0 8px ${cssColor(activeClass.slug)}`,
+                  } as React.CSSProperties
+                }
               />
             </div>
           )}

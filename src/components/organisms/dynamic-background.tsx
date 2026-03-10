@@ -11,7 +11,7 @@ export default function DynamicBackground() {
   const segments = pathname.split("/").filter(Boolean)
   // Routes: /pvp/[classSlug]/[specSlug]/[bracket]
   const isPvpRoute = segments[0] === "pvp"
-  const classSlug = (isPvpRoute ? segments[1] : segments[0]) as WowClassSlug | undefined ?? null
+  const classSlug = ((isPvpRoute ? segments[1] : segments[0]) as WowClassSlug | undefined) ?? null
   const specSlug = (isPvpRoute ? segments[2] : segments[1]) ?? null
   const isSpecPage = isPvpRoute && classSlug && specSlug
 
@@ -24,7 +24,10 @@ export default function DynamicBackground() {
       {/* Class color — top center blob */}
       <div
         className="animate-blob animation-delay-6000 pointer-events-none fixed -top-[40vw] left-1/2 h-[50vw] w-[90vw] -translate-x-1/2 overflow-hidden rounded-full opacity-15 blur-3xl filter transition-all duration-700 ease-in-out"
-        style={{ zIndex: -1, background }}
+        style={{
+          zIndex: -1,
+          background,
+        }}
       />
       {/* Spec color — bottom center gradient (only on spec pages) */}
       {isSpecPage && (

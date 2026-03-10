@@ -27,7 +27,13 @@ export function TopNavProvider({ children }: { children: React.ReactNode }) {
   const reset = useCallback(() => setConfig({}), [])
 
   return (
-    <TopNavContext.Provider value={{ config, set, reset }}>
+    <TopNavContext.Provider
+      value={{
+        config,
+        set,
+        reset,
+      }}
+    >
       {children}
     </TopNavContext.Provider>
   )

@@ -5,20 +5,22 @@ import { describe, expect, it, vi } from "vitest"
 import { HeroSection } from "../hero-section"
 
 vi.mock("@/components/molecules/hero-tree", () => ({
-  HeroTree: ({ talents }: any) => (
-    <div data-testid="hero-tree">{talents.length} nodes</div>
-  ),
+  HeroTree: ({ talents }: any) => <div data-testid="hero-tree">{talents.length} nodes</div>,
 }))
 
 vi.mock("@/components/atoms/talent-card", () => ({
   TalentCard: ({ children, style, className }: any) => (
-    <div data-testid="talent-card" style={style} className={className}>{children}</div>
+    <div data-testid="talent-card" style={style} className={className}>
+      {children}
+    </div>
   ),
 }))
 
 vi.mock("@/components/atoms/corner-peel", () => ({
   CornerPeel: ({ onClick, label }: any) => (
-    <button data-testid="corner-peel" onClick={onClick}>{label}</button>
+    <button data-testid="corner-peel" onClick={onClick}>
+      {label}
+    </button>
   ),
 }))
 
@@ -26,7 +28,12 @@ function makeTalent(
   id: number,
   name: string,
   pct: number,
-  opts: { row?: number | null, col?: number | null, prereqs?: number[], nodeId?: number } = {},
+  opts: {
+    row?: number | null
+    col?: number | null
+    prereqs?: number[]
+    nodeId?: number
+  } = {},
 ): MetaTalent {
   return {
     id,
@@ -56,18 +63,45 @@ function makeTalent(
 
 // Two disconnected components = two hero trees
 const primaryTree = [
-  makeTalent(1, "Primary A", 95, { row: 0, col: 0 }),
-  makeTalent(2, "Primary B", 90, { row: 1, col: 0, prereqs: [1] }),
+  makeTalent(1, "Primary A", 95, {
+    row: 0,
+    col: 0,
+  }),
+  makeTalent(2, "Primary B", 90, {
+    row: 1,
+    col: 0,
+    prereqs: [
+      1,
+    ],
+  }),
 ]
 const altTree = [
-  makeTalent(10, "Alt A", 40, { row: 0, col: 0, nodeId: 10 }),
-  makeTalent(11, "Alt B", 35, { row: 1, col: 0, nodeId: 11, prereqs: [10] }),
+  makeTalent(10, "Alt A", 40, {
+    row: 0,
+    col: 0,
+    nodeId: 10,
+  }),
+  makeTalent(11, "Alt B", 35, {
+    row: 1,
+    col: 0,
+    nodeId: 11,
+    prereqs: [
+      10,
+    ],
+  }),
 ]
 
 describe("heroSection", () => {
   it("renders the Hero Talents heading", () => {
     const { container } = render(
-      <HeroSection heroEntries={[...primaryTree, ...altTree]} activeColor="#c79c6e" classSlug="warrior" />,
+      <HeroSection
+        heroEntries={[
+          ...primaryTree,
+          ...altTree,
+        ]}
+        activeColor="#c79c6e"
+        classSlug="warrior"
+      />,
     )
     expect(container.textContent).toContain("Hero Talents")
   })
@@ -81,7 +115,14 @@ describe("heroSection", () => {
 
   it("shows corner peel when two trees exist", () => {
     const { getByTestId } = render(
-      <HeroSection heroEntries={[...primaryTree, ...altTree]} activeColor="#c79c6e" classSlug="warrior" />,
+      <HeroSection
+        heroEntries={[
+          ...primaryTree,
+          ...altTree,
+        ]}
+        activeColor="#c79c6e"
+        classSlug="warrior"
+      />,
     )
     expect(getByTestId("corner-peel")).toBeInTheDocument()
     expect(getByTestId("corner-peel").textContent).toContain("Alt")
@@ -103,7 +144,14 @@ describe("heroSection", () => {
 
   it("renders both primary and alt tree cards when two trees exist", () => {
     const { getAllByTestId } = render(
-      <HeroSection heroEntries={[...primaryTree, ...altTree]} activeColor="#c79c6e" classSlug="warrior" />,
+      <HeroSection
+        heroEntries={[
+          ...primaryTree,
+          ...altTree,
+        ]}
+        activeColor="#c79c6e"
+        classSlug="warrior"
+      />,
     )
     const cards = getAllByTestId("talent-card")
     expect(cards.length).toBe(2)
@@ -111,7 +159,14 @@ describe("heroSection", () => {
 
   it("toggles corner peel label on click", () => {
     const { getByTestId } = render(
-      <HeroSection heroEntries={[...primaryTree, ...altTree]} activeColor="#c79c6e" classSlug="warrior" />,
+      <HeroSection
+        heroEntries={[
+          ...primaryTree,
+          ...altTree,
+        ]}
+        activeColor="#c79c6e"
+        classSlug="warrior"
+      />,
     )
     const peel = getByTestId("corner-peel")
     expect(peel.textContent).toContain("Alt")

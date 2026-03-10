@@ -13,16 +13,37 @@ vi.mock("@/components/providers/hover-provider", () => ({
 
 const classes: WowClassConfig[] = [
   {
-    id: 1, name: "Warrior", slug: "warrior", iconUrl: "/warrior.jpg", color: "#c79c6e", colorOlkch: "",
+    id: 1,
+    name: "Warrior",
+    slug: "warrior",
+    iconUrl: "/warrior.jpg",
     specs: [
-      { id: 71, name: "arms" as any, url: "", iconUrl: "/arms.jpg" },
-      { id: 72, name: "fury" as any, url: "", iconUrl: "/fury.jpg" },
+      {
+        id: 71,
+        name: "arms" as any,
+        url: "",
+        iconUrl: "/arms.jpg",
+      },
+      {
+        id: 72,
+        name: "fury" as any,
+        url: "",
+        iconUrl: "/fury.jpg",
+      },
     ],
   },
   {
-    id: 2, name: "Mage", slug: "mage", iconUrl: "/mage.jpg", color: "#69ccf0", colorOlkch: "",
+    id: 2,
+    name: "Mage",
+    slug: "mage",
+    iconUrl: "/mage.jpg",
     specs: [
-      { id: 62, name: "fire" as any, url: "", iconUrl: "/fire.jpg" },
+      {
+        id: 62,
+        name: "fire" as any,
+        url: "",
+        iconUrl: "/fire.jpg",
+      },
     ],
   },
 ]
@@ -53,7 +74,7 @@ describe("classAccordion", () => {
     const buttons = container.querySelectorAll("button")
     fireEvent.click(buttons[0])
     const links = container.querySelectorAll("a")
-    const hrefs = Array.from(links).map(l => l.getAttribute("href"))
+    const hrefs = Array.from(links).map((l) => l.getAttribute("href"))
     expect(hrefs).toContain("/pvp/warrior/arms")
     expect(hrefs).toContain("/pvp/warrior/fury")
   })

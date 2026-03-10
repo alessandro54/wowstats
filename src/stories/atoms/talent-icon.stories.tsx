@@ -29,7 +29,9 @@ const sampleTalent = {
 const meta = {
   title: "Atoms/TalentIcon",
   component: TalentIcon,
-  tags: ["autodocs"],
+  tags: [
+    "autodocs",
+  ],
   parameters: {
     docs: {
       description: {
@@ -40,7 +42,12 @@ const meta = {
   },
   argTypes: {
     size: {
-      control: { type: "range", min: 24, max: 128, step: 8 },
+      control: {
+        type: "range",
+        min: 24,
+        max: 128,
+        step: 8,
+      },
       description: "Icon size in pixels",
     },
     activeColor: {
@@ -120,7 +127,13 @@ export const SizeVariants: Story = {
   },
   render: () => (
     <div className="flex items-end gap-4">
-      {[32, 48, 56, 64, 80].map(size => (
+      {[
+        32,
+        48,
+        56,
+        64,
+        80,
+      ].map((size) => (
         <div key={size} className="flex flex-col items-center gap-2">
           <TalentIcon
             talent={sampleTalent}
@@ -154,12 +167,30 @@ export const ColorVariants: Story = {
   render: () => (
     <div className="flex flex-wrap gap-4">
       {[
-        { name: "Warrior", color: "#c79c6e" },
-        { name: "Paladin", color: "#f58cba" },
-        { name: "Mage", color: "#69ccf0" },
-        { name: "Priest", color: "#ffffff" },
-        { name: "Rogue", color: "#fff569" },
-        { name: "Death Knight", color: "#c41f3b" },
+        {
+          name: "Warrior",
+          color: "#c79c6e",
+        },
+        {
+          name: "Paladin",
+          color: "#f58cba",
+        },
+        {
+          name: "Mage",
+          color: "#69ccf0",
+        },
+        {
+          name: "Priest",
+          color: "#ffffff",
+        },
+        {
+          name: "Rogue",
+          color: "#fff569",
+        },
+        {
+          name: "Death Knight",
+          color: "#c41f3b",
+        },
       ].map(({ name, color }) => (
         <div key={name} className="flex flex-col items-center gap-2">
           <TalentIcon talent={sampleTalent} size={56} activeColor={color} tooltipContent={name} />

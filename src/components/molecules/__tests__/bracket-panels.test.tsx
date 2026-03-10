@@ -4,7 +4,14 @@ import { BracketPanels } from "../bracket-panels"
 
 // next/link renders as <a> in tests via the storybook/vitest mock
 vi.mock("next/link", () => ({
-  default: ({ href, children, onMouseEnter, onClick, className, style }: {
+  default: ({
+    href,
+    children,
+    onMouseEnter,
+    onClick,
+    className,
+    style,
+  }: {
     href: string
     children: React.ReactNode
     onMouseEnter?: () => void
@@ -12,7 +19,13 @@ vi.mock("next/link", () => ({
     className?: string
     style?: React.CSSProperties
   }) => (
-    <a href={href} onMouseEnter={onMouseEnter} onClick={onClick} className={className} style={style}>
+    <a
+      href={href}
+      onMouseEnter={onMouseEnter}
+      onClick={onClick}
+      className={className}
+      style={style}
+    >
       {children}
     </a>
   ),
@@ -35,7 +48,7 @@ describe("bracketPanels", () => {
   it("renders correct href for each bracket", () => {
     render(<BracketPanels {...defaultProps} />)
     const links = document.querySelectorAll("a")
-    const hrefs = Array.from(links).map(l => l.getAttribute("href"))
+    const hrefs = Array.from(links).map((l) => l.getAttribute("href"))
     expect(hrefs).toContain("/pvp/warrior/arms/2v2")
     expect(hrefs).toContain("/pvp/warrior/arms/3v3")
     expect(hrefs).toContain("/pvp/warrior/arms/shuffle")
@@ -68,7 +81,9 @@ describe("bracketPanels", () => {
     render(<BracketPanels {...defaultProps} />)
     const links = document.querySelectorAll("a")
     const hasColor = Array.from(links).some(
-      l => (l as HTMLElement).style.color === "rgb(198, 155, 109)" || l.getAttribute("style")?.includes("C69B6D"),
+      (l) =>
+        (l as HTMLElement).style.color === "rgb(198, 155, 109)" ||
+        l.getAttribute("style")?.includes("C69B6D"),
     )
     expect(hasColor).toBe(true)
   })
@@ -94,7 +109,10 @@ describe("bracketPanels", () => {
     const links = document.querySelectorAll("a")
     const firstPanel = links[0]
 
-    const clickEvent = new MouseEvent("click", { bubbles: true, cancelable: true })
+    const clickEvent = new MouseEvent("click", {
+      bubbles: true,
+      cancelable: true,
+    })
     const preventDefaultSpy = vi.spyOn(clickEvent, "preventDefault")
 
     firstPanel.dispatchEvent(clickEvent)

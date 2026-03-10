@@ -6,7 +6,11 @@ function makeTalent(
   id: number,
   name: string,
   usagePct: number,
-  opts: { row?: number | null, col?: number | null, prereqs?: number[] } = {},
+  opts: {
+    row?: number | null
+    col?: number | null
+    prereqs?: number[]
+  } = {},
 ): MetaTalent {
   return {
     id,
@@ -29,27 +33,60 @@ function makeTalent(
     usage_pct: usagePct,
     in_top_build: usagePct > 50,
     top_build_rank: 1,
-    tier: (usagePct > 50 ? "bis" : usagePct > 15 ? "situational" : "common") as "bis" | "situational" | "common",
+    tier: (usagePct > 50 ? "bis" : usagePct > 15 ? "situational" : "common") as
+      | "bis"
+      | "situational"
+      | "common",
     snapshot_at: "2026-03-03T00:00:00Z",
   }
 }
 
 const treeTalents: MetaTalent[] = [
-  makeTalent(1, "Slayer's Strike", 95.0, { row: 0, col: 1 }),
-  makeTalent(2, "Reap the Storm", 88.0, { row: 1, col: 0, prereqs: [1] }),
-  makeTalent(3, "Imminent Demise", 82.0, { row: 1, col: 2, prereqs: [1] }),
-  makeTalent(4, "Culling Cyclone", 91.0, { row: 2, col: 1, prereqs: [2, 3] }),
+  makeTalent(1, "Slayer's Strike", 95.0, {
+    row: 0,
+    col: 1,
+  }),
+  makeTalent(2, "Reap the Storm", 88.0, {
+    row: 1,
+    col: 0,
+    prereqs: [
+      1,
+    ],
+  }),
+  makeTalent(3, "Imminent Demise", 82.0, {
+    row: 1,
+    col: 2,
+    prereqs: [
+      1,
+    ],
+  }),
+  makeTalent(4, "Culling Cyclone", 91.0, {
+    row: 2,
+    col: 1,
+    prereqs: [
+      2,
+      3,
+    ],
+  }),
 ]
 
 const flatTalents: MetaTalent[] = [
-  makeTalent(1, "Slayer's Strike", 95.0, { row: null, col: null }),
-  makeTalent(2, "Reap the Storm", 88.0, { row: null, col: null }),
+  makeTalent(1, "Slayer's Strike", 95.0, {
+    row: null,
+    col: null,
+  }),
+  makeTalent(2, "Reap the Storm", 88.0, {
+    row: null,
+    col: null,
+  }),
 ]
 
 const meta = {
   title: "Molecules/HeroTree",
   component: HeroTree,
-  tags: ["autodocs"],
+  tags: [
+    "autodocs",
+  ],
   parameters: {
     docs: {
       description: {
@@ -78,7 +115,9 @@ export const FlatFallback: Story = {
   },
   parameters: {
     docs: {
-      description: { story: "Falls back to TalentList when display_row/col are null." },
+      description: {
+        story: "Falls back to TalentList when display_row/col are null.",
+      },
     },
   },
 }

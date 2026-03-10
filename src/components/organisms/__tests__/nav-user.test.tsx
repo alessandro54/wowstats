@@ -8,7 +8,9 @@ vi.mock("@/components/ui/sidebar", () => ({
   SidebarMenu: ({ children }: any) => <div>{children}</div>,
   SidebarMenuButton: ({ children }: any) => <button>{children}</button>,
   SidebarMenuItem: ({ children }: any) => <div>{children}</div>,
-  useSidebar: vi.fn(() => ({ isMobile: false })),
+  useSidebar: vi.fn(() => ({
+    isMobile: false,
+  })),
 }))
 
 vi.mock("@/components/ui/dropdown-menu", () => ({
@@ -28,7 +30,11 @@ vi.mock("@/components/ui/avatar", () => ({
   AvatarImage: ({ src, alt }: any) => <img src={src} alt={alt} />,
 }))
 
-const user = { name: "Alessandro", email: "test@example.com", avatar: "/avatar.png" }
+const user = {
+  name: "Alessandro",
+  email: "test@example.com",
+  avatar: "/avatar.png",
+}
 
 describe("navUser", () => {
   it("renders the user name and email", () => {
@@ -46,7 +52,7 @@ describe("navUser", () => {
   it("renders dropdown menu items", () => {
     const { getAllByTestId } = render(<NavUser user={user} />)
     const items = getAllByTestId("dropdown-item")
-    const labels = items.map(i => i.textContent)
+    const labels = items.map((i) => i.textContent)
     expect(labels).toContain("Upgrade to Pro")
     expect(labels).toContain("Account")
     expect(labels).toContain("Billing")
@@ -55,7 +61,9 @@ describe("navUser", () => {
   })
 
   it("positions dropdown to bottom on mobile", () => {
-    vi.mocked(useSidebar).mockReturnValue({ isMobile: true } as any)
+    vi.mocked(useSidebar).mockReturnValue({
+      isMobile: true,
+    } as any)
     const { getByTestId } = render(<NavUser user={user} />)
     // DropdownMenuContent receives side prop — verified via mock rendering
     expect(getByTestId("dropdown-content")).toBeDefined()

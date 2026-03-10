@@ -1,12 +1,11 @@
 import type { WowClassConfig } from "./classes-config"
 
+// Class color: #F58CBA
 const PaladinConfig: WowClassConfig = {
   id: 2,
   name: "Paladin",
   slug: "paladin",
   iconUrl: "https://render.worldofwarcraft.com/us/icons/56/classicon_paladin.jpg",
-  color: "#F58CBA",
-  colorOlkch: "oklch(0.765 0.1373 353.11)",
   specs: [
     {
       id: 65,

@@ -14,12 +14,14 @@ vi.mock("@/hooks/use-active-color", () => ({
 
 vi.mock("@/components/ui/sidebar", () => ({
   SidebarTrigger: ({ className }: { className?: string }) => (
-    <button data-testid="sidebar-trigger" className={className}>Menu</button>
+    <button data-testid="sidebar-trigger" className={className}>
+      Menu
+    </button>
   ),
 }))
 
 vi.mock("@/components/ui/separator", () => ({
-  Separator: ({ orientation, className }: { orientation?: string, className?: string }) => (
+  Separator: ({ orientation, className }: { orientation?: string; className?: string }) => (
     <div data-testid="separator" data-orientation={orientation} className={className} />
   ),
 }))
@@ -56,16 +58,12 @@ describe("topNav", () => {
   })
 
   it("renders left slot content from context", () => {
-    const { container } = renderNav(
-      <TopNavConfig left={<span>Left Content</span>} />,
-    )
+    const { container } = renderNav(<TopNavConfig left={<span>Left Content</span>} />)
     expect(container.textContent).toContain("Left Content")
   })
 
   it("renders center slot content from context", () => {
-    const { container } = renderNav(
-      <TopNavConfig center={<span>Center Content</span>} />,
-    )
+    const { container } = renderNav(<TopNavConfig center={<span>Center Content</span>} />)
     expect(container.textContent).toContain("Center Content")
   })
 

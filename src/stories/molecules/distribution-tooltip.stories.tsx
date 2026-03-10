@@ -3,16 +3,37 @@ import type { DistEntry } from "../../components/molecules/distribution-tooltip"
 import { DistributionTooltip } from "../../components/molecules/distribution-tooltip"
 
 const weaponEntries: DistEntry[] = [
-  { name: "Void-Touched Claymore", pct: 61.3 },
-  { name: "Emerald Dream Greatsword", pct: 22.7 },
-  { name: "Ulduar's Echo", pct: 10.1 },
-  { name: "Other", pct: 5.9 },
+  {
+    name: "Void-Touched Claymore",
+    pct: 61.3,
+  },
+  {
+    name: "Emerald Dream Greatsword",
+    pct: 22.7,
+  },
+  {
+    name: "Ulduar's Echo",
+    pct: 10.1,
+  },
+  {
+    name: "Other",
+    pct: 5.9,
+  },
 ]
 
 const enchantEntries: DistEntry[] = [
-  { name: "Authority of Radiant Power", pct: 54.8 },
-  { name: "Authority of the Depths", pct: 30.2 },
-  { name: "Stormrider's Fury", pct: 15.0 },
+  {
+    name: "Authority of Radiant Power",
+    pct: 54.8,
+  },
+  {
+    name: "Authority of the Depths",
+    pct: 30.2,
+  },
+  {
+    name: "Stormrider's Fury",
+    pct: 15.0,
+  },
 ]
 
 const fiberGems = [
@@ -51,7 +72,9 @@ const fiberGems = [
 const meta = {
   title: "Molecules/DistributionTooltip",
   component: DistributionTooltip,
-  tags: ["autodocs"],
+  tags: [
+    "autodocs",
+  ],
   parameters: {
     docs: {
       description: {
@@ -72,42 +95,71 @@ type Story = StoryObj<typeof meta>
 
 export const AlternativesOnly: Story = {
   parameters: {
-    docs: { description: { story: "Shows item alternatives (entries after index 0)." } },
+    docs: {
+      description: {
+        story: "Shows item alternatives (entries after index 0).",
+      },
+    },
   },
 }
 
 export const WithEnchantAlternatives: Story = {
-  args: { enchantEntries },
+  args: {
+    enchantEntries,
+  },
   parameters: {
     docs: {
-      description: { story: "Two-column layout: item alternatives + enchant alternatives." },
+      description: {
+        story: "Two-column layout: item alternatives + enchant alternatives.",
+      },
     },
   },
 }
 
 export const WithCraftingStats: Story = {
-  args: { craftingStats: ["haste", "crit", "mastery"] },
+  args: {
+    craftingStats: [
+      "haste",
+      "crit",
+      "mastery",
+    ],
+  },
   parameters: {
     docs: {
-      description: { story: "Includes a crafted-item stat section below the alternatives." },
+      description: {
+        story: "Includes a crafted-item stat section below the alternatives.",
+      },
     },
   },
 }
 
 export const WithFiberGems: Story = {
-  args: { fiberGems },
+  args: {
+    fiberGems,
+  },
   parameters: {
-    docs: { description: { story: "Shows fiber socket gem options below the alternatives." } },
+    docs: {
+      description: {
+        story: "Shows fiber socket gem options below the alternatives.",
+      },
+    },
   },
 }
 
 export const FullTooltip: Story = {
   args: {
     enchantEntries,
-    craftingStats: ["haste", "crit"],
+    craftingStats: [
+      "haste",
+      "crit",
+    ],
     fiberGems,
   },
   parameters: {
-    docs: { description: { story: "All sections combined." } },
+    docs: {
+      description: {
+        story: "All sections combined.",
+      },
+    },
   },
 }

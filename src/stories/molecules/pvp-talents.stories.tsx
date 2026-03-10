@@ -24,7 +24,10 @@ function makeTalent(id: number, name: string, pct: number): MetaTalent {
     usage_pct: pct,
     in_top_build: pct > 50,
     top_build_rank: 1,
-    tier: (pct > 50 ? "bis" : pct > 15 ? "situational" : "common") as "bis" | "situational" | "common",
+    tier: (pct > 50 ? "bis" : pct > 15 ? "situational" : "common") as
+      | "bis"
+      | "situational"
+      | "common",
     snapshot_at: "2026-03-03T00:00:00Z",
   }
 }
@@ -41,7 +44,9 @@ const allTalents: MetaTalent[] = [
 const meta = {
   title: "Molecules/PvpTalents",
   component: PvpTalents,
-  tags: ["autodocs"],
+  tags: [
+    "autodocs",
+  ],
   parameters: {
     docs: {
       description: {
@@ -52,7 +57,7 @@ const meta = {
     layout: "centered",
   },
   decorators: [
-    Story => (
+    (Story) => (
       <div className="relative min-h-96 w-96 p-8">
         <Story />
       </div>
@@ -71,7 +76,10 @@ export const WithAllTiers: Story = {
   },
   parameters: {
     docs: {
-      description: { story: "All three tiers: top 3 gold, situational purple, rest dimmed. Hover to see dropdown." },
+      description: {
+        story:
+          "All three tiers: top 3 gold, situational purple, rest dimmed. Hover to see dropdown.",
+      },
     },
   },
 }
@@ -84,7 +92,9 @@ export const Top3Only: Story = {
   },
   parameters: {
     docs: {
-      description: { story: "Only 3 talents — no hover dropdown." },
+      description: {
+        story: "Only 3 talents — no hover dropdown.",
+      },
     },
   },
 }
@@ -100,7 +110,9 @@ export const WithSituationalOnly: Story = {
   },
   parameters: {
     docs: {
-      description: { story: "Dropdown only has situational talents (no low-usage rest)." },
+      description: {
+        story: "Dropdown only has situational talents (no low-usage rest).",
+      },
     },
   },
 }

@@ -30,12 +30,6 @@ describe("getWowClassBySlug", () => {
     expect(result).toBeNull()
   })
 
-  it("includes color information", () => {
-    const result = getWowClassBySlug("warrior")
-    expect(result?.color).toBe("#C69B6D")
-    expect(result?.colorOlkch).toBe("oklch(0.6431 0.2243 37.45)")
-  })
-
   it("includes specs array", () => {
     const result = getWowClassBySlug("warrior")
     expect(result?.specs).toHaveLength(3)
@@ -105,7 +99,7 @@ describe("getAllClasses", () => {
 
   it("includes expected classes", () => {
     const classes = getAllClasses()
-    const slugs = classes.map(c => c.slug)
+    const slugs = classes.map((c) => c.slug)
     expect(slugs).toContain("warrior")
     expect(slugs).toContain("mage")
     expect(slugs).toContain("paladin")

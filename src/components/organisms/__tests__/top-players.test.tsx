@@ -7,16 +7,16 @@ vi.mock("@/components/atoms/sliding-switch", () => ({
   SlidingSwitch: ({ options, value, onValueChange }: any) => (
     <div data-testid="region-switch">
       {options.map((o: any) => (
-        <button key={o.value} onClick={() => onValueChange(o.value)}>{o.value}</button>
+        <button key={o.value} onClick={() => onValueChange(o.value)}>
+          {o.value}
+        </button>
       ))}
     </div>
   ),
 }))
 
 vi.mock("@/components/molecules/player-row", () => ({
-  PlayerRow: ({ player, index }: any) => (
-    <div data-testid={`player-${index}`}>{player.name}</div>
-  ),
+  PlayerRow: ({ player, index }: any) => <div data-testid={`player-${index}`}>{player.name}</div>,
 }))
 
 vi.mock("@/components/ui/tooltip", () => ({
@@ -24,13 +24,31 @@ vi.mock("@/components/ui/tooltip", () => ({
 }))
 
 function makePlayer(name: string, region: string): TopPlayer {
-  return { name, realm: "Tichondrius", region, rating: 2400, wins: 100, losses: 50, rank: 1, score: 2600, avatar_url: null, class_slug: "warrior" }
+  return {
+    name,
+    realm: "Tichondrius",
+    region,
+    rating: 2400,
+    wins: 100,
+    losses: 50,
+    rank: 1,
+    score: 2600,
+    avatar_url: null,
+    class_slug: "warrior",
+  }
 }
 
 const playersByRegion = {
-  all: [makePlayer("Cdew", "us"), makePlayer("Whaazz", "eu")],
-  us: [makePlayer("Cdew", "us")],
-  eu: [makePlayer("Whaazz", "eu")],
+  all: [
+    makePlayer("Cdew", "us"),
+    makePlayer("Whaazz", "eu"),
+  ],
+  us: [
+    makePlayer("Cdew", "us"),
+  ],
+  eu: [
+    makePlayer("Whaazz", "eu"),
+  ],
 }
 
 describe("topPlayers", () => {
@@ -52,7 +70,13 @@ describe("topPlayers", () => {
 
   it("returns null when all players empty", () => {
     const { container } = render(
-      <TopPlayers playersByRegion={{ all: [], us: [], eu: [] }} />,
+      <TopPlayers
+        playersByRegion={{
+          all: [],
+          us: [],
+          eu: [],
+        }}
+      />,
     )
     expect(container.innerHTML).toBe("")
   })

@@ -8,9 +8,21 @@ vi.mock("next/image", () => ({
 }))
 
 const entries: DistEntry[] = [
-  { name: "Helm of Glory", pct: 45.5, quality: "EPIC", icon_url: "https://example.com/icon.jpg" },
-  { name: "Crown of Valor", pct: 30.2, quality: "RARE" },
-  { name: "Basic Hood", pct: 15.8 },
+  {
+    name: "Helm of Glory",
+    pct: 45.5,
+    quality: "EPIC",
+    icon_url: "https://example.com/icon.jpg",
+  },
+  {
+    name: "Crown of Valor",
+    pct: 30.2,
+    quality: "RARE",
+  },
+  {
+    name: "Basic Hood",
+    pct: 15.8,
+  },
 ]
 
 describe("distList", () => {
@@ -36,7 +48,12 @@ describe("distList", () => {
   })
 
   it("handles entries without icons", () => {
-    const noIcons: DistEntry[] = [{ name: "No Icon", pct: 50.0 }]
+    const noIcons: DistEntry[] = [
+      {
+        name: "No Icon",
+        pct: 50.0,
+      },
+    ]
     const { container } = render(<DistList entries={noIcons} />)
     expect(container.querySelector("img")).toBeNull()
     expect(container.textContent).toContain("No Icon")

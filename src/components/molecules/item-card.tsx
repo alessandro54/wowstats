@@ -5,7 +5,10 @@ import { ClickableTooltip } from "@/components/atoms/clickable-tooltip"
 import { DistributionTooltip } from "@/components/molecules/distribution-tooltip"
 import { formatSlot, isReshiiWraps, QUALITY_COLORS } from "@/config/equipment-config"
 
-export interface EnchantGroup { slot: string, entries: MetaEnchant[] }
+export interface EnchantGroup {
+  slot: string
+  entries: MetaEnchant[]
+}
 
 interface ItemCardProps {
   slot: string
@@ -16,13 +19,18 @@ interface ItemCardProps {
   pillStyle: React.CSSProperties
 }
 
-export function ItemCard({ slot, entries, enchants, fiberGems, activeColor, pillStyle }: ItemCardProps) {
-  if (!entries)
-    return <div key={slot} />
+export function ItemCard({
+  slot,
+  entries,
+  enchants,
+  fiberGems,
+  activeColor,
+  pillStyle,
+}: ItemCardProps) {
+  if (!entries) return <div key={slot} />
 
   const primary = entries[0]
-  if (!primary)
-    return <div key={slot} />
+  if (!primary) return <div key={slot} />
 
   const distribution = entries.slice(0, 6).map(
     (e): DistEntry => ({
@@ -47,7 +55,7 @@ export function ItemCard({ slot, entries, enchants, fiberGems, activeColor, pill
       key={slot}
       side="bottom"
       align="end"
-      content={(
+      content={
         <DistributionTooltip
           entries={distribution}
           enchantEntries={enchantDist}
@@ -55,7 +63,7 @@ export function ItemCard({ slot, entries, enchants, fiberGems, activeColor, pill
           craftingStats={primary.crafted ? primary.top_crafting_stats : undefined}
           fiberGems={hasFiber ? fiberGems : undefined}
         />
-      )}
+      }
     >
       <div className="bg-card/40 hover:bg-muted/20 flex h-full cursor-default gap-3 rounded-lg border p-3 backdrop-blur-sm transition-colors">
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
@@ -77,7 +85,9 @@ export function ItemCard({ slot, entries, enchants, fiberGems, activeColor, pill
             <div className="min-w-0">
               <p
                 className="truncate text-sm leading-tight font-medium"
-                style={{ color: QUALITY_COLORS[primary.item.quality.toUpperCase()] }}
+                style={{
+                  color: QUALITY_COLORS[primary.item.quality.toUpperCase()],
+                }}
               >
                 {primary.item.name}
               </p>
@@ -92,7 +102,9 @@ export function ItemCard({ slot, entries, enchants, fiberGems, activeColor, pill
         <div className="flex shrink-0 flex-col items-end justify-center gap-1">
           <span
             className="font-mono text-sm font-bold tabular-nums"
-            style={{ color: activeColor }}
+            style={{
+              color: activeColor,
+            }}
           >
             {primary.usage_pct.toFixed(1)}%
           </span>

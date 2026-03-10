@@ -43,7 +43,11 @@ describe("stickySpecHeader", () => {
 
   it("updates CSS property on scroll", () => {
     const { container } = render(
-      <div style={{ overflow: "auto" }}>
+      <div
+        style={{
+          overflow: "auto",
+        }}
+      >
         <StickySpecHeader>
           <div>Scrollable content</div>
         </StickySpecHeader>
@@ -53,7 +57,10 @@ describe("stickySpecHeader", () => {
     const parentDiv = container.querySelector("div") as HTMLDivElement
     const headerDiv = parentDiv.querySelector("div") as HTMLDivElement
 
-    Object.defineProperty(parentDiv, "scrollTop", { value: 100, writable: true })
+    Object.defineProperty(parentDiv, "scrollTop", {
+      value: 100,
+      writable: true,
+    })
     fireEvent.scroll(parentDiv)
 
     expect(headerDiv.style.getPropertyValue("--header-bg-opacity")).toBeTruthy()
@@ -61,7 +68,11 @@ describe("stickySpecHeader", () => {
 
   it("sets backdropFilter to none when scrollTop is 0", () => {
     const { container } = render(
-      <div style={{ overflow: "auto" }}>
+      <div
+        style={{
+          overflow: "auto",
+        }}
+      >
         <StickySpecHeader>
           <div>Content</div>
         </StickySpecHeader>
@@ -70,7 +81,10 @@ describe("stickySpecHeader", () => {
     const parentDiv = container.firstChild as HTMLDivElement
     const headerDiv = parentDiv.querySelector("div") as HTMLDivElement
 
-    Object.defineProperty(parentDiv, "scrollTop", { value: 0, writable: true })
+    Object.defineProperty(parentDiv, "scrollTop", {
+      value: 0,
+      writable: true,
+    })
     fireEvent.scroll(parentDiv)
 
     expect(headerDiv.style.backdropFilter).toBe("none")

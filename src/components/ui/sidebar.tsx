@@ -96,21 +96,27 @@ function SidebarProvider({
       const openState = typeof value === "function" ? value(open) : value
       if (setOpenProp) {
         setOpenProp(openState)
-      }
-      else {
+      } else {
         _setOpen(openState)
       }
 
       // This sets the cookie to keep the sidebar state.
       document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
     },
-    [setOpenProp, open],
+    [
+      setOpenProp,
+      open,
+    ],
   )
 
   // Helper to toggle the sidebar.
   const toggleSidebar = React.useCallback(() => {
-    return isMobile ? setOpenMobile(open => !open) : setOpen(open => !open)
-  }, [isMobile, setOpen, setOpenMobile])
+    return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open)
+  }, [
+    isMobile,
+    setOpen,
+    setOpenMobile,
+  ])
 
   // Adds a keyboard shortcut to toggle the sidebar.
   React.useEffect(() => {
@@ -123,7 +129,9 @@ function SidebarProvider({
 
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [toggleSidebar])
+  }, [
+    toggleSidebar,
+  ])
 
   // We add a state so that we can do data-state="expanded" or "collapsed".
   // This makes it easier to style the sidebar with Tailwind classes.
@@ -144,7 +152,20 @@ function SidebarProvider({
       isDragging,
       setIsDragging,
     }),
-    [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar, sidebarWidth, setSidebarWidth, persistWidth, isDragging, setIsDragging],
+    [
+      state,
+      open,
+      setOpen,
+      isMobile,
+      openMobile,
+      setOpenMobile,
+      toggleSidebar,
+      sidebarWidth,
+      setSidebarWidth,
+      persistWidth,
+      isDragging,
+      setIsDragging,
+    ],
   )
 
   return (
@@ -299,7 +320,8 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
 }
 
 function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
-  const { open, setOpen, sidebarWidth, setSidebarWidth, persistWidth, isDragging, setIsDragging } = useSidebar()
+  const { open, setOpen, sidebarWidth, setSidebarWidth, persistWidth, isDragging, setIsDragging } =
+    useSidebar()
   const startX = React.useRef(0)
   const startWidth = React.useRef(0)
   const latestWidth = React.useRef(sidebarWidth)
@@ -312,7 +334,11 @@ function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
       startWidth.current = open ? sidebarWidth : 48 // icon width
       setIsDragging(true)
     },
-    [open, sidebarWidth, setIsDragging],
+    [
+      open,
+      sidebarWidth,
+      setIsDragging,
+    ],
   )
 
   React.useEffect(() => {
@@ -327,8 +353,7 @@ function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
           setOpen(false)
           setSidebarWidth(SIDEBAR_MIN_WIDTH)
         }
-      }
-      else {
+      } else {
         if (!open) setOpen(true)
         setSidebarWidth(Math.min(Math.max(newWidth, SIDEBAR_MIN_WIDTH), SIDEBAR_MAX_WIDTH))
       }
@@ -345,7 +370,14 @@ function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
       document.removeEventListener("mousemove", handleMouseMove)
       document.removeEventListener("mouseup", handleMouseUp)
     }
-  }, [isDragging, open, setOpen, setSidebarWidth, persistWidth, setIsDragging])
+  }, [
+    isDragging,
+    open,
+    setOpen,
+    setSidebarWidth,
+    persistWidth,
+    setIsDragging,
+  ])
 
   return (
     <button
@@ -459,7 +491,9 @@ function SidebarGroupLabel({
   className,
   asChild = false,
   ...props
-}: React.ComponentProps<"div"> & { asChild?: boolean }) {
+}: React.ComponentProps<"div"> & {
+  asChild?: boolean
+}) {
   const Comp = asChild ? Slot : "div"
 
   return (
@@ -480,7 +514,9 @@ function SidebarGroupAction({
   className,
   asChild = false,
   ...props
-}: React.ComponentProps<"button"> & { asChild?: boolean }) {
+}: React.ComponentProps<"button"> & {
+  asChild?: boolean
+}) {
   const Comp = asChild ? Slot : "button"
 
   return (
@@ -576,7 +612,13 @@ function SidebarMenuButton({
       data-sidebar="menu-button"
       data-size={size}
       data-active={isActive}
-      className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
+      className={cn(
+        sidebarMenuButtonVariants({
+          variant,
+          size,
+        }),
+        className,
+      )}
       {...props}
     />
   )
@@ -627,8 +669,8 @@ function SidebarMenuAction({
         "peer-data-[size=default]/menu-button:top-1.5",
         "peer-data-[size=lg]/menu-button:top-2.5",
         "group-data-[collapsible=icon]:hidden",
-        showOnHover
-        && "peer-data-[active=true]/menu-button:text-sidebar-accent-foreground group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 md:opacity-0",
+        showOnHover &&
+          "peer-data-[active=true]/menu-button:text-sidebar-accent-foreground group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 md:opacity-0",
         className,
       )}
       {...props}

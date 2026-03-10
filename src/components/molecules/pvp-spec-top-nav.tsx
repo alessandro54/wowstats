@@ -22,7 +22,7 @@ interface Props {
 
 export function PvpSpecTopNav({ className, specSlug, classSlug }: Props) {
   const pathname = usePathname()
-  const isOnBracket = BRACKETS.some(b => pathname.endsWith(`/${b.slug}`))
+  const isOnBracket = BRACKETS.some((b) => pathname.endsWith(`/${b.slug}`))
 
   const breadcrumb = (
     <Breadcrumb className="min-w-0 flex-1">
@@ -46,7 +46,9 @@ export function PvpSpecTopNav({ className, specSlug, classSlug }: Props) {
     <TopNavConfig
       key={String(isOnBracket)}
       left={breadcrumb}
-      center={isOnBracket ? <BracketSelector classSlug={classSlug} specSlug={specSlug} /> : undefined}
+      center={
+        isOnBracket ? <BracketSelector classSlug={classSlug} specSlug={specSlug} /> : undefined
+      }
     />
   )
 }

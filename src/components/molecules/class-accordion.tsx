@@ -23,8 +23,8 @@ export function ClassAccordion({ classes }: Props) {
   }
 
   return (
-    <div className="flex flex-col divide-y divide-border/50">
-      {classes.map(cls => {
+    <div className="flex flex-col divide-y divide-black/10 dark:divide-white/10">
+      {classes.map((cls) => {
         const isOpen = open === cls.slug
 
         return (
@@ -44,7 +44,12 @@ export function ClassAccordion({ classes }: Props) {
                   className="block rounded-lg"
                 />
               </span>
-              <span className="flex-1 text-left text-sm font-semibold" style={{ color: cls.color }}>
+              <span
+                className="flex-1 text-left text-sm font-semibold"
+                style={{
+                  color: `var(--color-class-${cls.slug})`,
+                }}
+              >
                 {cls.name}
               </span>
               <ChevronRight
@@ -64,7 +69,7 @@ export function ClassAccordion({ classes }: Props) {
             >
               <div className="overflow-hidden">
                 <div className="flex flex-col gap-0.5 bg-muted/10 px-4 pb-3 pt-1">
-                  {cls.specs.map(spec => (
+                  {cls.specs.map((spec) => (
                     <Link
                       key={spec.id}
                       href={`/pvp/${cls.slug}/${spec.name}`}

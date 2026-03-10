@@ -26,7 +26,7 @@ describe("bracketSelector", () => {
     const links = container.querySelectorAll("a")
     expect(links.length).toBeGreaterThan(0)
 
-    const hrefs = Array.from(links).map(l => l.getAttribute("href"))
+    const hrefs = Array.from(links).map((l) => l.getAttribute("href"))
     expect(hrefs).toContain("/pvp/warrior/arms/2v2")
     expect(hrefs).toContain("/pvp/warrior/arms/3v3")
     expect(hrefs).toContain("/pvp/warrior/arms/shuffle")
@@ -36,7 +36,7 @@ describe("bracketSelector", () => {
     const { container } = render(<BracketSelector classSlug="warrior" specSlug="arms" />)
 
     const links = container.querySelectorAll("a")
-    const active3v3Link = Array.from(links).find(l => l.getAttribute("href")?.includes("3v3"))
+    const active3v3Link = Array.from(links).find((l) => l.getAttribute("href")?.includes("3v3"))
 
     expect(active3v3Link?.className).toContain("class-pill")
   })
@@ -48,7 +48,7 @@ describe("bracketSelector", () => {
     expect(linkElements.length).toBeGreaterThan(0)
 
     const hasColorClasses = Array.from(linkElements).some(
-      link =>
+      (link) =>
         link.className.includes("class-pill") || link.className.includes("bracket-inactive"),
     )
     expect(hasColorClasses).toBe(true)
@@ -69,7 +69,7 @@ describe("bracketSelector", () => {
     const { container } = render(<BracketSelector classSlug="mage" specSlug="fire" />)
 
     const links = container.querySelectorAll("a")
-    const hrefs = Array.from(links).map(l => l.getAttribute("href"))
+    const hrefs = Array.from(links).map((l) => l.getAttribute("href"))
     expect(hrefs).toContain("/pvp/mage/fire/2v2")
     expect(hrefs).toContain("/pvp/mage/fire/3v3")
   })

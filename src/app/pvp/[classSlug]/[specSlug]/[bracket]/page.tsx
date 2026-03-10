@@ -48,34 +48,49 @@ function groupBy<T>(items: T[], key: (item: T) => string): Map<string, T[]> {
   return map
 }
 
-function sortedBySlotOrder<T>(map: Map<string, T[]>): { slot: string, entries: T[] }[] {
-  const result: { slot: string, entries: T[] }[] = []
+function sortedBySlotOrder<T>(map: Map<string, T[]>): {
+  slot: string
+  entries: T[]
+}[] {
+  const result: {
+    slot: string
+    entries: T[]
+  }[] = []
   for (const slot of SLOT_ORDER) {
     const entry = map.get(slot) ?? map.get(slot.toLowerCase())
     if (entry)
-      result.push({ slot, entries: entry })
+      result.push({
+        slot,
+        entries: entry,
+      })
   }
   for (const [slot, entries] of map) {
-    if (!result.some(r => r.slot.toUpperCase() === slot.toUpperCase())) {
-      result.push({ slot, entries })
+    if (!result.some((r) => r.slot.toUpperCase() === slot.toUpperCase())) {
+      result.push({
+        slot,
+        entries,
+      })
     }
   }
   return result
 }
 
 interface PageProps {
-  params: Promise<{ classSlug: string, specSlug: string, bracket: string }>
+  params: Promise<{
+    classSlug: string
+    specSlug: string
+    bracket: string
+  }>
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { classSlug, specSlug, bracket } = await params
 
-  const cls = WOW_CLASSES.find(c => c.slug === classSlug)
-  const spec = cls?.specs.find(s => s.name === specSlug)
-  if (!cls || !spec)
-    return {}
+  const cls = WOW_CLASSES.find((c) => c.slug === classSlug)
+  const spec = cls?.specs.find((s) => s.name === specSlug)
+  if (!cls || !spec) return {}
 
-  const bracketLabel = BRACKETS.find(b => b.slug === bracket)?.label ?? bracket
+  const bracketLabel = BRACKETS.find((b) => b.slug === bracket)?.label ?? bracket
   const title = `${cls.name} ${specSlug} – ${bracketLabel} BIS`
   const description = `Best in slot items, enchants, and gems for ${cls.name} ${specSlug} in ${bracketLabel}. Based on real WoW PvP data.`
   const image = spec.iconRemasteredUrl ?? spec.iconUrl
@@ -86,13 +101,21 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       title,
       description,
-      images: [{ url: image, width: 1024, height: 1024 }],
+      images: [
+        {
+          url: image,
+          width: 1024,
+          height: 1024,
+        },
+      ],
     },
     twitter: {
       card: "summary",
       title,
       description,
-      images: [image],
+      images: [
+        image,
+      ],
     },
   }
 }
@@ -113,41 +136,93 @@ function apiBracket(bracket: string, classSlug: string, specSlug: string): strin
 export default async function SpecPage({ params }: PageProps) {
   const { classSlug, specSlug, bracket } = await params
 
-  const cls = WOW_CLASSES.find(c => c.slug === classSlug)
-  const spec = cls?.specs.find(s => s.name === specSlug)
-  if (!cls || !spec)
-    notFound()
+  const cls = WOW_CLASSES.find((c) => c.slug === classSlug)
+  const spec = cls?.specs.find((s) => s.name === specSlug)
+  if (!cls || !spec) notFound()
 
   const resolvedBracket = apiBracket(bracket, classSlug, specSlug)
 
-  const [items, enchants, gems, talentsResponse, topAll, topUs, topEu, statPriority] = await Promise.all([
-    fetchItems(resolvedBracket, spec.id).catch((): MetaItem[] => []),
-    fetchEnchants(resolvedBracket, spec.id).catch((): MetaEnchant[] => []),
-    fetchGems(resolvedBracket, spec.id).catch((): MetaGem[] => []),
-    fetchTalents(resolvedBracket, spec.id).catch((): TalentsResponse => ({ meta: { bracket: resolvedBracket, spec_id: spec.id, total_players: 0, total_weighted: 0, snapshot_at: null }, talents: [] })),
-    fetchTopPlayers(resolvedBracket, spec.id).catch((): TopPlayersResponse => ({ bracket: resolvedBracket, spec_id: spec.id, regions: [], players: [], snapshot_at: null })),
-    fetchTopPlayers(resolvedBracket, spec.id, "us").catch((): TopPlayersResponse => ({ bracket: resolvedBracket, spec_id: spec.id, regions: [], players: [], snapshot_at: null })),
-    fetchTopPlayers(resolvedBracket, spec.id, "eu").catch((): TopPlayersResponse => ({ bracket: resolvedBracket, spec_id: spec.id, regions: [], players: [], snapshot_at: null })),
-    fetchStatPriority(resolvedBracket, spec.id).catch(() => ({ bracket: resolvedBracket, spec_id: spec.id, stats: [] })),
-  ])
+  const [items, enchants, gems, talentsResponse, topAll, topUs, topEu, statPriority] =
+    await Promise.all([
+      fetchItems(resolvedBracket, spec.id).catch((): MetaItem[] => []),
+      fetchEnchants(resolvedBracket, spec.id).catch((): MetaEnchant[] => []),
+      fetchGems(resolvedBracket, spec.id).catch((): MetaGem[] => []),
+      fetchTalents(resolvedBracket, spec.id).catch(
+        (): TalentsResponse => ({
+          meta: {
+            bracket: resolvedBracket,
+            spec_id: spec.id,
+            total_players: 0,
+            total_weighted: 0,
+            snapshot_at: null,
+          },
+          talents: [],
+        }),
+      ),
+      fetchTopPlayers(resolvedBracket, spec.id).catch(
+        (): TopPlayersResponse => ({
+          bracket: resolvedBracket,
+          spec_id: spec.id,
+          regions: [],
+          players: [],
+          snapshot_at: null,
+        }),
+      ),
+      fetchTopPlayers(resolvedBracket, spec.id, "us").catch(
+        (): TopPlayersResponse => ({
+          bracket: resolvedBracket,
+          spec_id: spec.id,
+          regions: [],
+          players: [],
+          snapshot_at: null,
+        }),
+      ),
+      fetchTopPlayers(resolvedBracket, spec.id, "eu").catch(
+        (): TopPlayersResponse => ({
+          bracket: resolvedBracket,
+          spec_id: spec.id,
+          regions: [],
+          players: [],
+          snapshot_at: null,
+        }),
+      ),
+      fetchStatPriority(resolvedBracket, spec.id).catch(() => ({
+        bracket: resolvedBracket,
+        spec_id: spec.id,
+        stats: [],
+      })),
+    ])
 
-  const itemGroups = sortedBySlotOrder(groupBy(items, i => i.slot.toUpperCase()))
-  const enchantGroups = sortedBySlotOrder(groupBy(enchants, e => e.slot.toUpperCase()))
-  const fiberGems = gems.filter(g => g.socket_type === "FIBER")
+  const itemGroups = sortedBySlotOrder(groupBy(items, (i) => i.slot.toUpperCase()))
+  const enchantGroups = sortedBySlotOrder(groupBy(enchants, (e) => e.slot.toUpperCase()))
+  const fiberGems = gems.filter((g) => g.socket_type === "FIBER")
   const gemGroups = Array.from(
     groupBy(
-      gems.filter(g => g.socket_type !== "FIBER"),
-      g => g.socket_type,
+      gems.filter((g) => g.socket_type !== "FIBER"),
+      (g) => g.socket_type,
     ),
-  ).map(([socketType, entries]) => ({ socketType, entries }))
+  ).map(([socketType, entries]) => ({
+    socketType,
+    entries,
+  }))
 
   return (
     <div className="animate-page-in space-y-8 px-6 pb-8">
       <div className="grid gap-8 xl:grid-cols-[1fr_280px]">
-        <TopPlayers playersByRegion={{ all: topAll.players, us: topUs.players, eu: topEu.players }} />
+        <TopPlayers
+          playersByRegion={{
+            all: topAll.players,
+            us: topUs.players,
+            eu: topEu.players,
+          }}
+        />
         <StatPriority stats={statPriority.stats} />
       </div>
-      <Talents classSlug={cls.slug} talents={talentsResponse.talents} talentsMeta={talentsResponse.meta} />
+      <Talents
+        classSlug={cls.slug}
+        talents={talentsResponse.talents}
+        talentsMeta={talentsResponse.meta}
+      />
       <Equipment
         classSlug={cls.slug}
         itemGroups={itemGroups}

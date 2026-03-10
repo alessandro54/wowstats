@@ -1,15 +1,12 @@
 import type { WowClassConfig, WowClassSlug } from "@/config/wow/classes/classes-config"
-import {
-  WOW_CLASSES,
-
-} from "@/config/wow/classes/classes-config"
+import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
 
 /**
  * Finds a WoW class by its slug
  * @example getWowClassBySlug("warrior") // Returns warrior config
  */
 export function getWowClassBySlug(slug: WowClassSlug): WowClassConfig | null {
-  return WOW_CLASSES.find(c => c.slug === slug) ?? null
+  return WOW_CLASSES.find((c) => c.slug === slug) ?? null
 }
 
 /**
@@ -17,7 +14,7 @@ export function getWowClassBySlug(slug: WowClassSlug): WowClassConfig | null {
  * @example getWowClassById(1) // Returns warrior config
  */
 export function getWowClassById(id: number): WowClassConfig | null {
-  return WOW_CLASSES.find(c => c.id === id) ?? null
+  return WOW_CLASSES.find((c) => c.id === id) ?? null
 }
 
 /**
@@ -28,14 +25,24 @@ export function getWowClassById(id: number): WowClassConfig | null {
  * const warrior = classMap.get("warrior");
  */
 export function getWowClassMap(): Map<WowClassSlug, WowClassConfig> {
-  return new Map(WOW_CLASSES.map(c => [c.slug, c]))
+  return new Map(
+    WOW_CLASSES.map((c) => [
+      c.slug,
+      c,
+    ]),
+  )
 }
 
 /**
  * Creates a Map for O(1) lookups by class ID
  */
 export function getWowClassMapById(): Map<number, WowClassConfig> {
-  return new Map(WOW_CLASSES.map(c => [c.id, c]))
+  return new Map(
+    WOW_CLASSES.map((c) => [
+      c.id,
+      c,
+    ]),
+  )
 }
 
 /**
@@ -49,7 +56,7 @@ export function getAllClasses(): WowClassConfig[] {
  * Returns all class slugs
  */
 export function getAllClassSlugs(): WowClassSlug[] {
-  return WOW_CLASSES.map(c => c.slug)
+  return WOW_CLASSES.map((c) => c.slug)
 }
 
 /**

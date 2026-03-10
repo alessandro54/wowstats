@@ -4,16 +4,18 @@ import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
 
 interface Props {
   children: React.ReactNode
-  params: Promise<{ classSlug: string, specSlug: string }>
+  params: Promise<{
+    classSlug: string
+    specSlug: string
+  }>
 }
 
 export default async function PvpSpecLayout({ children, params }: Props) {
   const { classSlug, specSlug } = await params
 
-  const cls = WOW_CLASSES.find(c => c.slug === classSlug)
-  const spec = cls?.specs.find(s => s.name === specSlug)
-  if (!cls || !spec)
-    notFound()
+  const cls = WOW_CLASSES.find((c) => c.slug === classSlug)
+  const spec = cls?.specs.find((s) => s.name === specSlug)
+  if (!cls || !spec) notFound()
 
   return (
     <>

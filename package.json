@@ -17,8 +17,8 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "chromatic": "chromatic --exit-zero-on-changes",
-    "format": "oxlint --fix .",
-    "format:check": "oxlint .",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
     "stylelint": "stylelint \"src/**/*.css\"",
     "typecheck": "tsc --noEmit",
     "prepare": "husky"
@@ -45,6 +45,7 @@
     "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.4.6",
     "@storybook/addon-docs": "^10.2.14",
     "@storybook/addon-themes": "^10.2.14",
     "@storybook/addon-vitest": "10.2.14",
@@ -79,9 +80,14 @@
   },
   "lint-staged": {
     "*.{ts,tsx,mjs}": [
+      "biome format --write --no-errors-on-unmatched",
       "oxlint --fix"
     ],
+    "*.{json,jsonc}": [
+      "biome format --write --no-errors-on-unmatched"
+    ],
     "*.css": [
+      "biome format --write --no-errors-on-unmatched",
       "stylelint --fix"
     ]
   }

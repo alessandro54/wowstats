@@ -76,8 +76,12 @@ function withSidebar(Story: React.ComponentType) {
 const meta = {
   title: "Molecules/NavClassHoverCard",
   component: NavClassHoverCard,
-  tags: ["autodocs"],
-  decorators: [withSidebar],
+  tags: [
+    "autodocs",
+  ],
+  decorators: [
+    withSidebar,
+  ],
   parameters: {
     docs: {
       description: {
@@ -107,8 +111,14 @@ export const Warrior: Story = {
 }
 
 export const Mage: Story = {
-  args: { item: mageItem },
+  args: {
+    item: mageItem,
+  },
   parameters: {
-    docs: { description: { story: "Mage class with Arcane, Fire, Frost specs." } },
+    docs: {
+      description: {
+        story: "Mage class with Arcane, Fire, Frost specs.",
+      },
+    },
   },
 }

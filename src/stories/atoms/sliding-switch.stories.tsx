@@ -3,27 +3,33 @@ import { useState } from "react"
 import { SlidingSwitch } from "../../components/atoms/sliding-switch"
 
 const options = [
-  { value: "all" as const, label: <span className="px-3 py-1.5 block text-xs font-medium">ALL</span> },
-  { value: "us" as const, label: <span className="px-3 py-1.5 block text-xs font-medium">US</span> },
-  { value: "eu" as const, label: <span className="px-3 py-1.5 block text-xs font-medium">EU</span> },
+  {
+    value: "all" as const,
+    label: <span className="px-3 py-1.5 block text-xs font-medium">ALL</span>,
+  },
+  {
+    value: "us" as const,
+    label: <span className="px-3 py-1.5 block text-xs font-medium">US</span>,
+  },
+  {
+    value: "eu" as const,
+    label: <span className="px-3 py-1.5 block text-xs font-medium">EU</span>,
+  },
 ]
 
 function SlidingSwitchDemo({ bordered }: { bordered?: boolean }) {
   const [value, setValue] = useState("all")
   return (
-    <SlidingSwitch
-      options={options}
-      value={value}
-      onValueChange={setValue}
-      bordered={bordered}
-    />
+    <SlidingSwitch options={options} value={value} onValueChange={setValue} bordered={bordered} />
   )
 }
 
 const meta = {
   title: "Atoms/SlidingSwitch",
   component: SlidingSwitch,
-  tags: ["autodocs"],
+  tags: [
+    "autodocs",
+  ],
   parameters: {
     docs: {
       description: {
@@ -46,7 +52,11 @@ export const Default: Story = {
     onValueChange: () => {},
   },
   parameters: {
-    docs: { description: { story: "Region selector with ALL / US / EU options." } },
+    docs: {
+      description: {
+        story: "Region selector with ALL / US / EU options.",
+      },
+    },
   },
 }
 
@@ -59,6 +69,10 @@ export const NoBorder: Story = {
     bordered: false,
   },
   parameters: {
-    docs: { description: { story: "Without the outer border." } },
+    docs: {
+      description: {
+        story: "Without the outer border.",
+      },
+    },
   },
 }

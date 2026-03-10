@@ -4,7 +4,9 @@ import { SpecHeading } from "../../components/atoms/spec-heading"
 const meta = {
   title: "Atoms/SpecHeading",
   component: SpecHeading,
-  tags: ["autodocs"],
+  tags: [
+    "autodocs",
+  ],
   parameters: {
     docs: {
       description: {

@@ -13,9 +13,7 @@ describe("cornerPeel", () => {
 
   it("calls onClick when clicked", () => {
     const onClick = vi.fn()
-    const { container } = render(
-      <CornerPeel activeColor="#c79c6e" onClick={onClick} label="Alt" />,
-    )
+    const { container } = render(<CornerPeel activeColor="#c79c6e" onClick={onClick} label="Alt" />)
     fireEvent.click(container.querySelector("button")!)
     expect(onClick).toHaveBeenCalledOnce()
   })

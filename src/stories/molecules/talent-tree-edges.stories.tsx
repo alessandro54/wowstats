@@ -38,22 +38,84 @@ const SVG_W = COLS * COL_W + NODE_SIZE
 const SVG_H = 3 * ROW_H + NODE_SIZE
 
 const nodes: TalentNode[] = [
-  { nodeId: 1, row: 1, col: 1, maxRank: 1, defaultPoints: 0, prereqIds: [], primary: makeTalent(1, 1, 1), isChoice: false, all: [] },
-  { nodeId: 2, row: 1, col: 3, maxRank: 1, defaultPoints: 0, prereqIds: [], primary: makeTalent(2, 1, 3), isChoice: false, all: [] },
-  { nodeId: 3, row: 2, col: 2, maxRank: 1, defaultPoints: 0, prereqIds: [], primary: makeTalent(3, 2, 2), isChoice: false, all: [] },
-  { nodeId: 4, row: 3, col: 1, maxRank: 1, defaultPoints: 0, prereqIds: [], primary: makeTalent(4, 3, 1), isChoice: false, all: [] },
-  { nodeId: 5, row: 3, col: 3, maxRank: 1, defaultPoints: 0, prereqIds: [], primary: makeTalent(5, 3, 3), isChoice: false, all: [] },
+  {
+    nodeId: 1,
+    row: 1,
+    col: 1,
+    maxRank: 1,
+    defaultPoints: 0,
+    prereqIds: [],
+    primary: makeTalent(1, 1, 1),
+    isChoice: false,
+    all: [],
+  },
+  {
+    nodeId: 2,
+    row: 1,
+    col: 3,
+    maxRank: 1,
+    defaultPoints: 0,
+    prereqIds: [],
+    primary: makeTalent(2, 1, 3),
+    isChoice: false,
+    all: [],
+  },
+  {
+    nodeId: 3,
+    row: 2,
+    col: 2,
+    maxRank: 1,
+    defaultPoints: 0,
+    prereqIds: [],
+    primary: makeTalent(3, 2, 2),
+    isChoice: false,
+    all: [],
+  },
+  {
+    nodeId: 4,
+    row: 3,
+    col: 1,
+    maxRank: 1,
+    defaultPoints: 0,
+    prereqIds: [],
+    primary: makeTalent(4, 3, 1),
+    isChoice: false,
+    all: [],
+  },
+  {
+    nodeId: 5,
+    row: 3,
+    col: 3,
+    maxRank: 1,
+    defaultPoints: 0,
+    prereqIds: [],
+    primary: makeTalent(5, 3, 3),
+    isChoice: false,
+    all: [],
+  },
 ]
 
-const nodeMap = new Map(nodes.map(n => [n.nodeId, n]))
-const edgeSet = new Set(["1→3", "2→3", "3→4", "3→5"])
+const nodeMap = new Map(
+  nodes.map((n) => [
+    n.nodeId,
+    n,
+  ]),
+)
+const edgeSet = new Set([
+  "1→3",
+  "2→3",
+  "3→4",
+  "3→5",
+])
 const nodeCX = (n: TalentNode) => n.col * COL_W
 const nodeY = (row: number) => row * ROW_H
 
 const meta = {
   title: "Molecules/TalentEdges",
   component: TalentEdges,
-  tags: ["autodocs"],
+  tags: [
+    "autodocs",
+  ],
   parameters: {
     docs: {
       description: {
@@ -79,14 +141,22 @@ type Story = StoryObj<typeof meta>
 
 function canvas(Story: React.ComponentType) {
   return (
-    <div className="bg-muted/20 relative rounded" style={{ width: SVG_W, height: SVG_H }}>
+    <div
+      className="bg-muted/20 relative rounded"
+      style={{
+        width: SVG_W,
+        height: SVG_H,
+      }}
+    >
       <Story />
     </div>
   )
 }
 
 export const Default: Story = {
-  decorators: [canvas],
+  decorators: [
+    canvas,
+  ],
   parameters: {
     docs: {
       description: {
@@ -97,17 +167,33 @@ export const Default: Story = {
 }
 
 export const NoTopBuildEdges: Story = {
-  args: { budget: 10 },
-  decorators: [canvas],
+  args: {
+    budget: 10,
+  },
+  decorators: [
+    canvas,
+  ],
   parameters: {
-    docs: { description: { story: "No nodes are in the top build — all edges are dimmed." } },
+    docs: {
+      description: {
+        story: "No nodes are in the top build — all edges are dimmed.",
+      },
+    },
   },
 }
 
 export const PartialTopBuild: Story = {
-  args: { budget: 10 },
-  decorators: [canvas],
+  args: {
+    budget: 10,
+  },
+  decorators: [
+    canvas,
+  ],
   parameters: {
-    docs: { description: { story: "Only 1→3 and 3→4 are top-build edges; others are dimmed." } },
+    docs: {
+      description: {
+        story: "Only 1→3 and 3→4 are top-build edges; others are dimmed.",
+      },
+    },
   },
 }

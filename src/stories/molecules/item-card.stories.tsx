@@ -4,12 +4,18 @@ import type { EnchantGroup } from "../../components/molecules/item-card"
 import { ItemCard } from "../../components/molecules/item-card"
 import { HoverProvider } from "../../components/providers/hover-provider"
 
-function makeItem(slot: string, name: string, pct: number, quality = "EPIC", crafted = false): MetaItem {
+function makeItem(
+  slot: string,
+  name: string,
+  pct: number,
+  quality = "EPIC",
+  crafted = false,
+): MetaItem {
   return {
-    id: Math.random() * 100000 | 0,
+    id: (Math.random() * 100000) | 0,
     item: {
-      id: Math.random() * 100000 | 0,
-      blizzard_id: 200000 + (Math.random() * 1000 | 0),
+      id: (Math.random() * 100000) | 0,
+      blizzard_id: 200000 + ((Math.random() * 1000) | 0),
       name,
       icon_url: "https://wow.zamimg.com/images/wow/icons/large/inv_helmet_154.jpg",
       quality,
@@ -19,16 +25,21 @@ function makeItem(slot: string, name: string, pct: number, quality = "EPIC", cra
     usage_pct: pct,
     snapshot_at: "2026-03-03T00:00:00Z",
     crafted,
-    top_crafting_stats: crafted ? ["Haste", "Versatility"] : [],
+    top_crafting_stats: crafted
+      ? [
+          "Haste",
+          "Versatility",
+        ]
+      : [],
   }
 }
 
 function makeEnchant(slot: string, name: string, pct: number): MetaEnchant {
   return {
-    id: Math.random() * 100000 | 0,
+    id: (Math.random() * 100000) | 0,
     enchantment: {
-      id: Math.random() * 100000 | 0,
-      blizzard_id: 7000 + (Math.random() * 1000 | 0),
+      id: (Math.random() * 100000) | 0,
+      blizzard_id: 7000 + ((Math.random() * 1000) | 0),
       name,
     },
     slot,
@@ -40,10 +51,10 @@ function makeEnchant(slot: string, name: string, pct: number): MetaEnchant {
 
 function makeGem(socketType: string, name: string, pct: number): MetaGem {
   return {
-    id: Math.random() * 100000 | 0,
+    id: (Math.random() * 100000) | 0,
     item: {
-      id: Math.random() * 100000 | 0,
-      blizzard_id: 300000 + (Math.random() * 1000 | 0),
+      id: (Math.random() * 100000) | 0,
+      blizzard_id: 300000 + ((Math.random() * 1000) | 0),
       name,
       icon_url: "https://wow.zamimg.com/images/wow/icons/large/inv_misc_gem_sapphire_02.jpg",
       quality: "RARE",
@@ -90,12 +101,16 @@ const fiberGems: MetaGem[] = [
   makeGem("TINKER", "Masterful Jewel Doublet", 15.0),
 ]
 
-const pillStyle = { "--pill-color": "#c79c6e" } as React.CSSProperties
+const pillStyle = {
+  "--pill-color": "#c79c6e",
+} as React.CSSProperties
 
 const meta = {
   title: "Molecules/ItemCard",
   component: ItemCard,
-  tags: ["autodocs"],
+  tags: [
+    "autodocs",
+  ],
   parameters: {
     docs: {
       description: {
@@ -108,7 +123,11 @@ const meta = {
   decorators: [
     (Story: any) => (
       <HoverProvider>
-        <div style={{ maxWidth: 340 }}>
+        <div
+          style={{
+            maxWidth: 340,
+          }}
+        >
           <Story />
         </div>
       </HoverProvider>
@@ -129,7 +148,11 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   parameters: {
-    docs: { description: { story: "Basic item card with multiple distribution alternatives." } },
+    docs: {
+      description: {
+        story: "Basic item card with multiple distribution alternatives.",
+      },
+    },
   },
 }
 
@@ -140,7 +163,11 @@ export const WithEnchant: Story = {
     enchants,
   },
   parameters: {
-    docs: { description: { story: "Item card with enchant shown below the item name." } },
+    docs: {
+      description: {
+        story: "Item card with enchant shown below the item name.",
+      },
+    },
   },
 }
 
@@ -150,7 +177,11 @@ export const Crafted: Story = {
     entries: craftedEntries,
   },
   parameters: {
-    docs: { description: { story: "Crafted item shows the CRAFTED badge." } },
+    docs: {
+      description: {
+        story: "Crafted item shows the CRAFTED badge.",
+      },
+    },
   },
 }
 
@@ -159,6 +190,10 @@ export const Empty: Story = {
     entries: undefined,
   },
   parameters: {
-    docs: { description: { story: "Renders an empty placeholder when no entries are provided." } },
+    docs: {
+      description: {
+        story: "Renders an empty placeholder when no entries are provided.",
+      },
+    },
   },
 }

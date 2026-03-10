@@ -4,9 +4,18 @@ import { ClassPanels } from "@/components/molecules/class-panels"
 import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
 
 const TIERLIST_LINKS = [
-  { label: "2v2 Tierlist", href: "/pvp/meta/2v2/dps" },
-  { label: "3v3 Tierlist", href: "/pvp/meta/3v3/dps" },
-  { label: "Shuffle Tierlist", href: "/pvp/meta/shuffle-overall/dps" },
+  {
+    label: "2v2 Tierlist",
+    href: "/pvp/meta/2v2/dps",
+  },
+  {
+    label: "3v3 Tierlist",
+    href: "/pvp/meta/3v3/dps",
+  },
+  {
+    label: "Shuffle Tierlist",
+    href: "/pvp/meta/shuffle-overall/dps",
+  },
 ]
 
 export default function Home() {
@@ -21,7 +30,8 @@ export default function Home() {
           <h1 className="text-2xl font-bold tracking-tight">Select a guide</h1>
         </div>
         <p className="text-muted-foreground text-xs max-w-xs self-end text-right leading-relaxed">
-          Gear, stats and rankings built from real ladder data — updated every season across 2v2, 3v3 and Solo Shuffle.
+          Gear, stats and rankings built from real ladder data — updated every season across 2v2,
+          3v3 and Solo Shuffle.
         </p>
       </div>
       {/* Tierlist section */}
@@ -34,7 +44,7 @@ export default function Home() {
             <Link
               key={href}
               href={href}
-              className="rounded-full border border-border px-3 py-1 text-xs font-medium text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
+              className="rounded-full border border-black/15 dark:border-white/15 px-3 py-1 text-xs font-medium text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
             >
               {label}
             </Link>
@@ -47,7 +57,7 @@ export default function Home() {
       </div>
 
       {/* Mobile: vertical accordion */}
-      <div className="lg:hidden -mx-6 overflow-y-auto rounded-xl border border-border/50">
+      <div className="lg:hidden -mx-6 overflow-y-auto rounded-xl border border-black/15 dark:border-white/15">
         <ClassAccordion classes={WOW_CLASSES} />
       </div>
     </div>

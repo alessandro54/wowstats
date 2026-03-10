@@ -15,7 +15,12 @@ function NavReader() {
 }
 
 function wrap(ui: React.ReactNode) {
-  return render(<TopNavProvider>{ui}<NavReader /></TopNavProvider>)
+  return render(
+    <TopNavProvider>
+      {ui}
+      <NavReader />
+    </TopNavProvider>,
+  )
 }
 
 describe("topNavConfig", () => {
@@ -35,12 +40,7 @@ describe("topNavConfig", () => {
   })
 
   it("sets left and center together", () => {
-    wrap(
-      <TopNavConfig
-        left={<span>Left</span>}
-        center={<span>Center</span>}
-      />,
-    )
+    wrap(<TopNavConfig left={<span>Left</span>} center={<span>Center</span>} />)
     expect(screen.getByTestId("left").textContent).toBe("Left")
     expect(screen.getByTestId("center").textContent).toBe("Center")
   })

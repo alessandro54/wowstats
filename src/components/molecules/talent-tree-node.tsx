@@ -22,7 +22,7 @@ export function TalentNodeCard({
   onlyChoicePct,
   activeColor,
 }: Props) {
-  const tier = node.primary.tier ?? (node.all.some(t => t.in_top_build) ? "bis" : "common")
+  const tier = node.primary.tier ?? (node.all.some((t) => t.in_top_build) ? "bis" : "common")
   const isBis = tier === "bis"
   const isSituational = tier === "situational"
   const isRelevant = isBis || isSituational
@@ -38,14 +38,14 @@ export function TalentNodeCard({
           ? BORDER_SITUATIONAL
           : undefined
     : undefined
-  const isPartialRank
-    = inTopBuild
-      && node.maxRank > 1
-      && node.primary.top_build_rank > node.defaultPoints
-      && node.primary.top_build_rank < node.maxRank
+  const isPartialRank =
+    inTopBuild &&
+    node.maxRank > 1 &&
+    node.primary.top_build_rank > node.defaultPoints &&
+    node.primary.top_build_rank < node.maxRank
 
   const alternatives = node.isChoice
-    ? node.all.filter(t => t.talent.id !== node.primary.talent.id)
+    ? node.all.filter((t) => t.talent.id !== node.primary.talent.id)
     : []
 
   const tooltipContent = (
@@ -66,20 +66,20 @@ export function TalentNodeCard({
           <span className="text-xs leading-tight font-semibold">{node.primary.talent.name}</span>
         </div>
         {node.maxRank > 1 && (
-          <p className="text-muted-foreground text-[10px]">
-            {node.maxRank}
-            {" "}
-            ranks
-          </p>
+          <p className="text-muted-foreground text-[10px]">{node.maxRank} ranks</p>
         )}
         {node.primary.talent.description && (
           <p className="text-muted-foreground max-w-52 text-[11px] leading-snug">
             {node.primary.talent.description}
           </p>
         )}
-        <p className="font-mono text-[11px] font-bold" style={{ color: activeColor }}>
-          {node.primary.usage_pct.toFixed(1)}
-          %
+        <p
+          className="font-mono text-[11px] font-bold"
+          style={{
+            color: activeColor,
+          }}
+        >
+          {node.primary.usage_pct.toFixed(1)}%
         </p>
       </div>
 
@@ -89,7 +89,7 @@ export function TalentNodeCard({
           <p className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
             Alternative
           </p>
-          {alternatives.map(t => (
+          {alternatives.map((t) => (
             <div key={t.talent.id} className="flex items-center gap-2">
               {t.talent.icon_url && (
                 <Image
@@ -103,8 +103,7 @@ export function TalentNodeCard({
               )}
               <span className="flex-1 truncate text-xs">{t.talent.name}</span>
               <span className="text-muted-foreground shrink-0 font-mono text-[11px]">
-                {t.usage_pct.toFixed(1)}
-                %
+                {t.usage_pct.toFixed(1)}%
               </span>
             </div>
           ))}
@@ -119,12 +118,26 @@ export function TalentNodeCard({
   return (
     <div
       className="absolute flex flex-col items-center gap-1"
-      style={{ left, top, width: NODE_SIZE }}
+      style={{
+        left,
+        top,
+        width: NODE_SIZE,
+      }}
     >
       {/* Solid background blocks SVG lines from showing through dimmed icons */}
-      <div className="relative" style={{ width: NODE_SIZE, height: NODE_SIZE }}>
+      <div
+        className="relative"
+        style={{
+          width: NODE_SIZE,
+          height: NODE_SIZE,
+        }}
+      >
         <div className="bg-background absolute inset-0 rounded" />
-        <div style={{ opacity }}>
+        <div
+          style={{
+            opacity,
+          }}
+        >
           <TalentIcon
             talent={node.primary}
             size={NODE_SIZE}
@@ -138,14 +151,20 @@ export function TalentNodeCard({
       {showPct && (
         <span
           className="font-mono text-[10px] leading-none font-bold text-slate-600 tabular-nums dark:text-white"
-          style={{ opacity }}
+          style={{
+            opacity,
+          }}
         >
-          {node.primary.usage_pct.toFixed(0)}
-          %
+          {node.primary.usage_pct.toFixed(0)}%
         </span>
       )}
       {node.isChoice && (
-        <span className="text-muted-foreground text-[9px] leading-none" style={{ opacity }}>
+        <span
+          className="text-muted-foreground text-[9px] leading-none"
+          style={{
+            opacity,
+          }}
+        >
           choice
         </span>
       )}

@@ -7,9 +7,13 @@ export async function GET(req: NextRequest) {
   const bracket = req.nextUrl.searchParams.get("bracket") ?? "3v3"
 
   if (!specId)
-    return new NextResponse(null, { status: 400 })
+    return new NextResponse(null, {
+      status: 400,
+    })
 
   await fetchItems(bracket, specId).catch(() => {})
 
-  return new NextResponse(null, { status: 204 })
+  return new NextResponse(null, {
+    status: 204,
+  })
 }

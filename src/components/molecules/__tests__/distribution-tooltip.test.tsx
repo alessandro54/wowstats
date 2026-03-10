@@ -5,9 +5,21 @@ import { DistributionTooltip } from "../distribution-tooltip"
 
 describe("distributionTooltip", () => {
   const mockEntries: DistEntry[] = [
-    { name: "Item 1", pct: 45.5, quality: "EPIC" },
-    { name: "Item 2", pct: 30.2, quality: "RARE" },
-    { name: "Item 3", pct: 15.8, quality: "UNCOMMON" },
+    {
+      name: "Item 1",
+      pct: 45.5,
+      quality: "EPIC",
+    },
+    {
+      name: "Item 2",
+      pct: 30.2,
+      quality: "RARE",
+    },
+    {
+      name: "Item 3",
+      pct: 15.8,
+      quality: "UNCOMMON",
+    },
   ]
 
   it("renders item alternatives", () => {
@@ -30,8 +42,14 @@ describe("distributionTooltip", () => {
 
   it("renders enchant alternatives when provided", () => {
     const enchantEntries: DistEntry[] = [
-      { name: "Enchant 1", pct: 50.0 },
-      { name: "Enchant 2", pct: 25.0 },
+      {
+        name: "Enchant 1",
+        pct: 50.0,
+      },
+      {
+        name: "Enchant 2",
+        pct: 25.0,
+      },
     ]
 
     const { container } = render(
@@ -60,7 +78,11 @@ describe("distributionTooltip", () => {
       <DistributionTooltip
         entries={mockEntries}
         activeColor="#C69B6D"
-        craftingStats={["HASTE_RATING", "CRIT_RATING", "UNKNOWN_STAT"]}
+        craftingStats={[
+          "HASTE_RATING",
+          "CRIT_RATING",
+          "UNKNOWN_STAT",
+        ]}
       />,
     )
 
@@ -69,7 +91,13 @@ describe("distributionTooltip", () => {
   })
 
   it("handles empty alternatives gracefully", () => {
-    const singleEntry: DistEntry[] = [{ name: "Only Item", pct: 100, quality: "EPIC" }]
+    const singleEntry: DistEntry[] = [
+      {
+        name: "Only Item",
+        pct: 100,
+        quality: "EPIC",
+      },
+    ]
 
     const { container } = render(
       <DistributionTooltip entries={singleEntry} activeColor="#C69B6D" />,
@@ -83,7 +111,13 @@ describe("distributionTooltip", () => {
     const fiberGems = [
       {
         id: 1,
-        item: { id: 1, blizzard_id: 100, name: "Fiber Gem A", icon_url: "", quality: "RARE" },
+        item: {
+          id: 1,
+          blizzard_id: 100,
+          name: "Fiber Gem A",
+          icon_url: "",
+          quality: "RARE",
+        },
         slot: "prismatic",
         socket_type: "FIBER",
         usage_count: 50,
@@ -92,7 +126,13 @@ describe("distributionTooltip", () => {
       },
       {
         id: 2,
-        item: { id: 2, blizzard_id: 101, name: "Fiber Gem B", icon_url: "", quality: "UNCOMMON" },
+        item: {
+          id: 2,
+          blizzard_id: 101,
+          name: "Fiber Gem B",
+          icon_url: "",
+          quality: "UNCOMMON",
+        },
         slot: "prismatic",
         socket_type: "FIBER",
         usage_count: 30,
@@ -112,7 +152,11 @@ describe("distributionTooltip", () => {
 
   it("renders entries with icon_url in DistList", () => {
     const entriesWithIcons: DistEntry[] = [
-      { name: "Top Item", pct: 50.0, quality: "EPIC" },
+      {
+        name: "Top Item",
+        pct: 50.0,
+        quality: "EPIC",
+      },
       {
         name: "Alt With Icon",
         pct: 30.0,

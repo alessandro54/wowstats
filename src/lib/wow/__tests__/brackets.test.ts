@@ -44,7 +44,7 @@ describe("getAllBrackets", () => {
 
   it("includes expected brackets", () => {
     const brackets = getAllBrackets()
-    const slugs = brackets.map(b => b.slug)
+    const slugs = brackets.map((b) => b.slug)
     expect(slugs).toContain("2v2")
     expect(slugs).toContain("3v3")
     expect(slugs).toContain("shuffle")

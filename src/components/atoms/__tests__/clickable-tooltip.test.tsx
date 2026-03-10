@@ -16,7 +16,12 @@ describe("clickableTooltip", () => {
   })
 
   it("renders with different side positions", () => {
-    const sides = ["top", "bottom", "left", "right"] as const
+    const sides = [
+      "top",
+      "bottom",
+      "left",
+      "right",
+    ] as const
     sides.forEach((side) => {
       const { unmount } = render(<ClickableTooltip {...defaultProps} side={side} />)
       expect(screen.getByText("Trigger")).toBeInTheDocument()
@@ -33,7 +38,11 @@ describe("clickableTooltip", () => {
   })
 
   it("accepts align prop", () => {
-    const aligns = ["start", "center", "end"] as const
+    const aligns = [
+      "start",
+      "center",
+      "end",
+    ] as const
     aligns.forEach((align) => {
       const { unmount } = render(<ClickableTooltip {...defaultProps} align={align} />)
       expect(screen.getByText("Trigger")).toBeInTheDocument()

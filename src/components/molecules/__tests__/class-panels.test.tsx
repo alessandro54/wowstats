@@ -13,16 +13,46 @@ vi.mock("@/components/providers/hover-provider", () => ({
 
 const classes: WowClassConfig[] = [
   {
-    id: 1, name: "Warrior", slug: "warrior", iconUrl: "/warrior.jpg", color: "#c79c6e", colorOlkch: "",
-    specs: [{ id: 71, name: "arms" as any, url: "", iconUrl: "/arms.jpg" }],
+    id: 1,
+    name: "Warrior",
+    slug: "warrior",
+    iconUrl: "/warrior.jpg",
+    specs: [
+      {
+        id: 71,
+        name: "arms" as any,
+        url: "",
+        iconUrl: "/arms.jpg",
+      },
+    ],
   },
   {
-    id: 2, name: "Mage", slug: "mage", iconUrl: "/mage.jpg", color: "#69ccf0", colorOlkch: "",
-    specs: [{ id: 62, name: "fire" as any, url: "", iconUrl: "/fire.jpg" }],
+    id: 2,
+    name: "Mage",
+    slug: "mage",
+    iconUrl: "/mage.jpg",
+    specs: [
+      {
+        id: 62,
+        name: "fire" as any,
+        url: "",
+        iconUrl: "/fire.jpg",
+      },
+    ],
   },
   {
-    id: 3, name: "Rogue", slug: "rogue", iconUrl: "/rogue.jpg", color: "#fff569", colorOlkch: "",
-    specs: [{ id: 259, name: "assassination" as any, url: "", iconUrl: "/sin.jpg" }],
+    id: 3,
+    name: "Rogue",
+    slug: "rogue",
+    iconUrl: "/rogue.jpg",
+    specs: [
+      {
+        id: 259,
+        name: "assassination" as any,
+        url: "",
+        iconUrl: "/sin.jpg",
+      },
+    ],
   },
 ]
 

@@ -25,11 +25,8 @@ export function BracketPanels({ classSlug, specSlug, classColor }: BracketPanels
   }
 
   return (
-    <div
-      className="flex h-44 gap-2"
-      onMouseLeave={() => setActive(null)}
-    >
-      {BRACKETS.map(bracket => {
+    <div className="flex h-44 gap-2" onMouseLeave={() => setActive(null)}>
+      {BRACKETS.map((bracket) => {
         const isActive = active === bracket.slug
         const hasActive = active !== null
 
@@ -39,7 +36,9 @@ export function BracketPanels({ classSlug, specSlug, classColor }: BracketPanels
             href={`/pvp/${classSlug}/${specSlug}/${bracket.slug}`}
             onMouseEnter={() => setActive(bracket.slug)}
             onClick={(e) => handleClick(bracket.slug, e)}
-            style={{ color: classColor }}
+            style={{
+              color: classColor,
+            }}
             className={cn(
               "group relative flex flex-col justify-end overflow-hidden rounded-xl border bg-card transition-all duration-300 ease-in-out",
               isActive
@@ -58,7 +57,9 @@ export function BracketPanels({ classSlug, specSlug, classColor }: BracketPanels
             >
               <span
                 className="whitespace-nowrap text-sm font-semibold -rotate-90 select-none"
-                style={{ color: classColor }}
+                style={{
+                  color: classColor,
+                }}
               >
                 {bracket.label}
               </span>
@@ -68,16 +69,21 @@ export function BracketPanels({ classSlug, specSlug, classColor }: BracketPanels
             <div
               className={cn(
                 "p-4 transition-all duration-300",
-                isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 pointer-events-none",
+                isActive
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-2 pointer-events-none",
               )}
             >
               <div className="flex items-center justify-between gap-2">
-                <p className="text-xl font-bold" style={{ color: classColor }}>
+                <p
+                  className="text-xl font-bold"
+                  style={{
+                    color: classColor,
+                  }}
+                >
                   {bracket.label}
                 </p>
-                <ChevronRight
-                  className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-0.5"
-                />
+                <ChevronRight className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
               </div>
               <p className="mt-1 text-sm text-muted-foreground">{bracket.description}</p>
             </div>

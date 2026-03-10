@@ -12,7 +12,9 @@ vi.mock("@/components/ui/sidebar", () => ({
   SidebarMenuAction: ({ children }: any) => <div>{children}</div>,
   SidebarMenuButton: ({ children }: any) => <div>{children}</div>,
   SidebarMenuItem: ({ children }: any) => <li>{children}</li>,
-  useSidebar: vi.fn(() => ({ isMobile: false })),
+  useSidebar: vi.fn(() => ({
+    isMobile: false,
+  })),
 }))
 
 vi.mock("@/components/ui/dropdown-menu", () => ({
@@ -24,8 +26,16 @@ vi.mock("@/components/ui/dropdown-menu", () => ({
 }))
 
 const projects = [
-  { name: "Project Alpha", url: "/alpha", icon: Frame },
-  { name: "Project Beta", url: "/beta", icon: Map },
+  {
+    name: "Project Alpha",
+    url: "/alpha",
+    icon: Frame,
+  },
+  {
+    name: "Project Beta",
+    url: "/beta",
+    icon: Map,
+  },
 ]
 
 describe("navProjects", () => {
@@ -43,7 +53,7 @@ describe("navProjects", () => {
   it("renders project links with correct href", () => {
     const { container } = render(<NavProjects projects={projects} />)
     const links = container.querySelectorAll("a")
-    const hrefs = Array.from(links).map(l => l.getAttribute("href"))
+    const hrefs = Array.from(links).map((l) => l.getAttribute("href"))
     expect(hrefs).toContain("/alpha")
     expect(hrefs).toContain("/beta")
   })
@@ -51,10 +61,10 @@ describe("navProjects", () => {
   it("renders dropdown action items (View, Share, Delete)", () => {
     const { getAllByTestId } = render(<NavProjects projects={projects} />)
     const actions = getAllByTestId("action")
-    const labels = actions.map(a => a.textContent)
-    expect(labels.some(l => l?.includes("View Project"))).toBe(true)
-    expect(labels.some(l => l?.includes("Share Project"))).toBe(true)
-    expect(labels.some(l => l?.includes("Delete Project"))).toBe(true)
+    const labels = actions.map((a) => a.textContent)
+    expect(labels.some((l) => l?.includes("View Project"))).toBe(true)
+    expect(labels.some((l) => l?.includes("Share Project"))).toBe(true)
+    expect(labels.some((l) => l?.includes("Delete Project"))).toBe(true)
   })
 
   it("shows the More overflow button", () => {
@@ -70,7 +80,9 @@ describe("navProjects", () => {
   })
 
   it("uses isMobile for dropdown positioning", () => {
-    vi.mocked(useSidebar).mockReturnValue({ isMobile: true } as any)
+    vi.mocked(useSidebar).mockReturnValue({
+      isMobile: true,
+    } as any)
     const { container } = render(<NavProjects projects={projects} />)
     expect(container.textContent).toContain("Project Alpha")
   })

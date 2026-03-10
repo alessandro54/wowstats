@@ -9,7 +9,10 @@ vi.mock("next/navigation", () => ({
 const setTheme = vi.fn()
 
 vi.mock("next-themes", () => ({
-  useTheme: () => ({ theme: "light", setTheme }),
+  useTheme: () => ({
+    theme: "light",
+    setTheme,
+  }),
 }))
 
 const useHoverSlugMock = vi.fn(() => null as string | null)

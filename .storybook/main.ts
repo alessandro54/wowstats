@@ -7,13 +7,20 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 const config: StorybookConfig = {
-  stories: ["../src/stories/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
-  addons: ["@storybook/addon-docs", "@storybook/addon-themes"],
+  stories: [
+    "../src/stories/**/*.stories.@(js|jsx|mjs|ts|tsx)",
+  ],
+  addons: [
+    "@storybook/addon-docs",
+    "@storybook/addon-themes",
+  ],
   framework: {
     name: "@storybook/react-vite",
     options: {},
   },
-  staticDirs: ["../public"],
+  staticDirs: [
+    "../public",
+  ],
   viteFinal: async (config) => {
     config.resolve ??= {}
     config.resolve.alias = {

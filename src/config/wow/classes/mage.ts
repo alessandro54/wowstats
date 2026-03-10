@@ -1,13 +1,12 @@
 import type { WowClassConfig } from "./classes-config"
 import { CDN_BASE } from "@/config/cdn-config"
 
+// Class color: #69CCF0
 const MageConfig: WowClassConfig = {
   id: 8,
   name: "Mage",
   slug: "mage",
   iconUrl: "https://render.worldofwarcraft.com/us/icons/56/classicon_mage.jpg",
-  color: "#69CCF0",
-  colorOlkch: "oklch(0.7493 0.2533 249.22)",
   specs: [
     {
       id: 62,

@@ -7,9 +7,25 @@ vi.mock("next/image", () => ({
 }))
 
 const slices = [
-  { key: "arms", label: "Arms Warrior", value: 0.15, color: "#c79c6e", iconUrl: "https://example.com/icon.jpg" },
-  { key: "frost", label: "Frost Mage", value: 0.12, color: "#69ccf0" },
-  { key: "ret", label: "Ret Paladin", value: 0.10, color: "#f58cba" },
+  {
+    key: "arms",
+    label: "Arms Warrior",
+    value: 0.15,
+    color: "#c79c6e",
+    iconUrl: "https://example.com/icon.jpg",
+  },
+  {
+    key: "frost",
+    label: "Frost Mage",
+    value: 0.12,
+    color: "#69ccf0",
+  },
+  {
+    key: "ret",
+    label: "Ret Paladin",
+    value: 0.1,
+    color: "#f58cba",
+  },
 ]
 
 describe("metaDonutChart", () => {

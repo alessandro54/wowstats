@@ -37,15 +37,28 @@ export function TalentTree({
   const nodeMap = buildNodeMap(talents)
   const nodes = Array.from(nodeMap.values())
 
-  if (nodes.length === 0)
-    return null
+  if (nodes.length === 0) return null
 
   // Normalize rows and cols to contiguous indices so gaps in Blizzard's
   // display_row / display_col values don't produce extra whitespace.
-  const uniqueRows = [...new Set(nodes.map(n => n.row))].sort((a, b) => a - b)
-  const uniqueCols = [...new Set(nodes.map(n => n.col))].sort((a, b) => a - b)
-  const rowIdx = new Map(uniqueRows.map((r, i) => [r, i]))
-  const colIdx = new Map(uniqueCols.map((c, i) => [c, i]))
+  const uniqueRows = [
+    ...new Set(nodes.map((n) => n.row)),
+  ].sort((a, b) => a - b)
+  const uniqueCols = [
+    ...new Set(nodes.map((n) => n.col)),
+  ].sort((a, b) => a - b)
+  const rowIdx = new Map(
+    uniqueRows.map((r, i) => [
+      r,
+      i,
+    ]),
+  )
+  const colIdx = new Map(
+    uniqueCols.map((c, i) => [
+      c,
+      i,
+    ]),
+  )
 
   const minRow = uniqueRows[0]
   const maxRow = uniqueRows[uniqueRows.length - 1]
@@ -60,18 +73,16 @@ export function TalentTree({
   const extra = apexExtra ? APEX_EXTRA : 0
 
   const svgW = (uniqueCols.length - 1) * CELL_SIZE + NODE_SIZE
-  const svgH
-    = (uniqueRows.length - 1) * CELL_SIZE + NODE_SIZE + (topApex ? extra : 0) + (botApex ? extra : 0)
+  const svgH =
+    (uniqueRows.length - 1) * CELL_SIZE + NODE_SIZE + (topApex ? extra : 0) + (botApex ? extra : 0)
 
   const cx = (col: number) => colIdx.get(col)! * CELL_SIZE + NODE_SIZE / 2
   const nodeY = (row: number) => {
-    if (topApex && row === minRow)
-      return NODE_SIZE / 2
-    if (botApex && row === maxRow)
-      return svgH - NODE_SIZE / 2
+    if (topApex && row === minRow) return NODE_SIZE / 2
+    if (botApex && row === maxRow) return svgH - NODE_SIZE / 2
     return rowIdx.get(row)! * CELL_SIZE + NODE_SIZE / 2 + (topApex ? extra : 0)
   }
-  const nodeCX = (node: { row: number, col: number }) =>
+  const nodeCX = (node: { row: number; col: number }) =>
     (node.row === minRow || node.row === maxRow) && rowCounts.get(node.row) === 1
       ? svgW / 2
       : cx(node.col)
@@ -81,7 +92,13 @@ export function TalentTree({
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className="flex justify-center">
-        <div className="relative" style={{ width: svgW, height: svgH }}>
+        <div
+          className="relative"
+          style={{
+            width: svgW,
+            height: svgH,
+          }}
+        >
           <TalentEdges
             edgeSet={edgeSet}
             nodeMap={nodeMap}
@@ -92,7 +109,7 @@ export function TalentTree({
             activeColor={activeColor}
             budget={budget}
           />
-          {nodes.map(node => (
+          {nodes.map((node) => (
             <TalentNodeCard
               key={node.nodeId}
               node={node}

@@ -13,7 +13,7 @@ export function TalentList({
 }) {
   return (
     <div className="divide-border/40 divide-y rounded-lg border bg-transparent backdrop-blur-lg">
-      {talents.map(record => (
+      {talents.map((record) => (
         <div
           key={record.id ?? record.talent.id}
           className="hover:bg-muted/20 flex items-center gap-3 px-4 py-2.5 transition-colors first:rounded-t-lg last:rounded-b-lg"
@@ -36,10 +36,11 @@ export function TalentList({
           <span className="flex-1 text-sm">{record.talent.name}</span>
           <span
             className="shrink-0 font-mono text-sm font-bold tabular-nums"
-            style={{ color: activeColor }}
+            style={{
+              color: activeColor,
+            }}
           >
-            {record.usage_pct.toFixed(1)}
-            %
+            {record.usage_pct.toFixed(1)}%
           </span>
         </div>
       ))}

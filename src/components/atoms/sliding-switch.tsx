@@ -35,7 +35,9 @@ export function SlidingSwitch<T extends string>({
     : "var(--primary)"
 
   const containerRef = useRef<HTMLDivElement>(null)
-  const [indicatorStyle, setIndicatorStyle] = useState<React.CSSProperties>({ opacity: 0 })
+  const [indicatorStyle, setIndicatorStyle] = useState<React.CSSProperties>({
+    opacity: 0,
+  })
 
   useEffect(() => {
     if (!containerRef.current) return
@@ -50,7 +52,10 @@ export function SlidingSwitch<T extends string>({
       transform: `translateX(${button.offsetLeft - 2}px)`,
       opacity: 1,
     })
-  }, [value, options])
+  }, [
+    value,
+    options,
+  ])
 
   return (
     <div

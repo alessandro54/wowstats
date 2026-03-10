@@ -4,7 +4,9 @@ import { ClickableTooltip } from "../../components/atoms/clickable-tooltip"
 const meta = {
   title: "Atoms/ClickableTooltip",
   component: ClickableTooltip,
-  tags: ["autodocs"],
+  tags: [
+    "autodocs",
+  ],
   parameters: {
     docs: {
       description: {
@@ -16,12 +18,21 @@ const meta = {
   argTypes: {
     side: {
       control: "select",
-      options: ["top", "right", "bottom", "left"],
+      options: [
+        "top",
+        "right",
+        "bottom",
+        "left",
+      ],
       description: "Preferred side for tooltip placement",
     },
     align: {
       control: "select",
-      options: ["start", "center", "end"],
+      options: [
+        "start",
+        "center",
+        "end",
+      ],
       description: "Alignment of tooltip relative to trigger",
     },
     content: {
@@ -40,7 +51,7 @@ export const Default: Story = {
     children: <button className="hover:bg-muted rounded border px-3 py-1.5">Click me</button>,
     content: "Talent details shown here",
   },
-  render: args => (
+  render: (args) => (
     <div className="flex items-center justify-center p-24">
       <ClickableTooltip {...args} />
     </div>
@@ -68,7 +79,7 @@ export const WithRichContent: Story = {
       },
     },
   },
-  render: args => (
+  render: (args) => (
     <div className="flex items-center justify-center p-24">
       <ClickableTooltip {...args} />
     </div>
@@ -91,7 +102,14 @@ export const AllPlacements: Story = {
   },
   render: () => (
     <div className="grid grid-cols-2 gap-8 p-16">
-      {(["top", "right", "bottom", "left"] as const).map(side => (
+      {(
+        [
+          "top",
+          "right",
+          "bottom",
+          "left",
+        ] as const
+      ).map((side) => (
         <div key={side} className="flex items-center justify-center">
           <ClickableTooltip side={side} align="center" content={`Tooltip on ${side}`}>
             <button className="hover:bg-muted rounded border px-3 py-1.5 capitalize">{side}</button>

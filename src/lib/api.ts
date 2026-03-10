@@ -51,26 +51,41 @@ async function apiFetch<T>(path: string, params: Record<string, string>): Promis
   for (const [key, value] of Object.entries(params)) {
     url.searchParams.set(key, value)
   }
-  const res = await fetch(url.toString(), { cache: "no-store" })
-  if (!res.ok)
-    throw new Error(`Backend ${path} failed: ${res.status} ${res.statusText}`)
+  const res = await fetch(url.toString(), {
+    cache: "no-store",
+  })
+  if (!res.ok) throw new Error(`Backend ${path} failed: ${res.status} ${res.statusText}`)
   const json = await res.json()
-  if (json !== null && typeof json === "object" && "talents" in json && !Array.isArray(json.talents)) {
+  if (
+    json !== null &&
+    typeof json === "object" &&
+    "talents" in json &&
+    !Array.isArray(json.talents)
+  ) {
     console.error(`[apiFetch] unexpected shape at ${path}:`, JSON.stringify(json).slice(0, 300))
   }
   return json as T
 }
 
 export function fetchItems(bracket: string, specId: number): Promise<MetaItem[]> {
-  return apiFetch("/api/v1/pvp/meta/items", { bracket, spec_id: String(specId) })
+  return apiFetch("/api/v1/pvp/meta/items", {
+    bracket,
+    spec_id: String(specId),
+  })
 }
 
 export function fetchEnchants(bracket: string, specId: number): Promise<MetaEnchant[]> {
-  return apiFetch("/api/v1/pvp/meta/enchants", { bracket, spec_id: String(specId) })
+  return apiFetch("/api/v1/pvp/meta/enchants", {
+    bracket,
+    spec_id: String(specId),
+  })
 }
 
 export function fetchGems(bracket: string, specId: number): Promise<MetaGem[]> {
-  return apiFetch("/api/v1/pvp/meta/gems", { bracket, spec_id: String(specId) })
+  return apiFetch("/api/v1/pvp/meta/gems", {
+    bracket,
+    spec_id: String(specId),
+  })
 }
 
 export interface MetaTalent {
@@ -112,7 +127,10 @@ export interface TalentsResponse {
 }
 
 export async function fetchTalents(bracket: string, specId: number): Promise<TalentsResponse> {
-  return apiFetch("/api/v1/pvp/meta/talents", { bracket, spec_id: String(specId) })
+  return apiFetch("/api/v1/pvp/meta/talents", {
+    bracket,
+    spec_id: String(specId),
+  })
 }
 
 export interface TopPlayer {
@@ -141,9 +159,11 @@ export function fetchTopPlayers(
   specId: number,
   region?: string,
 ): Promise<TopPlayersResponse> {
-  const params: Record<string, string> = { bracket, spec_id: String(specId) }
-  if (region)
-    params.region = region
+  const params: Record<string, string> = {
+    bracket,
+    spec_id: String(specId),
+  }
+  if (region) params.region = region
   return apiFetch("/api/v1/pvp/meta/top_players", params)
 }
 
@@ -182,7 +202,10 @@ export interface StatPriorityResponse {
 }
 
 export function fetchStatPriority(bracket: string, specId: number): Promise<StatPriorityResponse> {
-  return apiFetch("/api/v1/pvp/meta/stat_priority", { bracket, spec_id: String(specId) })
+  return apiFetch("/api/v1/pvp/meta/stat_priority", {
+    bracket,
+    spec_id: String(specId),
+  })
 }
 
 export async function fetchCharacter(
@@ -192,8 +215,7 @@ export async function fetchCharacter(
 ): Promise<CharacterProfile | null> {
   try {
     return await apiFetch(`/api/v1/characters/${region}/${realm}/${name}`, {})
-  }
-  catch {
+  } catch {
     return null
   }
 }

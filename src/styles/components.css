@@ -5,7 +5,11 @@
 
 /* ─── Spec header gradient ───────────────────────────────────────────────── */
 .spec-header-gradient {
-  background-image: linear-gradient(to right, oklch(from var(--spec-color) l c h / 15%), transparent 60%);
+  background-image: linear-gradient(
+    to right,
+    oklch(from var(--spec-color) l c h / 15%),
+    transparent 60%
+  );
 }
 
 /* ─── Spec sticky header ─────────────────────────────────────────────────── */

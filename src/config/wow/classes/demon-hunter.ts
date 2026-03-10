@@ -1,14 +1,13 @@
 import type { WowClassConfig } from "./classes-config"
 import { CDN_BASE } from "@/config/cdn-config"
 
+// Class color: #A330C9
 const DemonHunterConfig: WowClassConfig = {
   id: 12,
   name: "Demon Hunter",
   slug: "demon-hunter",
   iconUrl: "https://render.worldofwarcraft.com/us/icons/56/classicon_demonhunter.jpg",
   iconRemasteredUrl: `${CDN_BASE}/class_media/demon-hunter/class_icon.png`,
-  color: "#A330C9",
-  colorOlkch: "oklch(0.4502 0.2343 306.19)",
   specs: [
     {
       id: 577,

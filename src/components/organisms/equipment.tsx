@@ -12,19 +12,52 @@ import { TooltipProvider } from "@/components/ui/tooltip"
 import { formatSocketType, QUALITY_COLORS } from "@/config/equipment-config"
 import { useActiveColor } from "@/hooks/use-active-color"
 
-const LAYOUT_ROWS: [string, string][] = [
-  ["HEAD", "NECK"],
-  ["SHOULDER", "BACK"],
-  ["CHEST", "WRIST"],
-  ["HANDS", "WAIST"],
-  ["LEGS", "FEET"],
-  ["MAIN_HAND", "OFF_HAND"],
-  ["FINGER_1", "FINGER_2"],
-  ["TRINKET_1", "TRINKET_2"],
+const LAYOUT_ROWS: [
+  string,
+  string,
+][] = [
+  [
+    "HEAD",
+    "NECK",
+  ],
+  [
+    "SHOULDER",
+    "BACK",
+  ],
+  [
+    "CHEST",
+    "WRIST",
+  ],
+  [
+    "HANDS",
+    "WAIST",
+  ],
+  [
+    "LEGS",
+    "FEET",
+  ],
+  [
+    "MAIN_HAND",
+    "OFF_HAND",
+  ],
+  [
+    "FINGER_1",
+    "FINGER_2",
+  ],
+  [
+    "TRINKET_1",
+    "TRINKET_2",
+  ],
 ]
 
-interface ItemGroup { slot: string, entries: MetaItem[] }
-interface GemGroup { socketType: string, entries: MetaGem[] }
+interface ItemGroup {
+  slot: string
+  entries: MetaItem[]
+}
+interface GemGroup {
+  socketType: string
+  entries: MetaGem[]
+}
 
 interface EquipmentProps {
   classSlug: WowClassSlug
@@ -34,12 +67,30 @@ interface EquipmentProps {
   fiberGems: MetaGem[]
 }
 
-export function Equipment({ classSlug, itemGroups, enchantGroups, gemGroups, fiberGems }: EquipmentProps) {
+export function Equipment({
+  classSlug,
+  itemGroups,
+  enchantGroups,
+  gemGroups,
+  fiberGems,
+}: EquipmentProps) {
   const activeColor = useActiveColor(classSlug)
-  const pillStyle = { "--pill-color": activeColor } as React.CSSProperties
+  const pillStyle = {
+    "--pill-color": activeColor,
+  } as React.CSSProperties
 
-  const itemBySlot = new Map(itemGroups.map(g => [g.slot, g]))
-  const enchantBySlot = new Map(enchantGroups.map(g => [g.slot, g]))
+  const itemBySlot = new Map(
+    itemGroups.map((g) => [
+      g.slot,
+      g,
+    ]),
+  )
+  const enchantBySlot = new Map(
+    enchantGroups.map((g) => [
+      g.slot,
+      g,
+    ]),
+  )
 
   return (
     <TooltipProvider>
@@ -47,42 +98,39 @@ export function Equipment({ classSlug, itemGroups, enchantGroups, gemGroups, fib
         {/* Items */}
         <section className="space-y-3">
           <h2 className="text-lg font-semibold">Items</h2>
-          {itemBySlot.size === 0
-            ? (
-              <p className="text-muted-foreground text-sm">
-                No item data available for this bracket.
-              </p>
-            )
-            : (
-              <div className="space-y-2">
-                {LAYOUT_ROWS.map(([slotA, slotB]) => {
-                  const hasA = itemBySlot.has(slotA)
-                  const hasB = itemBySlot.has(slotB)
-                  if (!hasA && !hasB)
-                    return null
-                  return (
-                    <div key={`${slotA}-${slotB}`} className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                      <ItemCard
-                        slot={slotA}
-                        entries={itemBySlot.get(slotA)?.entries}
-                        enchants={enchantBySlot}
-                        fiberGems={fiberGems}
-                        activeColor={activeColor}
-                        pillStyle={pillStyle}
-                      />
-                      <ItemCard
-                        slot={slotB}
-                        entries={itemBySlot.get(slotB)?.entries}
-                        enchants={enchantBySlot}
-                        fiberGems={fiberGems}
-                        activeColor={activeColor}
-                        pillStyle={pillStyle}
-                      />
-                    </div>
-                  )
-                })}
-              </div>
-            )}
+          {itemBySlot.size === 0 ? (
+            <p className="text-muted-foreground text-sm">
+              No item data available for this bracket.
+            </p>
+          ) : (
+            <div className="space-y-2">
+              {LAYOUT_ROWS.map(([slotA, slotB]) => {
+                const hasA = itemBySlot.has(slotA)
+                const hasB = itemBySlot.has(slotB)
+                if (!hasA && !hasB) return null
+                return (
+                  <div key={`${slotA}-${slotB}`} className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                    <ItemCard
+                      slot={slotA}
+                      entries={itemBySlot.get(slotA)?.entries}
+                      enchants={enchantBySlot}
+                      fiberGems={fiberGems}
+                      activeColor={activeColor}
+                      pillStyle={pillStyle}
+                    />
+                    <ItemCard
+                      slot={slotB}
+                      entries={itemBySlot.get(slotB)?.entries}
+                      enchants={enchantBySlot}
+                      fiberGems={fiberGems}
+                      activeColor={activeColor}
+                      pillStyle={pillStyle}
+                    />
+                  </div>
+                )
+              })}
+            </div>
+          )}
         </section>
 
         {/* Gems */}
@@ -92,8 +140,7 @@ export function Equipment({ classSlug, itemGroups, enchantGroups, gemGroups, fib
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
               {gemGroups.map(({ socketType, entries }) => {
                 const primary = entries[0]
-                if (!primary)
-                  return null
+                if (!primary) return null
                 const distribution = entries.slice(0, 6).map(
                   (e): DistEntry => ({
                     name: e.item.name,
@@ -130,7 +177,9 @@ export function Equipment({ classSlug, itemGroups, enchantGroups, gemGroups, fib
                           )}
                           <p
                             className="truncate text-sm leading-tight font-medium"
-                            style={{ color: QUALITY_COLORS[primary.item.quality?.toUpperCase()] }}
+                            style={{
+                              color: QUALITY_COLORS[primary.item.quality?.toUpperCase()],
+                            }}
                           >
                             {primary.item.name}
                           </p>
@@ -139,10 +188,11 @@ export function Equipment({ classSlug, itemGroups, enchantGroups, gemGroups, fib
                       <div className="flex shrink-0 items-center justify-end">
                         <span
                           className="font-mono text-sm font-bold tabular-nums"
-                          style={{ color: activeColor }}
+                          style={{
+                            color: activeColor,
+                          }}
                         >
-                          {primary.usage_pct.toFixed(1)}
-                          %
+                          {primary.usage_pct.toFixed(1)}%
                         </span>
                       </div>
                     </div>

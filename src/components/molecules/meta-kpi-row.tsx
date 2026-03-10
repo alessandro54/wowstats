@@ -14,7 +14,12 @@ interface Props {
   topSpec: TopSpec
 }
 
-export function MetaKpiRow({ totalPlayers, weightedAvgRating, weightedAvgWinRate, topSpec }: Props) {
+export function MetaKpiRow({
+  totalPlayers,
+  weightedAvgRating,
+  weightedAvgWinRate,
+  topSpec,
+}: Props) {
   return (
     <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
       {/* Players */}
@@ -28,9 +33,7 @@ export function MetaKpiRow({ totalPlayers, weightedAvgRating, weightedAvgWinRate
       {/* Avg Rating */}
       <div className="rounded-lg border border-border bg-card/80 px-4 py-3">
         <p className="text-[10px] uppercase tracking-wide text-muted-foreground/70">
-          Avg Rating
-          {" "}
-          <span className="normal-case opacity-60">weighted</span>
+          Avg Rating <span className="normal-case opacity-60">weighted</span>
         </p>
         <p className="mt-0.5 text-xl font-bold tabular-nums text-foreground">
           {weightedAvgRating.toFixed(0)}
@@ -40,21 +43,17 @@ export function MetaKpiRow({ totalPlayers, weightedAvgRating, weightedAvgWinRate
       {/* Avg Win Rate */}
       <div className="rounded-lg border border-border bg-card/80 px-4 py-3">
         <p className="text-[10px] uppercase tracking-wide text-muted-foreground/70">
-          Avg Win Rate
-          {" "}
-          <span className="normal-case opacity-60">adj.</span>
+          Avg Win Rate <span className="normal-case opacity-60">adj.</span>
         </p>
         <p className="mt-0.5 text-xl font-bold tabular-nums text-foreground">
-          {(weightedAvgWinRate * 100).toFixed(1)}
-          %
+          {(weightedAvgWinRate * 100).toFixed(1)}%
         </p>
       </div>
 
       {/* Top Spec */}
       <div className="rounded-lg border border-border bg-card/80 px-4 py-3">
-        <p className="text-[10px] uppercase tracking-wide text-muted-foreground/70">Top Spec
-          {" "}
-          <span className="normal-case opacity-60">highest meta</span>
+        <p className="text-[10px] uppercase tracking-wide text-muted-foreground/70">
+          Top Spec <span className="normal-case opacity-60">highest meta</span>
         </p>
         <div className="mt-0.5 flex items-center gap-2">
           {topSpec.iconUrl && (
@@ -69,7 +68,9 @@ export function MetaKpiRow({ totalPlayers, weightedAvgRating, weightedAvgWinRate
           )}
           <p
             className="text-xl font-bold tabular-nums"
-            style={{ color: topSpec.color }}
+            style={{
+              color: topSpec.color,
+            }}
           >
             {topSpec.name}
           </p>

@@ -1,14 +1,13 @@
 import type { WowClassConfig } from "./classes-config"
 import { CDN_BASE } from "@/config/cdn-config"
 
+// Class color: #FFF468
 const RogueConfig: WowClassConfig = {
   id: 4,
   name: "Rogue",
   slug: "rogue",
   iconUrl: "https://render.worldofwarcraft.com/us/icons/56/classicon_rogue.jpg",
   iconRemasteredUrl: `${CDN_BASE}/class_media/rogue/class_icon.png`,
-  color: "#FFF468",
-  colorOlkch: "oklch(0.8471 0.2243 91.37)",
   specs: [
     {
       id: 259,

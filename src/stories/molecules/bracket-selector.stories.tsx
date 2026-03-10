@@ -7,7 +7,9 @@ import { BracketSelector } from "../../components/molecules/bracket-selector"
 const meta = {
   title: "Molecules/BracketSelector",
   component: BracketSelector,
-  tags: ["autodocs"],
+  tags: [
+    "autodocs",
+  ],
   parameters: {
     docs: {
       description: {
@@ -29,21 +31,37 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   parameters: {
     docs: {
-      description: { story: "Warrior arms — 2v2 is active (derived from the mocked pathname)." },
+      description: {
+        story: "Warrior arms — 2v2 is active (derived from the mocked pathname).",
+      },
     },
   },
 }
 
 export const PaladinRetribution: Story = {
-  args: { classSlug: "paladin", specSlug: "retribution" },
+  args: {
+    classSlug: "paladin",
+    specSlug: "retribution",
+  },
   parameters: {
-    docs: { description: { story: "Paladin pink class color applied to the active pill." } },
+    docs: {
+      description: {
+        story: "Paladin pink class color applied to the active pill.",
+      },
+    },
   },
 }
 
 export const DeathKnight: Story = {
-  args: { classSlug: "death-knight", specSlug: "unholy" },
+  args: {
+    classSlug: "death-knight",
+    specSlug: "unholy",
+  },
   parameters: {
-    docs: { description: { story: "Death Knight red class color." } },
+    docs: {
+      description: {
+        story: "Death Knight red class color.",
+      },
+    },
   },
 }

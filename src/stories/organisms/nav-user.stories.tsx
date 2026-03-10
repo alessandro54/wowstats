@@ -5,7 +5,9 @@ import { SidebarProvider } from "../../components/ui/sidebar"
 const meta = {
   title: "Organisms/NavUser",
   component: NavUser,
-  tags: ["autodocs"],
+  tags: [
+    "autodocs",
+  ],
   parameters: {
     docs: {
       description: {
@@ -16,9 +18,13 @@ const meta = {
     layout: "centered",
   },
   decorators: [
-    Story => (
+    (Story) => (
       <SidebarProvider>
-        <div style={{ width: 260 }}>
+        <div
+          style={{
+            width: 260,
+          }}
+        >
           <Story />
         </div>
       </SidebarProvider>
@@ -49,7 +55,9 @@ export const LongName: Story = {
   },
   parameters: {
     docs: {
-      description: { story: "Verifies that long names and emails truncate properly." },
+      description: {
+        story: "Verifies that long names and emails truncate properly.",
+      },
     },
   },
 }

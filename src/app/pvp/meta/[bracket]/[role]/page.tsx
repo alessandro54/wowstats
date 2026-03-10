@@ -69,15 +69,22 @@ export default async function PvpBracketPage({ params, searchParams }: PageProps
     region,
   })
 
-  const classMap = new Map(WOW_CLASSES.map(c => [c.slug, c]))
-  const sorted = [...data.classes].sort((a, b) => b.meta_score - a.meta_score)
+  const classMap = new Map(
+    WOW_CLASSES.map((c) => [
+      c.slug,
+      c,
+    ]),
+  )
+  const sorted = [
+    ...data.classes,
+  ].sort((a, b) => b.meta_score - a.meta_score)
   const maxScore = sorted[0]?.meta_score ?? 1
 
-  const barEntries: MetaBarEntry[] = sorted.map(row => {
+  const barEntries: MetaBarEntry[] = sorted.map((row) => {
     const classSlug = normalizeClassSlug(row.class) as WowClassSlug
     const classConfig = classMap.get(classSlug)
     const specConfig = classConfig?.specs.find(
-      s => normalizeSpecName(s.name) === normalizeSpecName(row.spec),
+      (s) => normalizeSpecName(s.name) === normalizeSpecName(row.spec),
     )
     const normPct = (row.meta_score / maxScore) * 100
     return {
@@ -88,23 +95,23 @@ export default async function PvpBracketPage({ params, searchParams }: PageProps
       meanRating: row.mean_rating,
       winRate: row.shrunk_winrate,
       presence: row.games_share,
-      color: classConfig?.color ?? "#888",
+      color: classConfig ? `var(--color-class-${classSlug})` : "#888",
       iconUrl: specConfig?.iconUrl,
       tier: tier(normPct),
     }
   })
 
-  const donutSlices: DonutSlice[] = sorted.map(row => {
+  const donutSlices: DonutSlice[] = sorted.map((row) => {
     const classSlug = normalizeClassSlug(row.class) as WowClassSlug
     const classConfig = classMap.get(classSlug)
     const specConfig = classConfig?.specs.find(
-      s => normalizeSpecName(s.name) === normalizeSpecName(row.spec),
+      (s) => normalizeSpecName(s.name) === normalizeSpecName(row.spec),
     )
     return {
       key: `${row.class}-${row.spec_id}`,
       label: row.spec,
       value: row.games_share,
-      color: classConfig?.color ?? "#888",
+      color: classConfig ? `var(--color-class-${classSlug})` : "#888",
       iconUrl: specConfig?.iconUrl,
     }
   })
@@ -120,16 +127,16 @@ export default async function PvpBracketPage({ params, searchParams }: PageProps
   const topSpec = {
     name: topRow?.spec ?? "",
     className: topRow?.class ?? "",
-    color: topClassConfig?.color ?? "#888",
+    color: topRow ? `var(--color-class-${normalizeClassSlug(topRow.class)})` : "#888",
     iconUrl: topClassConfig?.specs.find(
-      s => normalizeSpecName(s.name) === normalizeSpecName(topRow?.spec ?? ""),
+      (s) => normalizeSpecName(s.name) === normalizeSpecName(topRow?.spec ?? ""),
     )?.iconUrl,
   }
 
   return (
     <>
       <TopNavConfig
-        left={(
+        left={
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
@@ -149,7 +156,7 @@ export default async function PvpBracketPage({ params, searchParams }: PageProps
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-        )}
+        }
       />
 
       <div className="space-y-6 p-4 lg:p-6">

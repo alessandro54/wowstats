@@ -11,7 +11,9 @@ export default function BracketLoading() {
             <Skeleton className="h-5 w-28" />
             <Skeleton className="h-7 w-32 rounded-full" />
           </div>
-          {Array.from({ length: 10 }).map((_, i) => (
+          {Array.from({
+            length: 10,
+          }).map((_, i) => (
             <Skeleton key={i} className="h-10 w-full rounded-md" />
           ))}
         </div>
@@ -19,7 +21,9 @@ export default function BracketLoading() {
         {/* Stat priority */}
         <div className="space-y-3 rounded-lg border p-4">
           <Skeleton className="h-4 w-24" />
-          {Array.from({ length: 5 }).map((_, i) => (
+          {Array.from({
+            length: 5,
+          }).map((_, i) => (
             <div key={i} className="flex items-center gap-3">
               <Skeleton className="h-3 w-16" />
               <Skeleton className="h-2 flex-1 rounded-full" />
@@ -39,7 +43,9 @@ export default function BracketLoading() {
       <div className="space-y-3">
         <Skeleton className="h-5 w-24" />
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-          {Array.from({ length: 8 }).map((_, i) => (
+          {Array.from({
+            length: 8,
+          }).map((_, i) => (
             <Skeleton key={i} className="h-16 w-full rounded-lg" />
           ))}
         </div>

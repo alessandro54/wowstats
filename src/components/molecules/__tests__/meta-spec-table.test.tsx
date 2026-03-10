@@ -7,8 +7,29 @@ vi.mock("next/image", () => ({
 }))
 
 const entries = [
-  { key: "arms", specName: "Arms", normPct: 100, metaScore: 0.82, meanRating: 1850, winRate: 0.54, presence: 0.12, color: "#c79c6e", iconUrl: "https://example.com/icon.jpg", tier: "S" as const },
-  { key: "frost", specName: "Frost", normPct: 66, metaScore: 0.54, meanRating: 1720, winRate: 0.51, presence: 0.08, color: "#69ccf0", tier: "B" as const },
+  {
+    key: "arms",
+    specName: "Arms",
+    normPct: 100,
+    metaScore: 0.82,
+    meanRating: 1850,
+    winRate: 0.54,
+    presence: 0.12,
+    color: "#c79c6e",
+    iconUrl: "https://example.com/icon.jpg",
+    tier: "S" as const,
+  },
+  {
+    key: "frost",
+    specName: "Frost",
+    normPct: 66,
+    metaScore: 0.54,
+    meanRating: 1720,
+    winRate: 0.51,
+    presence: 0.08,
+    color: "#69ccf0",
+    tier: "B" as const,
+  },
 ]
 
 describe("metaSpecTable", () => {

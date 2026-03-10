@@ -22,7 +22,15 @@ const INNER_R = 27
 const GAP_DEG = 0.5
 const OTHER_THRESHOLD = 0.02
 
-function polarToCartesian(cx: number, cy: number, r: number, angleDeg: number): { x: number; y: number } {
+function polarToCartesian(
+  cx: number,
+  cy: number,
+  r: number,
+  angleDeg: number,
+): {
+  x: number
+  y: number
+} {
   const rad = ((angleDeg - 90) * Math.PI) / 180
   return {
     x: cx + r * Math.cos(rad),
@@ -65,7 +73,9 @@ interface ComputedSlice {
 }
 
 function buildSlices(rawSlices: DonutSlice[]): ComputedSlice[] {
-  const sorted = [...rawSlices].sort((a, b) => b.value - a.value)
+  const sorted = [
+    ...rawSlices,
+  ].sort((a, b) => b.value - a.value)
 
   const main: DonutSlice[] = []
   let otherValue = 0
@@ -73,13 +83,14 @@ function buildSlices(rawSlices: DonutSlice[]): ComputedSlice[] {
   for (const s of sorted) {
     if (s.value < OTHER_THRESHOLD) {
       otherValue += s.value
-    }
-    else {
+    } else {
       main.push(s)
     }
   }
 
-  const withOther: DonutSlice[] = [...main]
+  const withOther: DonutSlice[] = [
+    ...main,
+  ]
   if (otherValue > 0) {
     withOther.push({
       key: "__other__",
@@ -116,19 +127,14 @@ export function MetaDonutChart({ slices }: Props) {
   const [hovered, setHovered] = useState<string | null>(null)
   const computed = buildSlices(slices)
 
-  const hoveredSlice = computed.find(s => s.key === hovered)
+  const hoveredSlice = computed.find((s) => s.key === hovered)
 
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
       {/* SVG donut */}
       <div className="relative shrink-0 self-center">
-        <svg
-          viewBox="0 0 100 100"
-          width={180}
-          height={180}
-          className="overflow-visible"
-        >
-          {computed.map(slice => {
+        <svg viewBox="0 0 100 100" width={180} height={180} className="overflow-visible">
+          {computed.map((slice) => {
             const isHovered = slice.key === hovered
             const path = slicePath(
               CX,
@@ -144,7 +150,10 @@ export function MetaDonutChart({ slices }: Props) {
                 d={path}
                 fill={slice.color}
                 opacity={hovered && !isHovered ? 0.4 : 1}
-                style={{ cursor: "pointer", transition: "opacity 0.15s, d 0.15s" }}
+                style={{
+                  cursor: "pointer",
+                  transition: "opacity 0.15s, d 0.15s",
+                }}
                 onMouseEnter={() => setHovered(slice.key)}
                 onMouseLeave={() => setHovered(null)}
               />
@@ -160,7 +169,9 @@ export function MetaDonutChart({ slices }: Props) {
             fontSize={hoveredSlice ? 7 : 6}
             fill="currentColor"
             className="fill-foreground font-semibold"
-            style={{ pointerEvents: "none" }}
+            style={{
+              pointerEvents: "none",
+            }}
           >
             {hoveredSlice ? hoveredSlice.label : "Presence"}
           </text>
@@ -172,18 +183,23 @@ export function MetaDonutChart({ slices }: Props) {
             fontSize={8}
             fill="currentColor"
             className="fill-muted-foreground font-mono"
-            style={{ pointerEvents: "none" }}
+            style={{
+              pointerEvents: "none",
+            }}
           >
-            {hoveredSlice
-              ? `${(hoveredSlice.value * 100).toFixed(1)}%`
-              : ""}
+            {hoveredSlice ? `${(hoveredSlice.value * 100).toFixed(1)}%` : ""}
           </text>
         </svg>
       </div>
 
       {/* Legend */}
-      <ol className="flex min-w-0 flex-1 flex-col gap-1 overflow-y-auto" style={{ maxHeight: 220 }}>
-        {computed.map(slice => (
+      <ol
+        className="flex min-w-0 flex-1 flex-col gap-1 overflow-y-auto"
+        style={{
+          maxHeight: 220,
+        }}
+      >
+        {computed.map((slice) => (
           <li
             key={slice.key}
             className="flex cursor-default items-center gap-2 rounded px-1.5 py-0.5 transition-colors"
@@ -193,32 +209,33 @@ export function MetaDonutChart({ slices }: Props) {
             onMouseEnter={() => setHovered(slice.key)}
             onMouseLeave={() => setHovered(null)}
           >
-            {slice.iconUrl && slice.key !== "__other__"
-              ? (
-                  <Image
-                    src={slice.iconUrl}
-                    alt={slice.label}
-                    width={14}
-                    height={14}
-                    className="rounded-sm"
-                    unoptimized
-                  />
-                )
-              : (
-                  <span
-                    className="inline-block h-3 w-3 shrink-0 rounded-sm"
-                    style={{ backgroundColor: slice.color }}
-                  />
-                )}
+            {slice.iconUrl && slice.key !== "__other__" ? (
+              <Image
+                src={slice.iconUrl}
+                alt={slice.label}
+                width={14}
+                height={14}
+                className="rounded-sm"
+                unoptimized
+              />
+            ) : (
+              <span
+                className="inline-block h-3 w-3 shrink-0 rounded-sm"
+                style={{
+                  backgroundColor: slice.color,
+                }}
+              />
+            )}
             <span
               className="min-w-0 flex-1 truncate text-[11px] text-foreground"
-              style={{ opacity: hovered && slice.key !== hovered ? 0.5 : 1 }}
+              style={{
+                opacity: hovered && slice.key !== hovered ? 0.5 : 1,
+              }}
             >
               {slice.label}
             </span>
             <span className="shrink-0 font-mono text-[11px] text-muted-foreground tabular-nums">
-              {(slice.value * 100).toFixed(1)}
-              %
+              {(slice.value * 100).toFixed(1)}%
             </span>
           </li>
         ))}

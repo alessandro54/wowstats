@@ -8,7 +8,12 @@ function makeTalent(
   name: string,
   usagePct: number,
   talentType: string,
-  opts: { row?: number, col?: number, prereqs?: number[], maxRank?: number } = {},
+  opts: {
+    row?: number
+    col?: number
+    prereqs?: number[]
+    maxRank?: number
+  } = {},
 ): MetaTalent {
   return {
     id,
@@ -31,29 +36,91 @@ function makeTalent(
     usage_pct: usagePct,
     in_top_build: usagePct > 50,
     top_build_rank: 1,
-    tier: (usagePct > 50 ? "bis" : usagePct > 15 ? "situational" : "common") as "bis" | "situational" | "common",
+    tier: (usagePct > 50 ? "bis" : usagePct > 15 ? "situational" : "common") as
+      | "bis"
+      | "situational"
+      | "common",
     snapshot_at: "2026-03-03T00:00:00Z",
   }
 }
 
 const specTalents: MetaTalent[] = [
-  makeTalent(1, "Mortal Strike", 98.4, "spec", { row: 0, col: 1 }),
-  makeTalent(2, "Overpower", 87.2, "spec", { row: 1, col: 0, prereqs: [1] }),
-  makeTalent(3, "Execute", 76.0, "spec", { row: 1, col: 2, prereqs: [1] }),
-  makeTalent(4, "Colossus Smash", 92.5, "spec", { row: 2, col: 1, prereqs: [2, 3] }),
+  makeTalent(1, "Mortal Strike", 98.4, "spec", {
+    row: 0,
+    col: 1,
+  }),
+  makeTalent(2, "Overpower", 87.2, "spec", {
+    row: 1,
+    col: 0,
+    prereqs: [
+      1,
+    ],
+  }),
+  makeTalent(3, "Execute", 76.0, "spec", {
+    row: 1,
+    col: 2,
+    prereqs: [
+      1,
+    ],
+  }),
+  makeTalent(4, "Colossus Smash", 92.5, "spec", {
+    row: 2,
+    col: 1,
+    prereqs: [
+      2,
+      3,
+    ],
+  }),
 ]
 
 const classTalents: MetaTalent[] = [
-  makeTalent(11, "Charge", 99.0, "class", { row: 0, col: 1 }),
-  makeTalent(12, "Heroic Throw", 72.0, "class", { row: 1, col: 0, prereqs: [11] }),
-  makeTalent(13, "Spell Reflect", 85.0, "class", { row: 1, col: 2, prereqs: [11] }),
-  makeTalent(14, "Storm Bolt", 68.0, "class", { row: 2, col: 1, prereqs: [12, 13] }),
+  makeTalent(11, "Charge", 99.0, "class", {
+    row: 0,
+    col: 1,
+  }),
+  makeTalent(12, "Heroic Throw", 72.0, "class", {
+    row: 1,
+    col: 0,
+    prereqs: [
+      11,
+    ],
+  }),
+  makeTalent(13, "Spell Reflect", 85.0, "class", {
+    row: 1,
+    col: 2,
+    prereqs: [
+      11,
+    ],
+  }),
+  makeTalent(14, "Storm Bolt", 68.0, "class", {
+    row: 2,
+    col: 1,
+    prereqs: [
+      12,
+      13,
+    ],
+  }),
 ]
 
 const heroTalents: MetaTalent[] = [
-  makeTalent(21, "Slayer's Strike", 95.0, "hero", { row: 0, col: 1 }),
-  makeTalent(22, "Reap the Storm", 88.0, "hero", { row: 1, col: 0, prereqs: [21] }),
-  makeTalent(23, "Imminent Demise", 82.0, "hero", { row: 1, col: 2, prereqs: [21] }),
+  makeTalent(21, "Slayer's Strike", 95.0, "hero", {
+    row: 0,
+    col: 1,
+  }),
+  makeTalent(22, "Reap the Storm", 88.0, "hero", {
+    row: 1,
+    col: 0,
+    prereqs: [
+      21,
+    ],
+  }),
+  makeTalent(23, "Imminent Demise", 82.0, "hero", {
+    row: 1,
+    col: 2,
+    prereqs: [
+      21,
+    ],
+  }),
 ]
 
 const pvpTalents: MetaTalent[] = [
@@ -62,12 +129,19 @@ const pvpTalents: MetaTalent[] = [
   makeTalent(33, "Disarm", 65.0, "pvp"),
 ]
 
-const allTalents = [...specTalents, ...classTalents, ...heroTalents, ...pvpTalents]
+const allTalents = [
+  ...specTalents,
+  ...classTalents,
+  ...heroTalents,
+  ...pvpTalents,
+]
 
 const meta = {
   title: "Organisms/Talents",
   component: Talents,
-  tags: ["autodocs"],
+  tags: [
+    "autodocs",
+  ],
   parameters: {
     docs: {
       description: {
@@ -78,9 +152,13 @@ const meta = {
     layout: "padded",
   },
   decorators: [
-    Story => (
+    (Story) => (
       <HoverProvider>
-        <div style={{ maxWidth: 900 }}>
+        <div
+          style={{
+            maxWidth: 900,
+          }}
+        >
           <Story />
         </div>
       </HoverProvider>
@@ -97,7 +175,11 @@ export const AllTypes: Story = {
     talents: allTalents,
   },
   parameters: {
-    docs: { description: { story: "All four talent types rendered together." } },
+    docs: {
+      description: {
+        story: "All four talent types rendered together.",
+      },
+    },
   },
 }
 
@@ -107,7 +189,11 @@ export const SpecOnly: Story = {
     talents: specTalents,
   },
   parameters: {
-    docs: { description: { story: "Only spec talents — no class, hero, or PvP sections shown." } },
+    docs: {
+      description: {
+        story: "Only spec talents — no class, hero, or PvP sections shown.",
+      },
+    },
   },
 }
 
@@ -117,7 +203,11 @@ export const PvPOnly: Story = {
     talents: pvpTalents,
   },
   parameters: {
-    docs: { description: { story: "PvP talents render as a flat list (no tree data)." } },
+    docs: {
+      description: {
+        story: "PvP talents render as a flat list (no tree data).",
+      },
+    },
   },
 }
 
@@ -127,6 +217,10 @@ export const Empty: Story = {
     talents: [],
   },
   parameters: {
-    docs: { description: { story: "No talent data — renders nothing." } },
+    docs: {
+      description: {
+        story: "No talent data — renders nothing.",
+      },
+    },
   },
 }

@@ -8,7 +8,9 @@ vi.mock("next/image", () => ({
 }))
 
 vi.mock("next/navigation", () => ({
-  useRouter: () => ({ push: vi.fn() }),
+  useRouter: () => ({
+    push: vi.fn(),
+  }),
 }))
 
 vi.mock("@/hooks/use-active-color", () => ({
@@ -31,9 +33,16 @@ vi.mock("@/lib/utils", () => ({
 }))
 
 const player: TopPlayer = {
-  name: "Cdew", realm: "Tichondrius", region: "us", rating: 2450,
-  wins: 200, losses: 80, rank: 1, score: 2800,
-  avatar_url: "https://example.com/avatar.jpg", class_slug: "shaman",
+  name: "Cdew",
+  realm: "Tichondrius",
+  region: "us",
+  rating: 2450,
+  wins: 200,
+  losses: 80,
+  rank: 1,
+  score: 2800,
+  avatar_url: "https://example.com/avatar.jpg",
+  class_slug: "shaman",
 }
 
 describe("playerRow", () => {

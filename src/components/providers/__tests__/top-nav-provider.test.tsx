@@ -13,12 +13,26 @@ function ConfigDisplay() {
   )
 }
 
-function ConfigSetter({ left, center, hidden }: { left?: string, center?: string, hidden?: boolean }) {
+function ConfigSetter({
+  left,
+  center,
+  hidden,
+}: {
+  left?: string
+  center?: string
+  hidden?: boolean
+}) {
   const { set } = useTopNav()
   return (
     <button
       data-testid="setter"
-      onClick={() => set({ left: left ? <span>{left}</span> : undefined, center: center ? <span>{center}</span> : undefined, hidden })}
+      onClick={() =>
+        set({
+          left: left ? <span>{left}</span> : undefined,
+          center: center ? <span>{center}</span> : undefined,
+          hidden,
+        })
+      }
     >
       set
     </button>
@@ -27,7 +41,11 @@ function ConfigSetter({ left, center, hidden }: { left?: string, center?: string
 
 function Resetter() {
   const { reset } = useTopNav()
-  return <button data-testid="resetter" onClick={reset}>reset</button>
+  return (
+    <button data-testid="resetter" onClick={reset}>
+      reset
+    </button>
+  )
 }
 
 describe("topNavProvider", () => {

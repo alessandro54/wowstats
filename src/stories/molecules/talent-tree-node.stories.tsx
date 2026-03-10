@@ -4,7 +4,14 @@ import type { TalentNode } from "../../lib/utils/talent-tree"
 import { TalentNodeCard } from "../../components/molecules/talent-tree-node"
 import { NODE_SIZE } from "../../lib/utils/talent-tree"
 
-function makeTalent(id: number, name: string, usagePct: number, inTopBuild = true, topBuildRank = 1, maxRank = 1): MetaTalent {
+function makeTalent(
+  id: number,
+  name: string,
+  usagePct: number,
+  inTopBuild = true,
+  topBuildRank = 1,
+  maxRank = 1,
+): MetaTalent {
   return {
     id,
     talent: {
@@ -26,7 +33,10 @@ function makeTalent(id: number, name: string, usagePct: number, inTopBuild = tru
     usage_pct: usagePct,
     in_top_build: inTopBuild,
     top_build_rank: topBuildRank,
-    tier: (usagePct > 50 ? "bis" : usagePct > 15 ? "situational" : "common") as "bis" | "situational" | "common",
+    tier: (usagePct > 50 ? "bis" : usagePct > 15 ? "situational" : "common") as
+      | "bis"
+      | "situational"
+      | "common",
     snapshot_at: "2026-03-02T00:00:00Z",
   }
 }
@@ -40,7 +50,9 @@ const topBuildNode: TalentNode = {
   prereqIds: [],
   primary: makeTalent(1, "Mortal Strike", 98.4),
   isChoice: false,
-  all: [makeTalent(1, "Mortal Strike", 98.4)],
+  all: [
+    makeTalent(1, "Mortal Strike", 98.4),
+  ],
 }
 
 const choiceNode: TalentNode = {
@@ -52,7 +64,10 @@ const choiceNode: TalentNode = {
   prereqIds: [],
   primary: makeTalent(2, "Bladestorm", 62.1),
   isChoice: true,
-  all: [makeTalent(2, "Bladestorm", 62.1), makeTalent(3, "Ravager", 37.9, true, 1)],
+  all: [
+    makeTalent(2, "Bladestorm", 62.1),
+    makeTalent(3, "Ravager", 37.9, true, 1),
+  ],
 }
 
 const partialRankNode: TalentNode = {
@@ -64,7 +79,9 @@ const partialRankNode: TalentNode = {
   prereqIds: [],
   primary: makeTalent(4, "Dreadnaught", 88.0, true, 1, 2),
   isChoice: false,
-  all: [makeTalent(4, "Dreadnaught", 88.0, true, 1, 2)],
+  all: [
+    makeTalent(4, "Dreadnaught", 88.0, true, 1, 2),
+  ],
 }
 
 const dimNode: TalentNode = {
@@ -76,7 +93,9 @@ const dimNode: TalentNode = {
   prereqIds: [],
   primary: makeTalent(5, "Fervor of Battle", 12.0, false),
   isChoice: false,
-  all: [makeTalent(5, "Fervor of Battle", 12.0, false)],
+  all: [
+    makeTalent(5, "Fervor of Battle", 12.0, false),
+  ],
 }
 
 const PAD = 24
@@ -84,7 +103,9 @@ const PAD = 24
 const meta = {
   title: "Molecules/TalentNodeCard",
   component: TalentNodeCard,
-  tags: ["autodocs"],
+  tags: [
+    "autodocs",
+  ],
   parameters: {
     docs: {
       description: {
@@ -111,7 +132,10 @@ function canvas(Story: React.ComponentType) {
   return (
     <div
       className="bg-muted/20 relative rounded"
-      style={{ width: NODE_SIZE + PAD * 2, height: NODE_SIZE + PAD * 2 }}
+      style={{
+        width: NODE_SIZE + PAD * 2,
+        height: NODE_SIZE + PAD * 2,
+      }}
     >
       <Story />
     </div>
@@ -119,17 +143,25 @@ function canvas(Story: React.ComponentType) {
 }
 
 export const TopBuild: Story = {
-  decorators: [canvas],
+  decorators: [
+    canvas,
+  ],
   parameters: {
     docs: {
-      description: { story: "Full-opacity node that is in the top build. No percentage shown." },
+      description: {
+        story: "Full-opacity node that is in the top build. No percentage shown.",
+      },
     },
   },
 }
 
 export const ChoiceNode: Story = {
-  args: { node: choiceNode },
-  decorators: [canvas],
+  args: {
+    node: choiceNode,
+  },
+  decorators: [
+    canvas,
+  ],
   parameters: {
     docs: {
       description: {
@@ -141,8 +173,12 @@ export const ChoiceNode: Story = {
 }
 
 export const PartialRank: Story = {
-  args: { node: partialRankNode },
-  decorators: [canvas],
+  args: {
+    node: partialRankNode,
+  },
+  decorators: [
+    canvas,
+  ],
   parameters: {
     docs: {
       description: {
@@ -154,8 +190,12 @@ export const PartialRank: Story = {
 }
 
 export const DimmedUnused: Story = {
-  args: { node: dimNode },
-  decorators: [canvas],
+  args: {
+    node: dimNode,
+  },
+  decorators: [
+    canvas,
+  ],
   parameters: {
     docs: {
       description: {

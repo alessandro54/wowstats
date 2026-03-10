@@ -4,7 +4,9 @@ import { BracketPanels } from "../../components/molecules/bracket-panels"
 const meta = {
   title: "Molecules/BracketPanels",
   component: BracketPanels,
-  tags: ["autodocs"],
+  tags: [
+    "autodocs",
+  ],
   parameters: {
     docs: {
       description: {
@@ -26,27 +28,55 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   parameters: {
-    docs: { description: { story: "Warrior arms — hover a panel to expand it." } },
+    docs: {
+      description: {
+        story: "Warrior arms — hover a panel to expand it.",
+      },
+    },
   },
 }
 
 export const DeathKnight: Story = {
-  args: { classSlug: "death-knight", specSlug: "frost", classColor: "#C41E3A" },
+  args: {
+    classSlug: "death-knight",
+    specSlug: "frost",
+    classColor: "#C41E3A",
+  },
   parameters: {
-    docs: { description: { story: "Death Knight red class color." } },
+    docs: {
+      description: {
+        story: "Death Knight red class color.",
+      },
+    },
   },
 }
 
 export const Paladin: Story = {
-  args: { classSlug: "paladin", specSlug: "retribution", classColor: "#F48CBA" },
+  args: {
+    classSlug: "paladin",
+    specSlug: "retribution",
+    classColor: "#F48CBA",
+  },
   parameters: {
-    docs: { description: { story: "Paladin pink class color." } },
+    docs: {
+      description: {
+        story: "Paladin pink class color.",
+      },
+    },
   },
 }
 
 export const Mage: Story = {
-  args: { classSlug: "mage", specSlug: "frost", classColor: "#3FC7EB" },
+  args: {
+    classSlug: "mage",
+    specSlug: "frost",
+    classColor: "#3FC7EB",
+  },
   parameters: {
-    docs: { description: { story: "Mage blue class color." } },
+    docs: {
+      description: {
+        story: "Mage blue class color.",
+      },
+    },
   },
 }

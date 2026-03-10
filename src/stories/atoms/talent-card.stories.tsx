@@ -4,7 +4,9 @@ import { TalentCard } from "../../components/atoms/talent-card"
 const meta = {
   title: "Atoms/TalentCard",
   component: TalentCard,
-  tags: ["autodocs"],
+  tags: [
+    "autodocs",
+  ],
   parameters: {
     docs: {
       description: {
@@ -51,7 +53,9 @@ export const NoClassColor: Story = {
   },
   parameters: {
     docs: {
-      description: { story: "Falls back to a neutral card background when no classSlug is provided." },
+      description: {
+        story: "Falls back to a neutral card background when no classSlug is provided.",
+      },
     },
   },
 }
@@ -62,7 +66,23 @@ export const AllClasses: Story = {
   },
   render: () => (
     <div className="flex flex-wrap gap-4">
-      {(["warrior", "paladin", "hunter", "rogue", "priest", "death-knight", "shaman", "mage", "warlock", "monk", "druid", "demon-hunter", "evoker"] as const).map(slug => (
+      {(
+        [
+          "warrior",
+          "paladin",
+          "hunter",
+          "rogue",
+          "priest",
+          "death-knight",
+          "shaman",
+          "mage",
+          "warlock",
+          "monk",
+          "druid",
+          "demon-hunter",
+          "evoker",
+        ] as const
+      ).map((slug) => (
         <TalentCard key={slug} classSlug={slug}>
           <div className="flex h-20 w-28 items-center justify-center text-xs text-white">
             {slug}
@@ -73,7 +93,9 @@ export const AllClasses: Story = {
   ),
   parameters: {
     docs: {
-      description: { story: "All WoW class gradient variants." },
+      description: {
+        story: "All WoW class gradient variants.",
+      },
     },
   },
 }

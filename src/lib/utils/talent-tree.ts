@@ -26,17 +26,14 @@ export function buildNodeMap(talents: MetaTalent[]): Map<number, TalentNode> {
 
   for (const t of talents) {
     const { node_id, display_row, display_col, max_rank } = t.talent
-    if (node_id == null || display_row == null || display_col == null)
-      continue
+    if (node_id == null || display_row == null || display_col == null) continue
 
     const existing = map.get(node_id)
     if (existing) {
       existing.all.push(t)
-      if (t.usage_pct > existing.primary.usage_pct)
-        existing.primary = t
+      if (t.usage_pct > existing.primary.usage_pct) existing.primary = t
       existing.isChoice = true
-    }
-    else {
+    } else {
       map.set(node_id, {
         nodeId: node_id,
         row: display_row,
@@ -46,7 +43,9 @@ export function buildNodeMap(talents: MetaTalent[]): Map<number, TalentNode> {
         prereqIds: t.talent.prerequisite_node_ids,
         primary: t,
         isChoice: false,
-        all: [t],
+        all: [
+          t,
+        ],
       })
     }
   }
@@ -65,7 +64,12 @@ export function buildNodeMap(talents: MetaTalent[]): Map<number, TalentNode> {
  * automatically, just like the in-game talent picker.
  */
 export function buildTopNodeIds(nodes: TalentNode[], budget: number): Set<number> {
-  const nodeById = new Map(nodes.map(n => [n.nodeId, n]))
+  const nodeById = new Map(
+    nodes.map((n) => [
+      n.nodeId,
+      n,
+    ]),
+  )
   const picked = new Set<number>()
   let remaining = budget
 
@@ -74,8 +78,7 @@ export function buildTopNodeIds(nodes: TalentNode[], budget: number): Set<number
 
   // Free talents — always included, no budget cost
   for (const node of nodes) {
-    if (nodeCost(node) <= 0)
-      picked.add(node.nodeId)
+    if (nodeCost(node) <= 0) picked.add(node.nodeId)
   }
 
   // Collect the full prerequisite chain (transitive) for a node,
@@ -85,37 +88,35 @@ export function buildTopNodeIds(nodes: TalentNode[], budget: number): Set<number
   function unlockChain(nodeId: number): TalentNode[] {
     const chain: TalentNode[] = []
     const visited = new Set<number>()
-    const stack = [nodeId]
+    const stack = [
+      nodeId,
+    ]
     while (stack.length > 0) {
       const id = stack.pop()!
-      if (picked.has(id) || visited.has(id))
-        continue
+      if (picked.has(id) || visited.has(id)) continue
       visited.add(id)
       const n = nodeById.get(id)
-      if (!n)
-        continue // outside our tree — treat as satisfied
+      if (!n) continue // outside our tree — treat as satisfied
       chain.push(n)
-      for (const prereqId of n.prereqIds)
-        stack.push(prereqId)
+      for (const prereqId of n.prereqIds) stack.push(prereqId)
     }
     return chain
   }
 
   // Sort candidates by usage_pct descending — highest value first
-  const sorted = [...nodes].sort((a, b) => b.primary.usage_pct - a.primary.usage_pct)
+  const sorted = [
+    ...nodes,
+  ].sort((a, b) => b.primary.usage_pct - a.primary.usage_pct)
 
   for (const node of sorted) {
-    if (picked.has(node.nodeId))
-      continue
+    if (picked.has(node.nodeId)) continue
 
     const chain = unlockChain(node.nodeId)
     const totalCost = chain.reduce((sum, n) => sum + nodeCost(n), 0)
-    if (totalCost > remaining)
-      continue
+    if (totalCost > remaining) continue
 
     // Pick the entire chain
-    for (const n of chain)
-      picked.add(n.nodeId)
+    for (const n of chain) picked.add(n.nodeId)
     remaining -= totalCost
   }
 
@@ -126,8 +127,7 @@ export function buildEdgeSet(talents: MetaTalent[]): Set<string> {
   const edgeSet = new Set<string>()
   for (const t of talents) {
     const { node_id, prerequisite_node_ids } = t.talent
-    if (node_id == null)
-      continue
+    if (node_id == null) continue
     for (const pid of prerequisite_node_ids) {
       edgeSet.add(`${pid}→${node_id}`)
     }
@@ -136,14 +136,14 @@ export function buildEdgeSet(talents: MetaTalent[]): Set<string> {
 }
 
 export function hasTreeData(talents: MetaTalent[]): boolean {
-  return talents.some(t => t.talent.display_row != null && t.talent.display_col != null)
+  return talents.some((t) => t.talent.display_row != null && t.talent.display_col != null)
 }
 
 // Split hero talents into separate sub-trees via connected-component BFS.
 // Hero trees share no prerequisite edges between them, so components = trees.
 export function splitHeroTrees(talents: MetaTalent[]): MetaTalent[][] {
   const heroNodeIds = new Set(
-    talents.map(t => t.talent.node_id).filter((id): id is number => id != null),
+    talents.map((t) => t.talent.node_id).filter((id): id is number => id != null),
   )
 
   // Bidirectional adjacency — only traverse edges within the hero set
@@ -151,8 +151,7 @@ export function splitHeroTrees(talents: MetaTalent[]): MetaTalent[][] {
   for (const id of heroNodeIds) adj.set(id, new Set())
   for (const t of talents) {
     const { node_id, prerequisite_node_ids } = t.talent
-    if (node_id == null)
-      continue
+    if (node_id == null) continue
     for (const prereqId of prerequisite_node_ids) {
       if (heroNodeIds.has(prereqId)) {
         adj.get(node_id)!.add(prereqId)
@@ -165,31 +164,30 @@ export function splitHeroTrees(talents: MetaTalent[]): MetaTalent[][] {
   const visited = new Set<number>()
   const components: Set<number>[] = []
   for (const nodeId of heroNodeIds) {
-    if (visited.has(nodeId))
-      continue
+    if (visited.has(nodeId)) continue
     const component = new Set<number>()
-    const queue = [nodeId]
+    const queue = [
+      nodeId,
+    ]
     while (queue.length > 0) {
       const curr = queue.shift()!
-      if (visited.has(curr))
-        continue
+      if (visited.has(curr)) continue
       visited.add(curr)
       component.add(curr)
       for (const neighbor of adj.get(curr) ?? []) {
-        if (!visited.has(neighbor))
-          queue.push(neighbor)
+        if (!visited.has(neighbor)) queue.push(neighbor)
       }
     }
     components.push(component)
   }
 
   // Map components back to MetaTalent[], sorted dominant first
-  const trees = components.map(ids =>
-    talents.filter(t => t.talent.node_id != null && ids.has(t.talent.node_id)),
+  const trees = components.map((ids) =>
+    talents.filter((t) => t.talent.node_id != null && ids.has(t.talent.node_id)),
   )
 
   // Rank by max usage_pct in each tree (highest = dominant)
   return trees.sort(
-    (a, b) => Math.max(...b.map(t => t.usage_pct)) - Math.max(...a.map(t => t.usage_pct)),
+    (a, b) => Math.max(...b.map((t) => t.usage_pct)) - Math.max(...a.map((t) => t.usage_pct)),
   )
 }

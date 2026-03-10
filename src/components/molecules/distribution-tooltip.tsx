@@ -4,7 +4,12 @@ import type { MetaGem } from "@/lib/api"
 import { getStatMeta } from "@/config/equipment-config"
 import { DistList } from "@/components/atoms/dist-list"
 
-export interface DistEntry { name: string, icon_url?: string | null, quality?: string, pct: number }
+export interface DistEntry {
+  name: string
+  icon_url?: string | null
+  quality?: string
+  pct: number
+}
 
 export function DistributionTooltip({
   entries,
@@ -44,7 +49,9 @@ export function DistributionTooltip({
                 <span
                   key={stat}
                   className="text-[11px] font-semibold"
-                  style={{ color: color ?? "inherit" }}
+                  style={{
+                    color: color ?? "inherit",
+                  }}
                 >
                   {label}
                 </span>
@@ -57,12 +64,11 @@ export function DistributionTooltip({
             <p className="text-muted-foreground text-[10px] tracking-wider uppercase">
               Fiber socket
             </p>
-            {fiberGems.map(gem => (
+            {fiberGems.map((gem) => (
               <div key={gem.id} className="flex items-center justify-between gap-3">
                 <span className="text-xs">{gem.item.name}</span>
                 <span className="text-muted-foreground font-mono text-[11px]">
-                  {gem.usage_pct.toFixed(1)}
-                  %
+                  {gem.usage_pct.toFixed(1)}%
                 </span>
               </div>
             ))}

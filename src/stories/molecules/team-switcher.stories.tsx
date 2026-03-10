@@ -14,16 +14,32 @@ function withSidebar(Story: React.ComponentType) {
 }
 
 const sampleTeams = [
-  { name: "Acme Inc", logo: GalleryVerticalEnd, plan: "Enterprise" },
-  { name: "Acme Corp.", logo: AudioWaveform, plan: "Startup" },
-  { name: "Evil Corp.", logo: Command, plan: "Free" },
+  {
+    name: "Acme Inc",
+    logo: GalleryVerticalEnd,
+    plan: "Enterprise",
+  },
+  {
+    name: "Acme Corp.",
+    logo: AudioWaveform,
+    plan: "Startup",
+  },
+  {
+    name: "Evil Corp.",
+    logo: Command,
+    plan: "Free",
+  },
 ]
 
 const meta = {
   title: "Molecules/TeamSwitcher",
   component: TeamSwitcher,
-  tags: ["autodocs"],
-  decorators: [withSidebar],
+  tags: [
+    "autodocs",
+  ],
+  decorators: [
+    withSidebar,
+  ],
   parameters: {
     docs: {
       description: {
@@ -44,10 +60,14 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {}
 
 export const SingleTeam: Story = {
-  args: { teams: sampleTeams.slice(0, 1) },
+  args: {
+    teams: sampleTeams.slice(0, 1),
+  },
   parameters: {
     docs: {
-      description: { story: "Only one team available — switcher still renders the dropdown." },
+      description: {
+        story: "Only one team available — switcher still renders the dropdown.",
+      },
     },
   },
 }

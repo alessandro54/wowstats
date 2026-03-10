@@ -42,7 +42,11 @@ describe("specHeading", () => {
   })
 
   it("handles different class colors", () => {
-    const slugs: WowClassSlug[] = ["warrior", "mage", "druid"]
+    const slugs: WowClassSlug[] = [
+      "warrior",
+      "mage",
+      "druid",
+    ]
 
     slugs.forEach((slug) => {
       const { container, unmount } = render(

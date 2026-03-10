@@ -87,7 +87,9 @@ describe("teamSwitcher", () => {
   })
 
   it("renders when isMobile is true", () => {
-    vi.mocked(useSidebar).mockReturnValueOnce({ isMobile: true } as any)
+    vi.mocked(useSidebar).mockReturnValueOnce({
+      isMobile: true,
+    } as any)
     const { getByTestId } = render(<TeamSwitcher teams={mockTeams} />)
     expect(getByTestId("sidebar-menu")).toBeTruthy()
   })
@@ -96,7 +98,7 @@ describe("teamSwitcher", () => {
     const { container, getAllByTestId } = render(<TeamSwitcher teams={mockTeams} />)
     expect(container.textContent).toContain("Team A")
     const items = getAllByTestId("dropdown-item")
-    const teamBItem = items.find(item => item.textContent?.includes("Team B"))
+    const teamBItem = items.find((item) => item.textContent?.includes("Team B"))
     fireEvent.click(teamBItem!)
     expect(container.textContent).toContain("Team B")
     expect(container.textContent).toContain("Enterprise")

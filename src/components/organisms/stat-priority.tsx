@@ -6,8 +6,7 @@ interface Props {
 }
 
 export function StatPriority({ stats }: Props) {
-  if (stats.length === 0)
-    return null
+  if (stats.length === 0) return null
 
   const max = stats[0].pct
 
@@ -30,7 +29,12 @@ export function StatPriority({ stats }: Props) {
                 </span>
                 <div className="flex-1 space-y-0.5">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-xs font-medium" style={{ color }}>
+                    <span
+                      className="text-xs font-medium"
+                      style={{
+                        color,
+                      }}
+                    >
                       {label}
                     </span>
                     <span className="text-[11px] font-mono tabular-nums text-muted-foreground shrink-0">
@@ -40,7 +44,10 @@ export function StatPriority({ stats }: Props) {
                   <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
                     <div
                       className="h-full rounded-full transition-all"
-                      style={{ width: `${barWidth}%`, backgroundColor: color }}
+                      style={{
+                        width: `${barWidth}%`,
+                        backgroundColor: color,
+                      }}
                     />
                   </div>
                 </div>

@@ -6,7 +6,7 @@ import { BRACKETS } from "@/config/wow/brackets-config"
  * @example getBracketBySlug("3v3")
  */
 export function getBracketBySlug(slug: BracketSlug) {
-  return BRACKETS.find(b => b.slug === slug) ?? null
+  return BRACKETS.find((b) => b.slug === slug) ?? null
 }
 
 /**
@@ -20,14 +20,14 @@ export function getAllBrackets() {
  * Returns all bracket slugs
  */
 export function getAllBracketSlugs(): BracketSlug[] {
-  return BRACKETS.map(b => b.slug)
+  return BRACKETS.map((b) => b.slug)
 }
 
 /**
  * Checks if a string is a valid bracket slug
  */
 export function isValidBracketSlug(slug: string): slug is BracketSlug {
-  return BRACKETS.some(b => b.slug === slug)
+  return BRACKETS.some((b) => b.slug === slug)
 }
 
 /**

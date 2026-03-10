@@ -14,7 +14,7 @@ vi.mock("@/components/ui/hover-card", () => ({
 }))
 
 vi.mock("next/image", () => ({
-  default: ({ src, alt }: { src: string, alt: string }) => (
+  default: ({ src, alt }: { src: string; alt: string }) => (
     // eslint-disable-next-line next/no-img-element
     <img src={src} alt={alt} data-testid="class-icon" />
   ),
@@ -37,8 +37,18 @@ describe("navClassHoverCard", () => {
     color: "#C69B6D",
     iconUrl: "https://example.com/warrior.jpg",
     items: [
-      { id: 71, title: "Arms", url: "/warrior/arms", iconUrl: "https://example.com/arms.jpg" },
-      { id: 72, title: "Fury", url: "/warrior/fury", iconUrl: "https://example.com/fury.jpg" },
+      {
+        id: 71,
+        title: "Arms",
+        url: "/warrior/arms",
+        iconUrl: "https://example.com/arms.jpg",
+      },
+      {
+        id: 72,
+        title: "Fury",
+        url: "/warrior/fury",
+        iconUrl: "https://example.com/fury.jpg",
+      },
       {
         id: 73,
         title: "Protection",
@@ -76,7 +86,7 @@ describe("navClassHoverCard", () => {
     const icons = getAllByTestId("class-icon")
     expect(icons.length).toBeGreaterThan(0)
     expect(
-      icons.some(icon => icon.getAttribute("src") === "https://example.com/warrior.jpg"),
+      icons.some((icon) => icon.getAttribute("src") === "https://example.com/warrior.jpg"),
     ).toBe(true)
   })
 
@@ -96,7 +106,7 @@ describe("navClassHoverCard", () => {
     )
 
     const links = container.querySelectorAll("a")
-    const hrefs = Array.from(links).map(l => l.getAttribute("href"))
+    const hrefs = Array.from(links).map((l) => l.getAttribute("href"))
 
     expect(hrefs).toContain("/warrior/arms")
     expect(hrefs).toContain("/warrior/fury")
@@ -121,9 +131,24 @@ describe("navClassHoverCard", () => {
       color: "#69CCF0",
       iconUrl: "https://example.com/mage.jpg",
       items: [
-        { id: 62, title: "Arcane", url: "/mage/arcane", iconUrl: "https://example.com/arcane.jpg" },
-        { id: 63, title: "Fire", url: "/mage/fire", iconUrl: "https://example.com/fire.jpg" },
-        { id: 64, title: "Frost", url: "/mage/frost", iconUrl: "https://example.com/frost.jpg" },
+        {
+          id: 62,
+          title: "Arcane",
+          url: "/mage/arcane",
+          iconUrl: "https://example.com/arcane.jpg",
+        },
+        {
+          id: 63,
+          title: "Fire",
+          url: "/mage/fire",
+          iconUrl: "https://example.com/fire.jpg",
+        },
+        {
+          id: 64,
+          title: "Frost",
+          url: "/mage/frost",
+          iconUrl: "https://example.com/frost.jpg",
+        },
       ],
     }
 

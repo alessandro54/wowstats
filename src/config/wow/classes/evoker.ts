@@ -1,12 +1,11 @@
 import type { WowClassConfig } from "./classes-config"
 
+// Class color: #33937F
 const EvokerConfig: WowClassConfig = {
   id: 13,
   name: "Evoker",
   slug: "evoker",
   iconUrl: "https://render.worldofwarcraft.com/us/icons/56/classicon_evoker.jpg",
-  color: "#33937F",
-  colorOlkch: "oklch(0.4353 0.2535 162.19)",
   specs: [
     {
       id: 1467,

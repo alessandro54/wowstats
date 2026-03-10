@@ -5,7 +5,7 @@ import { QUALITY_COLORS } from "@/config/equipment-config"
 export function DistList({ entries }: { entries: DistEntry[] }) {
   return (
     <div className="space-y-1">
-      {entries.map(e => (
+      {entries.map((e) => (
         <div key={e.name} className="flex items-center gap-1.5">
           {e.icon_url && (
             <Image
@@ -18,13 +18,14 @@ export function DistList({ entries }: { entries: DistEntry[] }) {
           )}
           <span
             className="flex-1 truncate text-xs"
-            style={{ color: e.quality ? QUALITY_COLORS[e.quality] : undefined }}
+            style={{
+              color: e.quality ? QUALITY_COLORS[e.quality] : undefined,
+            }}
           >
             {e.name}
           </span>
           <span className="text-muted-foreground shrink-0 font-mono text-[11px]">
-            {e.pct.toFixed(1)}
-            %
+            {e.pct.toFixed(1)}%
           </span>
         </div>
       ))}

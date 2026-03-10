@@ -1,14 +1,13 @@
 import { CDN_BASE } from "@/config/cdn-config"
 import type { WowClassConfig } from "./classes-config"
 
+// Class color: #C69B6D
 const WarriorConfig: WowClassConfig = {
   id: 1,
   name: "Warrior",
   slug: "warrior",
   iconUrl: "https://render.worldofwarcraft.com/us/icons/56/classicon_warrior.jpg",
   iconRemasteredUrl: `${CDN_BASE}/class_media/warrior/class_icon.png`,
-  color: "#C69B6D",
-  colorOlkch: "oklch(0.6431 0.2243 37.45)",
   specs: [
     {
       id: 71,

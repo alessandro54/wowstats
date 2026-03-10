@@ -4,7 +4,9 @@ import { CornerPeel } from "../../components/atoms/corner-peel"
 const meta = {
   title: "Atoms/CornerPeel",
   component: CornerPeel,
-  tags: ["autodocs"],
+  tags: [
+    "autodocs",
+  ],
   parameters: {
     docs: {
       description: {
@@ -15,7 +17,7 @@ const meta = {
     layout: "centered",
   },
   decorators: [
-    Story => (
+    (Story) => (
       <div className="border-border relative h-48 w-64 rounded-xl border">
         <Story />
       </div>

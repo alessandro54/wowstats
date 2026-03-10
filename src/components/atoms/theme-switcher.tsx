@@ -6,9 +6,18 @@ import { useEffect, useMemo, useState } from "react"
 import { SlidingSwitch } from "@/components/atoms/sliding-switch"
 
 const OPTIONS = [
-  { value: "system", label: <Monitor size={14} /> },
-  { value: "light", label: <Sun size={14} /> },
-  { value: "dark", label: <Moon size={14} /> },
+  {
+    value: "system",
+    label: <Monitor size={14} />,
+  },
+  {
+    value: "light",
+    label: <Sun size={14} />,
+  },
+  {
+    value: "dark",
+    label: <Moon size={14} />,
+  },
 ] as const
 
 type ThemeValue = (typeof OPTIONS)[number]["value"]
@@ -20,10 +29,11 @@ export function ThemeSwitcher() {
   useEffect(() => setMounted(true), [])
 
   const options = useMemo(
-    () => OPTIONS.map(({ value, label }) => ({
-      value,
-      label: <span className="p-1.5 block">{label}</span>,
-    })),
+    () =>
+      OPTIONS.map(({ value, label }) => ({
+        value,
+        label: <span className="p-1.5 block">{label}</span>,
+      })),
     [],
   )
 

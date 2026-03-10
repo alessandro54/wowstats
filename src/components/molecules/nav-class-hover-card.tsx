@@ -7,9 +7,18 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/h
 import { SidebarMenuButton } from "@/components/ui/sidebar"
 
 const QUICK_BRACKETS = [
-  { slug: "2v2", label: "2v2" },
-  { slug: "3v3", label: "3v3" },
-  { slug: "shuffle", label: "Solo" },
+  {
+    slug: "2v2",
+    label: "2v2",
+  },
+  {
+    slug: "3v3",
+    label: "3v3",
+  },
+  {
+    slug: "shuffle",
+    label: "Solo",
+  },
 ] as const
 
 interface Props {
@@ -40,13 +49,15 @@ export function NavClassHoverCard({ item, onMouseEnter }: Props) {
       <HoverCardContent side="bottom" align="start" sideOffset={4} className="w-52 p-2">
         <p
           className="px-1 pb-2 text-xs font-bold tracking-wider uppercase"
-          style={{ color: classColor }}
+          style={{
+            color: classColor,
+          }}
         >
           {item.title}
         </p>
 
         <div className="space-y-0.5">
-          {item.items.map(spec => (
+          {item.items.map((spec) => (
             <div key={spec.title} className="group/spec">
               <Link
                 href={spec.url}
@@ -71,7 +82,11 @@ export function NavClassHoverCard({ item, onMouseEnter }: Props) {
                         key={slug}
                         href={`${spec.url}/${slug}`}
                         className="class-pill rounded px-1.5 py-0.5 text-[10px] font-semibold"
-                        style={{ "--pill-color": classColor } as React.CSSProperties}
+                        style={
+                          {
+                            "--pill-color": classColor,
+                          } as React.CSSProperties
+                        }
                       >
                         {label}
                       </Link>

@@ -10,7 +10,12 @@ const props = {
   totalPlayers: 12500,
   weightedAvgRating: 1847,
   weightedAvgWinRate: 0.523,
-  topSpec: { name: "Arms", className: "Warrior", color: "#c79c6e", iconUrl: "https://example.com/icon.jpg" },
+  topSpec: {
+    name: "Arms",
+    className: "Warrior",
+    color: "#c79c6e",
+    iconUrl: "https://example.com/icon.jpg",
+  },
 }
 
 describe("metaKpiRow", () => {
@@ -40,7 +45,13 @@ describe("metaKpiRow", () => {
   })
 
   it("handles topSpec without icon", () => {
-    const noIcon = { ...props, topSpec: { ...props.topSpec, iconUrl: undefined } }
+    const noIcon = {
+      ...props,
+      topSpec: {
+        ...props.topSpec,
+        iconUrl: undefined,
+      },
+    }
     const { container } = render(<MetaKpiRow {...noIcon} />)
     expect(container.querySelector("img")).toBeNull()
     expect(container.textContent).toContain("Arms")

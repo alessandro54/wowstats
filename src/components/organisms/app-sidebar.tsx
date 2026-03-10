@@ -5,7 +5,13 @@ import Link from "next/link"
 import * as React from "react"
 
 import { NavMain } from "@/components/organisms/nav-main"
-import { SidebarHeader, Sidebar, SidebarContent, SidebarRail, useSidebar } from "@/components/ui/sidebar"
+import {
+  SidebarHeader,
+  Sidebar,
+  SidebarContent,
+  SidebarRail,
+  useSidebar,
+} from "@/components/ui/sidebar"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { open } = useSidebar()
@@ -13,7 +19,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="pt-3.5">
-        <Link href="/" className="flex items-center rounded-md hover:bg-sidebar-accent transition-colors translate-x-0.5">
+        <Link
+          href="/"
+          className="flex items-center rounded-md hover:bg-sidebar-accent transition-colors translate-x-0.5"
+        >
           <Image
             src="/logo.png"
             alt="Logo"

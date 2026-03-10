@@ -1,6 +1,7 @@
 import type { WowClassConfig } from "./classes-config"
 import { CDN_BASE } from "@/config/cdn-config"
 
+// Class color: #9482C9
 const WarlockConfig: WowClassConfig = {
   id: 9,
   name: "Warlock",
@@ -8,8 +9,6 @@ const WarlockConfig: WowClassConfig = {
   iconUrl: "https://render.worldofwarcraft.com/us/icons/56/classicon_warlock.jpg",
   iconRemasteredUrl: `${CDN_BASE}/class_media/warlock/class_icon.png`,
   bannerUrl: `${CDN_BASE}/class_media/warlock/class_banner.png`,
-  color: "#9482C9",
-  colorOlkch: "oklch(0.5902 0.1373 289.11)",
   specs: [
     {
       id: 265,

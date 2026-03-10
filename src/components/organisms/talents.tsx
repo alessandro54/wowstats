@@ -26,10 +26,9 @@ export function Talents({ classSlug, talents, talentsMeta }: Props) {
   const activeColor = useActiveColor(classSlug)
 
   const safeTalents = Array.isArray(talents) ? talents : []
-  if (safeTalents.length === 0)
-    return null
+  if (safeTalents.length === 0) return null
 
-  const byType = Map.groupBy(safeTalents, t => t.talent.talent_type)
+  const byType = Map.groupBy(safeTalents, (t) => t.talent.talent_type)
 
   const specEntries = byType.get("spec")
   const classEntries = byType.get("class")
@@ -37,13 +36,11 @@ export function Talents({ classSlug, talents, talentsMeta }: Props) {
   const pvpEntries = byType.get("pvp")
 
   const renderTree = (entries: MetaTalent[]) =>
-    hasTreeData(entries)
-      ? (
-          <TalentTree talents={entries} activeColor={activeColor} budget={34} />
-        )
-      : (
-          <TalentList talents={entries} activeColor={activeColor} />
-        )
+    hasTreeData(entries) ? (
+      <TalentTree talents={entries} activeColor={activeColor} budget={34} />
+    ) : (
+      <TalentList talents={entries} activeColor={activeColor} />
+    )
 
   return (
     <div className="space-y-8">
@@ -60,7 +57,11 @@ export function Talents({ classSlug, talents, talentsMeta }: Props) {
         <div className="flex flex-col items-center">
           <div className="relative inline-flex flex-col items-center md:block">
             {heroEntries && (
-              <HeroSection heroEntries={heroEntries} activeColor={activeColor} classSlug={classSlug} />
+              <HeroSection
+                heroEntries={heroEntries}
+                activeColor={activeColor}
+                classSlug={classSlug}
+              />
             )}
             {pvpEntries && (
               <div className="mt-6 md:absolute md:top-1/2 md:z-20 md:mt-0 md:left-[calc(100%+50px)] md:-translate-y-1/2">

@@ -19,8 +19,12 @@ function withProviders(Story: React.ComponentType) {
 const meta = {
   title: "Molecules/TopNav",
   component: TopNav,
-  tags: ["autodocs"],
-  decorators: [withProviders],
+  tags: [
+    "autodocs",
+  ],
+  decorators: [
+    withProviders,
+  ],
   parameters: {
     docs: {
       description: {
@@ -37,7 +41,11 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   parameters: {
-    docs: { description: { story: "Empty nav — just sidebar trigger and theme switcher." } },
+    docs: {
+      description: {
+        story: "Empty nav — just sidebar trigger and theme switcher.",
+      },
+    },
   },
 }
 
@@ -49,7 +57,11 @@ export const WithBreadcrumb: Story = {
     </>
   ),
   parameters: {
-    docs: { description: { story: "Left slot filled with a breadcrumb string." } },
+    docs: {
+      description: {
+        story: "Left slot filled with a breadcrumb string.",
+      },
+    },
   },
 }
 
@@ -57,19 +69,30 @@ export const WithCenterActions: Story = {
   render: () => (
     <>
       <TopNavConfig
-        center={(
+        center={
           <div className="flex gap-1">
-            {["2v2", "3v3", "Solo", "RBG"].map(b => (
-              <span key={b} className="bg-muted rounded px-2.5 py-1 text-xs font-medium">{b}</span>
+            {[
+              "2v2",
+              "3v3",
+              "Solo",
+              "RBG",
+            ].map((b) => (
+              <span key={b} className="bg-muted rounded px-2.5 py-1 text-xs font-medium">
+                {b}
+              </span>
             ))}
           </div>
-        )}
+        }
       />
       <TopNav />
     </>
   ),
   parameters: {
-    docs: { description: { story: "Center slot used for bracket navigation." } },
+    docs: {
+      description: {
+        story: "Center slot used for bracket navigation.",
+      },
+    },
   },
 }
 
@@ -78,19 +101,30 @@ export const WithBothSlots: Story = {
     <>
       <TopNavConfig
         left={<span className="text-sm font-semibold">PvP › Warrior › Arms</span>}
-        center={(
+        center={
           <div className="flex gap-1">
-            {["2v2", "3v3", "Solo", "RBG"].map(b => (
-              <span key={b} className="bg-muted rounded px-2.5 py-1 text-xs font-medium">{b}</span>
+            {[
+              "2v2",
+              "3v3",
+              "Solo",
+              "RBG",
+            ].map((b) => (
+              <span key={b} className="bg-muted rounded px-2.5 py-1 text-xs font-medium">
+                {b}
+              </span>
             ))}
           </div>
-        )}
+        }
       />
       <TopNav />
     </>
   ),
   parameters: {
-    docs: { description: { story: "Both left and center slots populated." } },
+    docs: {
+      description: {
+        story: "Both left and center slots populated.",
+      },
+    },
   },
 }
 
@@ -99,10 +133,16 @@ export const Hidden: Story = {
     <>
       <TopNavConfig hidden />
       <TopNav />
-      <div className="p-8 text-sm text-muted-foreground">TopNav is hidden — no header rendered above.</div>
+      <div className="p-8 text-sm text-muted-foreground">
+        TopNav is hidden — no header rendered above.
+      </div>
     </>
   ),
   parameters: {
-    docs: { description: { story: "Set `hidden` via TopNavConfig to suppress the bar entirely." } },
+    docs: {
+      description: {
+        story: "Set `hidden` via TopNavConfig to suppress the bar entirely.",
+      },
+    },
   },
 }

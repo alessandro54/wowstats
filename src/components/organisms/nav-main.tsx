@@ -32,36 +32,38 @@ export function NavMain() {
 
   const handleItemEnter = useCallback(
     (item: (typeof navMain)[number]) => {
-      if (timerRef.current)
-        clearTimeout(timerRef.current)
+      if (timerRef.current) clearTimeout(timerRef.current)
       timerRef.current = setTimeout(() => {
         setOpenSlug(item.slug)
         setSlug(item.slug)
         if (!prefetchedRef.current.has(item.slug)) {
           prefetchedRef.current.add(item.slug)
           item.items.forEach((spec) => {
-            fetch(`/api/prefetch/items?spec_id=${spec.id}&bracket=3v3`, { priority: "low" }).catch(
-              () => {},
-            )
+            fetch(`/api/prefetch/items?spec_id=${spec.id}&bracket=3v3`, {
+              priority: "low",
+            }).catch(() => {})
           })
         }
       }, 80)
     },
-    [setSlug],
+    [
+      setSlug,
+    ],
   )
 
   const handleMenuLeave = useCallback(() => {
-    if (timerRef.current)
-      clearTimeout(timerRef.current)
+    if (timerRef.current) clearTimeout(timerRef.current)
     setOpenSlug(null)
     setSlug(null)
-  }, [setSlug])
+  }, [
+    setSlug,
+  ])
 
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Guides</SidebarGroupLabel>
       <SidebarMenu onMouseLeave={handleMenuLeave}>
-        {navMain.map(item => (
+        {navMain.map((item) => (
           <Collapsible
             key={item.title}
             asChild
@@ -70,32 +72,32 @@ export function NavMain() {
             onMouseEnter={() => handleItemEnter(item)} // item ref is stable (navMain is a module-level const)
           >
             <SidebarMenuItem>
-              {sidebarOpen
-                ? (
-                    <CollapsibleTrigger asChild>
-                      <SidebarMenuButton tooltip={item.title}>
-                        <span className="icon-vignette rounded-full">
-                          <Image
-                            src={item.iconUrl}
-                            width={20}
-                            height={20}
-                            className="block rounded-full"
-                            alt={item.title}
-                          />
-                        </span>
-                        <span>{item.title}</span>
-                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                      </SidebarMenuButton>
-                    </CollapsibleTrigger>
-                  )
-                : (
-                    <NavClassHoverCard item={item} onMouseEnter={() => setSlug(item.slug)} />
-                  )}
+              {sidebarOpen ? (
+                <CollapsibleTrigger asChild>
+                  <SidebarMenuButton tooltip={item.title}>
+                    <span className="icon-vignette rounded-full">
+                      <Image
+                        src={item.iconUrl}
+                        width={20}
+                        height={20}
+                        className="block rounded-full"
+                        alt={item.title}
+                      />
+                    </span>
+                    <span>{item.title}</span>
+                    <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                  </SidebarMenuButton>
+                </CollapsibleTrigger>
+              ) : (
+                <NavClassHoverCard item={item} onMouseEnter={() => setSlug(item.slug)} />
+              )}
               <CollapsibleContent>
                 <SidebarMenuSub>
                   {item.items?.map((subItem) => {
                     const classColor = `var(--color-class-${item.slug})`
-                    const pillStyle = { "--pill-color": classColor } as React.CSSProperties
+                    const pillStyle = {
+                      "--pill-color": classColor,
+                    } as React.CSSProperties
                     return (
                       <SidebarMenuSubItem key={subItem.title} className="group/spec">
                         <SidebarMenuSubButton asChild>
@@ -115,7 +117,13 @@ export function NavMain() {
                         <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-200 ease-out group-hover/spec:grid-rows-[1fr]">
                           <div className="overflow-hidden">
                             <div className="flex justify-center gap-1 px-2 pt-0.5 pb-1.5 opacity-0 transition-opacity delay-75 duration-150 group-hover/spec:opacity-100">
-                              {(["2v2", "3v3", "shuffle"] as const).map(bracket => (
+                              {(
+                                [
+                                  "2v2",
+                                  "3v3",
+                                  "shuffle",
+                                ] as const
+                              ).map((bracket) => (
                                 <Link
                                   key={bracket}
                                   href={`/pvp/${item.slug}/${subItem.title}/${bracket}`}

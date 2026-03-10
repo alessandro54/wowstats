@@ -27,7 +27,12 @@ export function PvpTalentTooltip({ talent, activeColor }: Props) {
           {talent.talent.description}
         </p>
       )}
-      <p className="font-mono text-[11px] font-bold" style={{ color: activeColor }}>
+      <p
+        className="font-mono text-[11px] font-bold"
+        style={{
+          color: activeColor,
+        }}
+      >
         {talent.usage_pct.toFixed(1)}%
       </p>
     </div>

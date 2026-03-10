@@ -5,7 +5,9 @@ import { StickySpecHeader } from "../../components/atoms/sticky-header"
 const meta = {
   title: "Atoms/StickySpecHeader",
   component: StickySpecHeader,
-  tags: ["autodocs"],
+  tags: [
+    "autodocs",
+  ],
   parameters: {
     docs: {
       description: {
@@ -43,11 +45,11 @@ export const Default: Story = {
         <div className="text-muted-foreground text-xs">Scroll to see effect</div>
       </StickySpecHeader>
       <div className="space-y-2 p-3">
-        {Array.from({ length: 50 }).map((_, index) => (
+        {Array.from({
+          length: 50,
+        }).map((_, index) => (
           <p key={index} className="text-muted-foreground text-sm">
-            Scroll content row
-            {" "}
-            {index + 1}
+            Scroll content row {index + 1}
           </p>
         ))}
       </div>
@@ -75,11 +77,11 @@ export const WithSpecHeading: Story = {
         <div className="rounded border p-4">
           <h3 className="mb-2 font-semibold">Equipment</h3>
           <div className="space-y-2">
-            {Array.from({ length: 15 }).map((_, i) => (
+            {Array.from({
+              length: 15,
+            }).map((_, i) => (
               <div key={i} className="text-sm">
-                Item slot
-                {" "}
-                {i + 1}
+                Item slot {i + 1}
               </div>
             ))}
           </div>
@@ -87,11 +89,11 @@ export const WithSpecHeading: Story = {
         <div className="rounded border p-4">
           <h3 className="mb-2 font-semibold">Talents</h3>
           <div className="space-y-2">
-            {Array.from({ length: 20 }).map((_, i) => (
+            {Array.from({
+              length: 20,
+            }).map((_, i) => (
               <div key={i} className="text-sm">
-                Talent
-                {" "}
-                {i + 1}
+                Talent {i + 1}
               </div>
             ))}
           </div>

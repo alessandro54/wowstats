@@ -4,23 +4,22 @@ import { describe, expect, it, vi } from "vitest"
 import { HeroTree } from "../hero-tree"
 
 vi.mock("@/components/molecules/talent-list", () => ({
-  TalentList: ({ talents }: any) => (
-    <div data-testid="talent-list">{talents.length} items</div>
-  ),
+  TalentList: ({ talents }: any) => <div data-testid="talent-list">{talents.length} items</div>,
 }))
 
 vi.mock("@/components/organisms/talent-tree", () => ({
-  TalentTree: ({ talents }: any) => (
-    <div data-testid="talent-tree">{talents.length} nodes</div>
-  ),
+  TalentTree: ({ talents }: any) => <div data-testid="talent-tree">{talents.length} nodes</div>,
   hasTreeData: (talents: MetaTalent[]) =>
-    talents.some(t => t.talent.display_row != null && t.talent.display_col != null),
+    talents.some((t) => t.talent.display_row != null && t.talent.display_col != null),
 }))
 
 function makeTalent(
   id: number,
   pct: number,
-  opts: { row?: number | null, col?: number | null } = {},
+  opts: {
+    row?: number | null
+    col?: number | null
+  } = {},
 ): MetaTalent {
   return {
     id,
@@ -50,15 +49,30 @@ function makeTalent(
 
 describe("heroTree", () => {
   it("renders TalentTree when tree data is available", () => {
-    const talents = [makeTalent(1, 90, { row: 0, col: 0 }), makeTalent(2, 80, { row: 1, col: 0 })]
+    const talents = [
+      makeTalent(1, 90, {
+        row: 0,
+        col: 0,
+      }),
+      makeTalent(2, 80, {
+        row: 1,
+        col: 0,
+      }),
+    ]
     const { getByTestId } = render(<HeroTree talents={talents} activeColor="#c79c6e" />)
     expect(getByTestId("talent-tree").textContent).toContain("2 nodes")
   })
 
   it("falls back to TalentList when no tree data", () => {
     const talents = [
-      makeTalent(1, 90, { row: null, col: null }),
-      makeTalent(2, 80, { row: null, col: null }),
+      makeTalent(1, 90, {
+        row: null,
+        col: null,
+      }),
+      makeTalent(2, 80, {
+        row: null,
+        col: null,
+      }),
     ]
     const { getByTestId } = render(<HeroTree talents={talents} activeColor="#c79c6e" />)
     expect(getByTestId("talent-list").textContent).toContain("2 items")

@@ -6,7 +6,9 @@ import { SidebarProvider } from "../../components/ui/sidebar"
 const meta = {
   title: "Organisms/NavMain",
   component: NavMain,
-  tags: ["autodocs"],
+  tags: [
+    "autodocs",
+  ],
   parameters: {
     docs: {
       description: {
@@ -17,10 +19,14 @@ const meta = {
     layout: "fullscreen",
   },
   decorators: [
-    Story => (
+    (Story) => (
       <HoverProvider>
         <SidebarProvider>
-          <div style={{ width: 260 }}>
+          <div
+            style={{
+              width: 260,
+            }}
+          >
             <Story />
           </div>
         </SidebarProvider>
@@ -35,17 +41,23 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   parameters: {
     docs: {
-      description: { story: "Full sidebar open state — hover over a class to expand specs." },
+      description: {
+        story: "Full sidebar open state — hover over a class to expand specs.",
+      },
     },
   },
 }
 
 export const CollapsedMode: Story = {
   decorators: [
-    Story => (
+    (Story) => (
       <HoverProvider>
         <SidebarProvider defaultOpen={false}>
-          <div style={{ width: 60 }}>
+          <div
+            style={{
+              width: 60,
+            }}
+          >
             <Story />
           </div>
         </SidebarProvider>

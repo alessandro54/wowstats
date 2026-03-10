@@ -2,7 +2,13 @@ import type { Meta, StoryObj } from "@storybook/react-vite"
 import type { MetaTalent } from "../../lib/api"
 import { TalentList } from "../../components/molecules/talent-list"
 
-function makeTalent(id: number, name: string, iconUrl: string, usagePct: number, inTopBuild = true): MetaTalent {
+function makeTalent(
+  id: number,
+  name: string,
+  iconUrl: string,
+  usagePct: number,
+  inTopBuild = true,
+): MetaTalent {
   return {
     id,
     talent: {
@@ -24,7 +30,10 @@ function makeTalent(id: number, name: string, iconUrl: string, usagePct: number,
     usage_pct: usagePct,
     in_top_build: inTopBuild,
     top_build_rank: 1,
-    tier: (usagePct > 50 ? "bis" : usagePct > 15 ? "situational" : "common") as "bis" | "situational" | "common",
+    tier: (usagePct > 50 ? "bis" : usagePct > 15 ? "situational" : "common") as
+      | "bis"
+      | "situational"
+      | "common",
     snapshot_at: "2026-03-02T00:00:00Z",
   }
 }
@@ -66,7 +75,9 @@ const warriorTalents: MetaTalent[] = [
 const meta = {
   title: "Molecules/TalentList",
   component: TalentList,
-  tags: ["autodocs"],
+  tags: [
+    "autodocs",
+  ],
   parameters: {
     docs: {
       description: {
@@ -87,7 +98,7 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   decorators: [
-    Story => (
+    (Story) => (
       <div className="w-80">
         <Story />
       </div>
@@ -96,29 +107,41 @@ export const Default: Story = {
 }
 
 export const PaladinColors: Story = {
-  args: { activeColor: "#f58cba" },
+  args: {
+    activeColor: "#f58cba",
+  },
   decorators: [
-    Story => (
+    (Story) => (
       <div className="w-80">
         <Story />
       </div>
     ),
   ],
   parameters: {
-    docs: { description: { story: "Same list with Paladin pink class color." } },
+    docs: {
+      description: {
+        story: "Same list with Paladin pink class color.",
+      },
+    },
   },
 }
 
 export const SingleEntry: Story = {
-  args: { talents: warriorTalents.slice(0, 1) },
+  args: {
+    talents: warriorTalents.slice(0, 1),
+  },
   decorators: [
-    Story => (
+    (Story) => (
       <div className="w-80">
         <Story />
       </div>
     ),
   ],
   parameters: {
-    docs: { description: { story: "List with a single talent entry." } },
+    docs: {
+      description: {
+        story: "List with a single talent entry.",
+      },
+    },
   },
 }

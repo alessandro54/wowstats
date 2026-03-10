@@ -36,7 +36,9 @@ function TooltipContent({
   sideOffset = 0,
   children,
   ...props
-}: React.ComponentProps<typeof TooltipPrimitive.Content> & { arrowClassName?: string }) {
+}: React.ComponentProps<typeof TooltipPrimitive.Content> & {
+  arrowClassName?: string
+}) {
   return (
     <TooltipPrimitive.Portal>
       <TooltipPrimitive.Content

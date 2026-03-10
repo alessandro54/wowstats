@@ -35,7 +35,9 @@ export function PlayerTooltip({ player }: { player: TopPlayer }) {
         </div>
         <div>
           <div className="uppercase tracking-wide text-muted-foreground/70">W/L</div>
-          <div className="mt-0.5 text-foreground">{player.wins}/{player.losses}</div>
+          <div className="mt-0.5 text-foreground">
+            {player.wins}/{player.losses}
+          </div>
         </div>
         <div>
           <div className="uppercase tracking-wide text-muted-foreground/70">Win%</div>

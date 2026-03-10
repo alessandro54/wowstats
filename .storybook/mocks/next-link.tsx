@@ -1,7 +1,12 @@
 import type { AnchorHTMLAttributes } from "react"
 
 type NextLinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
-  href: string | { pathname?: string, query?: Record<string, string> }
+  href:
+    | string
+    | {
+        pathname?: string
+        query?: Record<string, string>
+      }
   prefetch?: boolean
   replace?: boolean
   scroll?: boolean

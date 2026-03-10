@@ -20,11 +20,13 @@ interface Props {
 
 export function PvpTalents({ talents, activeColor, classSlug }: Props) {
   const [hovered, setHovered] = useState(false)
-  const sorted = [...talents].sort((a, b) => b.usage_pct - a.usage_pct)
+  const sorted = [
+    ...talents,
+  ].sort((a, b) => b.usage_pct - a.usage_pct)
   const top3 = sorted.slice(0, 3)
   const others = sorted.slice(3)
-  const situational = others.filter(t => t.usage_pct > 20)
-  const rest = others.filter(t => t.usage_pct <= 20)
+  const situational = others.filter((t) => t.usage_pct > 20)
+  const rest = others.filter((t) => t.usage_pct <= 20)
 
   return (
     <div
@@ -35,11 +37,8 @@ export function PvpTalents({ talents, activeColor, classSlug }: Props) {
       <h2 className="mb-3 text-center text-sm font-semibold">PvP Talents</h2>
       <TalentCard classSlug={classSlug} className="p-3">
         <div className="flex flex-col items-center gap-2">
-          {top3.map(t => (
-            <div
-              key={t.talent.id}
-              className="flex flex-col items-center gap-0.5"
-            >
+          {top3.map((t) => (
+            <div key={t.talent.id} className="flex flex-col items-center gap-0.5">
               <TalentIcon
                 talent={t}
                 size={ICON_SIZE}
@@ -61,7 +60,11 @@ export function PvpTalents({ talents, activeColor, classSlug }: Props) {
             "absolute left-0 z-30 transition-all duration-200",
             hovered ? "opacity-100" : "pointer-events-none opacity-0",
           )}
-          style={{ top: 0, left: "100%", paddingLeft: 8 }}
+          style={{
+            top: 0,
+            left: "100%",
+            paddingLeft: 8,
+          }}
         >
           <TalentCard classSlug={classSlug} className="p-3">
             <div className="flex flex-col items-center gap-2">
@@ -70,11 +73,8 @@ export function PvpTalents({ talents, activeColor, classSlug }: Props) {
                   <span className="text-[9px] font-medium uppercase tracking-wider text-purple-400">
                     situational
                   </span>
-                  {situational.map(t => (
-                    <div
-                      key={t.talent.id}
-                      className="flex flex-col items-center gap-0.5"
-                    >
+                  {situational.map((t) => (
+                    <div key={t.talent.id} className="flex flex-col items-center gap-0.5">
                       <TalentIcon
                         talent={t}
                         size={ICON_SIZE}
@@ -91,7 +91,7 @@ export function PvpTalents({ talents, activeColor, classSlug }: Props) {
               )}
               {rest.length > 0 && (
                 <>
-                  {rest.map(t => (
+                  {rest.map((t) => (
                     <div
                       key={t.talent.id}
                       className="flex flex-col items-center gap-0.5 opacity-50"

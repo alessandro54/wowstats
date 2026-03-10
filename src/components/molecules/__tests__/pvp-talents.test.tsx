@@ -48,7 +48,7 @@ const talents = [
   makeTalent(1, "Gladiator's Resolve", 85),
   makeTalent(2, "Battle Trance", 70),
   makeTalent(3, "War Banner", 55),
-  makeTalent(4, "Disarm", 30),    // situational (>20%)
+  makeTalent(4, "Disarm", 30), // situational (>20%)
   makeTalent(5, "Spell Reflect", 25), // situational (>20%)
   makeTalent(6, "Storm of Swords", 10), // rest (<=20%)
 ]

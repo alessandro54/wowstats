@@ -1,12 +1,11 @@
 import type { WowClassConfig } from "./classes-config"
 
+// Class color: #00FF96
 const MonkConfig: WowClassConfig = {
   id: 10,
   name: "Monk",
   slug: "monk",
   iconUrl: "https://render.worldofwarcraft.com/us/icons/56/classicon_monk.jpg",
-  color: "#00FF96",
-  colorOlkch: "oklch(0.8667 0.2535 155.19)",
   specs: [
     {
       id: 268,

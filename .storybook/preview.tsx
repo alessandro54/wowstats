@@ -13,7 +13,7 @@ const preview: Preview = {
       },
       defaultTheme: "dark",
     }),
-    Story => (
+    (Story) => (
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <HoverProvider>
           <Story />

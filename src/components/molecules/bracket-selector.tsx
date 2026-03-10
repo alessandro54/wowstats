@@ -25,7 +25,11 @@ export function BracketSelector({ classSlug, specSlug }: Props) {
             key={b.slug}
             href={`/pvp/${classSlug}/${specSlug}/${b.slug}`}
             className={`rounded px-2.5 py-1 text-xs font-medium transition-colors duration-700 ${isActive ? "class-pill" : "bracket-inactive"}`}
-            style={{ "--pill-color": activeColor } as React.CSSProperties}
+            style={
+              {
+                "--pill-color": activeColor,
+              } as React.CSSProperties
+            }
           >
             {b.label}
           </Link>

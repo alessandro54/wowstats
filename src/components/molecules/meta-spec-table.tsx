@@ -39,7 +39,9 @@ export function MetaSpecTable({ entries }: Props) {
           <div
             key={entry.key}
             className="flex cursor-default items-center gap-2 border-b border-border/50 px-4 py-2 transition-colors last:border-b-0"
-            style={{ backgroundColor: isHovered ? "hsl(var(--muted) / 0.2)" : undefined }}
+            style={{
+              backgroundColor: isHovered ? "hsl(var(--muted) / 0.2)" : undefined,
+            }}
             onMouseEnter={() => setHoveredKey(entry.key)}
             onMouseLeave={() => setHoveredKey(null)}
           >
@@ -50,26 +52,29 @@ export function MetaSpecTable({ entries }: Props) {
 
             {/* Spec icon + name */}
             <div className="flex flex-1 items-center gap-2">
-              {entry.iconUrl
-                ? (
-                    <Image
-                      src={entry.iconUrl}
-                      alt={entry.specName}
-                      width={18}
-                      height={18}
-                      className="shrink-0 rounded-sm"
-                      unoptimized
-                    />
-                  )
-                : (
-                    <div
-                      className="h-[18px] w-[18px] shrink-0 rounded-sm"
-                      style={{ backgroundColor: entry.color, opacity: 0.7 }}
-                    />
-                  )}
+              {entry.iconUrl ? (
+                <Image
+                  src={entry.iconUrl}
+                  alt={entry.specName}
+                  width={18}
+                  height={18}
+                  className="shrink-0 rounded-sm"
+                  unoptimized
+                />
+              ) : (
+                <div
+                  className="h-[18px] w-[18px] shrink-0 rounded-sm"
+                  style={{
+                    backgroundColor: entry.color,
+                    opacity: 0.7,
+                  }}
+                />
+              )}
               <span
                 className="truncate text-sm font-medium"
-                style={{ color: entry.color }}
+                style={{
+                  color: entry.color,
+                }}
               >
                 {entry.specName}
               </span>
@@ -77,7 +82,9 @@ export function MetaSpecTable({ entries }: Props) {
 
             {/* Tier badge */}
             <div className="w-8 shrink-0 text-center">
-              <span className={`inline-block rounded px-1 py-0.5 text-[10px] font-bold ${TIER_COLORS[entry.tier]}`}>
+              <span
+                className={`inline-block rounded px-1 py-0.5 text-[10px] font-bold ${TIER_COLORS[entry.tier]}`}
+              >
                 {entry.tier}
               </span>
             </div>
@@ -95,8 +102,7 @@ export function MetaSpecTable({ entries }: Props) {
                   />
                 </div>
                 <span className="w-8 shrink-0 text-right font-mono text-[11px] tabular-nums text-muted-foreground">
-                  {entry.normPct.toFixed(0)}
-                  %
+                  {entry.normPct.toFixed(0)}%
                 </span>
               </div>
             </div>
@@ -108,14 +114,12 @@ export function MetaSpecTable({ entries }: Props) {
 
             {/* Win Rate */}
             <span className="w-16 shrink-0 text-right font-mono text-sm tabular-nums text-foreground">
-              {(entry.winRate * 100).toFixed(1)}
-              %
+              {(entry.winRate * 100).toFixed(1)}%
             </span>
 
             {/* Presence */}
             <span className="w-16 shrink-0 text-right font-mono text-sm tabular-nums text-muted-foreground">
-              {(entry.presence * 100).toFixed(1)}
-              %
+              {(entry.presence * 100).toFixed(1)}%
             </span>
           </div>
         )
