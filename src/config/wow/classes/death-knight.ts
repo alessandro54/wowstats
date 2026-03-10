@@ -7,6 +7,8 @@ const DeathKnightConfig: WowClassConfig = {
   name: "Death Knight",
   slug: "death-knight",
   iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_deathknight_classicon.jpg",
+  iconRemasteredUrl: `${CDN}/class_media/death-knight/class_icon.png`,
+  bannerUrl: `${CDN}/class_media/death-knight/class_banner.png`,
   color: "#C41E3A",
   colorOlkch: "oklch(0.5308 0.1969 19.54)",
   specs: [
@@ -15,8 +17,12 @@ const DeathKnightConfig: WowClassConfig = {
       name: "frost",
       url: "/pvp/death-knight/frost",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_deathknight_frostpresence.jpg",
-      iconRemasteredUrl: `${CDN}/icons-remastered/deathknight_frost.png`,
-      animationUrl: `${CDN}/animations/deathknight_frost.mp4`,
+      iconRemasteredUrl: `${CDN}/class_media/death-knight/frost_icon.png`,
+      splash: {
+        url: `${CDN}/class_media/death-knight/frost_splash.png`,
+        position: "100% center",
+      },
+      animationUrl: `${CDN}/class_media/death-knight/frost_animation.mp4`,
     },
     {
       id: 252,
@@ -24,16 +30,23 @@ const DeathKnightConfig: WowClassConfig = {
       url: "/pvp/death-knight/unholy",
       iconUrl:
         "https://render.worldofwarcraft.com/us/icons/56/spell_deathknight_unholypresence.jpg",
-      iconRemasteredUrl: `${CDN}/icons-remastered/deathknight_unholy.png`,
-      animationUrl: `${CDN}/animations/deathknight_unholy.mp4`,
+      iconRemasteredUrl: `${CDN}/class_media/death-knight/unholy_icon.png`,
+      splash: {
+        url: `${CDN}/class_media/death-knight/unholy_splash.png`,
+      },
+      animationUrl: `${CDN}/class_media/death-knight/unholy_animation.mp4`,
     },
     {
       id: 250,
       name: "blood",
       url: "/pvp/death-knight/blood",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_deathknight_bloodpresence.jpg",
-      iconRemasteredUrl: `${CDN}/icons-remastered/deathknight_blood.png`,
-      animationUrl: `${CDN}/animations/deathknight_blood.mp4`,
+      iconRemasteredUrl: `${CDN}/class_media/death-knight/blood_icon.png`,
+      splash: {
+        url: `${CDN}/class_media/death-knight/blood_splash.png`,
+        position: "80% center",
+      },
+      animationUrl: `${CDN}/class_media/death-knight/blood_animation.mp4`,
     },
   ],
 }

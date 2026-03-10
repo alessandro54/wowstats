@@ -1,15 +1,7 @@
 import { notFound } from "next/navigation"
 import { SpecHeading } from "@/components/atoms/spec-heading"
 import { BracketSelector } from "@/components/molecules/bracket-selector"
-import { PageHeader } from "@/components/molecules/page-header"
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
+import { PvpSpecTopNav } from "@/components/molecules/pvp-spec-top-nav"
 import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
 
 interface Props {
@@ -17,7 +9,7 @@ interface Props {
   params: Promise<{ classSlug: string, specSlug: string }>
 }
 
-export default async function PvpLayout({ children, params }: Props) {
+export default async function PvpBracketLayout({ children, params }: Props) {
   const { classSlug, specSlug } = await params
 
   const cls = WOW_CLASSES.find(c => c.slug === classSlug)
@@ -27,26 +19,6 @@ export default async function PvpLayout({ children, params }: Props) {
 
   return (
     <>
-      <PageHeader centerSlot={<BracketSelector classSlug={cls.slug} specSlug={specSlug} />}>
-        <Breadcrumb className="min-w-0 flex-1">
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbPage>PvP</BreadcrumbPage>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem className="hidden md:block">
-              <BreadcrumbLink href="#">{cls.name}</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator className="hidden md:block" />
-            <BreadcrumbItem>
-              <BreadcrumbPage className="capitalize">{specSlug}</BreadcrumbPage>
-            </BreadcrumbItem>
-
-
-          </BreadcrumbList>
-        </Breadcrumb>
-      </PageHeader>
-
       <div className="mx-auto flex max-w-screen-ok2xl flex-col" style={{ height: "calc(100vh - 60px)" }}>
         <div className="flex shrink-0 items-center gap-3 px-6 py-3">
           <span className="icon-vignette icon-vignette-lg rounded-full">

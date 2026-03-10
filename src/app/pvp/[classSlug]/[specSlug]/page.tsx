@@ -1,9 +1,7 @@
 import type { Metadata } from "next"
-import { ChevronRight } from "lucide-react"
 import Image from "next/image"
-import Link from "next/link"
 import { notFound } from "next/navigation"
-import { BRACKETS } from "@/config/wow/brackets-config"
+import { BracketPanels } from "@/components/molecules/bracket-panels"
 import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
 
 interface PageProps {
@@ -24,7 +22,7 @@ export default async function SpecIndexPage({ params }: PageProps) {
     notFound()
 
   return (
-    <div className="animate-page-in mx-auto max-w-2xl space-y-10 p-8">
+    <div className="animate-page-in mx-auto max-w-6xl space-y-10 p-8">
       {/* Spec hero */}
       <div className="flex items-center gap-4">
         <span className="icon-vignette rounded-xl">
@@ -46,24 +44,8 @@ export default async function SpecIndexPage({ params }: PageProps) {
         </div>
       </div>
 
-      {/* Bracket cards */}
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        {BRACKETS.map(bracket => (
-          <Link
-            key={bracket.slug}
-            href={`/pvp/${classSlug}/${specSlug}/${bracket.slug}`}
-            className="group bg-card hover:border-primary/50 hover:bg-card/80 flex items-center justify-between rounded-xl border p-5 transition-colors"
-          >
-            <div className="space-y-1">
-              <p className="font-semibold" style={{ color: cls.color }}>
-                {bracket.label}
-              </p>
-              <p className="text-muted-foreground text-sm">{bracket.description}</p>
-            </div>
-            <ChevronRight className="text-muted-foreground h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-          </Link>
-        ))}
-      </div>
+      {/* Bracket panels */}
+      <BracketPanels classSlug={classSlug} specSlug={specSlug} classColor={cls.color} />
     </div>
   )
 }

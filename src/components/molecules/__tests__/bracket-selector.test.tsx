@@ -18,7 +18,6 @@ describe("bracketSelector", () => {
     expect(container.textContent).toContain("2v2")
     expect(container.textContent).toContain("3v3")
     expect(container.textContent).toContain("Solo")
-    expect(container.textContent).toContain("RBG")
   })
 
   it("renders bracket links with correct href format", () => {
@@ -31,7 +30,6 @@ describe("bracketSelector", () => {
     expect(hrefs).toContain("/pvp/warrior/arms/2v2")
     expect(hrefs).toContain("/pvp/warrior/arms/3v3")
     expect(hrefs).toContain("/pvp/warrior/arms/shuffle")
-    expect(hrefs).toContain("/pvp/warrior/arms/rbg")
   })
 
   it("highlights current bracket correctly", () => {
@@ -49,7 +47,6 @@ describe("bracketSelector", () => {
     const linkElements = container.querySelectorAll("a")
     expect(linkElements.length).toBeGreaterThan(0)
 
-    // Check that at least one link has the class-pill or bracket-inactive class
     const hasColorClasses = Array.from(linkElements).some(
       link =>
         link.className.includes("class-pill") || link.className.includes("bracket-inactive"),

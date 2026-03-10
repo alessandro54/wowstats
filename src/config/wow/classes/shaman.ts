@@ -6,6 +6,7 @@ const ShamanConfig: WowClassConfig = {
   name: "Shaman",
   slug: "shaman",
   iconUrl: "https://render.worldofwarcraft.com/us/icons/56/classicon_shaman.jpg",
+  iconRemasteredUrl: `${CDN_BASE}/class_media/shaman/class_icon.png`,
   color: "#0070DE",
   colorOlkch: "oklch(0.5373 0.2243 255.11)",
   specs: [
@@ -14,7 +15,7 @@ const ShamanConfig: WowClassConfig = {
       name: "elemental",
       url: "/pvp/shaman/elemental",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_nature_lightning.jpg",
-      iconRemasteredUrl: `${CDN_BASE}/icons-remastered/shaman_elemental.png`,
+      iconRemasteredUrl: `${CDN_BASE}/class_media/shaman/elemental_icon.png`,
     },
     {
       id: 263,
@@ -22,14 +23,14 @@ const ShamanConfig: WowClassConfig = {
       url: "/pvp/shaman/enhancement",
       iconUrl:
         "https://render.worldofwarcraft.com/us/icons/56/spell_shaman_improvedstormstrike.jpg",
-      iconRemasteredUrl: `${CDN_BASE}/icons-remastered/shaman_enhancement.png`,
+      iconRemasteredUrl: `${CDN_BASE}/class_media/shaman/enhancement_icon.png`,
     },
     {
       id: 264,
       name: "restoration",
       url: "/pvp/shaman/restoration",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_nature_magicimmunity.jpg",
-      iconRemasteredUrl: `${CDN_BASE}/icons-remastered/shaman_restoration.png`,
+      iconRemasteredUrl: `${CDN_BASE}/class_media/shaman/restoration_icon.png`,
     },
   ],
 }

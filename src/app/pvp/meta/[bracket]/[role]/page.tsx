@@ -8,7 +8,7 @@ import { MetaBarChart } from "@/components/molecules/meta-bar-chart"
 import { MetaDonutChart } from "@/components/molecules/meta-donut-chart"
 import { MetaKpiRow } from "@/components/molecules/meta-kpi-row"
 import { MetaSpecTable } from "@/components/molecules/meta-spec-table"
-import { PageHeader } from "@/components/molecules/page-header"
+import { TopNavConfig } from "@/components/molecules/top-nav-config"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -128,27 +128,29 @@ export default async function PvpBracketPage({ params, searchParams }: PageProps
 
   return (
     <>
-      <PageHeader>
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem className="hidden md:block">
-              <BreadcrumbLink href="#">Meta</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator className="hidden md:block" />
-            <BreadcrumbItem>
-              <BreadcrumbPage>PvP</BreadcrumbPage>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator className="hidden md:block" />
-            <BreadcrumbItem>
-              <BreadcrumbPage>{bracket}</BreadcrumbPage>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator className="hidden md:block" />
-            <BreadcrumbItem>
-              <BreadcrumbPage>{role.toUpperCase()}</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-      </PageHeader>
+      <TopNavConfig
+        left={(
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem className="hidden md:block">
+                <BreadcrumbLink href="#">Meta</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator className="hidden md:block" />
+              <BreadcrumbItem>
+                <BreadcrumbPage>PvP</BreadcrumbPage>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator className="hidden md:block" />
+              <BreadcrumbItem>
+                <BreadcrumbPage>{bracket}</BreadcrumbPage>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator className="hidden md:block" />
+              <BreadcrumbItem>
+                <BreadcrumbPage>{role.toUpperCase()}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        )}
+      />
 
       <div className="space-y-6 p-4 lg:p-6">
         {/* KPIs */}

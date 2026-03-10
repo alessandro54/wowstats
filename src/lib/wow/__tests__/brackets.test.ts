@@ -48,7 +48,6 @@ describe("getAllBrackets", () => {
     expect(slugs).toContain("2v2")
     expect(slugs).toContain("3v3")
     expect(slugs).toContain("shuffle")
-    expect(slugs).toContain("rbg")
   })
 
   it("each bracket has required properties", () => {
@@ -73,7 +72,6 @@ describe("getAllBracketSlugs", () => {
     expect(slugs).toContain("2v2")
     expect(slugs).toContain("3v3")
     expect(slugs).toContain("shuffle")
-    expect(slugs).toContain("rbg")
   })
 
   it("contains only strings", () => {
@@ -89,7 +87,6 @@ describe("isValidBracketSlug", () => {
     expect(isValidBracketSlug("2v2")).toBe(true)
     expect(isValidBracketSlug("3v3")).toBe(true)
     expect(isValidBracketSlug("shuffle")).toBe(true)
-    expect(isValidBracketSlug("rbg")).toBe(true)
   })
 
   it("returns false for invalid bracket slug", () => {
@@ -110,11 +107,6 @@ describe("getBracketLabel", () => {
     expect(label).toBe("Solo")
   })
 
-  it("returns 'RBG' label for rbg", () => {
-    const label = getBracketLabel("rbg")
-    expect(label).toBe("RBG")
-  })
-
   it("returns slug as fallback for invalid bracket", () => {
     const label = getBracketLabel("invalid" as any)
     expect(label).toBe("invalid")
@@ -130,11 +122,6 @@ describe("getBracketDescription", () => {
   it("returns description for shuffle", () => {
     const desc = getBracketDescription("shuffle")
     expect(desc).toBe("6-player round-robin arena")
-  })
-
-  it("returns description for rbg", () => {
-    const desc = getBracketDescription("rbg")
-    expect(desc).toBe("Rated Battleground")
   })
 
   it("returns empty string for invalid bracket", () => {

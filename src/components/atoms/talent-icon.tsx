@@ -42,7 +42,7 @@ export function TalentIcon({
           ? (
               <Image
                 src={talent.talent.icon_url}
-                alt={talent.talent.name}
+                alt={talent.talent.name || "Talent Icon"}
                 width={size}
                 height={size}
                 className="object-cover"

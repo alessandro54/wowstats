@@ -1,69 +1,55 @@
-import Image from "next/image"
+import Link from "next/link"
+import { ClassAccordion } from "@/components/molecules/class-accordion"
+import { ClassPanels } from "@/components/molecules/class-panels"
+import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
+
+const TIERLIST_LINKS = [
+  { label: "2v2 Tierlist", href: "/pvp/meta/2v2/dps" },
+  { label: "3v3 Tierlist", href: "/pvp/meta/3v3/dps" },
+  { label: "Shuffle Tierlist", href: "/pvp/meta/shuffle-overall/dps" },
+]
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between bg-white px-16 py-32 sm:items-start dark:bg-black">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl leading-10 font-semibold tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to
-            {" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>
-            {" "}
-            or the
-            {" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>
-            {" "}
-            center.
+    <div className="animate-page-in flex h-full flex-col gap-4 px-6 py-8">
+      {/* Header row */}
+      <div className="flex items-end justify-between">
+        <div>
+          <p className="text-muted-foreground text-xs font-medium uppercase tracking-widest">
+            PvP Meta
           </p>
+          <h1 className="text-2xl font-bold tracking-tight">Select a guide</h1>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="bg-foreground text-background flex h-12 w-full items-center justify-center gap-2 rounded-full px-5 transition-colors hover:bg-[#383838] md:w-[158px] dark:hover:bg-[#ccc]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] md:w-[158px] dark:border-white/[.145] dark:hover:bg-[#1a1a1a]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <p className="text-muted-foreground text-xs max-w-xs self-end text-right leading-relaxed">
+          Gear, stats and rankings built from real ladder data — updated every season across 2v2, 3v3 and Solo Shuffle.
+        </p>
+      </div>
+      {/* Tierlist section */}
+      <div className="flex items-center gap-4">
+        <p className="text-muted-foreground text-xs font-medium uppercase tracking-widest shrink-0">
+          Tierlist
+        </p>
+        <div className="flex gap-2">
+          {TIERLIST_LINKS.map(({ label, href }) => (
+            <Link
+              key={href}
+              href={href}
+              className="rounded-full border border-border px-3 py-1 text-xs font-medium text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
+            >
+              {label}
+            </Link>
+          ))}
         </div>
-      </main>
+      </div>
+      {/* Desktop: expanding horizontal panels */}
+      <div className="hidden min-h-0 flex-1 lg:flex lg:flex-col">
+        <ClassPanels classes={WOW_CLASSES} />
+      </div>
+
+      {/* Mobile: vertical accordion */}
+      <div className="lg:hidden -mx-6 overflow-y-auto rounded-xl border border-border/50">
+        <ClassAccordion classes={WOW_CLASSES} />
+      </div>
     </div>
   )
 }

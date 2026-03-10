@@ -2,21 +2,23 @@ import type { Metadata } from "next"
 import { cookies } from "next/headers"
 import { AppSidebar } from "@/components/organisms/app-sidebar"
 import DynamicBackground from "@/components/organisms/dynamic-background"
+import { TopNav } from "@/components/molecules/top-nav"
 import { HoverProvider } from "@/components/providers/hover-provider"
 import { ThemeProvider } from "@/components/providers/theme-provider"
+import { TopNavProvider } from "@/components/providers/top-nav-provider"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import "./globals.css"
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:5123"),
   title: {
-    default: "WoW PvP Meta",
+    default: "WoW Meta Insights | WoW PvP Meta ",
     template: "%s | WoW PvP Meta",
   },
   description:
     "PvP insights for WoW Arena, Solo Shuffle, and RBG. Best in slot gear based on real player data.",
   openGraph: {
-    siteName: "WoW PvP Meta",
+    siteName: "WoW Meta Insights",
     type: "website",
   },
   twitter: {
@@ -40,7 +42,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               <DynamicBackground />
               <AppSidebar />
               <SidebarInset>
-                <main>{children}</main>
+                <TopNavProvider>
+                  <TopNav />
+                  <main className="min-h-[calc(100dvh-4rem)]">{children}</main>
+                </TopNavProvider>
               </SidebarInset>
             </SidebarProvider>
           </HoverProvider>

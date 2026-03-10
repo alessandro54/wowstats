@@ -9,8 +9,12 @@ export function classColor(slug: WowClassSlug | null | undefined): string | unde
   return `var(--color-class-${slug})`
 }
 
-export function useActiveColor(defaultSlug: WowClassSlug): string {
+export function useActiveColor(defaultSlug: WowClassSlug): string
+export function useActiveColor(defaultSlug?: WowClassSlug | null): string | undefined
+export function useActiveColor(defaultSlug?: WowClassSlug | null): string | undefined {
   const hoverSlug = useHoverSlug()
-  const activeSlug = (hoverSlug ?? defaultSlug) as WowClassSlug
+  const activeSlug = hoverSlug ?? defaultSlug ?? null
+  if (!activeSlug)
+    return`var(--color-primary)`
   return `var(--color-class-${activeSlug})`
 }

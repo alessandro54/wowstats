@@ -31,8 +31,8 @@ export function SlidingSwitch<T extends string>({
   const segments = pathname.split("/").filter(Boolean)
   const activeSlug = hoverSlug ?? (segments[0] === "pvp" ? segments[1] : segments[0])
   const accentColor = activeSlug
-    ? `var(--color-class-${activeSlug}, var(--border))`
-    : "var(--border)"
+    ? `var(--color-class-${activeSlug}, var(--primary))`
+    : "var(--primary)"
 
   const containerRef = useRef<HTMLDivElement>(null)
   const [indicatorStyle, setIndicatorStyle] = useState<React.CSSProperties>({ opacity: 0 })

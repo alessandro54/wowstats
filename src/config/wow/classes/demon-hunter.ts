@@ -6,6 +6,7 @@ const DemonHunterConfig: WowClassConfig = {
   name: "Demon Hunter",
   slug: "demon-hunter",
   iconUrl: "https://render.worldofwarcraft.com/us/icons/56/classicon_demonhunter.jpg",
+  iconRemasteredUrl: `${CDN_BASE}/class_media/demon-hunter/class_icon.png`,
   color: "#A330C9",
   colorOlkch: "oklch(0.4502 0.2343 306.19)",
   specs: [
@@ -26,7 +27,7 @@ const DemonHunterConfig: WowClassConfig = {
       name: "devourer",
       url: "/pvp/demon-hunter/devourer",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/classicon_demonhunter_void.jpg",
-      iconRemasteredUrl: `${CDN_BASE}/icons-remastered/demonhunter_devourer.png`,
+      iconRemasteredUrl: `${CDN_BASE}/class_media/demon-hunter/devourer_icon.png`,
     },
   ],
 }
