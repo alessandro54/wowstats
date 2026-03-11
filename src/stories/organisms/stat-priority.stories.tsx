@@ -4,23 +4,19 @@ import { StatPriority } from "../../components/organisms/stat-priority"
 const stats = [
   {
     stat: "HASTE_RATING",
-    count: 800,
-    pct: 85.2,
+    median: 347,
   },
   {
     stat: "VERSATILITY",
-    count: 650,
-    pct: 69.1,
+    median: 310,
   },
   {
     stat: "CRIT_RATING",
-    count: 350,
-    pct: 37.2,
+    median: 197,
   },
   {
     stat: "MASTERY_RATING",
-    count: 150,
-    pct: 16.0,
+    median: 118,
   },
 ]
 
