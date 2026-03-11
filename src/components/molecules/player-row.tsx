@@ -27,7 +27,19 @@ export function PlayerRow({ player, index }: { player: TopPlayer; index: number 
       >
         <div className="grid grid-cols-[minmax(0,1fr)_76px_72px_58px] sm:grid-cols-[minmax(0,1fr)_76px_72px_58px_44px] items-center gap-x-3 gap-y-1">
           <div className="flex min-w-0 items-center gap-2.5 rounded-sm text-left">
-            <span className="text-[11px] font-mono text-muted-foreground">
+            <span
+              className="text-[11px] font-mono font-semibold"
+              style={{
+                color:
+                  index === 0
+                    ? "#FFD700"
+                    : index === 1
+                      ? "#C0C0C0"
+                      : index === 2
+                        ? "#CD7F32"
+                        : undefined,
+              }}
+            >
               {String(index + 1).padStart(2, "0")}
             </span>
             {player.avatar_url && (

@@ -18,7 +18,7 @@ export function SpecHeading({ className, classSlug, specSlug }: Props) {
   return (
     <div>
       <h1
-        className="text-2xl font-bold capitalize"
+        className="text-lg md:text-2xl font-bold capitalize"
         style={{
           color: `var(--color-class-${classSlug})`,
         }}
@@ -27,7 +27,7 @@ export function SpecHeading({ className, classSlug, specSlug }: Props) {
         {" • "}
         {specSlug}
       </h1>
-      <p className="text-muted-foreground text-sm capitalize">
+      <p className="text-muted-foreground text-xs md:text-sm capitalize">
         {isSoloShuffle(bracket) ? "Solo Shuffle" : bracket} · PvP
       </p>
     </div>

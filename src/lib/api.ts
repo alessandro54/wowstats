@@ -191,8 +191,7 @@ export interface CharacterProfile {
 
 export interface StatPriorityEntry {
   stat: string
-  count: number
-  pct: number
+  median: number
 }
 
 export interface StatPriorityResponse {

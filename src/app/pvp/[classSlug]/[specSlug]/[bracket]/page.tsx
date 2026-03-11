@@ -6,17 +6,9 @@ export const dynamic = "force-dynamic"
 import { Equipment } from "@/components/organisms/equipment"
 import { Talents } from "@/components/organisms/talents"
 import { TopPlayers } from "@/components/organisms/top-players"
-import { StatPriority } from "@/components/organisms/stat-priority"
 import { BRACKETS } from "@/config/wow/brackets-config"
 import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
-import {
-  fetchEnchants,
-  fetchGems,
-  fetchItems,
-  fetchStatPriority,
-  fetchTalents,
-  fetchTopPlayers,
-} from "@/lib/api"
+import { fetchEnchants, fetchGems, fetchItems, fetchTalents, fetchTopPlayers } from "@/lib/api"
 
 const SLOT_ORDER = [
   "HEAD",
@@ -142,56 +134,50 @@ export default async function SpecPage({ params }: PageProps) {
 
   const resolvedBracket = apiBracket(bracket, classSlug, specSlug)
 
-  const [items, enchants, gems, talentsResponse, topAll, topUs, topEu, statPriority] =
-    await Promise.all([
-      fetchItems(resolvedBracket, spec.id).catch((): MetaItem[] => []),
-      fetchEnchants(resolvedBracket, spec.id).catch((): MetaEnchant[] => []),
-      fetchGems(resolvedBracket, spec.id).catch((): MetaGem[] => []),
-      fetchTalents(resolvedBracket, spec.id).catch(
-        (): TalentsResponse => ({
-          meta: {
-            bracket: resolvedBracket,
-            spec_id: spec.id,
-            total_players: 0,
-            total_weighted: 0,
-            snapshot_at: null,
-          },
-          talents: [],
-        }),
-      ),
-      fetchTopPlayers(resolvedBracket, spec.id).catch(
-        (): TopPlayersResponse => ({
+  const [items, enchants, gems, talentsResponse, topAll, topUs, topEu] = await Promise.all([
+    fetchItems(resolvedBracket, spec.id).catch((): MetaItem[] => []),
+    fetchEnchants(resolvedBracket, spec.id).catch((): MetaEnchant[] => []),
+    fetchGems(resolvedBracket, spec.id).catch((): MetaGem[] => []),
+    fetchTalents(resolvedBracket, spec.id).catch(
+      (): TalentsResponse => ({
+        meta: {
           bracket: resolvedBracket,
           spec_id: spec.id,
-          regions: [],
-          players: [],
+          total_players: 0,
+          total_weighted: 0,
           snapshot_at: null,
-        }),
-      ),
-      fetchTopPlayers(resolvedBracket, spec.id, "us").catch(
-        (): TopPlayersResponse => ({
-          bracket: resolvedBracket,
-          spec_id: spec.id,
-          regions: [],
-          players: [],
-          snapshot_at: null,
-        }),
-      ),
-      fetchTopPlayers(resolvedBracket, spec.id, "eu").catch(
-        (): TopPlayersResponse => ({
-          bracket: resolvedBracket,
-          spec_id: spec.id,
-          regions: [],
-          players: [],
-          snapshot_at: null,
-        }),
-      ),
-      fetchStatPriority(resolvedBracket, spec.id).catch(() => ({
+        },
+        talents: [],
+      }),
+    ),
+    fetchTopPlayers(resolvedBracket, spec.id).catch(
+      (): TopPlayersResponse => ({
         bracket: resolvedBracket,
         spec_id: spec.id,
-        stats: [],
-      })),
-    ])
+        regions: [],
+        players: [],
+        snapshot_at: null,
+      }),
+    ),
+    fetchTopPlayers(resolvedBracket, spec.id, "us").catch(
+      (): TopPlayersResponse => ({
+        bracket: resolvedBracket,
+        spec_id: spec.id,
+        regions: [],
+        players: [],
+        snapshot_at: null,
+      }),
+    ),
+    fetchTopPlayers(resolvedBracket, spec.id, "eu").catch(
+      (): TopPlayersResponse => ({
+        bracket: resolvedBracket,
+        spec_id: spec.id,
+        regions: [],
+        players: [],
+        snapshot_at: null,
+      }),
+    ),
+  ])
 
   const itemGroups = sortedBySlotOrder(groupBy(items, (i) => i.slot.toUpperCase()))
   const enchantGroups = sortedBySlotOrder(groupBy(enchants, (e) => e.slot.toUpperCase()))
@@ -208,16 +194,13 @@ export default async function SpecPage({ params }: PageProps) {
 
   return (
     <div className="animate-page-in space-y-8 px-6 pb-8">
-      <div className="grid gap-8 xl:grid-cols-[1fr_280px]">
-        <TopPlayers
-          playersByRegion={{
-            all: topAll.players,
-            us: topUs.players,
-            eu: topEu.players,
-          }}
-        />
-        <StatPriority stats={statPriority.stats} />
-      </div>
+      <TopPlayers
+        playersByRegion={{
+          all: topAll.players,
+          us: topUs.players,
+          eu: topEu.players,
+        }}
+      />
       <Talents
         classSlug={cls.slug}
         talents={talentsResponse.talents}

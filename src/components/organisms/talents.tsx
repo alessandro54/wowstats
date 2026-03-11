@@ -44,34 +44,6 @@ export function Talents({ classSlug, talents, talentsMeta }: Props) {
 
   return (
     <div className="space-y-8">
-      {talentsMeta && talentsMeta.total_players > 0 && (
-        <p className="text-muted-foreground text-center text-sm">
-          Based on {talentsMeta.total_players.toLocaleString()} players
-          {talentsMeta.total_weighted !== talentsMeta.total_players && (
-            <span> (weighted score: {talentsMeta.total_weighted.toLocaleString()})</span>
-          )}
-        </p>
-      )}
-      {/* hero always centered, pvp below on mobile, floating right on lg+ */}
-      {(heroEntries || pvpEntries) && (
-        <div className="flex flex-col items-center">
-          <div className="relative inline-flex flex-col items-center md:block">
-            {heroEntries && (
-              <HeroSection
-                heroEntries={heroEntries}
-                activeColor={activeColor}
-                classSlug={classSlug}
-              />
-            )}
-            {pvpEntries && (
-              <div className="mt-6 md:absolute md:top-1/2 md:z-20 md:mt-0 md:left-[calc(100%+50px)] md:-translate-y-1/2">
-                <PvpTalents talents={pvpEntries} activeColor={activeColor} classSlug={classSlug} />
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
       {/* class + spec */}
       {(classEntries?.length || specEntries?.length) && (
         <div className="sm:overflow-x-auto">
@@ -90,6 +62,25 @@ export function Talents({ classSlug, talents, talentsMeta }: Props) {
                 <TalentCard classSlug={classSlug} className="flex flex-1 flex-col overflow-x-auto">
                   {renderTree(specEntries)}
                 </TalentCard>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+      {/* hero always centered, pvp below on mobile, floating right on lg+ */}
+      {(heroEntries || pvpEntries) && (
+        <div className="flex flex-col items-center">
+          <div className="relative inline-flex flex-col items-center md:block">
+            {heroEntries && (
+              <HeroSection
+                heroEntries={heroEntries}
+                activeColor={activeColor}
+                classSlug={classSlug}
+              />
+            )}
+            {pvpEntries && (
+              <div className="mt-6 md:absolute md:top-1/2 md:z-20 md:mt-0 md:left-[calc(100%+50px)] md:-translate-y-1/2">
+                <PvpTalents talents={pvpEntries} activeColor={activeColor} classSlug={classSlug} />
               </div>
             )}
           </div>

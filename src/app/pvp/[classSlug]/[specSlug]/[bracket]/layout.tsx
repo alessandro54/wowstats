@@ -1,23 +1,44 @@
 import { notFound } from "next/navigation"
 import { SpecHeading } from "@/components/atoms/spec-heading"
-import { BracketSelector } from "@/components/molecules/bracket-selector"
-import { PvpSpecTopNav } from "@/components/molecules/pvp-spec-top-nav"
+import { StatPriority } from "@/components/organisms/stat-priority"
 import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
+import { fetchStatPriority } from "@/lib/api"
+
+const API_CLASS_SLUG: Record<string, string> = {
+  "death-knight": "deathknight",
+  "demon-hunter": "demonhunter",
+}
+
+function apiBracket(bracket: string, classSlug: string, specSlug: string): string {
+  if (bracket === "shuffle") {
+    const apiClass = API_CLASS_SLUG[classSlug] ?? classSlug
+    return `shuffle-${apiClass}-${specSlug}`
+  }
+  return bracket
+}
 
 interface Props {
   children: React.ReactNode
   params: Promise<{
     classSlug: string
     specSlug: string
+    bracket: string
   }>
 }
 
 export default async function PvpBracketLayout({ children, params }: Props) {
-  const { classSlug, specSlug } = await params
+  const { classSlug, specSlug, bracket } = await params
 
   const cls = WOW_CLASSES.find((c) => c.slug === classSlug)
   const spec = cls?.specs.find((s) => s.name === specSlug)
   if (!cls || !spec) notFound()
+
+  const resolvedBracket = apiBracket(bracket, classSlug, specSlug)
+  const statPriority = await fetchStatPriority(resolvedBracket, spec.id).catch(() => ({
+    bracket: resolvedBracket,
+    spec_id: spec.id,
+    stats: [],
+  }))
 
   return (
     <>
@@ -27,24 +48,34 @@ export default async function PvpBracketLayout({ children, params }: Props) {
           height: "calc(100vh - 60px)",
         }}
       >
-        <div className="flex shrink-0 items-center gap-3 px-6 py-3">
-          <span className="icon-vignette icon-vignette-lg rounded-full">
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              width={100}
-              height={100}
-              poster={spec.iconRemasteredUrl ?? spec.iconUrl}
-              className="block rounded-full"
-            >
-              <source src={spec.animationUrl} type="video/mp4" />
-            </video>
-          </span>
-          <SpecHeading className={cls.name} classSlug={cls.slug} specSlug={specSlug} />
+        <div className="shrink-0 px-6 py-3">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2 md:gap-3">
+              <span className="icon-vignette icon-vignette-lg rounded-full">
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  width={100}
+                  height={100}
+                  poster={spec.iconRemasteredUrl ?? spec.iconUrl}
+                  className="block size-12 md:size-25 rounded-full"
+                >
+                  <source src={spec.animationUrl} type="video/mp4" />
+                </video>
+              </span>
+              <SpecHeading className={cls.name} classSlug={cls.slug} specSlug={specSlug} />
+            </div>
+            <div className="hidden md:block">
+              <StatPriority stats={statPriority.stats} compact />
+            </div>
+            <div className="md:hidden">
+              <StatPriority stats={statPriority.stats} vertical />
+            </div>
+          </div>
         </div>
-        <div className="flex-1 overflow-auto">{children}</div>
+        <div className="flex-1 overflow-auto lg:px-5">{children}</div>
       </div>
     </>
   )
