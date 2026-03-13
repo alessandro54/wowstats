@@ -87,11 +87,12 @@ export default async function CharacterPage({ params }: PageProps) {
 
   if (!character) notFound()
 
-  const color = `var(--color-class-${character.class_slug})`
+  const normalizedSlug = character.class_slug?.replace(/_/g, "-")
+  const color = `var(--color-class-${normalizedSlug})`
   const displayRealm = formatRealm(character.realm)
 
-  const classConfig = WOW_CLASSES.find((c) => c.slug === character.class_slug)
-  const classSlug = (classConfig?.slug ?? character.class_slug) as WowClassSlug
+  const classConfig = WOW_CLASSES.find((c) => c.slug === normalizedSlug)
+  const classSlug = (classConfig?.slug ?? normalizedSlug) as WowClassSlug
 
   const specIcon = classConfig?.specs.find((s) => s.id === character.primary_spec_id)?.iconUrl
 
