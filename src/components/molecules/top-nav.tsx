@@ -1,7 +1,6 @@
 "use client"
 
 import { usePathname } from "next/navigation"
-import { ThemeSwitcher } from "@/components/atoms/theme-switcher"
 import { useTopNav } from "@/components/providers/top-nav-provider"
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
@@ -32,9 +31,6 @@ export function TopNav() {
       ) : (
         <div className="flex-1" />
       )}
-      <div className="hidden sm:block">
-        <ThemeSwitcher />
-      </div>
     </header>
   )
 }

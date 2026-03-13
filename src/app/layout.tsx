@@ -1,5 +1,8 @@
 import type { Metadata } from "next"
+import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import { cookies } from "next/headers"
+import { AppFooter } from "@/components/molecules/app-footer"
 import { AppSidebar } from "@/components/organisms/app-sidebar"
 import DynamicBackground from "@/components/organisms/dynamic-background"
 import { TopNav } from "@/components/molecules/top-nav"
@@ -45,11 +48,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 <TopNavProvider>
                   <TopNav />
                   <main className="min-h-[calc(100dvh-4rem)]">{children}</main>
+                  <AppFooter />
                 </TopNavProvider>
               </SidebarInset>
             </SidebarProvider>
           </HoverProvider>
         </ThemeProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )

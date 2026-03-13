@@ -13,6 +13,7 @@ export function TalentIcon({
   borderClass,
   tooltipContent,
   partialRank,
+  isApex,
 }: {
   talent: MetaTalent
   size: number
@@ -29,18 +30,20 @@ export function TalentIcon({
    *  the top build (e.g. 1/2 ranks taken).
    */
   partialRank?: boolean
+  isApex?: boolean
 }) {
+  const radius = isApex ? "rounded-full" : "rounded"
   const icon = (
     <div
       id={`talent-${talent.talent.blizzard_id}`}
-      className="relative shrink-0 cursor-default rounded"
+      className={cn("relative shrink-0 cursor-default", radius)}
       style={{
         width: size,
         height: size,
       }}
     >
       {/* Image layer — overflow-hidden kept here so the icon stays fully visible */}
-      <div className="absolute inset-0 overflow-hidden rounded">
+      <div className={cn("absolute inset-0 overflow-hidden", radius)}>
         {talent.talent.icon_url ? (
           <Image
             src={talent.talent.icon_url}
@@ -52,7 +55,7 @@ export function TalentIcon({
           />
         ) : (
           <div
-            className="h-full w-full rounded"
+            className={cn("h-full w-full", radius)}
             style={{
               background: "rgba(255,255,255,0.08)",
             }}
@@ -62,7 +65,7 @@ export function TalentIcon({
 
       {/* Border overlay — diagonally clipped to right+bottom when partially ranked */}
       <div
-        className={cn("pointer-events-none absolute inset-0 rounded", borderClass ?? "border-2")}
+        className={cn("pointer-events-none absolute inset-0", radius, borderClass ?? "border-2")}
         style={{
           ...(partialRank && {
             clipPath: "polygon(100% 0, 100% 100%, 0 100%)",

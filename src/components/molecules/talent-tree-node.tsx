@@ -1,7 +1,13 @@
 import type { TalentNode } from "@/lib/utils/talent-tree"
 import Image from "next/image"
 import { TalentIcon } from "@/components/atoms/talent-icon"
-import { BORDER_BIS, BORDER_DEFAULT, BORDER_SITUATIONAL, NODE_SIZE } from "@/lib/utils/talent-tree"
+import {
+  APEX_NODE_SIZE,
+  BORDER_BIS,
+  BORDER_DEFAULT,
+  BORDER_SITUATIONAL,
+  NODE_SIZE,
+} from "@/lib/utils/talent-tree"
 
 interface Props {
   node: TalentNode
@@ -11,6 +17,8 @@ interface Props {
   fullOpacity: boolean
   onlyChoicePct: boolean
   activeColor: string
+  hideStats?: boolean
+  isApex?: boolean
 }
 
 export function TalentNodeCard({
@@ -21,6 +29,8 @@ export function TalentNodeCard({
   fullOpacity,
   onlyChoicePct,
   activeColor,
+  hideStats,
+  isApex,
 }: Props) {
   const tier = node.primary.tier ?? (node.all.some((t) => t.in_top_build) ? "bis" : "common")
   const isBis = tier === "bis"
@@ -73,18 +83,20 @@ export function TalentNodeCard({
             {node.primary.talent.description}
           </p>
         )}
-        <p
-          className="font-mono text-[11px] font-bold"
-          style={{
-            color: activeColor,
-          }}
-        >
-          {node.primary.usage_pct.toFixed(1)}%
-        </p>
+        {!hideStats && (
+          <p
+            className="font-mono text-[11px] font-bold"
+            style={{
+              color: activeColor,
+            }}
+          >
+            {node.primary.usage_pct.toFixed(1)}%
+          </p>
+        )}
       </div>
 
       {/* Alternatives panel (choice nodes) */}
-      {alternatives.length > 0 && (
+      {!hideStats && alternatives.length > 0 && (
         <div className="border-border/50 min-w-36 space-y-1.5 border-l pl-4">
           <p className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
             Alternative
@@ -114,6 +126,7 @@ export function TalentNodeCard({
 
   // Top-build non-choice nodes: hide %, they're "the build"
   const showPct = (!inTopBuild || node.isChoice) && (!onlyChoicePct || node.isChoice)
+  const nodeSize = isApex ? APEX_NODE_SIZE : NODE_SIZE
 
   return (
     <div
@@ -121,18 +134,18 @@ export function TalentNodeCard({
       style={{
         left,
         top,
-        width: NODE_SIZE,
+        width: nodeSize,
       }}
     >
       {/* Solid background blocks SVG lines from showing through dimmed icons */}
       <div
         className="relative"
         style={{
-          width: NODE_SIZE,
-          height: NODE_SIZE,
+          width: nodeSize,
+          height: nodeSize,
         }}
       >
-        <div className="bg-background absolute inset-0 rounded" />
+        <div className={`bg-background absolute inset-0 ${isApex ? "rounded-full" : "rounded"}`} />
         <div
           style={{
             opacity,
@@ -140,15 +153,16 @@ export function TalentNodeCard({
         >
           <TalentIcon
             talent={node.primary}
-            size={NODE_SIZE}
+            size={nodeSize}
             activeColor={activeColor}
             borderClass={borderClass}
             tooltipContent={tooltipContent}
             partialRank={isPartialRank}
+            isApex={isApex}
           />
         </div>
       </div>
-      {showPct && (
+      {!hideStats && showPct && (
         <span
           className="font-mono text-[10px] leading-none font-bold text-slate-600 tabular-nums dark:text-white"
           style={{
@@ -158,7 +172,7 @@ export function TalentNodeCard({
           {node.primary.usage_pct.toFixed(0)}%
         </span>
       )}
-      {node.isChoice && (
+      {!hideStats && node.isChoice && (
         <span
           className="text-muted-foreground text-[9px] leading-none"
           style={{

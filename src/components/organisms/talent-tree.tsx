@@ -5,6 +5,7 @@ import { TalentEdges } from "@/components/molecules/talent-tree-edges"
 import { TalentNodeCard } from "@/components/molecules/talent-tree-node"
 import {
   APEX_EXTRA,
+  APEX_NODE_SIZE,
   BORDER_BIS,
   BORDER_SITUATIONAL,
   buildEdgeSet,
@@ -22,6 +23,8 @@ export function TalentTree({
   fullOpacity = false,
   apexExtra = false,
   budget,
+  hideStats,
+  apexCircle = false,
 }: {
   talents: MetaTalent[]
   activeColor: string
@@ -33,6 +36,8 @@ export function TalentTree({
    *  Top nodes by usage_pct (weighted by maxRank) are treated as the best build.
    */
   budget?: number
+  hideStats?: boolean
+  apexCircle?: boolean
 }) {
   const nodeMap = buildNodeMap(talents)
   const nodes = Array.from(nodeMap.values())
@@ -72,14 +77,19 @@ export function TalentTree({
   const botApex = rowCounts.get(maxRow) === 1
   const extra = apexExtra ? APEX_EXTRA : 0
 
+  const useApex = apexCircle && botApex
+  const botNodeSize = useApex ? APEX_NODE_SIZE : NODE_SIZE
   const svgW = (uniqueCols.length - 1) * CELL_SIZE + NODE_SIZE
   const svgH =
-    (uniqueRows.length - 1) * CELL_SIZE + NODE_SIZE + (topApex ? extra : 0) + (botApex ? extra : 0)
+    (uniqueRows.length - 1) * CELL_SIZE +
+    NODE_SIZE +
+    (topApex ? extra : 0) +
+    (useApex ? extra + (APEX_NODE_SIZE - NODE_SIZE) / 2 : botApex ? extra : 0)
 
   const cx = (col: number) => colIdx.get(col)! * CELL_SIZE + NODE_SIZE / 2
   const nodeY = (row: number) => {
     if (topApex && row === minRow) return NODE_SIZE / 2
-    if (botApex && row === maxRow) return svgH - NODE_SIZE / 2
+    if (botApex && row === maxRow) return svgH - botNodeSize / 2 + 10 // control vertical position of bottom apex node
     return rowIdx.get(row)! * CELL_SIZE + NODE_SIZE / 2 + (topApex ? extra : 0)
   }
   const nodeCX = (node: { row: number; col: number }) =>
@@ -109,18 +119,24 @@ export function TalentTree({
             activeColor={activeColor}
             budget={budget}
           />
-          {nodes.map((node) => (
-            <TalentNodeCard
-              key={node.nodeId}
-              node={node}
-              left={nodeCX(node) - NODE_SIZE / 2}
-              top={nodeY(node.row) - NODE_SIZE / 2}
-              budget={budget}
-              fullOpacity={fullOpacity}
-              onlyChoicePct={onlyChoicePct}
-              activeColor={activeColor}
-            />
-          ))}
+          {nodes.map((node) => {
+            const isApex = useApex && node.row === maxRow
+            const size = isApex ? APEX_NODE_SIZE : NODE_SIZE
+            return (
+              <TalentNodeCard
+                key={node.nodeId}
+                node={node}
+                left={nodeCX(node) - size / 2}
+                top={nodeY(node.row) - size / 2}
+                budget={budget}
+                fullOpacity={fullOpacity}
+                onlyChoicePct={onlyChoicePct}
+                activeColor={activeColor}
+                hideStats={hideStats}
+                isApex={isApex}
+              />
+            )
+          })}
         </div>
       </div>
 

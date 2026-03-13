@@ -1,6 +1,7 @@
 import type { MetaTalent } from "@/lib/api"
 
 export const NODE_SIZE = 44
+export const APEX_NODE_SIZE = 56 // bigger circle for capstone nodes
 export const CELL_SIZE = 64 // node + gap; preserves Blizzard's sparse column spacing
 export const APEX_EXTRA = 20 // extra px pushed outward for single-node apex rows
 

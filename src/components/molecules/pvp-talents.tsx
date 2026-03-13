@@ -16,9 +16,10 @@ interface Props {
   talents: MetaTalent[]
   activeColor: string
   classSlug: WowClassSlug
+  hideStats?: boolean
 }
 
-export function PvpTalents({ talents, activeColor, classSlug }: Props) {
+export function PvpTalents({ talents, activeColor, classSlug, hideStats }: Props) {
   const [hovered, setHovered] = useState(false)
   const sorted = [
     ...talents,
@@ -46,15 +47,17 @@ export function PvpTalents({ talents, activeColor, classSlug }: Props) {
                 borderClass={GOLD_BORDER}
                 tooltipContent={<PvpTalentTooltip talent={t} activeColor={activeColor} />}
               />
-              <span className="font-mono text-[10px] font-bold tabular-nums text-amber-400">
-                {t.usage_pct.toFixed(0)}%
-              </span>
+              {!hideStats && (
+                <span className="font-mono text-[10px] font-bold tabular-nums text-amber-400">
+                  {t.usage_pct.toFixed(0)}%
+                </span>
+              )}
             </div>
           ))}
         </div>
       </TalentCard>
 
-      {(situational.length > 0 || rest.length > 0) && (
+      {!hideStats && (situational.length > 0 || rest.length > 0) && (
         <div
           className={cn(
             "absolute left-0 z-30 transition-all duration-200",

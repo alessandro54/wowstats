@@ -3,14 +3,7 @@
 import Image from "next/image"
 import { useState } from "react"
 import type { MetaBarEntry } from "@/components/molecules/meta-bar-chart"
-
-const TIER_COLORS: Record<MetaBarEntry["tier"], string> = {
-  S: "bg-purple-500/20 text-purple-300 border border-purple-500/40",
-  A: "bg-amber-500/20 text-amber-300 border border-amber-500/40",
-  B: "bg-blue-500/20 text-blue-300 border border-blue-500/40",
-  C: "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40",
-  D: "bg-muted/40 text-muted-foreground border border-border",
-}
+import { TIER_COLORS } from "@/config/app-config"
 
 interface Props {
   entries: MetaBarEntry[]

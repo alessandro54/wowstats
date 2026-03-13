@@ -12,9 +12,10 @@ interface Props {
   heroEntries: MetaTalent[]
   activeColor: string
   classSlug: WowClassSlug
+  hideStats?: boolean
 }
 
-export function HeroSection({ heroEntries, activeColor, classSlug }: Props) {
+export function HeroSection({ heroEntries, activeColor, classSlug, hideStats }: Props) {
   const trees = splitHeroTrees(heroEntries)
   const [flipped, setFlipped] = useState(false)
 
@@ -72,9 +73,11 @@ export function HeroSection({ heroEntries, activeColor, classSlug }: Props) {
                   transform: "rotateY(180deg)",
                 }}
               >
-                <p className="text-muted-foreground mb-3 text-center font-mono text-xs">
-                  Alt · {altPct}%
-                </p>
+                {!hideStats && (
+                  <p className="text-muted-foreground mb-3 text-center font-mono text-xs">
+                    Alt · {altPct}%
+                  </p>
+                )}
                 <HeroTree talents={alt} activeColor={activeColor} />
               </TalentCard>
             )}
@@ -82,7 +85,7 @@ export function HeroSection({ heroEntries, activeColor, classSlug }: Props) {
         </div>
 
         {/* Corner peel — shows opposite side label */}
-        {alt && (
+        {!hideStats && alt && (
           <CornerPeel
             activeColor={activeColor}
             onClick={toggle}

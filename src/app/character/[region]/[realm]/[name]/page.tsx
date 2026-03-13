@@ -3,8 +3,13 @@ import { notFound } from "next/navigation"
 
 export const dynamic = "force-dynamic"
 import Image from "next/image"
+import { CharacterEquipment } from "@/components/organisms/character-equipment"
+import { StatPriority } from "@/components/organisms/stat-priority"
+import { Talents } from "@/components/organisms/talents"
+import type { WowClassSlug } from "@/config/wow/classes/classes-config"
+import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
 import { fetchCharacter } from "@/lib/api"
-import type { CharacterPvpEntry } from "@/lib/api"
+import type { CharacterPvpEntry, StatPriorityEntry } from "@/lib/api"
 import { formatBracket, formatRealm, titleizeSlug, winRate } from "@/lib/utils"
 
 interface PageProps {
@@ -66,6 +71,16 @@ function PvpEntryCard({ entry }: { entry: CharacterPvpEntry }) {
   )
 }
 
+function statPriorityFromPcts(stat_pcts: Record<string, number>): StatPriorityEntry[] {
+  return Object.entries(stat_pcts)
+    .filter(([, v]) => v > 0)
+    .map(([stat, median]) => ({
+      stat,
+      median,
+    }))
+    .sort((a, b) => b.median - a.median)
+}
+
 export default async function CharacterPage({ params }: PageProps) {
   const { region, realm, name } = await params
   const character = await fetchCharacter(region, realm, name)
@@ -75,11 +90,29 @@ export default async function CharacterPage({ params }: PageProps) {
   const color = `var(--color-class-${character.class_slug})`
   const displayRealm = formatRealm(character.realm)
 
+  const classConfig = WOW_CLASSES.find((c) => c.slug === character.class_slug)
+  const classSlug = (classConfig?.slug ?? character.class_slug) as WowClassSlug
+
+  const specIcon = classConfig?.specs.find((s) => s.id === character.primary_spec_id)?.iconUrl
+
+  const statEntries = statPriorityFromPcts(character.stat_pcts ?? {})
+
   return (
     <div className="animate-page-in space-y-6 px-6 pb-8 pt-2">
       {/* Header */}
       <div className="flex items-center gap-4">
-        {character.avatar_url && (
+        {character.inset_url ? (
+          <Image
+            src={character.inset_url}
+            alt=""
+            width={72}
+            height={96}
+            className="rounded-lg border border-border object-cover"
+            style={{
+              objectPosition: "top",
+            }}
+          />
+        ) : character.avatar_url ? (
           <Image
             src={character.avatar_url}
             alt=""
@@ -87,7 +120,7 @@ export default async function CharacterPage({ params }: PageProps) {
             height={72}
             className="rounded-lg border border-border"
           />
-        )}
+        ) : null}
         <div>
           <h1
             className="text-2xl font-bold leading-none"
@@ -102,7 +135,10 @@ export default async function CharacterPage({ params }: PageProps) {
             {" · "}
             {character.region}
           </div>
-          <div className="mt-1 text-sm text-muted-foreground">
+          <div className="mt-1 flex items-center gap-1.5 text-sm text-muted-foreground">
+            {specIcon && (
+              <Image src={specIcon} alt="" width={16} height={16} className="rounded-sm" />
+            )}
             {character.race && `${character.race} `}
             {titleizeSlug(character.class_slug)}
           </div>
@@ -124,6 +160,20 @@ export default async function CharacterPage({ params }: PageProps) {
           No PvP data available for the current season.
         </div>
       )}
+
+      {/* Stat Priority */}
+      {statEntries.length > 0 && <StatPriority stats={statEntries} />}
+
+      {/* Talent Tree */}
+      {character.talents.length > 0 && (
+        <section className="space-y-3">
+          <h2 className="text-base font-semibold">Talents</h2>
+          <Talents classSlug={classSlug} talents={character.talents} hideStats />
+        </section>
+      )}
+
+      {/* Equipment */}
+      <CharacterEquipment items={character.equipment} />
     </div>
   )
 }

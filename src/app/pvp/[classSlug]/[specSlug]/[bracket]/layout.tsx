@@ -1,21 +1,9 @@
 import { notFound } from "next/navigation"
 import { SpecHeading } from "@/components/atoms/spec-heading"
 import { StatPriority } from "@/components/organisms/stat-priority"
+import { apiBracket } from "@/config/app-config"
 import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
 import { fetchStatPriority } from "@/lib/api"
-
-const API_CLASS_SLUG: Record<string, string> = {
-  "death-knight": "deathknight",
-  "demon-hunter": "demonhunter",
-}
-
-function apiBracket(bracket: string, classSlug: string, specSlug: string): string {
-  if (bracket === "shuffle") {
-    const apiClass = API_CLASS_SLUG[classSlug] ?? classSlug
-    return `shuffle-${apiClass}-${specSlug}`
-  }
-  return bracket
-}
 
 interface Props {
   children: React.ReactNode

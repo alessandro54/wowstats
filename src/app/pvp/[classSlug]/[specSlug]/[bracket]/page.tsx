@@ -6,28 +6,13 @@ export const dynamic = "force-dynamic"
 import { Equipment } from "@/components/organisms/equipment"
 import { Talents } from "@/components/organisms/talents"
 import { TopPlayers } from "@/components/organisms/top-players"
+import { apiBracket } from "@/config/app-config"
+import { SLOT_ORDER } from "@/config/equipment-config"
 import { BRACKETS } from "@/config/wow/brackets-config"
 import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
 import { fetchEnchants, fetchGems, fetchItems, fetchTalents, fetchTopPlayers } from "@/lib/api"
-
-const SLOT_ORDER = [
-  "HEAD",
-  "NECK",
-  "SHOULDER",
-  "BACK",
-  "CHEST",
-  "WRIST",
-  "HANDS",
-  "WAIST",
-  "LEGS",
-  "FEET",
-  "FINGER_1",
-  "FINGER_2",
-  "TRINKET_1",
-  "TRINKET_2",
-  "MAIN_HAND",
-  "OFF_HAND",
-]
+import { getLocale } from "@/lib/locale"
+import { titleizeSlug } from "@/lib/utils"
 
 function groupBy<T>(items: T[], key: (item: T) => string): Map<string, T[]> {
   const map = new Map<string, T[]>()
@@ -83,7 +68,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!cls || !spec) return {}
 
   const bracketLabel = BRACKETS.find((b) => b.slug === bracket)?.label ?? bracket
-  const title = `${cls.name} ${specSlug} – ${bracketLabel} BIS`
+  const title = `${titleizeSlug(specSlug)} • ${cls.name} • ${bracketLabel} BiS`
   const description = `Best in slot items, enchants, and gems for ${cls.name} ${specSlug} in ${bracketLabel}. Based on real WoW PvP data.`
   const image = spec.iconRemasteredUrl ?? spec.iconUrl
 
@@ -112,19 +97,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-const API_CLASS_SLUG: Record<string, string> = {
-  "death-knight": "deathknight",
-  "demon-hunter": "demonhunter",
-}
-
-function apiBracket(bracket: string, classSlug: string, specSlug: string): string {
-  if (bracket === "shuffle") {
-    const apiClass = API_CLASS_SLUG[classSlug] ?? classSlug
-    return `shuffle-${apiClass}-${specSlug}`
-  }
-  return bracket
-}
-
 export default async function SpecPage({ params }: PageProps) {
   const { classSlug, specSlug, bracket } = await params
 
@@ -133,12 +105,13 @@ export default async function SpecPage({ params }: PageProps) {
   if (!cls || !spec) notFound()
 
   const resolvedBracket = apiBracket(bracket, classSlug, specSlug)
+  const locale = await getLocale()
 
   const [items, enchants, gems, talentsResponse, topAll, topUs, topEu] = await Promise.all([
-    fetchItems(resolvedBracket, spec.id).catch((): MetaItem[] => []),
-    fetchEnchants(resolvedBracket, spec.id).catch((): MetaEnchant[] => []),
-    fetchGems(resolvedBracket, spec.id).catch((): MetaGem[] => []),
-    fetchTalents(resolvedBracket, spec.id).catch(
+    fetchItems(resolvedBracket, spec.id, locale).catch((): MetaItem[] => []),
+    fetchEnchants(resolvedBracket, spec.id, locale).catch((): MetaEnchant[] => []),
+    fetchGems(resolvedBracket, spec.id, locale).catch((): MetaGem[] => []),
+    fetchTalents(resolvedBracket, spec.id, locale).catch(
       (): TalentsResponse => ({
         meta: {
           bracket: resolvedBracket,
@@ -150,7 +123,7 @@ export default async function SpecPage({ params }: PageProps) {
         talents: [],
       }),
     ),
-    fetchTopPlayers(resolvedBracket, spec.id).catch(
+    fetchTopPlayers(resolvedBracket, spec.id, undefined, locale).catch(
       (): TopPlayersResponse => ({
         bracket: resolvedBracket,
         spec_id: spec.id,
@@ -159,7 +132,7 @@ export default async function SpecPage({ params }: PageProps) {
         snapshot_at: null,
       }),
     ),
-    fetchTopPlayers(resolvedBracket, spec.id, "us").catch(
+    fetchTopPlayers(resolvedBracket, spec.id, "us", locale).catch(
       (): TopPlayersResponse => ({
         bracket: resolvedBracket,
         spec_id: spec.id,
@@ -168,7 +141,7 @@ export default async function SpecPage({ params }: PageProps) {
         snapshot_at: null,
       }),
     ),
-    fetchTopPlayers(resolvedBracket, spec.id, "eu").catch(
+    fetchTopPlayers(resolvedBracket, spec.id, "eu", locale).catch(
       (): TopPlayersResponse => ({
         bracket: resolvedBracket,
         spec_id: spec.id,

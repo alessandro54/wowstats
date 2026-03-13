@@ -18,6 +18,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
+import { tier } from "@/config/app-config"
 import { fetchClassDistribution } from "@/lib/api"
 
 type Bracket = "2v2" | "3v3" | "rbg" | "shuffle-overall" | "blitz-overall"
@@ -46,14 +47,6 @@ function normalizeSpecName(value: string): string {
     .trim()
     .toLowerCase()
     .replace(/[-_\s]/g, "")
-}
-
-function tier(normPct: number): "S" | "A" | "B" | "C" | "D" {
-  if (normPct >= 85) return "S"
-  if (normPct >= 65) return "A"
-  if (normPct >= 45) return "B"
-  if (normPct >= 25) return "C"
-  return "D"
 }
 
 export default async function PvpBracketPage({ params, searchParams }: PageProps) {

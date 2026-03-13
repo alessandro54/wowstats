@@ -46,11 +46,16 @@ export interface MetaGem {
   snapshot_at: string
 }
 
-async function apiFetch<T>(path: string, params: Record<string, string>): Promise<T> {
+async function apiFetch<T>(
+  path: string,
+  params: Record<string, string>,
+  locale?: string,
+): Promise<T> {
   const url = new URL(path, BACKEND_URL)
   for (const [key, value] of Object.entries(params)) {
     url.searchParams.set(key, value)
   }
+  if (locale) url.searchParams.set("locale", locale)
   const res = await fetch(url.toString(), {
     cache: "no-store",
   })
@@ -67,25 +72,41 @@ async function apiFetch<T>(path: string, params: Record<string, string>): Promis
   return json as T
 }
 
-export function fetchItems(bracket: string, specId: number): Promise<MetaItem[]> {
-  return apiFetch("/api/v1/pvp/meta/items", {
-    bracket,
-    spec_id: String(specId),
-  })
+export function fetchItems(bracket: string, specId: number, locale?: string): Promise<MetaItem[]> {
+  return apiFetch(
+    "/api/v1/pvp/meta/items",
+    {
+      bracket,
+      spec_id: String(specId),
+    },
+    locale,
+  )
 }
 
-export function fetchEnchants(bracket: string, specId: number): Promise<MetaEnchant[]> {
-  return apiFetch("/api/v1/pvp/meta/enchants", {
-    bracket,
-    spec_id: String(specId),
-  })
+export function fetchEnchants(
+  bracket: string,
+  specId: number,
+  locale?: string,
+): Promise<MetaEnchant[]> {
+  return apiFetch(
+    "/api/v1/pvp/meta/enchants",
+    {
+      bracket,
+      spec_id: String(specId),
+    },
+    locale,
+  )
 }
 
-export function fetchGems(bracket: string, specId: number): Promise<MetaGem[]> {
-  return apiFetch("/api/v1/pvp/meta/gems", {
-    bracket,
-    spec_id: String(specId),
-  })
+export function fetchGems(bracket: string, specId: number, locale?: string): Promise<MetaGem[]> {
+  return apiFetch(
+    "/api/v1/pvp/meta/gems",
+    {
+      bracket,
+      spec_id: String(specId),
+    },
+    locale,
+  )
 }
 
 export interface MetaTalent {
@@ -126,11 +147,19 @@ export interface TalentsResponse {
   talents: MetaTalent[]
 }
 
-export async function fetchTalents(bracket: string, specId: number): Promise<TalentsResponse> {
-  return apiFetch("/api/v1/pvp/meta/talents", {
-    bracket,
-    spec_id: String(specId),
-  })
+export async function fetchTalents(
+  bracket: string,
+  specId: number,
+  locale?: string,
+): Promise<TalentsResponse> {
+  return apiFetch(
+    "/api/v1/pvp/meta/talents",
+    {
+      bracket,
+      spec_id: String(specId),
+    },
+    locale,
+  )
 }
 
 export interface TopPlayer {
@@ -158,13 +187,14 @@ export function fetchTopPlayers(
   bracket: string,
   specId: number,
   region?: string,
+  locale?: string,
 ): Promise<TopPlayersResponse> {
   const params: Record<string, string> = {
     bracket,
     spec_id: String(specId),
   }
   if (region) params.region = region
-  return apiFetch("/api/v1/pvp/meta/top_players", params)
+  return apiFetch("/api/v1/pvp/meta/top_players", params, locale)
 }
 
 export interface CharacterPvpEntry {
@@ -177,6 +207,17 @@ export interface CharacterPvpEntry {
   spec_id: number | null
 }
 
+export interface CharacterEquipmentItem {
+  slot: string
+  item_level: number | null
+  quality: string | null
+  blizzard_id: number | null
+  name: string | null
+  icon_url: string | null
+  enchant: string | null
+  sockets: string[]
+}
+
 export interface CharacterProfile {
   name: string
   realm: string
@@ -186,7 +227,11 @@ export interface CharacterProfile {
   faction: string | null
   avatar_url: string | null
   inset_url: string | null
+  primary_spec_id: number | null
+  stat_pcts: Record<string, number>
   pvp_entries: CharacterPvpEntry[]
+  equipment: CharacterEquipmentItem[]
+  talents: MetaTalent[]
 }
 
 export interface StatPriorityEntry {
@@ -200,20 +245,29 @@ export interface StatPriorityResponse {
   stats: StatPriorityEntry[]
 }
 
-export function fetchStatPriority(bracket: string, specId: number): Promise<StatPriorityResponse> {
-  return apiFetch("/api/v1/pvp/meta/stat_priority", {
-    bracket,
-    spec_id: String(specId),
-  })
+export function fetchStatPriority(
+  bracket: string,
+  specId: number,
+  locale?: string,
+): Promise<StatPriorityResponse> {
+  return apiFetch(
+    "/api/v1/pvp/meta/stat_priority",
+    {
+      bracket,
+      spec_id: String(specId),
+    },
+    locale,
+  )
 }
 
 export async function fetchCharacter(
   region: string,
   realm: string,
   name: string,
+  locale?: string,
 ): Promise<CharacterProfile | null> {
   try {
-    return await apiFetch(`/api/v1/characters/${region}/${realm}/${name}`, {})
+    return await apiFetch(`/api/v1/characters/${region}/${realm}/${name}`, {}, locale)
   } catch {
     return null
   }
@@ -251,16 +305,23 @@ export interface ClassDistributionResponse {
   classes: ClassDistributionSpec[]
 }
 
-export function fetchClassDistribution(params: {
-  seasonId: string
-  bracket: string
-  region: string
-  role: string
-}): Promise<ClassDistributionResponse> {
-  return apiFetch("/api/v1/pvp/meta/class_distribution", {
-    season_id: params.seasonId,
-    bracket: params.bracket,
-    region: params.region,
-    role: params.role,
-  })
+export function fetchClassDistribution(
+  params: {
+    seasonId: string
+    bracket: string
+    region: string
+    role: string
+  },
+  locale?: string,
+): Promise<ClassDistributionResponse> {
+  return apiFetch(
+    "/api/v1/pvp/meta/class_distribution",
+    {
+      season_id: params.seasonId,
+      bracket: params.bracket,
+      region: params.region,
+      role: params.role,
+    },
+    locale,
+  )
 }

@@ -7,9 +7,11 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 export function TalentList({
   talents,
   activeColor,
+  hideStats,
 }: {
   talents: MetaTalent[]
   activeColor: string
+  hideStats?: boolean
 }) {
   return (
     <div className="divide-border/40 divide-y rounded-lg border bg-transparent backdrop-blur-lg">
@@ -34,14 +36,16 @@ export function TalentList({
             </Tooltip>
           )}
           <span className="flex-1 text-sm">{record.talent.name}</span>
-          <span
-            className="shrink-0 font-mono text-sm font-bold tabular-nums"
-            style={{
-              color: activeColor,
-            }}
-          >
-            {record.usage_pct.toFixed(1)}%
-          </span>
+          {!hideStats && (
+            <span
+              className="shrink-0 font-mono text-sm font-bold tabular-nums"
+              style={{
+                color: activeColor,
+              }}
+            >
+              {record.usage_pct.toFixed(1)}%
+            </span>
+          )}
         </div>
       ))}
     </div>

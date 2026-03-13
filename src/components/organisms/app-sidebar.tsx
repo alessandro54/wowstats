@@ -4,9 +4,12 @@ import Image from "next/image"
 import Link from "next/link"
 import * as React from "react"
 
+import { ThemeDropdown } from "@/components/atoms/theme-dropdown"
+import { ThemeSwitcher } from "@/components/atoms/theme-switcher"
 import { NavMain } from "@/components/organisms/nav-main"
 import {
   SidebarHeader,
+  SidebarFooter,
   Sidebar,
   SidebarContent,
   SidebarRail,
@@ -14,7 +17,7 @@ import {
 } from "@/components/ui/sidebar"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { open } = useSidebar()
+  const { open, isMobile } = useSidebar()
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -36,6 +39,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavMain />
       </SidebarContent>
+      <SidebarFooter className="flex items-center justify-center pb-4 group-data-[collapsible=icon]:hidden">
+        {isMobile ? <ThemeDropdown /> : <ThemeSwitcher />}
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   )

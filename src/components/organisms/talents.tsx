@@ -20,9 +20,10 @@ interface Props {
   classSlug: WowClassSlug
   talents: MetaTalent[]
   talentsMeta?: TalentsMeta
+  hideStats?: boolean
 }
 
-export function Talents({ classSlug, talents, talentsMeta }: Props) {
+export function Talents({ classSlug, talents, talentsMeta, hideStats }: Props) {
   const activeColor = useActiveColor(classSlug)
 
   const safeTalents = Array.isArray(talents) ? talents : []
@@ -35,11 +36,17 @@ export function Talents({ classSlug, talents, talentsMeta }: Props) {
   const heroEntries = byType.get("hero")
   const pvpEntries = byType.get("pvp")
 
-  const renderTree = (entries: MetaTalent[]) =>
+  const renderTree = (entries: MetaTalent[], apexCircle?: boolean) =>
     hasTreeData(entries) ? (
-      <TalentTree talents={entries} activeColor={activeColor} budget={34} />
+      <TalentTree
+        talents={entries}
+        activeColor={activeColor}
+        budget={34}
+        hideStats={hideStats}
+        apexCircle={apexCircle}
+      />
     ) : (
-      <TalentList talents={entries} activeColor={activeColor} />
+      <TalentList talents={entries} activeColor={activeColor} hideStats={hideStats} />
     )
 
   return (
@@ -60,7 +67,7 @@ export function Talents({ classSlug, talents, talentsMeta }: Props) {
               <div className="flex flex-1 flex-col">
                 <h2 className="mb-3 text-center text-lg font-semibold">{TYPE_LABELS.spec}</h2>
                 <TalentCard classSlug={classSlug} className="flex flex-1 flex-col overflow-x-auto">
-                  {renderTree(specEntries)}
+                  {renderTree(specEntries, true)}
                 </TalentCard>
               </div>
             )}
@@ -76,11 +83,17 @@ export function Talents({ classSlug, talents, talentsMeta }: Props) {
                 heroEntries={heroEntries}
                 activeColor={activeColor}
                 classSlug={classSlug}
+                hideStats={hideStats}
               />
             )}
             {pvpEntries && (
               <div className="mt-6 md:absolute md:top-1/2 md:z-20 md:mt-0 md:left-[calc(100%+50px)] md:-translate-y-1/2">
-                <PvpTalents talents={pvpEntries} activeColor={activeColor} classSlug={classSlug} />
+                <PvpTalents
+                  talents={pvpEntries}
+                  activeColor={activeColor}
+                  classSlug={classSlug}
+                  hideStats={hideStats}
+                />
               </div>
             )}
           </div>

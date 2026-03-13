@@ -1,22 +1,8 @@
 import Link from "next/link"
 import { ClassAccordion } from "@/components/molecules/class-accordion"
 import { ClassPanels } from "@/components/molecules/class-panels"
+import { TIERLIST_LINKS } from "@/config/app-config"
 import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
-
-const TIERLIST_LINKS = [
-  {
-    label: "2v2 Tierlist",
-    href: "/pvp/meta/2v2/dps",
-  },
-  {
-    label: "3v3 Tierlist",
-    href: "/pvp/meta/3v3/dps",
-  },
-  {
-    label: "Shuffle Tierlist",
-    href: "/pvp/meta/shuffle-overall/dps",
-  },
-]
 
 export default function Home() {
   return (

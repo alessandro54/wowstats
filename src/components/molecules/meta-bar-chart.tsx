@@ -2,6 +2,7 @@
 
 import Image from "next/image"
 import { useRef, useState } from "react"
+import { TIER_COLORS } from "@/config/app-config"
 
 export interface MetaBarEntry {
   key: string
@@ -17,14 +18,6 @@ export interface MetaBarEntry {
 }
 
 export type { MetaBarEntry as MetaBarChartEntry }
-
-const TIER_COLORS: Record<MetaBarEntry["tier"], string> = {
-  S: "bg-purple-500/20 text-purple-300 border border-purple-500/40",
-  A: "bg-amber-500/20 text-amber-300 border border-amber-500/40",
-  B: "bg-blue-500/20 text-blue-300 border border-blue-500/40",
-  C: "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40",
-  D: "bg-muted/40 text-muted-foreground border border-border",
-}
 
 interface TooltipData {
   entry: MetaBarEntry
