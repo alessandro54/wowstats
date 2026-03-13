@@ -3,8 +3,6 @@ import type { MetaTalent } from "@/lib/api"
 export const NODE_SIZE = 44
 export const APEX_NODE_SIZE = 56 // bigger circle for capstone nodes
 export const CELL_SIZE = 64 // node + gap; preserves Blizzard's sparse column spacing
-export const APEX_EXTRA = 20 // extra px pushed outward for single-node apex rows
-
 // Border tiers — Tailwind classes with dark: variants
 export const BORDER_BIS = "border-rose-400 dark:border-amber-300 border-4 dark:border-2"
 export const BORDER_SITUATIONAL = "border-purple-500 dark:border-purple-400 border-4 dark:border-2"
