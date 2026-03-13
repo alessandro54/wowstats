@@ -87,3 +87,23 @@
 [data-slot="collapsible-content"][data-state="closed"] {
   animation: collapsible-close 0.2s ease-out;
 }
+
+/* ─── Talent glow (max rank) ─────────────────────────────────────────────── */
+@keyframes talent-glow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 6px 1px var(--glow-color),
+      0 0 14px 2px color-mix(in srgb, var(--glow-color) 40%, transparent);
+  }
+
+  50% {
+    box-shadow:
+      0 0 10px 3px var(--glow-color),
+      0 0 22px 6px color-mix(in srgb, var(--glow-color) 50%, transparent);
+  }
+}
+
+.animate-talent-glow {
+  animation: talent-glow 2s ease-in-out infinite;
+}

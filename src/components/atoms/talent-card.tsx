@@ -13,7 +13,10 @@ export function TalentCard({ classSlug, className, style, children }: Props) {
 
   return (
     <section
-      className={cn("border-border/40 relative rounded-xl border p-4 backdrop-blur-sm", className)}
+      className={cn(
+        "border-border/40 relative rounded-xl border px-4 py-6.5 backdrop-blur-sm",
+        className,
+      )}
       style={{
         background: gradientColor
           ? `linear-gradient(-45deg, color-mix(in oklch, ${gradientColor} 8%, transparent), transparent 60%)`

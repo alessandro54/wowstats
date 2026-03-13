@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { Inter, JetBrains_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { cookies } from "next/headers"
@@ -11,6 +12,19 @@ import { ThemeProvider } from "@/components/providers/theme-provider"
 import { TopNavProvider } from "@/components/providers/top-nav-provider"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import "./globals.css"
+
+const inter = Inter({
+  subsets: [
+    "latin",
+  ],
+  variable: "--font-inter",
+})
+const jetbrainsMono = JetBrains_Mono({
+  subsets: [
+    "latin",
+  ],
+  variable: "--font-jetbrains-mono",
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:5123"),
@@ -37,7 +51,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const defaultOpen = stateCookie ? stateCookie.value === "true" : true
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${inter.variable} ${jetbrainsMono.variable}`}
+    >
       <body className="bg-background text-foreground min-h-screen antialiased">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <HoverProvider>

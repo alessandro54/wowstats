@@ -50,6 +50,7 @@ const topBuildNode: TalentNode = {
   prereqIds: [],
   primary: makeTalent(1, "Mortal Strike", 98.4),
   isChoice: false,
+  isRanked: false,
   all: [
     makeTalent(1, "Mortal Strike", 98.4),
   ],
@@ -64,6 +65,7 @@ const choiceNode: TalentNode = {
   prereqIds: [],
   primary: makeTalent(2, "Bladestorm", 62.1),
   isChoice: true,
+  isRanked: false,
   all: [
     makeTalent(2, "Bladestorm", 62.1),
     makeTalent(3, "Ravager", 37.9, true, 1),
@@ -79,6 +81,7 @@ const partialRankNode: TalentNode = {
   prereqIds: [],
   primary: makeTalent(4, "Dreadnaught", 88.0, true, 1, 2),
   isChoice: false,
+  isRanked: false,
   all: [
     makeTalent(4, "Dreadnaught", 88.0, true, 1, 2),
   ],
@@ -93,6 +96,7 @@ const dimNode: TalentNode = {
   prereqIds: [],
   primary: makeTalent(5, "Fervor of Battle", 12.0, false),
   isChoice: false,
+  isRanked: false,
   all: [
     makeTalent(5, "Fervor of Battle", 12.0, false),
   ],

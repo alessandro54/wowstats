@@ -91,13 +91,13 @@ export function ClassPanels({ classes }: Props) {
 
   const thumbPercent = activeIndex >= 0 ? (activeIndex / (N - 1)) * 100 : null
 
-  // Preload all class banners and spec splashes so they're cached on first use
-  for (const cls of classes) {
-    const banner = cls.bannerUrl || cls.iconRemasteredUrl || cls.iconUrl
+  // Preload only the active class's banner + spec splashes (not all 40+ images)
+  if (activeClass) {
+    const banner = activeClass.bannerUrl || activeClass.iconRemasteredUrl || activeClass.iconUrl
     preload(banner, {
       as: "image",
     })
-    for (const spec of cls.specs) {
+    for (const spec of activeClass.specs) {
       if (spec.splash?.url)
         preload(spec.splash.url, {
           as: "image",

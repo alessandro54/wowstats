@@ -60,7 +60,7 @@ export function HeroSection({ heroEntries, activeColor, classSlug, hideStats }: 
                 backfaceVisibility: "hidden",
               }}
             >
-              <HeroTree talents={primary} activeColor={activeColor} />
+              <HeroTree talents={primary} activeColor={activeColor} hideStats={hideStats} />
             </TalentCard>
 
             {/* Back — alt tree */}
@@ -78,7 +78,7 @@ export function HeroSection({ heroEntries, activeColor, classSlug, hideStats }: 
                     Alt · {altPct}%
                   </p>
                 )}
-                <HeroTree talents={alt} activeColor={activeColor} />
+                <HeroTree talents={alt} activeColor={activeColor} hideStats={hideStats} />
               </TalentCard>
             )}
           </div>

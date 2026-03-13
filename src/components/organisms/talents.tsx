@@ -41,7 +41,7 @@ export function Talents({ classSlug, talents, talentsMeta, hideStats }: Props) {
       <TalentTree
         talents={entries}
         activeColor={activeColor}
-        budget={34}
+        budget={hideStats ? undefined : 34}
         hideStats={hideStats}
         apexCircle={apexCircle}
       />

@@ -18,7 +18,8 @@ export interface TalentNode {
   defaultPoints: number // points granted for free (not counted against budget)
   prereqIds: number[] // prerequisite node IDs (must be picked before this node)
   primary: MetaTalent // highest usage_pct — shown as the main icon
-  isChoice: boolean // two talents share this node
+  isChoice: boolean // two+ talents share this node (different abilities)
+  isRanked: boolean // multiple ranks of the same talent (same name, different effects per rank)
   all: MetaTalent[]
 }
 
@@ -44,10 +45,34 @@ export function buildNodeMap(talents: MetaTalent[]): Map<number, TalentNode> {
         prereqIds: t.talent.prerequisite_node_ids,
         primary: t,
         isChoice: false,
+        isRanked: false,
         all: [
           t,
         ],
       })
+    }
+  }
+
+  // Distinguish ranked nodes (same talent, multiple ranks like apex 1/4–4/4)
+  // from choice nodes (different talents, pick one).
+  // Ranked nodes: all variants share the same name AND maxRank > 1.
+  // Some nodes have 2 variants with identical names but maxRank=1 — these are
+  // NOT ranked, they're two different spells that happen to share a name.
+  for (const node of map.values()) {
+    if (node.isChoice && node.all.length > 1) {
+      const firstName = node.all[0].talent.name
+      const allSameName = node.all.every((t) => t.talent.name === firstName)
+      if (allSameName && node.maxRank > 1) {
+        node.isRanked = true
+        node.isChoice = false
+        // Sort by blizzard_id ascending so rank order is consistent (lowest = earliest rank)
+        node.all.sort((a, b) => a.talent.blizzard_id - b.talent.blizzard_id)
+        // Primary = highest blizzard_id (the capstone rank, shows the full icon)
+        node.primary = node.all[node.all.length - 1]
+      } else if (allSameName) {
+        // Same name but maxRank=1: collapse to single talent (not a real choice)
+        node.isChoice = false
+      }
     }
   }
 
@@ -104,10 +129,14 @@ export function buildTopNodeIds(nodes: TalentNode[], budget: number): Set<number
     return chain
   }
 
-  // Sort candidates by usage_pct descending — highest value first
+  // Sort candidates by usage_pct descending — highest value first.
+  // For ranked nodes (apex), use the max usage across all variants
+  // (rank 1 is always the highest since every investor gets it).
+  const effectiveUsage = (n: TalentNode) =>
+    n.isRanked ? Math.max(...n.all.map((t) => t.usage_pct)) : n.primary.usage_pct
   const sorted = [
     ...nodes,
-  ].sort((a, b) => b.primary.usage_pct - a.primary.usage_pct)
+  ].sort((a, b) => effectiveUsage(b) - effectiveUsage(a))
 
   for (const node of sorted) {
     if (picked.has(node.nodeId)) continue

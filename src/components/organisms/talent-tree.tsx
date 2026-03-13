@@ -3,14 +3,13 @@
 import type { MetaTalent } from "@/lib/api"
 import { TalentEdges } from "@/components/molecules/talent-tree-edges"
 import { TalentNodeCard } from "@/components/molecules/talent-tree-node"
+import { computeTreeLayout } from "@/lib/utils/talent-tree-layout"
 import {
-  APEX_EXTRA,
   APEX_NODE_SIZE,
   BORDER_BIS,
   BORDER_SITUATIONAL,
   buildEdgeSet,
   buildNodeMap,
-  CELL_SIZE,
   NODE_SIZE,
 } from "@/lib/utils/talent-tree"
 
@@ -31,10 +30,6 @@ export function TalentTree({
   onlyChoicePct?: boolean
   fullOpacity?: boolean
   apexExtra?: boolean
-  /**
-   * How many talent points can be spent in this tree (e.g. 34 for class/spec).
-   *  Top nodes by usage_pct (weighted by maxRank) are treated as the best build.
-   */
   budget?: number
   hideStats?: boolean
   apexCircle?: boolean
@@ -44,59 +39,12 @@ export function TalentTree({
 
   if (nodes.length === 0) return null
 
-  // Normalize rows and cols to contiguous indices so gaps in Blizzard's
-  // display_row / display_col values don't produce extra whitespace.
-  const uniqueRows = [
-    ...new Set(nodes.map((n) => n.row)),
-  ].sort((a, b) => a - b)
-  const uniqueCols = [
-    ...new Set(nodes.map((n) => n.col)),
-  ].sort((a, b) => a - b)
-  const rowIdx = new Map(
-    uniqueRows.map((r, i) => [
-      r,
-      i,
-    ]),
-  )
-  const colIdx = new Map(
-    uniqueCols.map((c, i) => [
-      c,
-      i,
-    ]),
-  )
-
-  const minRow = uniqueRows[0]
-  const maxRow = uniqueRows[uniqueRows.length - 1]
-
-  const rowCounts = new Map<number, number>()
-  for (const node of nodes) {
-    rowCounts.set(node.row, (rowCounts.get(node.row) ?? 0) + 1)
-  }
-
-  const topApex = rowCounts.get(minRow) === 1
-  const botApex = rowCounts.get(maxRow) === 1
-  const extra = apexExtra ? APEX_EXTRA : 0
-
+  const layout = computeTreeLayout(nodes, {
+    apexExtra,
+    apexCircle,
+  })
+  const { svgW, svgH, maxRow, botApex, nodeCX, nodeY } = layout
   const useApex = apexCircle && botApex
-  const botNodeSize = useApex ? APEX_NODE_SIZE : NODE_SIZE
-  const svgW = (uniqueCols.length - 1) * CELL_SIZE + NODE_SIZE
-  const svgH =
-    (uniqueRows.length - 1) * CELL_SIZE +
-    NODE_SIZE +
-    (topApex ? extra : 0) +
-    (useApex ? extra + (APEX_NODE_SIZE - NODE_SIZE) / 2 : botApex ? extra : 0)
-
-  const cx = (col: number) => colIdx.get(col)! * CELL_SIZE + NODE_SIZE / 2
-  const nodeY = (row: number) => {
-    if (topApex && row === minRow) return NODE_SIZE / 2
-    if (botApex && row === maxRow) return svgH - botNodeSize / 2 + 10 // control vertical position of bottom apex node
-    return rowIdx.get(row)! * CELL_SIZE + NODE_SIZE / 2 + (topApex ? extra : 0)
-  }
-  const nodeCX = (node: { row: number; col: number }) =>
-    (node.row === minRow || node.row === maxRow) && rowCounts.get(node.row) === 1
-      ? svgW / 2
-      : cx(node.col)
-
   const edgeSet = buildEdgeSet(talents)
 
   return (

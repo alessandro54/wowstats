@@ -47,6 +47,7 @@ const nodes: TalentNode[] = [
     prereqIds: [],
     primary: makeTalent(1, 1, 1),
     isChoice: false,
+    isRanked: false,
     all: [],
   },
   {
@@ -58,6 +59,7 @@ const nodes: TalentNode[] = [
     prereqIds: [],
     primary: makeTalent(2, 1, 3),
     isChoice: false,
+    isRanked: false,
     all: [],
   },
   {
@@ -69,6 +71,7 @@ const nodes: TalentNode[] = [
     prereqIds: [],
     primary: makeTalent(3, 2, 2),
     isChoice: false,
+    isRanked: false,
     all: [],
   },
   {
@@ -80,6 +83,7 @@ const nodes: TalentNode[] = [
     prereqIds: [],
     primary: makeTalent(4, 3, 1),
     isChoice: false,
+    isRanked: false,
     all: [],
   },
   {
@@ -91,6 +95,7 @@ const nodes: TalentNode[] = [
     prereqIds: [],
     primary: makeTalent(5, 3, 3),
     isChoice: false,
+    isRanked: false,
     all: [],
   },
 ]

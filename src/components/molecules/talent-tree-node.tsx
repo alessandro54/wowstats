@@ -1,13 +1,14 @@
 import type { TalentNode } from "@/lib/utils/talent-tree"
-import Image from "next/image"
 import { TalentIcon } from "@/components/atoms/talent-icon"
+import { TalentNodeTooltip } from "@/components/atoms/talent-node-tooltip"
+import { APEX_NODE_SIZE, NODE_SIZE } from "@/lib/utils/talent-tree"
 import {
-  APEX_NODE_SIZE,
-  BORDER_BIS,
-  BORDER_DEFAULT,
-  BORDER_SITUATIONAL,
-  NODE_SIZE,
-} from "@/lib/utils/talent-tree"
+  bestTier,
+  buildRankBars,
+  displayUsagePct,
+  investedRank as computeInvestedRank,
+  metaBorderClass,
+} from "@/lib/utils/talent-node-utils"
 
 interface Props {
   node: TalentNode
@@ -21,6 +22,57 @@ interface Props {
   isApex?: boolean
 }
 
+// ── Choice chevrons ────────────────────────────────────────────────────────
+
+function ChoiceChevrons({ activeColor }: { activeColor: string }) {
+  return (
+    <>
+      <svg
+        className="pointer-events-none absolute"
+        style={{
+          left: -8,
+          top: "50%",
+          transform: "translateY(-50%)",
+        }}
+        width="6"
+        height="10"
+        viewBox="0 0 6 10"
+      >
+        <path
+          d="M5 1 L1 5 L5 9"
+          stroke={activeColor}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="none"
+        />
+      </svg>
+      <svg
+        className="pointer-events-none absolute"
+        style={{
+          right: -8,
+          top: "50%",
+          transform: "translateY(-50%)",
+        }}
+        width="6"
+        height="10"
+        viewBox="0 0 6 10"
+      >
+        <path
+          d="M1 1 L5 5 L1 9"
+          stroke={activeColor}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="none"
+        />
+      </svg>
+    </>
+  )
+}
+
+// ── Main component ─────────────────────────────────────────────────────────
+
 export function TalentNodeCard({
   node,
   left,
@@ -32,100 +84,23 @@ export function TalentNodeCard({
   hideStats,
   isApex,
 }: Props) {
-  const tier = node.primary.tier ?? (node.all.some((t) => t.in_top_build) ? "bis" : "common")
+  const tier = bestTier(node)
   const isBis = tier === "bis"
   const isSituational = tier === "situational"
-  const isRelevant = isBis || isSituational
-  const inTopBuild = fullOpacity || isRelevant
+  const inTopBuild = fullOpacity || isBis || isSituational
   const opacity = fullOpacity || isBis ? 1 : isSituational ? 0.75 : 0.25
-  const isFree = node.defaultPoints >= node.maxRank
-  const borderClass = budget
-    ? isFree
-      ? BORDER_DEFAULT
-      : isBis
-        ? BORDER_BIS
-        : isSituational
-          ? BORDER_SITUATIONAL
-          : undefined
-    : undefined
+
+  const borderClass = budget ? metaBorderClass(tier, node.defaultPoints >= node.maxRank) : undefined
+
+  const invested = computeInvestedRank(node)
   const isPartialRank =
-    inTopBuild &&
-    node.maxRank > 1 &&
-    node.primary.top_build_rank > node.defaultPoints &&
-    node.primary.top_build_rank < node.maxRank
+    inTopBuild && node.maxRank > 1 && invested > node.defaultPoints && invested < node.maxRank
 
-  const alternatives = node.isChoice
-    ? node.all.filter((t) => t.talent.id !== node.primary.talent.id)
-    : []
+  const rankBars = buildRankBars(node)
+  const maxBarPct = rankBars ? Math.max(...rankBars.map((b) => b.pct), 1) : 0
 
-  const tooltipContent = (
-    <div className={alternatives.length > 0 ? "flex gap-4" : ""}>
-      {/* Main panel */}
-      <div className="min-w-36 space-y-1.5">
-        <div className="flex items-center gap-2">
-          {node.primary.talent.icon_url && (
-            <Image
-              src={node.primary.talent.icon_url}
-              width={50}
-              height={50}
-              className="shrink-0 rounded-full"
-              alt={node.primary.talent.name}
-              unoptimized
-            />
-          )}
-          <span className="text-xs leading-tight font-semibold">{node.primary.talent.name}</span>
-        </div>
-        {node.maxRank > 1 && (
-          <p className="text-muted-foreground text-[10px]">{node.maxRank} ranks</p>
-        )}
-        {node.primary.talent.description && (
-          <p className="text-muted-foreground max-w-52 text-[11px] leading-snug">
-            {node.primary.talent.description}
-          </p>
-        )}
-        {!hideStats && (
-          <p
-            className="font-mono text-[11px] font-bold"
-            style={{
-              color: activeColor,
-            }}
-          >
-            {node.primary.usage_pct.toFixed(1)}%
-          </p>
-        )}
-      </div>
-
-      {/* Alternatives panel (choice nodes) */}
-      {!hideStats && alternatives.length > 0 && (
-        <div className="border-border/50 min-w-36 space-y-1.5 border-l pl-4">
-          <p className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
-            Alternative
-          </p>
-          {alternatives.map((t) => (
-            <div key={t.talent.id} className="flex items-center gap-2">
-              {t.talent.icon_url && (
-                <Image
-                  src={t.talent.icon_url}
-                  width={16}
-                  height={16}
-                  className="shrink-0 rounded opacity-80"
-                  alt=""
-                  unoptimized
-                />
-              )}
-              <span className="flex-1 truncate text-xs">{t.talent.name}</span>
-              <span className="text-muted-foreground shrink-0 font-mono text-[11px]">
-                {t.usage_pct.toFixed(1)}%
-              </span>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  )
-
-  // Top-build non-choice nodes: hide %, they're "the build"
-  const showPct = (!inTopBuild || node.isChoice) && (!onlyChoicePct || node.isChoice)
+  const isVariable = node.isChoice || node.isRanked
+  const showPct = (!inTopBuild || isVariable) && (!onlyChoicePct || isVariable)
   const nodeSize = isApex ? APEX_NODE_SIZE : NODE_SIZE
 
   return (
@@ -156,12 +131,25 @@ export function TalentNodeCard({
             size={nodeSize}
             activeColor={activeColor}
             borderClass={borderClass}
-            tooltipContent={tooltipContent}
+            tooltipContent={
+              <TalentNodeTooltip
+                node={node}
+                investedRank={invested}
+                activeColor={activeColor}
+                hideStats={hideStats}
+                rankBars={rankBars}
+                maxBarPct={maxBarPct}
+              />
+            }
             partialRank={isPartialRank}
             isApex={isApex}
+            glowing={isApex && invested === node.maxRank}
           />
         </div>
+        {node.isChoice && inTopBuild && <ChoiceChevrons activeColor={activeColor} />}
       </div>
+
+      {/* Meta: usage % below node */}
       {!hideStats && showPct && (
         <span
           className="font-mono text-[10px] leading-none font-bold text-slate-600 tabular-nums dark:text-white"
@@ -169,7 +157,7 @@ export function TalentNodeCard({
             opacity,
           }}
         >
-          {node.primary.usage_pct.toFixed(0)}%
+          {displayUsagePct(node).toFixed(0)}%
         </span>
       )}
       {!hideStats && node.isChoice && (
@@ -180,6 +168,19 @@ export function TalentNodeCard({
           }}
         >
           choice
+        </span>
+      )}
+
+      {/* Character: invested rank below node */}
+      {hideStats && node.maxRank > 1 && invested > 0 && (
+        <span
+          className="font-mono text-[10px] leading-none font-bold tabular-nums"
+          style={{
+            color: activeColor,
+            opacity,
+          }}
+        >
+          {invested}/{node.maxRank}
         </span>
       )}
     </div>

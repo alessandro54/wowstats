@@ -14,6 +14,7 @@ export function TalentIcon({
   tooltipContent,
   partialRank,
   isApex,
+  glowing,
 }: {
   talent: MetaTalent
   size: number
@@ -31,15 +32,20 @@ export function TalentIcon({
    */
   partialRank?: boolean
   isApex?: boolean
+  glowing?: boolean
 }) {
   const radius = isApex ? "rounded-full" : "rounded"
   const icon = (
     <div
       id={`talent-${talent.talent.blizzard_id}`}
-      className={cn("relative shrink-0 cursor-default", radius)}
+      className={cn("relative shrink-0 cursor-default", radius, glowing && "animate-talent-glow")}
       style={{
         width: size,
         height: size,
+        ...(glowing &&
+          ({
+            "--glow-color": activeColor,
+          } as React.CSSProperties)),
       }}
     >
       {/* Image layer — overflow-hidden kept here so the icon stays fully visible */}
