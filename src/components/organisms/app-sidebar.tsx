@@ -15,6 +15,7 @@ import {
   SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { CDN_BASE } from "@/config/cdn-config"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { open, isMobile } = useSidebar()
@@ -27,7 +28,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           className="flex items-center rounded-md hover:bg-sidebar-accent transition-colors translate-x-0.5"
         >
           <Image
-            src="/logo.png"
+            src={`${CDN_BASE}/assets/logo.png`}
             alt="Logo"
             width={90}
             height={90}

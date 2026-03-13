@@ -6,7 +6,7 @@ import { TalentCard } from "@/components/atoms/talent-card"
 import { PvpTalents } from "@/components/molecules/pvp-talents"
 import { TalentList } from "@/components/molecules/talent-list"
 import { HeroSection } from "@/components/organisms/hero-section"
-import { hasTreeData, TalentTree } from "@/components/organisms/talent-tree"
+import { hasTreeData, TalentTree, TalentTreeSkeleton } from "@/components/organisms/talent-tree"
 import { useActiveColor } from "@/hooks/use-active-color"
 
 const TYPE_LABELS: Record<string, string> = {
@@ -27,7 +27,28 @@ export function Talents({ classSlug, talents, talentsMeta, hideStats }: Props) {
   const activeColor = useActiveColor(classSlug)
 
   const safeTalents = Array.isArray(talents) ? talents : []
-  if (safeTalents.length === 0) return null
+
+  if (safeTalents.length === 0) {
+    return (
+      <div className="sm:overflow-x-auto">
+        <div className="flex flex-col items-stretch gap-6 sm:min-w-max sm:flex-row">
+          {(
+            [
+              "Class Talents",
+              "Spec Talents",
+            ] as const
+          ).map((label) => (
+            <div key={label} className="flex flex-1 flex-col">
+              <h2 className="mb-3 text-center text-lg font-semibold">{label}</h2>
+              <div className="rounded-xl border p-4">
+                <TalentTreeSkeleton />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
 
   const byType = Map.groupBy(safeTalents, (t) => t.talent.talent_type)
 

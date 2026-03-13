@@ -17,7 +17,7 @@ export function TopNav() {
   if (config.hidden) return null
 
   return (
-    <header className="bg-background/40 sticky top-0 z-20 flex h-[60px] shrink-0 items-center gap-2 border-b p-4 backdrop-blur-md">
+    <header className="bg-background/40 sticky top-0 z-20 flex h-15 shrink-0 items-center gap-2 border-b p-4 backdrop-blur-md">
       <SidebarTrigger
         className="-ml-1 transition-colors"
         style={{
