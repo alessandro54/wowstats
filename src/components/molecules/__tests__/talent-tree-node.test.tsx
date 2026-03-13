@@ -18,8 +18,14 @@ function makeTalent(
   id: number,
   name: string,
   pct: number,
-  tier: "bis" | "situational" | "common" = "bis",
+  opts: {
+    tier?: "bis" | "situational" | "common"
+    inTopBuild?: boolean
+    topBuildRank?: number
+    maxRank?: number
+  } = {},
 ): MetaTalent {
+  const { tier = "bis", inTopBuild = pct > 50, topBuildRank = 1, maxRank = 1 } = opts
   return {
     id,
     talent: {
@@ -32,15 +38,15 @@ function makeTalent(
       node_id: id,
       display_row: 0,
       display_col: 0,
-      max_rank: 1,
+      max_rank: maxRank,
       default_points: 0,
       icon_url: null,
       prerequisite_node_ids: [],
     },
     usage_count: Math.round(pct * 10),
     usage_pct: pct,
-    in_top_build: pct > 50,
-    top_build_rank: 1,
+    in_top_build: inTopBuild,
+    top_build_rank: topBuildRank,
     tier,
     snapshot_at: null,
   }
@@ -57,6 +63,7 @@ function makeNode(overrides: Partial<TalentNode> = {}): TalentNode {
     prereqIds: [],
     primary,
     isChoice: false,
+    isRanked: false,
     all: [
       primary,
     ],
@@ -95,8 +102,10 @@ describe("talentNodeCard", () => {
     expect(el.style.top).toBe("200px")
   })
 
-  it("shows choice label for choice nodes", () => {
-    const alt = makeTalent(2, "Overpower", 40, "common")
+  it("shows percentage for choice nodes on meta page", () => {
+    const alt = makeTalent(2, "Overpower", 40, {
+      tier: "common",
+    })
     const node = makeNode({
       isChoice: true,
       all: [
@@ -114,11 +123,13 @@ describe("talentNodeCard", () => {
         activeColor="#c79c6e"
       />,
     )
-    expect(container.textContent).toContain("choice")
+    expect(container.textContent).toContain("85%")
   })
 
   it("shows percentage for non-top-build nodes", () => {
-    const primary = makeTalent(1, "Weak", 20, "common")
+    const primary = makeTalent(1, "Weak", 20, {
+      tier: "common",
+    })
     const node = makeNode({
       primary,
       all: [
@@ -136,5 +147,118 @@ describe("talentNodeCard", () => {
       />,
     )
     expect(container.textContent).toContain("20%")
+  })
+
+  it("shows percentage for situational nodes", () => {
+    const primary = makeTalent(1, "Shield Block", 39, {
+      tier: "situational",
+    })
+    const node = makeNode({
+      primary,
+      all: [
+        primary,
+      ],
+    })
+    const { container } = render(
+      <TalentNodeCard
+        node={node}
+        left={0}
+        top={0}
+        fullOpacity={false}
+        onlyChoicePct={false}
+        activeColor="#c79c6e"
+      />,
+    )
+    expect(container.textContent).toContain("39%")
+  })
+
+  it("shows inline % and rank for ranked nodes on meta page", () => {
+    const v1 = makeTalent(41, "Impale", 90, {
+      topBuildRank: 1,
+      maxRank: 2,
+    })
+    const v2 = makeTalent(42, "Impale", 85, {
+      topBuildRank: 1,
+      maxRank: 2,
+    })
+    const node = makeNode({
+      maxRank: 2,
+      isRanked: true,
+      primary: v2,
+      all: [
+        v1,
+        v2,
+      ],
+    })
+    const { container } = render(
+      <TalentNodeCard
+        node={node}
+        left={0}
+        top={0}
+        fullOpacity={false}
+        onlyChoicePct={false}
+        activeColor="#c79c6e"
+        budget={34}
+      />,
+    )
+    expect(container.textContent).toContain("90%")
+    expect(container.textContent).toContain("2/2")
+  })
+
+  it("shows rank on character page (hideStats)", () => {
+    const v1 = makeTalent(41, "Impale", 90, {
+      topBuildRank: 1,
+      maxRank: 2,
+    })
+    const v2 = makeTalent(42, "Impale", 85, {
+      topBuildRank: 1,
+      maxRank: 2,
+    })
+    const node = makeNode({
+      maxRank: 2,
+      isRanked: true,
+      primary: v2,
+      all: [
+        v1,
+        v2,
+      ],
+    })
+    const { container } = render(
+      <TalentNodeCard
+        node={node}
+        left={0}
+        top={0}
+        fullOpacity
+        onlyChoicePct={false}
+        activeColor="#c79c6e"
+        hideStats
+      />,
+    )
+    expect(container.textContent).toContain("2/2")
+    expect(container.textContent).not.toContain("%")
+  })
+
+  it("hides percentage for BIS non-variable nodes", () => {
+    const primary = makeTalent(1, "Mortal Strike", 98, {
+      tier: "bis",
+    })
+    const node = makeNode({
+      primary,
+      all: [
+        primary,
+      ],
+    })
+    const { container } = render(
+      <TalentNodeCard
+        node={node}
+        left={0}
+        top={0}
+        fullOpacity={false}
+        onlyChoicePct={false}
+        activeColor="#c79c6e"
+        budget={34}
+      />,
+    )
+    expect(container.textContent).not.toContain("%")
   })
 })

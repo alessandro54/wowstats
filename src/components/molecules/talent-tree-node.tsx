@@ -1,11 +1,12 @@
 import type { TalentNode } from "@/lib/utils/talent-tree"
+import { ChoiceChevrons } from "@/components/atoms/choice-chevrons"
+import { NodeStats } from "@/components/atoms/node-stats"
 import { TalentIcon } from "@/components/atoms/talent-icon"
 import { TalentNodeTooltip } from "@/components/atoms/talent-node-tooltip"
 import { APEX_NODE_SIZE, NODE_SIZE } from "@/lib/utils/talent-tree"
 import {
   bestTier,
   buildRankBars,
-  displayUsagePct,
   investedRank as computeInvestedRank,
   metaBorderClass,
 } from "@/lib/utils/talent-node-utils"
@@ -21,57 +22,6 @@ interface Props {
   hideStats?: boolean
   isApex?: boolean
 }
-
-// ── Choice chevrons ────────────────────────────────────────────────────────
-
-function ChoiceChevrons({ activeColor }: { activeColor: string }) {
-  return (
-    <>
-      <svg
-        className="pointer-events-none absolute"
-        style={{
-          left: -8,
-          top: "50%",
-          transform: "translateY(-50%)",
-        }}
-        width="6"
-        height="10"
-        viewBox="0 0 6 10"
-      >
-        <path
-          d="M5 1 L1 5 L5 9"
-          stroke={activeColor}
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          fill="none"
-        />
-      </svg>
-      <svg
-        className="pointer-events-none absolute"
-        style={{
-          right: -8,
-          top: "50%",
-          transform: "translateY(-50%)",
-        }}
-        width="6"
-        height="10"
-        viewBox="0 0 6 10"
-      >
-        <path
-          d="M1 1 L5 5 L1 9"
-          stroke={activeColor}
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          fill="none"
-        />
-      </svg>
-    </>
-  )
-}
-
-// ── Main component ─────────────────────────────────────────────────────────
 
 export function TalentNodeCard({
   node,
@@ -94,13 +44,19 @@ export function TalentNodeCard({
 
   const invested = computeInvestedRank(node)
   const isPartialRank =
-    inTopBuild && node.maxRank > 1 && invested > node.defaultPoints && invested < node.maxRank
+    !node.isChoice &&
+    inTopBuild &&
+    node.maxRank > 1 &&
+    invested > node.defaultPoints &&
+    invested < node.maxRank
 
   const rankBars = buildRankBars(node)
   const maxBarPct = rankBars ? Math.max(...rankBars.map((b) => b.pct), 1) : 0
 
   const isVariable = node.isChoice || node.isRanked
-  const showPct = (!inTopBuild || isVariable) && (!onlyChoicePct || isVariable)
+  const showPct =
+    (!inTopBuild || isSituational || isVariable) && (!onlyChoicePct || isSituational || isVariable)
+  const showRank = node.isRanked && node.maxRank > 1 && invested > 0
   const nodeSize = isApex ? APEX_NODE_SIZE : NODE_SIZE
 
   return (
@@ -147,41 +103,32 @@ export function TalentNodeCard({
           />
         </div>
         {node.isChoice && inTopBuild && <ChoiceChevrons activeColor={activeColor} />}
+        {/* Apex: stats to the right of the icon */}
+        {isApex && (
+          <NodeStats
+            hideStats={hideStats}
+            showPct={showPct}
+            showRank={showRank}
+            node={node}
+            invested={invested}
+            activeColor={activeColor}
+            opacity={opacity}
+            position="right"
+          />
+        )}
       </div>
 
-      {/* Meta: usage % below node */}
-      {!hideStats && showPct && (
-        <span
-          className="font-mono text-[10px] leading-none font-bold text-slate-600 tabular-nums dark:text-white"
-          style={{
-            opacity,
-          }}
-        >
-          {displayUsagePct(node).toFixed(0)}%
-        </span>
-      )}
-      {!hideStats && node.isChoice && (
-        <span
-          className="text-muted-foreground text-[9px] leading-none"
-          style={{
-            opacity,
-          }}
-        >
-          choice
-        </span>
-      )}
-
-      {/* Character: invested rank below node */}
-      {hideStats && node.maxRank > 1 && invested > 0 && (
-        <span
-          className="font-mono text-[10px] leading-none font-bold tabular-nums"
-          style={{
-            color: activeColor,
-            opacity,
-          }}
-        >
-          {invested}/{node.maxRank}
-        </span>
+      {/* Non-apex: stats below the icon */}
+      {!isApex && (
+        <NodeStats
+          hideStats={hideStats}
+          showPct={showPct}
+          showRank={showRank}
+          node={node}
+          invested={invested}
+          activeColor={activeColor}
+          opacity={opacity}
+        />
       )}
     </div>
   )

@@ -40,7 +40,7 @@ export function TalentNodeTooltip({
           )}
           <div>
             <span className="text-xs leading-tight font-semibold">{node.primary.talent.name}</span>
-            {node.maxRank > 1 && investedRank > 0 && (
+            {node.isRanked && node.maxRank > 1 && investedRank > 0 && (
               <p className="text-muted-foreground text-[10px]">
                 Rank {investedRank}/{node.maxRank}
               </p>
@@ -76,7 +76,7 @@ export function TalentNodeTooltip({
                   style={{
                     width: `${(bar.pct / maxBarPct) * 100}%`,
                     backgroundColor: activeColor,
-                    opacity: 0.4 + (i / (rankBars.length - 1)) * 0.6,
+                    opacity: 0.4 + (bar.pct / maxBarPct) * 0.6,
                   }}
                 />
               </div>
