@@ -15,7 +15,6 @@ export function HeroTree({ talents, activeColor, hideStats }: Props) {
       activeColor={activeColor}
       onlyChoicePct
       fullOpacity
-      apexExtra
       hideStats={hideStats}
     />
   ) : (

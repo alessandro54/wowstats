@@ -42,6 +42,7 @@ function makeNode(id: number, row: number): TalentNode {
     prereqIds: [],
     primary,
     isChoice: false,
+    isRanked: false,
     all: [
       primary,
     ],

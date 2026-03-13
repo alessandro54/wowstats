@@ -31,9 +31,9 @@ export function metaBorderClass(tier: string, isFree: boolean): string | undefin
 // ── Rank ───────────────────────────────────────────────────────────────────
 
 export function investedRank(node: TalentNode): number {
-  return node.isRanked
-    ? node.all.filter((t) => t.in_top_build).reduce((sum, t) => sum + t.top_build_rank, 0)
-    : node.primary.top_build_rank
+  if (!node.isRanked) return node.primary.top_build_rank
+  const sum = node.all.filter((t) => t.in_top_build).reduce((s, t) => s + t.top_build_rank, 0)
+  return Math.min(sum, node.maxRank)
 }
 
 export interface RankBar {
@@ -42,7 +42,12 @@ export interface RankBar {
 }
 
 export function buildRankBars(node: TalentNode): RankBar[] | null {
-  if (node.isRanked && node.all.length === 3) {
+  if (!node.isRanked || node.all.length < 2) return null
+
+  const max = node.maxRank
+
+  // Apex: 3 variants = 4 in-game ranks (variant[1] covers ranks 2 and 3)
+  if (node.all.length === 3 && max === 4) {
     return [
       {
         label: "1/4",
@@ -62,19 +67,12 @@ export function buildRankBars(node: TalentNode): RankBar[] | null {
       },
     ]
   }
-  if (node.isRanked && node.all.length === 2) {
-    return [
-      {
-        label: "1/2",
-        pct: node.all[0].usage_pct,
-      },
-      {
-        label: "2/2",
-        pct: node.all[1].usage_pct,
-      },
-    ]
-  }
-  return null
+
+  // General case: one bar per variant, labeled by maxRank
+  return node.all.map((t, i) => ({
+    label: `${i + 1}/${max}`,
+    pct: t.usage_pct,
+  }))
 }
 
 // ── Usage % ────────────────────────────────────────────────────────────────

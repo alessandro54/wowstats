@@ -47,7 +47,7 @@ export function HeroSection({ heroEntries, activeColor, classSlug, hideStats }: 
         >
           {/* Both faces stacked in a grid so the taller one sizes the container */}
           <div
-            className="grid [&>*]:col-start-1 [&>*]:row-start-1"
+            className="grid items-stretch [&>*]:col-start-1 [&>*]:row-start-1"
             style={{
               transformStyle: "preserve-3d",
             }}
@@ -55,7 +55,7 @@ export function HeroSection({ heroEntries, activeColor, classSlug, hideStats }: 
             {/* Front — primary tree */}
             <TalentCard
               classSlug={classSlug}
-              className={`flex items-center justify-center ${flipped ? "pointer-events-none" : ""}`}
+              className={`flex items-center justify-center p-4 ${flipped ? "pointer-events-none" : ""}`}
               style={{
                 backfaceVisibility: "hidden",
               }}
@@ -67,7 +67,7 @@ export function HeroSection({ heroEntries, activeColor, classSlug, hideStats }: 
             {alt && (
               <TalentCard
                 classSlug={classSlug}
-                className={`flex flex-col items-center justify-center ${!flipped ? "pointer-events-none" : ""}`}
+                className={`flex flex-col items-center justify-center p-4 ${!flipped ? "pointer-events-none" : ""}`}
                 style={{
                   backfaceVisibility: "hidden",
                   transform: "rotateY(180deg)",

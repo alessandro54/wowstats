@@ -15,6 +15,7 @@ export function TalentIcon({
   partialRank,
   isApex,
   glowing,
+  glowIntensity,
 }: {
   talent: MetaTalent
   size: number
@@ -33,8 +34,11 @@ export function TalentIcon({
   partialRank?: boolean
   isApex?: boolean
   glowing?: boolean
+  /** 0–1 intensity for static glow (no animation). 0 = off, 1 = full brightness. */
+  glowIntensity?: number
 }) {
   const radius = isApex ? "rounded-full" : "rounded"
+  const hasStaticGlow = !glowing && (glowIntensity ?? 0) > 0
   const icon = (
     <div
       id={`talent-${talent.talent.blizzard_id}`}
@@ -42,10 +46,13 @@ export function TalentIcon({
       style={{
         width: size,
         height: size,
-        ...(glowing &&
+        ...((glowing || hasStaticGlow) &&
           ({
             "--glow-color": activeColor,
           } as React.CSSProperties)),
+        ...(hasStaticGlow && {
+          boxShadow: `0 0 ${4 + (glowIntensity ?? 0) * 8}px ${1 + (glowIntensity ?? 0) * 2}px ${activeColor}, 0 0 ${8 + (glowIntensity ?? 0) * 14}px ${2 + (glowIntensity ?? 0) * 4}px color-mix(in srgb, ${activeColor} ${Math.round(20 + (glowIntensity ?? 0) * 30)}%, transparent)`,
+        }),
       }}
     >
       {/* Image layer — overflow-hidden kept here so the icon stays fully visible */}

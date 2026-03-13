@@ -3,8 +3,6 @@ import type { MetaTalent } from "@/lib/api"
 export const NODE_SIZE = 44
 export const APEX_NODE_SIZE = 56 // bigger circle for capstone nodes
 export const CELL_SIZE = 64 // node + gap; preserves Blizzard's sparse column spacing
-export const APEX_EXTRA = 20 // extra px pushed outward for single-node apex rows
-
 // Border tiers — Tailwind classes with dark: variants
 export const BORDER_BIS = "border-rose-400 dark:border-amber-300 border-4 dark:border-2"
 export const BORDER_SITUATIONAL = "border-purple-500 dark:border-purple-400 border-4 dark:border-2"
@@ -53,12 +51,15 @@ export function buildNodeMap(talents: MetaTalent[]): Map<number, TalentNode> {
     }
   }
 
-  // Distinguish ranked nodes (same talent, multiple ranks like apex 1/4–4/4)
-  // from choice nodes (different talents, pick one).
-  // Ranked nodes: all variants share the same name AND maxRank > 1.
-  // Some nodes have 2 variants with identical names but maxRank=1 — these are
-  // NOT ranked, they're two different spells that happen to share a name.
+  // Distinguish ranked nodes from choice nodes.
+  // Ranked = same talent investable multiple times (maxRank > 1).
+  // Choice = different talents sharing a node (pick one).
   for (const node of map.values()) {
+    // Single-variant nodes with maxRank > 1 are ranked (e.g. "A Just Reward" 2/2)
+    if (node.all.length === 1 && node.maxRank > 1) {
+      node.isRanked = true
+    }
+
     if (node.isChoice && node.all.length > 1) {
       const firstName = node.all[0].talent.name
       const allSameName = node.all.every((t) => t.talent.name === firstName)
@@ -73,6 +74,12 @@ export function buildNodeMap(talents: MetaTalent[]): Map<number, TalentNode> {
         // Same name but maxRank=1: collapse to single talent (not a real choice)
         node.isChoice = false
       }
+    }
+
+    // Choice nodes are always 1 rank — Blizzard's API sometimes inflates maxRank
+    // for choice nodes that use the ranked structure internally
+    if (node.isChoice && !node.isRanked) {
+      node.maxRank = 1
     }
   }
 
