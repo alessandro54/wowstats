@@ -65,10 +65,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               <SidebarInset className="overflow-y-auto">
                 <TopNavProvider>
                   <TopNav />
-                  <main>
+                  <div className="flex-1 min-h-[calc(100vh-60px)] max-w-[95%] mx-auto">
                     {children}
-                    <AppFooter />
-                  </main>
+                  </div>
+                  <AppFooter />
                 </TopNavProvider>
               </SidebarInset>
             </SidebarProvider>

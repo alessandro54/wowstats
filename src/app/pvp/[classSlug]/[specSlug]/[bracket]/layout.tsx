@@ -30,12 +30,7 @@ export default async function PvpBracketLayout({ children, params }: Props) {
 
   return (
     <>
-      <div
-        className="mx-auto flex max-w-screen-ok2xl flex-col"
-        style={{
-          height: "calc(100vh - 60px)",
-        }}
-      >
+      <div className="flex w-auto flex-col">
         <div className="shrink-0 px-6 py-3">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2 md:gap-3">
@@ -63,7 +58,7 @@ export default async function PvpBracketLayout({ children, params }: Props) {
             </div>
           </div>
         </div>
-        <div className="flex-1 overflow-auto lg:px-5">{children}</div>
+        <div className="flex-1 lg:px-5">{children}</div>
       </div>
     </>
   )
