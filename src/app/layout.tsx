@@ -65,7 +65,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               <SidebarInset className="overflow-y-auto">
                 <TopNavProvider>
                   <TopNav />
-                  <div className="flex-1 min-h-[calc(100vh-60px)] max-w-[95%] mx-auto">
+                  <div className="flex-1 min-h-[calc(100vh-60px)] w-full lg:w-auto lg:max-w-[95%] mx-auto">
                     {children}
                   </div>
                   <AppFooter />

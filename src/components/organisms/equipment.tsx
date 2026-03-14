@@ -103,30 +103,19 @@ export function Equipment({
               No item data available for this bracket.
             </p>
           ) : (
-            <div className="space-y-2">
-              {LAYOUT_ROWS.map(([slotA, slotB]) => {
-                const hasA = itemBySlot.has(slotA)
-                const hasB = itemBySlot.has(slotB)
-                if (!hasA && !hasB) return null
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 min-[1800px]:grid-cols-4">
+              {LAYOUT_ROWS.flat().map((slot) => {
+                if (!itemBySlot.has(slot)) return null
                 return (
-                  <div key={`${slotA}-${slotB}`} className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                    <ItemCard
-                      slot={slotA}
-                      entries={itemBySlot.get(slotA)?.entries}
-                      enchants={enchantBySlot}
-                      fiberGems={fiberGems}
-                      activeColor={activeColor}
-                      pillStyle={pillStyle}
-                    />
-                    <ItemCard
-                      slot={slotB}
-                      entries={itemBySlot.get(slotB)?.entries}
-                      enchants={enchantBySlot}
-                      fiberGems={fiberGems}
-                      activeColor={activeColor}
-                      pillStyle={pillStyle}
-                    />
-                  </div>
+                  <ItemCard
+                    key={slot}
+                    slot={slot}
+                    entries={itemBySlot.get(slot)?.entries}
+                    enchants={enchantBySlot}
+                    fiberGems={fiberGems}
+                    activeColor={activeColor}
+                    pillStyle={pillStyle}
+                  />
                 )
               })}
             </div>

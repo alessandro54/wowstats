@@ -88,6 +88,53 @@
   animation: collapsible-close 0.2s ease-out;
 }
 
+/* ─── Snow ───────────────────────────────────────────────────────────────── */
+@keyframes snowfall {
+  0% {
+    transform: translateY(-20px) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+
+  8% {
+    opacity: 1;
+  }
+
+  92% {
+    opacity: 0.7;
+  }
+
+  100% {
+    transform: translateY(105vh) translateX(var(--snow-drift, 30px))
+      rotate(var(--snow-spin, 360deg));
+    opacity: 0;
+  }
+}
+
+.animate-snowfall {
+  animation: snowfall ease-in infinite;
+}
+
+/* ─── Orbital ring ───────────────────────────────────────────────────────── */
+@keyframes orbit-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes orbit-counter {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
 /* ─── Talent glow (max rank) ─────────────────────────────────────────────── */
 @keyframes talent-glow {
   0%,

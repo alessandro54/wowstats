@@ -8,6 +8,10 @@ vi.mock("@/hooks/use-active-color", () => ({
   useActiveColor: vi.fn(() => "#c79c6e"),
 }))
 
+vi.mock("@/components/atoms/talent-card", () => ({
+  TalentCard: ({ children }: any) => <div data-testid="talent-card">{children}</div>,
+}))
+
 vi.mock("@/components/molecules/talent-list", () => ({
   TalentList: ({ talents }: any) => <div data-testid="talent-list">{talents.length} talents</div>,
 }))
@@ -19,6 +23,7 @@ vi.mock("@/components/organisms/talent-tree", () => ({
       {budget}
     </div>
   ),
+  TalentTreeSkeleton: () => <div data-testid="talent-tree-skeleton" />,
   hasTreeData: (talents: MetaTalent[]) =>
     talents.some((t) => t.talent.display_row != null && t.talent.display_col != null),
 }))
@@ -105,7 +110,9 @@ const pvpTalents = [
 describe("talents", () => {
   it("returns null for empty talents", () => {
     const { container } = render(<Talents classSlug="warrior" talents={[]} />)
-    expect(container.innerHTML).toBe("")
+    // Component renders a skeleton state with Class/Spec headings when talents array is empty
+    expect(container.textContent).toContain("Class Talents")
+    expect(container.textContent).toContain("Spec Talents")
   })
 
   it("renders all four talent sections", () => {
@@ -115,9 +122,10 @@ describe("talents", () => {
       ...heroTalents,
       ...pvpTalents,
     ]
-    const { getByTestId, container } = render(<Talents classSlug="warrior" talents={all} />)
+    const { getAllByTestId, container } = render(<Talents classSlug="warrior" talents={all} />)
 
-    expect(getByTestId("hero-section")).toBeDefined()
+    // Hero section renders in both the 2K row and the below-2K row
+    expect(getAllByTestId("hero-section").length).toBeGreaterThan(0)
     expect(container.textContent).toContain("Class Talents")
     expect(container.textContent).toContain("Spec Talents")
     expect(container.textContent).toContain("pvp talents")

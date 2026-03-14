@@ -70,11 +70,50 @@ export function Talents({ classSlug, talents, talentsMeta, hideStats }: Props) {
       <TalentList talents={entries} activeColor={activeColor} hideStats={hideStats} />
     )
 
+  // On 2K+ screens all three trees sit side-by-side in one row.
+  // Below that, hero stays in its own centered section.
+  const allInOneRow = !!(heroEntries && (classEntries || specEntries))
+
   return (
     <div className="space-y-8">
-      {/* class + spec */}
+      {/* ── 2K+ single row: hero + class + spec ─────────────── */}
+      {allInOneRow && (
+        <div className="hidden min-[1800px]:flex min-[1800px]:items-start min-[1800px]:justify-center min-[1800px]:gap-8">
+          {heroEntries && (
+            <div className="flex flex-col">
+              <h2 className="mb-3 text-center text-lg font-semibold">{TYPE_LABELS.hero}</h2>
+              <HeroSection
+                heroEntries={heroEntries}
+                activeColor={activeColor}
+                classSlug={classSlug}
+                hideStats={hideStats}
+              />
+            </div>
+          )}
+          {classEntries && (
+            <div className="flex flex-col">
+              <h2 className="mb-3 text-center text-lg font-semibold">{TYPE_LABELS.class}</h2>
+              <TalentCard classSlug={classSlug} className="flex flex-col overflow-x-auto">
+                {renderTree(classEntries)}
+              </TalentCard>
+            </div>
+          )}
+          {specEntries && (
+            <div className="flex flex-col">
+              <h2 className="mb-3 text-center text-lg font-semibold">{TYPE_LABELS.spec}</h2>
+              <TalentCard classSlug={classSlug} className="flex flex-col overflow-x-auto">
+                {renderTree(specEntries, true)}
+              </TalentCard>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── Below 2K: class + spec row ──────────────────────── */}
       {(classEntries?.length || specEntries?.length) && (
-        <div className="sm:overflow-x-auto">
+        <div
+          className={allInOneRow ? "min-[1800px]:hidden sm:overflow-x-auto" : "sm:overflow-x-auto"}
+        >
           <div className="flex flex-col items-stretch gap-6 sm:min-w-max sm:flex-row">
             {classEntries && (
               <div className="flex flex-1 flex-col">
@@ -95,9 +134,16 @@ export function Talents({ classSlug, talents, talentsMeta, hideStats }: Props) {
           </div>
         </div>
       )}
-      {/* hero always centered, pvp below on mobile, floating right on lg+ */}
+
+      {/* ── Below 2K: hero centered + pvp floating ──────────── */}
       {(heroEntries || pvpEntries) && (
-        <div className="flex flex-col items-center">
+        <div
+          className={
+            allInOneRow
+              ? "min-[1800px]:hidden flex flex-col items-center"
+              : "flex flex-col items-center"
+          }
+        >
           <div className="relative inline-flex flex-col items-center md:block">
             {heroEntries && (
               <HeroSection
