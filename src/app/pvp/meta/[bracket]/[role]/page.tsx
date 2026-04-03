@@ -1,13 +1,10 @@
 import type { Metadata } from "next"
-import type { MetaBarEntry } from "@/components/molecules/meta-bar-chart"
-import type { DonutSlice } from "@/components/molecules/meta-donut-chart"
+import type { MetaStatsEntry } from "@/components/molecules/meta-stats-table"
 
 export const dynamic = "force-dynamic"
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
-import { MetaBarChart } from "@/components/molecules/meta-bar-chart"
-import { MetaDonutChart } from "@/components/molecules/meta-donut-chart"
 import { MetaKpiRow } from "@/components/molecules/meta-kpi-row"
-import { MetaSpecTable } from "@/components/molecules/meta-spec-table"
+import { MetaStatsTable } from "@/components/molecules/meta-stats-table"
 import { TopNavConfig } from "@/components/molecules/top-nav-config"
 import {
   Breadcrumb,
@@ -68,51 +65,52 @@ export default async function PvpBracketPage({ params, searchParams }: PageProps
       c,
     ]),
   )
+
+  // Sort by Bayesian score (descending)
   const sorted = [
     ...data.classes,
-  ].sort((a, b) => b.meta_score - a.meta_score)
-  const maxScore = sorted[0]?.meta_score ?? 1
+  ].sort((a, b) => b.score - a.score)
+  const maxScore = sorted[0]?.score ?? 1
 
-  const barEntries: MetaBarEntry[] = sorted.map((row) => {
+  // Compute presence as player share: count / sum(counts)
+  const totalCount = data.total_entries
+  const presenceMap = new Map(
+    sorted.map((row) => [
+      row.spec_id,
+      totalCount > 0 ? row.count / totalCount : 0,
+    ]),
+  )
+
+  const tableEntries: MetaStatsEntry[] = sorted.map((row) => {
     const classSlug = normalizeClassSlug(row.class) as WowClassSlug
     const classConfig = classMap.get(classSlug)
     const specConfig = classConfig?.specs.find(
       (s) => normalizeSpecName(s.name) === normalizeSpecName(row.spec),
     )
-    const normPct = (row.meta_score / maxScore) * 100
+    const normPct = (row.score / maxScore) * 100
     return {
       key: `${row.class}-${row.spec_id}`,
       specName: row.spec,
+      className: row.class,
+      score: row.score,
       normPct,
-      metaScore: row.meta_score,
-      meanRating: row.mean_rating,
-      winRate: row.shrunk_winrate,
-      presence: row.games_share,
-      color: classConfig ? `var(--color-class-${classSlug})` : "#888",
-      iconUrl: specConfig?.iconUrl,
       tier: tier(normPct),
-    }
-  })
-
-  const donutSlices: DonutSlice[] = sorted.map((row) => {
-    const classSlug = normalizeClassSlug(row.class) as WowClassSlug
-    const classConfig = classMap.get(classSlug)
-    const specConfig = classConfig?.specs.find(
-      (s) => normalizeSpecName(s.name) === normalizeSpecName(row.spec),
-    )
-    return {
-      key: `${row.class}-${row.spec_id}`,
-      label: row.spec,
-      value: row.games_share,
+      thetaHat: row.theta_hat,
+      ratingCiLow: row.rating_ci_low,
+      ratingCiHigh: row.rating_ci_high,
+      meanRating: row.mean_rating,
+      wrHat: row.wr_hat,
+      presence: presenceMap.get(row.spec_id) ?? 0,
+      bK: row.b_k,
       color: classConfig ? `var(--color-class-${classSlug})` : "#888",
       iconUrl: specConfig?.iconUrl,
     }
   })
 
-  // KPIs
-  const totalCount = data.total_entries
-  const weightedRating = sorted.reduce((s, r) => s + r.mean_rating * r.count, 0) / (totalCount || 1)
-  const weightedWR = sorted.reduce((s, r) => s + r.shrunk_winrate * r.count, 0) / (totalCount || 1)
+  // KPIs using Bayesian fields
+  const weightedRating = sorted.reduce((s, r) => s + r.theta_hat * r.count, 0) / (totalCount || 1)
+  const weightedWR = sorted.reduce((s, r) => s + r.wr_hat * r.count, 0) / (totalCount || 1)
+
   const topRow = sorted[0]
   const topClassConfig = topRow
     ? classMap.get(normalizeClassSlug(topRow.class) as WowClassSlug)
@@ -124,6 +122,23 @@ export default async function PvpBracketPage({ params, searchParams }: PageProps
     iconUrl: topClassConfig?.specs.find(
       (s) => normalizeSpecName(s.name) === normalizeSpecName(topRow?.spec ?? ""),
     )?.iconUrl,
+  }
+
+  // Most reliable: highest b_k (most data-backed shrinkage)
+  const reliableRow = [
+    ...sorted,
+  ].sort((a, b) => b.b_k - a.b_k)[0]
+  const reliableClassConfig = reliableRow
+    ? classMap.get(normalizeClassSlug(reliableRow.class) as WowClassSlug)
+    : undefined
+  const mostReliable = {
+    name: reliableRow?.spec ?? "",
+    className: reliableRow?.class ?? "",
+    color: reliableRow ? `var(--color-class-${normalizeClassSlug(reliableRow.class)})` : "#888",
+    iconUrl: reliableClassConfig?.specs.find(
+      (s) => normalizeSpecName(s.name) === normalizeSpecName(reliableRow?.spec ?? ""),
+    )?.iconUrl,
+    bK: reliableRow?.b_k ?? 0,
   }
 
   return (
@@ -159,35 +174,17 @@ export default async function PvpBracketPage({ params, searchParams }: PageProps
           weightedAvgRating={weightedRating}
           weightedAvgWinRate={weightedWR}
           topSpec={topSpec}
+          mostReliable={mostReliable}
         />
 
-        {/* Charts row */}
-        <div className="grid gap-6 xl:grid-cols-[1fr_320px]">
-          {/* Bar chart card */}
-          <div className="rounded-lg border border-border bg-card/80 px-4 pb-2 pt-4">
-            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-              Meta Score by Spec
-            </h2>
-            <MetaBarChart entries={barEntries} />
-          </div>
-
-          {/* Donut card */}
-          <div className="rounded-lg border border-border bg-card/80 p-4">
-            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-              Spec Presence
-            </h2>
-            <MetaDonutChart slices={donutSlices} />
-          </div>
-        </div>
-
-        {/* Table */}
+        {/* Stats table */}
         <div className="rounded-lg border border-border bg-card/80">
           <div className="border-b border-border px-4 py-3">
             <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
               Spec Rankings
             </h2>
           </div>
-          <MetaSpecTable entries={barEntries} />
+          <MetaStatsTable entries={tableEntries} />
         </div>
       </div>
     </>
