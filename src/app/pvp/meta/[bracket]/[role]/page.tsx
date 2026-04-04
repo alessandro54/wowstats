@@ -22,6 +22,18 @@ import type { ClassDistributionResponse } from "@/lib/api"
 
 type Bracket = "2v2" | "3v3" | "rbg" | "shuffle-overall" | "blitz-overall"
 
+const ALL_BRACKETS = [
+  "2v2",
+  "3v3",
+  "shuffle-overall",
+  "blitz-overall",
+]
+const REGIONS: Region[] = [
+  "all",
+  "us",
+  "eu",
+]
+
 interface PageProps {
   params: Promise<{
     bracket: Bracket | string
@@ -73,7 +85,7 @@ function transformToEntries(data: ClassDistributionResponse, bracket: string): M
       className: row.class,
       role: row.role,
       score: row.score,
-      normPct: 0, // recalculated per-role in the dashboard
+      normPct: 0,
       tier: tier(0),
       thetaHat: row.theta_hat,
       ratingCiLow: row.rating_ci_low,
@@ -136,58 +148,79 @@ function buildDataset(data: ClassDistributionResponse, bracket: string): MetaDat
   }
 }
 
+const emptyDataset: MetaDataset = {
+  entries: [],
+  totalEntries: 0,
+  weightedRating: 0,
+  weightedWR: 0,
+  topSpec: {
+    name: "",
+    className: "",
+    color: "#888",
+  },
+  mostReliable: {
+    name: "",
+    className: "",
+    color: "#888",
+    bK: 0,
+  },
+}
+
 export default async function PvpBracketPage({ params, searchParams }: PageProps) {
   const { bracket, role } = await params
   const { region: regionParam, season: seasonParam } = await searchParams
   const initialRegion = (regionParam ?? "all") as Region
   const initialRole = role as Role
-
   const bracketStr = String(bracket)
 
-  // Fetch all 3 regions in parallel with all roles
-  const [allData, usData, euData] = await Promise.all([
-    fetchClassDistribution({
-      seasonId: seasonParam,
-      bracket: bracketStr,
-      region: "all",
-      role: "all",
-    }).catch(() => null),
-    fetchClassDistribution({
-      seasonId: seasonParam,
-      bracket: bracketStr,
-      region: "us",
-      role: "all",
-    }).catch(() => null),
-    fetchClassDistribution({
-      seasonId: seasonParam,
-      bracket: bracketStr,
-      region: "eu",
-      role: "all",
-    }).catch(() => null),
-  ])
+  // Fetch all 4 brackets × 3 regions in parallel (12 calls)
+  const fetchPromises = ALL_BRACKETS.flatMap((b) =>
+    REGIONS.map((r) =>
+      fetchClassDistribution({
+        seasonId: seasonParam,
+        bracket: b,
+        region: r,
+        role: "all",
+      })
+        .then((data) => ({
+          bracket: b,
+          region: r,
+          data,
+        }))
+        .catch(() => ({
+          bracket: b,
+          region: r,
+          data: null,
+        })),
+    ),
+  )
 
-  const emptyDataset: MetaDataset = {
-    entries: [],
-    totalEntries: 0,
-    weightedRating: 0,
-    weightedWR: 0,
-    topSpec: {
-      name: "",
-      className: "",
-      color: "#888",
-    },
-    mostReliable: {
-      name: "",
-      className: "",
-      color: "#888",
-      bK: 0,
-    },
+  const results = await Promise.all(fetchPromises)
+
+  // Build datasets for current bracket (used by KPIs + table)
+  const currentDatasets: Record<Region, MetaDataset> = {
+    all: emptyDataset,
+    us: emptyDataset,
+    eu: emptyDataset,
   }
 
-  const datasets: Record<Region, MetaDataset> = {
-    all: allData ? buildDataset(allData, bracketStr) : emptyDataset,
-    us: usData ? buildDataset(usData, bracketStr) : emptyDataset,
-    eu: euData ? buildDataset(euData, bracketStr) : emptyDataset,
+  // Build all brackets data (used by tier list bracket comparison)
+  const allBrackets: Record<string, Record<Region, MetaDataset>> = {}
+
+  for (const { bracket: b, region: r, data } of results) {
+    if (!allBrackets[b]) {
+      allBrackets[b] = {
+        all: emptyDataset,
+        us: emptyDataset,
+        eu: emptyDataset,
+      }
+    }
+    const dataset = data ? buildDataset(data, b) : emptyDataset
+    allBrackets[b][r as Region] = dataset
+
+    if (b === bracketStr) {
+      currentDatasets[r as Region] = dataset
+    }
   }
 
   return (
@@ -212,9 +245,10 @@ export default async function PvpBracketPage({ params, searchParams }: PageProps
         }
       />
 
-      <div className="p-4 lg:p-6 w-full md:max-w-5xl">
+      <div className="p-4 lg:p-6 w-full">
         <MetaStatsDashboard
-          datasets={datasets}
+          datasets={currentDatasets}
+          allBrackets={allBrackets}
           bracket={bracketStr}
           initialRole={initialRole}
           initialRegion={initialRegion}

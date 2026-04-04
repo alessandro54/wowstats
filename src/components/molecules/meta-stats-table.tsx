@@ -3,6 +3,8 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
+import { useSetHoverSlug } from "@/components/providers/hover-provider"
+import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import {
   Table,
   TableBody,
@@ -82,9 +84,16 @@ function scoreHeatBg(tier: Tier): string {
   )
 }
 
-export function MetaStatsTable({ entries }: { entries: MetaStatsEntry[] }) {
+export function MetaStatsTable({
+  entries,
+  defaultClassSlug,
+}: {
+  entries: MetaStatsEntry[]
+  defaultClassSlug?: WowClassSlug
+}) {
   const [sortKey, setSortKey] = useState<SortKey>("rank")
   const [sortAsc, setSortAsc] = useState(false)
+  const setHoverSlug = useSetHoverSlug()
 
   const handleSort = (key: SortKey) => {
     if (sortKey === key) {
@@ -191,7 +200,11 @@ export function MetaStatsTable({ entries }: { entries: MetaStatsEntry[] }) {
           const presenceBarPct = Math.min(entry.presence * 100 * 5, 100)
 
           return (
-            <TableRow key={entry.key}>
+            <TableRow
+              key={entry.key}
+              onMouseEnter={() => setHoverSlug(entry.className as WowClassSlug)}
+              onMouseLeave={() => setHoverSlug(defaultClassSlug ?? null)}
+            >
               <TableCell className="text-center font-mono text-xs text-muted-foreground">
                 {index + 1}
               </TableCell>

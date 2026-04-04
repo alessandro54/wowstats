@@ -2,15 +2,34 @@
 
 import { Suspense, useEffect, useRef, useState } from "react"
 import { usePathname, useSearchParams } from "next/navigation"
+import { useSetHoverSlug } from "@/components/providers/hover-provider"
+import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { MetaKpiRow } from "@/components/molecules/meta-kpi-row"
 import { MetaStatsTable } from "@/components/molecules/meta-stats-table"
 import type { MetaStatsEntry } from "@/components/molecules/meta-stats-table"
+import { MetaTierList } from "@/components/molecules/meta-tier-list"
+import type { SpecBracketData } from "@/components/molecules/meta-tier-list"
 import { RegionSwitcher } from "@/components/molecules/region-switcher"
 import { RoleSwitcher } from "@/components/molecules/role-switcher"
 import { MetaStatsSkeleton } from "@/components/molecules/meta-stats-skeleton"
 import { tier, tierByPercentile } from "@/config/app-config"
+import type { Tier } from "@/config/app-config"
 
 const SOLO_BRACKETS = [
+  "shuffle-overall",
+  "blitz-overall",
+]
+
+const BRACKET_LABELS: Record<string, string> = {
+  "2v2": "2v2",
+  "3v3": "3v3",
+  "shuffle-overall": "Shuffle",
+  "blitz-overall": "Blitz",
+}
+
+const ALL_BRACKETS = [
+  "2v2",
+  "3v3",
   "shuffle-overall",
   "blitz-overall",
 ]
@@ -40,6 +59,7 @@ export interface MetaDataset {
 
 interface Props {
   datasets: Record<Region, MetaDataset>
+  allBrackets: Record<string, Record<Region, MetaDataset>>
   bracket: string
   initialRole: Role
   initialRegion: Region
@@ -101,12 +121,59 @@ function filterByRole(dataset: MetaDataset, role: Role, bracket: string): MetaDa
   }
 }
 
-function DashboardInner({ datasets, bracket, initialRole, initialRegion }: Props) {
+function buildBracketComparison(
+  allBrackets: Record<string, Record<Region, MetaDataset>>,
+  region: Region,
+  role: Role,
+): Map<string, SpecBracketData> {
+  const map = new Map<string, SpecBracketData>()
+
+  for (const b of ALL_BRACKETS) {
+    const bracketData = allBrackets[b]?.[region]
+    if (!bracketData) continue
+
+    const filtered = filterByRole(bracketData, role, b)
+
+    for (let i = 0; i < filtered.entries.length; i++) {
+      const entry = filtered.entries[i]
+      const existing = map.get(entry.key) ?? {
+        specId: entry.key,
+        ranks: [],
+      }
+      existing.ranks.push({
+        bracket: b,
+        label: BRACKET_LABELS[b] ?? b,
+        tier: entry.tier,
+        score: entry.score,
+        rank: i + 1,
+      })
+      map.set(entry.key, existing)
+    }
+  }
+
+  return map
+}
+
+function DashboardInner({ datasets, allBrackets, bracket, initialRole, initialRegion }: Props) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const setHoverSlug = useSetHoverSlug()
 
   const [role, setRole] = useState<Role>(initialRole)
   const [region, setRegion] = useState<Region>(initialRegion)
+
+  const dataset = filterByRole(datasets[region], role, bracket)
+  const topClassName = dataset.entries[0]?.className as WowClassSlug | undefined
+
+  const bracketComparison = buildBracketComparison(allBrackets, region, role)
+
+  useEffect(() => {
+    if (topClassName) setHoverSlug(topClassName)
+    return () => setHoverSlug(null)
+  }, [
+    topClassName,
+    setHoverSlug,
+  ])
 
   const updateUrl = (newRole: Role, newRegion: Region) => {
     const segments = pathname.split("/")
@@ -134,19 +201,33 @@ function DashboardInner({ datasets, bracket, initialRole, initialRegion }: Props
     updateUrl(role, r)
   }
 
-  const dataset = filterByRole(datasets[region], role, bracket)
-
-  // Animate content on role/region switch
-  const contentRef = useRef<HTMLDivElement>(null)
-  const [animating, setAnimating] = useState(false)
-  const prevKey = useRef(`${role}-${region}`)
+  // Animate KPIs only on data changes (role/region)
+  const [kpiAnimating, setKpiAnimating] = useState(false)
+  const prevDataKey = useRef(`${role}-${region}`)
 
   useEffect(() => {
     const key = `${role}-${region}`
-    if (key !== prevKey.current) {
-      prevKey.current = key
-      setAnimating(true)
-      const timer = setTimeout(() => setAnimating(false), 200)
+    if (key !== prevDataKey.current) {
+      prevDataKey.current = key
+      setKpiAnimating(true)
+      const timer = setTimeout(() => setKpiAnimating(false), 200)
+      return () => clearTimeout(timer)
+    }
+  }, [
+    role,
+    region,
+  ])
+
+  // Animate content on data switch
+  const [contentAnimating, setContentAnimating] = useState(false)
+  const prevContentKey = useRef(`${role}-${region}`)
+
+  useEffect(() => {
+    const key = `${role}-${region}`
+    if (key !== prevContentKey.current) {
+      prevContentKey.current = key
+      setContentAnimating(true)
+      const timer = setTimeout(() => setContentAnimating(false), 200)
       return () => clearTimeout(timer)
     }
   }, [
@@ -157,11 +238,10 @@ function DashboardInner({ datasets, bracket, initialRole, initialRegion }: Props
   return (
     <div className="space-y-6">
       <div
-        ref={contentRef}
         className="transition-all duration-200 ease-out"
         style={{
-          opacity: animating ? 0 : 1,
-          transform: animating ? "translateY(4px)" : "translateY(0)",
+          opacity: kpiAnimating ? 0 : 1,
+          transform: kpiAnimating ? "translateY(4px)" : "translateY(0)",
         }}
       >
         <MetaKpiRow
@@ -186,11 +266,17 @@ function DashboardInner({ datasets, bracket, initialRole, initialRegion }: Props
         <div
           className="transition-all duration-200 ease-out"
           style={{
-            opacity: animating ? 0 : 1,
-            transform: animating ? "translateY(4px)" : "translateY(0)",
+            opacity: contentAnimating ? 0 : 1,
+            transform: contentAnimating ? "translateY(4px)" : "translateY(0)",
           }}
         >
-          <MetaStatsTable entries={dataset.entries} />
+          <MetaTierList
+            entries={dataset.entries}
+            bracketComparison={bracketComparison}
+            currentBracket={bracket}
+            defaultClassSlug={topClassName}
+          />
+          <MetaStatsTable entries={dataset.entries} defaultClassSlug={topClassName} />
         </div>
       </div>
     </div>

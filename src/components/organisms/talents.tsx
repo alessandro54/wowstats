@@ -79,6 +79,14 @@ export function Talents({ classSlug, talents, talentsMeta, hideStats }: Props) {
       {/* ── 2K+ single row: hero + class + spec ─────────────── */}
       {allInOneRow && (
         <div className="hidden min-[1800px]:flex min-[1800px]:items-start min-[1800px]:justify-center min-[1800px]:gap-8">
+          {classEntries && (
+            <div className="flex flex-col">
+              <h2 className="mb-3 text-center text-lg font-semibold">{TYPE_LABELS.class}</h2>
+              <TalentCard classSlug={classSlug} className="flex flex-col overflow-x-auto">
+                {renderTree(classEntries)}
+              </TalentCard>
+            </div>
+          )}
           {heroEntries && (
             <div className="flex flex-col">
               <h2 className="mb-3 text-center text-lg font-semibold">{TYPE_LABELS.hero}</h2>
@@ -88,14 +96,6 @@ export function Talents({ classSlug, talents, talentsMeta, hideStats }: Props) {
                 classSlug={classSlug}
                 hideStats={hideStats}
               />
-            </div>
-          )}
-          {classEntries && (
-            <div className="flex flex-col">
-              <h2 className="mb-3 text-center text-lg font-semibold">{TYPE_LABELS.class}</h2>
-              <TalentCard classSlug={classSlug} className="flex flex-col overflow-x-auto">
-                {renderTree(classEntries)}
-              </TalentCard>
             </div>
           )}
           {specEntries && (
