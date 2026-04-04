@@ -180,8 +180,9 @@ getStatMeta(stat: string): { label: string; color?: string }
 ### CDN (`cdn-config.ts`)
 
 ```typescript
-CDN_BASE = "https://pub-627f5a049a2d470c85b1b70cbd99a5ce.r2.dev"
+CDN_BASE = process.env.NEXT_PUBLIC_CDN_URL ?? "https://pub-627f5a049a2d470c85b1b70cbd99a5ce.r2.dev"
 // Used for remastered class/spec icons, splash art, animations
+// Set NEXT_PUBLIC_CDN_URL in .env.local to override
 ```
 
 ---

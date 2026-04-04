@@ -37,11 +37,11 @@ export function tierByPercentile(rank: number, total: number): Tier {
 }
 
 export const TIER_COLORS: Record<Tier, string> = {
-  "S+": "bg-red-500/20 text-red-300 border border-red-500/40",
-  S: "bg-purple-500/20 text-purple-300 border border-purple-500/40",
-  A: "bg-amber-500/20 text-amber-300 border border-amber-500/40",
-  B: "bg-blue-500/20 text-blue-300 border border-blue-500/40",
-  C: "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40",
+  "S+": "bg-red-500/20 text-red-700 dark:text-red-300 border border-red-500/40",
+  S: "bg-purple-500/20 text-purple-700 dark:text-purple-300 border border-purple-500/40",
+  A: "bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40",
+  B: "bg-blue-500/20 text-blue-700 dark:text-blue-300 border border-blue-500/40",
+  C: "bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/40",
   D: "bg-muted/40 text-muted-foreground border border-border",
 }
 
