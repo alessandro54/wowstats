@@ -35,24 +35,18 @@ export function SpecHero({
           src={splashUrl}
           alt=""
           fill
-          className="pointer-events-none object-cover opacity-25"
+          className="pointer-events-none object-cover opacity-15 dark:opacity-25"
           style={{
             objectPosition: splashPosition ?? "center top",
+            maskImage:
+              "linear-gradient(to bottom, transparent 0%, black 15%, black 60%, transparent 100%), linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%)",
+            maskComposite: "intersect",
+            WebkitMaskImage:
+              "linear-gradient(to bottom, transparent 0%, black 15%, black 60%, transparent 100%)",
           }}
           priority
         />
       )}
-
-      {/* Gradient overlays */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background: `
-            linear-gradient(to top, var(--background) 0%, transparent 60%),
-            linear-gradient(to right, var(--background) 0%, transparent 70%)
-          `,
-        }}
-      />
 
       {/* Content */}
       <div className="relative z-[2] mx-auto w-full max-w-5xl">

@@ -53,7 +53,7 @@ function LanguageDropdown() {
           <ChevronDown className="size-3" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="min-w-35">
+      <DropdownMenuContent align="start" className="min-w-36">
         <DropdownMenuRadioGroup value={locale} onValueChange={handleChange}>
           {SUPPORTED_LOCALES.map((loc) => (
             <DropdownMenuRadioItem key={loc} value={loc}>

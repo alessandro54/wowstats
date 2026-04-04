@@ -10,11 +10,11 @@ const BRACKET_COLORS: Record<string, string> = {
 }
 
 const TIER_TEXT_COLORS: Record<Tier, string> = {
-  "S+": "text-red-400",
-  S: "text-purple-400",
-  A: "text-amber-400",
-  B: "text-blue-400",
-  C: "text-emerald-400",
+  "S+": "text-red-600 dark:text-red-400",
+  S: "text-purple-600 dark:text-purple-400",
+  A: "text-amber-600 dark:text-amber-400",
+  B: "text-blue-600 dark:text-blue-400",
+  C: "text-emerald-600 dark:text-emerald-400",
   D: "text-muted-foreground",
 }
 

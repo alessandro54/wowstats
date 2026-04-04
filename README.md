@@ -31,7 +31,7 @@
 
 ```bash
 pnpm install
-cp .env.local.example .env.local   # set API_URL if needed
+cp .env.example .env.local          # set API_URL, NEXT_PUBLIC_CDN_URL if needed
 pnpm dev                            # http://localhost:5123
 ```
 
