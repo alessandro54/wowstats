@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# WoW Insights — Frontend
 
-## Getting Started
+**WoW Insights** tracks World of Warcraft PvP meta in real time. It analyzes live leaderboard data from US and EU servers to show what the best players are actually using — gear, enchants, gems, talents, and stat priorities — broken down by spec and bracket.
 
-First, run the development server:
+## Features
+
+- **BiS Gear** — Most popular items per slot for any spec and bracket (2v2, 3v3, Solo Shuffle)
+- **Enchants & Gems** — Top enchant and gem choices with usage percentages
+- **Talent Builds** — Full talent tree visualization with top build highlighted and per-node usage stats
+- **Stat Priority** — Median stat distribution from top-ranked characters
+- **Top Players** — Leaderboard of highest-rated players per spec, linkable to their full profile
+- **Class Tierlist** — Meta ranking of all specs by bracket and role, with presence and win rate scores
+- **Character Profiles** — Individual character pages showing their current equipment and talent loadout
+- **Localization** — English and Spanish (Latin America) support
+
+## Stack
+
+- [Next.js 16](https://nextjs.org) — App Router, React Server Components
+- [React 19](https://react.dev) with React Compiler
+- [TypeScript](https://www.typescriptlang.org)
+- [Tailwind CSS v4](https://tailwindcss.com) + [shadcn/ui](https://ui.shadcn.com) + [Radix UI](https://www.radix-ui.com)
+- [Vitest](https://vitest.dev) + [Storybook](https://storybook.js.org)
+
+## Requirements
+
+- Node.js >= 22
+- pnpm
+- The [bis Rails API](../bis/) running locally (or set `API_URL`)
+
+## Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
+cp .env.local.example .env.local   # set API_URL if needed
+pnpm dev                            # http://localhost:5123
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Environment Variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Variable | Default | Purpose |
+|---|---|---|
+| `API_URL` | `http://localhost:3000` | Rails API base URL |
+| `NEXT_PUBLIC_SITE_URL` | `http://localhost:5123` | Used in OG metadata |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Development
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+pnpm dev          # dev server
+pnpm build        # production build
+pnpm lint         # linting
+pnpm typecheck    # type check
+pnpm test         # unit tests
+pnpm storybook    # component explorer on :6006
+```

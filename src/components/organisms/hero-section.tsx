@@ -30,8 +30,6 @@ export function HeroSection({ heroEntries, activeColor, classSlug, hideStats }: 
 
   return (
     <section className="w-full space-y-3 lg:w-auto">
-      <h2 className="text-center text-lg font-semibold lg:text-left">Hero Talents</h2>
-
       <div
         className="relative inline-block"
         style={{

@@ -1,7 +1,7 @@
 /* ─── Light mode ─────────────────────────────────────────────────────────── */
 :root {
   /* Stat colors */
-  --color-stat-haste: oklch(60% 0.18 98deg);
+  --color-stat-haste: oklch(81.283% 0.16529 90.795deg);
   --color-stat-crit: oklch(55% 0.22 35deg);
   --color-stat-mastery: oklch(55% 0.15 295deg);
   --color-stat-versatility: oklch(55% 0.14 225deg);

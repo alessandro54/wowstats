@@ -166,7 +166,7 @@ export default async function SpecPage({ params }: PageProps) {
   }))
 
   return (
-    <div className="animate-page-in space-y-8 px-6 pb-8">
+    <div className="mx-auto max-w-5xl space-y-8 px-4 pb-12 lg:px-6">
       <TopPlayers
         playersByRegion={{
           all: topAll.players,

@@ -27,7 +27,7 @@ const RogueConfig: WowClassConfig = {
       id: 261,
       name: "subtlety",
       url: "/pvp/rogue/subtlety",
-      iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_rogue_shadowdance.jpg",
+      iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_stealth.jpg",
       iconRemasteredUrl: `${CDN_BASE}/class_media/rogue/subtlety_icon.png`,
     },
   ],

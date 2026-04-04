@@ -43,6 +43,13 @@ export const Default: Story = {
       color: "#c79c6e",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_warrior_savageblow.jpg",
     },
+    mostReliable: {
+      name: "Fire",
+      className: "Mage",
+      color: "#69ccf0",
+      iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_fire_firebolt02.jpg",
+      bK: 0.94,
+    },
   },
 }
 
@@ -55,6 +62,12 @@ export const NoIcon: Story = {
       name: "Frost",
       className: "Mage",
       color: "#69ccf0",
+    },
+    mostReliable: {
+      name: "Subtlety",
+      className: "Rogue",
+      color: "#fff569",
+      bK: 0.88,
     },
   },
   parameters: {

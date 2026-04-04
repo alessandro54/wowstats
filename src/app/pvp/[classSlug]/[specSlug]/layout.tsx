@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation"
 import { PvpSpecTopNav } from "@/components/molecules/pvp-spec-top-nav"
+import { SpecHero } from "@/components/molecules/spec-hero"
+import { SpecParticleFx } from "@/components/molecules/spec-particle-fx"
 import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
 
 interface Props {
@@ -17,10 +19,38 @@ export default async function PvpSpecLayout({ children, params }: Props) {
   const spec = cls?.specs.find((s) => s.name === specSlug)
   if (!cls || !spec) notFound()
 
+  const specColor = `var(--color-spec-${classSlug}-${specSlug})`
+
   return (
     <>
       <PvpSpecTopNav className={cls.name} classSlug={cls.slug} specSlug={specSlug} />
-      {children}
+      <div className="relative">
+        <SpecParticleFx effect={spec.effect} />
+        {!spec.effect && (
+          <div
+            className="pointer-events-none fixed aspect-square w-[50vw] rounded-full animate-blob-drift-2"
+            style={{
+              zIndex: -1,
+              background: specColor,
+              opacity: 0.05,
+              filter: "blur(160px)",
+              bottom: "-25%",
+              left: "-15%",
+            }}
+          />
+        )}
+        <SpecHero
+          specName={specSlug}
+          className={cls.name}
+          classSlug={classSlug}
+          specIconUrl={spec.iconUrl}
+          splashUrl={spec.splash?.url}
+          splashPosition={spec.splash?.position}
+          animationUrl={spec.animationUrl}
+          iconRemasteredUrl={spec.iconRemasteredUrl}
+        />
+        {children}
+      </div>
     </>
   )
 }

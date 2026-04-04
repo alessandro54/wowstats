@@ -1,0 +1,12 @@
+pre-commit:
+  parallel: true
+  commands:
+    biome-format:
+      glob: "**/*.{ts,tsx,mjs,json,jsonc,css}"
+      run: pnpm biome format --write {staged_files}
+      stage_fixed: true
+
+    oxlint:
+      glob: "*.{ts,tsx,mjs}"
+      run: pnpm oxlint --fix {staged_files}
+      stage_fixed: true

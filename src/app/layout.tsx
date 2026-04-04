@@ -56,16 +56,16 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       suppressHydrationWarning
       className={`${inter.variable} ${jetbrainsMono.variable}`}
     >
-      <body className="bg-background text-foreground min-h-screen antialiased">
+      <body className="bg-background text-foreground h-dvh overflow-hidden antialiased">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <HoverProvider>
             <SidebarProvider defaultOpen={defaultOpen} defaultWidth={defaultWidth}>
               <DynamicBackground />
               <AppSidebar />
-              <SidebarInset>
+              <SidebarInset className="h-dvh overflow-y-auto overflow-x-hidden">
                 <TopNavProvider>
                   <TopNav />
-                  <main className="min-h-[calc(100dvh-4rem)]">{children}</main>
+                  <div className="flex-1 w-full pb-45">{children}</div>
                   <AppFooter />
                 </TopNavProvider>
               </SidebarInset>

@@ -1,13 +1,11 @@
 import type { Metadata } from "next"
-import type { MetaBarEntry } from "@/components/molecules/meta-bar-chart"
-import type { DonutSlice } from "@/components/molecules/meta-donut-chart"
+import type { MetaStatsEntry } from "@/components/molecules/meta-stats-table"
+import type { MetaDataset, Region, Role } from "@/components/molecules/meta-stats-dashboard"
 
 export const dynamic = "force-dynamic"
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
-import { MetaBarChart } from "@/components/molecules/meta-bar-chart"
-import { MetaDonutChart } from "@/components/molecules/meta-donut-chart"
-import { MetaKpiRow } from "@/components/molecules/meta-kpi-row"
-import { MetaSpecTable } from "@/components/molecules/meta-spec-table"
+import { BracketDropdown } from "@/components/molecules/bracket-dropdown"
+import { MetaStatsDashboard } from "@/components/molecules/meta-stats-dashboard"
 import { TopNavConfig } from "@/components/molecules/top-nav-config"
 import {
   Breadcrumb,
@@ -20,8 +18,21 @@ import {
 import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
 import { tier } from "@/config/app-config"
 import { fetchClassDistribution } from "@/lib/api"
+import type { ClassDistributionResponse } from "@/lib/api"
 
 type Bracket = "2v2" | "3v3" | "rbg" | "shuffle-overall" | "blitz-overall"
+
+const ALL_BRACKETS = [
+  "2v2",
+  "3v3",
+  "shuffle-overall",
+  "blitz-overall",
+]
+const REGIONS: Region[] = [
+  "all",
+  "us",
+  "eu",
+]
 
 interface PageProps {
   params: Promise<{
@@ -49,81 +60,167 @@ function normalizeSpecName(value: string): string {
     .replace(/[-_\s]/g, "")
 }
 
-export default async function PvpBracketPage({ params, searchParams }: PageProps) {
-  const { bracket, role } = await params
-  const { region: regionParam, season: seasonParam } = await searchParams
-  const region = regionParam ?? "us"
-  const season = seasonParam ?? "40"
+const classMap = new Map(
+  WOW_CLASSES.map((c) => [
+    c.slug,
+    c,
+  ]),
+)
 
-  const data = await fetchClassDistribution({
-    seasonId: season,
-    role,
-    bracket: String(bracket),
-    region,
-  })
-
-  const classMap = new Map(
-    WOW_CLASSES.map((c) => [
-      c.slug,
-      c,
-    ]),
-  )
+function transformToEntries(data: ClassDistributionResponse, bracket: string): MetaStatsEntry[] {
   const sorted = [
     ...data.classes,
-  ].sort((a, b) => b.meta_score - a.meta_score)
-  const maxScore = sorted[0]?.meta_score ?? 1
+  ].sort((a, b) => b.score - a.score)
+  const totalCount = data.total_entries
 
-  const barEntries: MetaBarEntry[] = sorted.map((row) => {
+  return sorted.map((row) => {
     const classSlug = normalizeClassSlug(row.class) as WowClassSlug
     const classConfig = classMap.get(classSlug)
     const specConfig = classConfig?.specs.find(
       (s) => normalizeSpecName(s.name) === normalizeSpecName(row.spec),
     )
-    const normPct = (row.meta_score / maxScore) * 100
     return {
       key: `${row.class}-${row.spec_id}`,
       specName: row.spec,
-      normPct,
-      metaScore: row.meta_score,
+      className: row.class,
+      role: row.role,
+      score: row.score,
+      normPct: 0,
+      tier: tier(0),
+      thetaHat: row.theta_hat,
+      ratingCiLow: row.rating_ci_low,
+      ratingCiHigh: row.rating_ci_high,
       meanRating: row.mean_rating,
-      winRate: row.shrunk_winrate,
-      presence: row.games_share,
+      wrHat: row.wr_hat,
+      presence: totalCount > 0 ? row.count / totalCount : 0,
+      bK: row.b_k,
       color: classConfig ? `var(--color-class-${classSlug})` : "#888",
       iconUrl: specConfig?.iconUrl,
-      tier: tier(normPct),
+      specUrl: `/pvp/${classSlug}/${row.spec}/${bracket}`,
     }
   })
+}
 
-  const donutSlices: DonutSlice[] = sorted.map((row) => {
-    const classSlug = normalizeClassSlug(row.class) as WowClassSlug
-    const classConfig = classMap.get(classSlug)
-    const specConfig = classConfig?.specs.find(
-      (s) => normalizeSpecName(s.name) === normalizeSpecName(row.spec),
-    )
-    return {
-      key: `${row.class}-${row.spec_id}`,
-      label: row.spec,
-      value: row.games_share,
-      color: classConfig ? `var(--color-class-${classSlug})` : "#888",
-      iconUrl: specConfig?.iconUrl,
-    }
-  })
-
-  // KPIs
+function buildDataset(data: ClassDistributionResponse, bracket: string): MetaDataset {
+  const entries = transformToEntries(data, bracket)
   const totalCount = data.total_entries
-  const weightedRating = sorted.reduce((s, r) => s + r.mean_rating * r.count, 0) / (totalCount || 1)
-  const weightedWR = sorted.reduce((s, r) => s + r.shrunk_winrate * r.count, 0) / (totalCount || 1)
+  const sorted = [
+    ...data.classes,
+  ].sort((a, b) => b.score - a.score)
+
+  const weightedRating = sorted.reduce((s, r) => s + r.theta_hat * r.count, 0) / (totalCount || 1)
+  const weightedWR = sorted.reduce((s, r) => s + r.wr_hat * r.count, 0) / (totalCount || 1)
+
   const topRow = sorted[0]
-  const topClassConfig = topRow
-    ? classMap.get(normalizeClassSlug(topRow.class) as WowClassSlug)
+  const topClassSlug = topRow ? (normalizeClassSlug(topRow.class) as WowClassSlug) : undefined
+  const topClassConfig = topClassSlug ? classMap.get(topClassSlug) : undefined
+
+  const reliableRow = [
+    ...sorted,
+  ].sort((a, b) => b.b_k - a.b_k)[0]
+  const reliableClassSlug = reliableRow
+    ? (normalizeClassSlug(reliableRow.class) as WowClassSlug)
     : undefined
-  const topSpec = {
-    name: topRow?.spec ?? "",
-    className: topRow?.class ?? "",
-    color: topRow ? `var(--color-class-${normalizeClassSlug(topRow.class)})` : "#888",
-    iconUrl: topClassConfig?.specs.find(
-      (s) => normalizeSpecName(s.name) === normalizeSpecName(topRow?.spec ?? ""),
-    )?.iconUrl,
+  const reliableClassConfig = reliableClassSlug ? classMap.get(reliableClassSlug) : undefined
+
+  return {
+    entries,
+    totalEntries: totalCount,
+    weightedRating,
+    weightedWR,
+    topSpec: {
+      name: topRow?.spec ?? "",
+      className: topRow?.class ?? "",
+      color: topRow ? `var(--color-class-${normalizeClassSlug(topRow.class)})` : "#888",
+      iconUrl: topClassConfig?.specs.find(
+        (s) => normalizeSpecName(s.name) === normalizeSpecName(topRow?.spec ?? ""),
+      )?.iconUrl,
+    },
+    mostReliable: {
+      name: reliableRow?.spec ?? "",
+      className: reliableRow?.class ?? "",
+      color: reliableRow ? `var(--color-class-${normalizeClassSlug(reliableRow.class)})` : "#888",
+      iconUrl: reliableClassConfig?.specs.find(
+        (s) => normalizeSpecName(s.name) === normalizeSpecName(reliableRow?.spec ?? ""),
+      )?.iconUrl,
+      bK: reliableRow?.b_k ?? 0,
+    },
+  }
+}
+
+const emptyDataset: MetaDataset = {
+  entries: [],
+  totalEntries: 0,
+  weightedRating: 0,
+  weightedWR: 0,
+  topSpec: {
+    name: "",
+    className: "",
+    color: "#888",
+  },
+  mostReliable: {
+    name: "",
+    className: "",
+    color: "#888",
+    bK: 0,
+  },
+}
+
+export default async function PvpBracketPage({ params, searchParams }: PageProps) {
+  const { bracket, role } = await params
+  const { region: regionParam, season: seasonParam } = await searchParams
+  const initialRegion = (regionParam ?? "all") as Region
+  const initialRole = role as Role
+  const bracketStr = String(bracket)
+
+  // Fetch all 4 brackets × 3 regions in parallel (12 calls)
+  const fetchPromises = ALL_BRACKETS.flatMap((b) =>
+    REGIONS.map((r) =>
+      fetchClassDistribution({
+        seasonId: seasonParam,
+        bracket: b,
+        region: r,
+        role: "all",
+      })
+        .then((data) => ({
+          bracket: b,
+          region: r,
+          data,
+        }))
+        .catch(() => ({
+          bracket: b,
+          region: r,
+          data: null,
+        })),
+    ),
+  )
+
+  const results = await Promise.all(fetchPromises)
+
+  // Build datasets for current bracket (used by KPIs + table)
+  const currentDatasets: Record<Region, MetaDataset> = {
+    all: emptyDataset,
+    us: emptyDataset,
+    eu: emptyDataset,
+  }
+
+  // Build all brackets data (used by tier list bracket comparison)
+  const allBrackets: Record<string, Record<Region, MetaDataset>> = {}
+
+  for (const { bracket: b, region: r, data } of results) {
+    if (!allBrackets[b]) {
+      allBrackets[b] = {
+        all: emptyDataset,
+        us: emptyDataset,
+        eu: emptyDataset,
+      }
+    }
+    const dataset = data ? buildDataset(data, b) : emptyDataset
+    allBrackets[b][r as Region] = dataset
+
+    if (b === bracketStr) {
+      currentDatasets[r as Region] = dataset
+    }
   }
 
   return (
@@ -141,54 +238,21 @@ export default async function PvpBracketPage({ params, searchParams }: PageProps
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
-                <BreadcrumbPage>{bracket}</BreadcrumbPage>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator className="hidden md:block" />
-              <BreadcrumbItem>
-                <BreadcrumbPage>{role.toUpperCase()}</BreadcrumbPage>
+                <BracketDropdown current={bracketStr} />
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
         }
       />
 
-      <div className="space-y-6 p-4 lg:p-6">
-        {/* KPIs */}
-        <MetaKpiRow
-          totalPlayers={totalCount}
-          weightedAvgRating={weightedRating}
-          weightedAvgWinRate={weightedWR}
-          topSpec={topSpec}
+      <div className="mx-auto w-full p-4 lg:max-w-[80%] lg:p-6">
+        <MetaStatsDashboard
+          datasets={currentDatasets}
+          allBrackets={allBrackets}
+          bracket={bracketStr}
+          initialRole={initialRole}
+          initialRegion={initialRegion}
         />
-
-        {/* Charts row */}
-        <div className="grid gap-6 xl:grid-cols-[1fr_320px]">
-          {/* Bar chart card */}
-          <div className="rounded-lg border border-border bg-card/80 px-4 pb-2 pt-4">
-            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-              Meta Score by Spec
-            </h2>
-            <MetaBarChart entries={barEntries} />
-          </div>
-
-          {/* Donut card */}
-          <div className="rounded-lg border border-border bg-card/80 p-4">
-            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-              Spec Presence
-            </h2>
-            <MetaDonutChart slices={donutSlices} />
-          </div>
-        </div>
-
-        {/* Table */}
-        <div className="rounded-lg border border-border bg-card/80">
-          <div className="border-b border-border px-4 py-3">
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-              Spec Rankings
-            </h2>
-          </div>
-          <MetaSpecTable entries={barEntries} />
-        </div>
       </div>
     </>
   )

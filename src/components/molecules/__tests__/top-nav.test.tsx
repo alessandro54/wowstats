@@ -46,9 +46,9 @@ describe("topNav", () => {
     expect(getByTestId("sidebar-trigger")).toBeTruthy()
   })
 
-  it("always renders theme switcher", () => {
+  it("always renders sidebar trigger", () => {
     const { getByTestId } = renderNav()
-    expect(getByTestId("theme-switcher")).toBeTruthy()
+    expect(getByTestId("sidebar-trigger")).toBeTruthy()
   })
 
   it("renders separator between trigger and content", () => {

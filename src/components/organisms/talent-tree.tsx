@@ -1,6 +1,7 @@
 "use client"
 
 import type { MetaTalent } from "@/lib/api"
+import { Skeleton } from "@/components/ui/skeleton"
 import { TalentEdges } from "@/components/molecules/talent-tree-edges"
 import { TalentNodeCard } from "@/components/molecules/talent-tree-node"
 import { computeTreeLayout } from "@/lib/utils/talent-tree-layout"
@@ -10,10 +11,72 @@ import {
   BORDER_SITUATIONAL,
   buildEdgeSet,
   buildNodeMap,
+  CELL_SIZE,
   NODE_SIZE,
 } from "@/lib/utils/talent-tree"
 
 export { hasTreeData } from "@/lib/utils/talent-tree"
+
+// Deterministic sparse pattern — avoids hydration mismatches.
+// Mirrors the diamond-like shape of real talent trees.
+const SKIP = new Set([
+  "0-0",
+  "0-1",
+  "0-5",
+  "0-6",
+  "1-0",
+  "1-6",
+  "8-0",
+  "8-6",
+  "9-0",
+  "9-1",
+  "9-5",
+  "9-6",
+])
+
+export function TalentTreeSkeleton({ cols = 7, rows = 10 }: { cols?: number; rows?: number }) {
+  const w = (cols - 1) * CELL_SIZE + NODE_SIZE
+  const h = (rows - 1) * CELL_SIZE + NODE_SIZE
+
+  return (
+    <div className="flex justify-center">
+      <div
+        className="relative"
+        style={{
+          width: w,
+          height: h,
+        }}
+      >
+        {Array.from(
+          {
+            length: rows,
+          },
+          (_, row) =>
+            Array.from(
+              {
+                length: cols,
+              },
+              (_, col) => {
+                if (SKIP.has(`${row}-${col}`)) return null
+                return (
+                  <Skeleton
+                    key={`${row}-${col}`}
+                    className="absolute rounded-sm"
+                    style={{
+                      width: NODE_SIZE,
+                      height: NODE_SIZE,
+                      left: col * CELL_SIZE,
+                      top: row * CELL_SIZE,
+                    }}
+                  />
+                )
+              },
+            ),
+        )}
+      </div>
+    </div>
+  )
+}
 
 export function TalentTree({
   talents,

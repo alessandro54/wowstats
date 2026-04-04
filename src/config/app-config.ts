@@ -13,17 +13,31 @@ export function apiBracket(bracket: string, classSlug: string, specSlug: string)
   return bracket
 }
 
-export type Tier = "S" | "A" | "B" | "C" | "D"
+export type Tier = "S+" | "S" | "A" | "B" | "C" | "D"
 
+/** Fixed-cutoff tiers for arena brackets (natural spread in scores). */
 export function tier(normPct: number): Tier {
-  if (normPct >= 85) return "S"
-  if (normPct >= 65) return "A"
-  if (normPct >= 45) return "B"
-  if (normPct >= 25) return "C"
+  if (normPct >= 94) return "S+"
+  if (normPct >= 84) return "S"
+  if (normPct >= 64) return "A"
+  if (normPct >= 44) return "B"
+  if (normPct >= 24) return "C"
+  return "D"
+}
+
+/** Percentile-based tiers for solo brackets (shuffle/blitz) where scores compress. */
+export function tierByPercentile(rank: number, total: number): Tier {
+  const pct = rank / total
+  if (pct <= 0.04) return "S+"
+  if (pct <= 0.15) return "S"
+  if (pct <= 0.35) return "A"
+  if (pct <= 0.6) return "B"
+  if (pct <= 0.82) return "C"
   return "D"
 }
 
 export const TIER_COLORS: Record<Tier, string> = {
+  "S+": "bg-red-500/20 text-red-300 border border-red-500/40",
   S: "bg-purple-500/20 text-purple-300 border border-purple-500/40",
   A: "bg-amber-500/20 text-amber-300 border border-amber-500/40",
   B: "bg-blue-500/20 text-blue-300 border border-blue-500/40",
@@ -43,6 +57,10 @@ export const TIERLIST_LINKS = [
   {
     label: "Shuffle Tierlist",
     href: "/pvp/meta/shuffle-overall/dps",
+  },
+  {
+    label: "Blitz Tierlist",
+    href: "/pvp/meta/blitz-overall/dps",
   },
 ] as const
 

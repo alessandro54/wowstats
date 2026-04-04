@@ -88,6 +88,53 @@
   animation: collapsible-close 0.2s ease-out;
 }
 
+/* ─── Snow ───────────────────────────────────────────────────────────────── */
+@keyframes snowfall {
+  0% {
+    transform: translateY(-20px) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+
+  8% {
+    opacity: 1;
+  }
+
+  92% {
+    opacity: 0.7;
+  }
+
+  100% {
+    transform: translateY(105vh) translateX(var(--snow-drift, 30px))
+      rotate(var(--snow-spin, 360deg));
+    opacity: 0;
+  }
+}
+
+.animate-snowfall {
+  animation: snowfall ease-in infinite;
+}
+
+/* ─── Orbital ring ───────────────────────────────────────────────────────── */
+@keyframes orbit-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes orbit-counter {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
 /* ─── Talent glow (max rank) ─────────────────────────────────────────────── */
 @keyframes talent-glow {
   0%,
@@ -106,4 +153,150 @@
 
 .animate-talent-glow {
   animation: talent-glow 2s ease-in-out infinite;
+}
+
+/* ─── CTA glow pulse ────────────────────────────────────────────────────── */
+@keyframes glow-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 8px 0 rgb(249 115 22 / 15%),
+      0 0 20px 0 rgb(249 115 22 / 8%);
+  }
+
+  50% {
+    box-shadow:
+      0 0 16px 4px rgb(249 115 22 / 25%),
+      0 0 40px 8px rgb(249 115 22 / 12%);
+  }
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+/* ─── Ambient blob drift ────────────────────────────────────────────────── */
+@keyframes blob-drift-1 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  25% {
+    transform: translate(5%, 8%) scale(1.05);
+  }
+
+  50% {
+    transform: translate(-3%, 4%) scale(0.95);
+  }
+
+  75% {
+    transform: translate(4%, -5%) scale(1.02);
+  }
+}
+
+@keyframes blob-drift-2 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  25% {
+    transform: translate(-6%, -4%) scale(1.03);
+  }
+
+  50% {
+    transform: translate(5%, -7%) scale(0.97);
+  }
+
+  75% {
+    transform: translate(-3%, 6%) scale(1.05);
+  }
+}
+
+.animate-blob-drift-1 {
+  animation: blob-drift-1 20s ease-in-out infinite;
+}
+
+.animate-blob-drift-2 {
+  animation: blob-drift-2 25s ease-in-out infinite;
+}
+
+/* ─── Rotating gradient border ──────────────────────────────────────────── */
+@keyframes border-spin {
+  from {
+    --border-angle: 0deg;
+  }
+
+  to {
+    --border-angle: 360deg;
+  }
+}
+
+@property --border-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@property --glow-border {
+  syntax: "<color>";
+  initial-value: rgb(249 115 22 / 70%);
+  inherits: true;
+}
+
+@property --glow-border-dim {
+  syntax: "<color>";
+  initial-value: rgb(249 115 22 / 15%);
+  inherits: true;
+}
+
+.animate-border-spin {
+  --border-angle: 0deg;
+  --glow-border: rgb(249 115 22 / 70%);
+  --glow-border-dim: rgb(249 115 22 / 15%);
+
+  border: 2px solid transparent;
+  background:
+    linear-gradient(var(--background), var(--background)) padding-box,
+    conic-gradient(
+      from var(--border-angle),
+      var(--glow-border),
+      var(--glow-border-dim),
+      var(--glow-border),
+      var(--glow-border-dim),
+      var(--glow-border)
+    )
+    border-box;
+  animation: border-spin 4s linear infinite;
+  transition:
+    --glow-border 0.5s ease,
+    --glow-border-dim 0.5s ease;
+}
+
+/* ─── Scroll hint line ──────────────────────────────────────────────────── */
+@keyframes scroll-line {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+
+  50% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+
+  51% {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+
+  100% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+}
+
+.animate-scroll-line {
+  animation: scroll-line 2s ease-in-out infinite;
 }

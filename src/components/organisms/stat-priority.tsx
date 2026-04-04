@@ -10,35 +10,76 @@ interface Props {
   vertical?: boolean
 }
 
-function StatTooltipContent({
-  entry,
-  index,
-  total,
-}: {
-  entry: StatPriorityEntry
-  index: number
-  total: number
-}) {
-  const { label, color } = getStatMeta(entry.stat)
-
+function AllStatsTooltip({ stats }: { stats: StatPriorityEntry[] }) {
+  const total = stats.reduce((sum, s) => sum + s.median, 0)
   return (
-    <div className="space-y-1 text-[11px]">
-      <div
-        className="font-semibold"
-        style={{
-          color,
-        }}
-      >
-        {label}
+    <div className="space-y-2 min-w-[160px]">
+      <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+        Stat Priority
+      </p>
+      <div className="space-y-1.5">
+        {stats.map((entry, i) => {
+          const { label, color } = getStatMeta(entry.stat)
+          const pct = total > 0 ? ((entry.median / total) * 100).toFixed(0) : "0"
+          return (
+            <div key={entry.stat} className="flex items-center gap-2 text-[11px]">
+              <span className="w-3 shrink-0 text-right font-mono text-muted-foreground">
+                {i + 1}
+              </span>
+              <span
+                className="size-2 shrink-0 rounded-full"
+                style={{
+                  backgroundColor: color,
+                }}
+              />
+              <span
+                className="flex-1 font-medium"
+                style={{
+                  color,
+                }}
+              >
+                {label}
+              </span>
+              <span className="font-mono tabular-nums text-foreground">
+                {Math.round(entry.median)}
+              </span>
+              <span className="w-7 shrink-0 text-right font-mono text-muted-foreground">
+                {pct}%
+              </span>
+            </div>
+          )
+        })}
       </div>
-      <div className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-muted-foreground">
-        <span>Rank</span>
-        <span className="text-foreground font-mono text-right">
-          #{index + 1} of {total}
-        </span>
-        <span>Median</span>
-        <span className="text-foreground font-mono text-right">{Math.round(entry.median)}</span>
-      </div>
+    </div>
+  )
+}
+
+function StatLabels({ stats }: { stats: StatPriorityEntry[] }) {
+  return (
+    <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
+      {stats.map((entry) => {
+        const { label, color } = getStatMeta(entry.stat)
+        return (
+          <span
+            key={entry.stat}
+            className="flex items-center gap-0.5 text-[9px] font-bold uppercase tracking-wide"
+          >
+            <span
+              className="inline-block size-1.5 shrink-0 rounded-full"
+              style={{
+                backgroundColor: color,
+              }}
+            />
+            <span
+              style={{
+                color,
+              }}
+            >
+              {label.slice(0, 4)}
+            </span>
+          </span>
+        )
+      })}
     </div>
   )
 }
@@ -46,147 +87,116 @@ function StatTooltipContent({
 export function StatPriority({ stats, compact, vertical }: Props) {
   if (stats.length === 0) return null
 
-  const max = stats[0].median
+  const total = stats.reduce((sum, s) => sum + s.median, 0)
 
-  if (vertical) {
-    return (
-      <div className="flex items-center gap-2">
-        {stats.map((entry, i) => {
-          const { label, color } = getStatMeta(entry.stat)
-          const barHeight = max > 0 ? (entry.median / max) * 100 : 0
-
-          return (
-            <Tooltip key={entry.stat}>
-              <TooltipTrigger asChild>
-                <div className="flex flex-col items-center gap-0.5 cursor-default">
-                  <span className="text-[8px] font-mono tabular-nums text-muted-foreground">
-                    {Math.round(entry.median)}
-                  </span>
-                  <div className="flex h-8 w-4 items-end overflow-hidden rounded-sm bg-muted">
-                    <div
-                      className="w-full rounded-sm opacity-40 transition-all"
-                      style={{
-                        height: `${barHeight}%`,
-                        backgroundColor: color,
-                      }}
-                    />
-                  </div>
-                  <span
-                    className="text-[7px] font-semibold uppercase leading-tight"
-                    style={{
-                      color,
-                    }}
-                  >
-                    {label.slice(0, 4)}
-                  </span>
-                </div>
-              </TooltipTrigger>
-              <TooltipContent
-                side="bottom"
-                className="bg-card text-foreground border border-border shadow-lg px-3 py-2"
-              >
-                <StatTooltipContent entry={entry} index={i} total={stats.length} />
-              </TooltipContent>
-            </Tooltip>
-          )
-        })}
-      </div>
-    )
-  }
+  const bar = (height: string) => (
+    <div className={`flex ${height} overflow-hidden rounded-full gap-px`}>
+      {stats.map((entry) => {
+        const { color } = getStatMeta(entry.stat)
+        const pct = total > 0 ? (entry.median / total) * 100 : 0
+        return (
+          <div
+            key={entry.stat}
+            className="h-full"
+            style={{
+              width: `${pct}%`,
+              backgroundColor: color,
+              opacity: 0.9,
+            }}
+          />
+        )
+      })}
+    </div>
+  )
 
   if (compact) {
     return (
-      <div className="flex flex-col gap-1.5">
-        <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-          Stat Priority
-        </span>
-        {stats.map((entry, i) => {
-          const { label, color } = getStatMeta(entry.stat)
-          const barWidth = max > 0 ? (entry.median / max) * 100 : 0
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div className="flex w-48 cursor-default flex-col gap-1">
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+              Stat Priority
+            </span>
+            {bar("h-3")}
+            <StatLabels stats={stats} />
+          </div>
+        </TooltipTrigger>
+        <TooltipContent
+          side="bottom"
+          className="border border-border bg-card px-3 py-2.5 text-foreground shadow-lg"
+        >
+          <AllStatsTooltip stats={stats} />
+        </TooltipContent>
+      </Tooltip>
+    )
+  }
 
-          return (
-            <Tooltip key={entry.stat}>
-              <TooltipTrigger asChild>
-                <div className="flex items-center gap-2 cursor-default">
-                  <span
-                    className="w-10 shrink-0 text-right text-[10px] font-semibold uppercase"
-                    style={{
-                      color,
-                    }}
-                  >
-                    {label.slice(0, 4)}
-                  </span>
-                  <div className="h-2 w-28 overflow-hidden rounded-full bg-muted">
-                    <div
-                      className="h-full rounded-full opacity-40 transition-all"
-                      style={{
-                        width: `${barWidth}%`,
-                        backgroundColor: color,
-                      }}
-                    />
-                  </div>
-                  <span className="w-9 shrink-0 text-right text-[10px] font-mono tabular-nums text-muted-foreground">
-                    {Math.round(entry.median)}
-                  </span>
-                </div>
-              </TooltipTrigger>
-              <TooltipContent
-                side="bottom"
-                className="bg-card text-foreground border border-border shadow-lg px-3 py-2"
-              >
-                <StatTooltipContent entry={entry} index={i} total={stats.length} />
-              </TooltipContent>
-            </Tooltip>
-          )
-        })}
-      </div>
+  if (vertical) {
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div className="flex w-24 cursor-default flex-col gap-1">
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+              Stats
+            </span>
+            {bar("h-2")}
+            <StatLabels stats={stats} />
+          </div>
+        </TooltipTrigger>
+        <TooltipContent
+          side="bottom"
+          className="border border-border bg-card px-3 py-2.5 text-foreground shadow-lg"
+        >
+          <AllStatsTooltip stats={stats} />
+        </TooltipContent>
+      </Tooltip>
     )
   }
 
   return (
     <section className="space-y-3">
       <h2 className="text-lg font-semibold">Stat Priority</h2>
-      <div className="rounded-lg border border-border bg-card/80 px-4 py-3 space-y-2.5">
-        <p className="text-[11px] text-muted-foreground">Median stat rating across top players</p>
-        <div className="space-y-2">
-          {stats.map((entry, i) => {
-            const { label, color } = getStatMeta(entry.stat)
-            const barWidth = max > 0 ? (entry.median / max) * 100 : 0
-
-            return (
-              <div key={entry.stat} className="flex items-center gap-3">
-                <span className="w-4 text-right text-[11px] font-mono text-muted-foreground shrink-0">
-                  {i + 1}
-                </span>
-                <div className="flex-1 space-y-0.5">
-                  <div className="flex items-center justify-between gap-2">
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div className="cursor-default space-y-2 rounded-lg border border-border bg-card/80 px-4 py-3">
+            <p className="text-[11px] text-muted-foreground">
+              Median stat distribution across top players
+            </p>
+            {bar("h-5")}
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+              {stats.map((entry) => {
+                const { label, color } = getStatMeta(entry.stat)
+                return (
+                  <span
+                    key={entry.stat}
+                    className="flex items-center gap-1 text-[10px] font-semibold"
+                  >
                     <span
-                      className="text-xs font-medium"
+                      className="inline-block size-2 shrink-0 rounded-full"
+                      style={{
+                        backgroundColor: color,
+                      }}
+                    />
+                    <span
                       style={{
                         color,
                       }}
                     >
                       {label}
                     </span>
-                    <span className="text-[11px] font-mono tabular-nums text-muted-foreground shrink-0">
-                      {Math.round(entry.median)}
-                    </span>
-                  </div>
-                  <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
-                    <div
-                      className="h-full rounded-full transition-all"
-                      style={{
-                        width: `${barWidth}%`,
-                        backgroundColor: color,
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-            )
-          })}
-        </div>
-      </div>
+                  </span>
+                )
+              })}
+            </div>
+          </div>
+        </TooltipTrigger>
+        <TooltipContent
+          side="bottom"
+          className="border border-border bg-card px-3 py-2.5 text-foreground shadow-lg"
+        >
+          <AllStatsTooltip stats={stats} />
+        </TooltipContent>
+      </Tooltip>
     </section>
   )
 }

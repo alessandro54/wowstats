@@ -7,6 +7,14 @@ vi.mock("next/image", () => ({
   default: (props: any) => <img {...props} />,
 }))
 
+vi.mock("@/components/atoms/theme-switcher", () => ({
+  ThemeSwitcher: () => <div data-testid="theme-switcher">Theme</div>,
+}))
+
+vi.mock("@/components/atoms/theme-dropdown", () => ({
+  ThemeDropdown: () => <div data-testid="theme-dropdown">Theme</div>,
+}))
+
 vi.mock("@/components/organisms/nav-main", () => ({
   NavMain: () => <div data-testid="nav-main">Navigation</div>,
 }))
@@ -15,9 +23,11 @@ vi.mock("@/components/ui/sidebar", () => ({
   Sidebar: ({ children }: any) => <div data-testid="sidebar">{children}</div>,
   SidebarContent: ({ children }: any) => <div>{children}</div>,
   SidebarHeader: ({ children }: any) => <div>{children}</div>,
+  SidebarFooter: ({ children }: any) => <div>{children}</div>,
   SidebarRail: () => <div data-testid="sidebar-rail" />,
   useSidebar: () => ({
     open: true,
+    isMobile: false,
   }),
 }))
 
