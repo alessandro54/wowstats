@@ -5,6 +5,7 @@ export const dynamic = "force-dynamic"
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { MetaKpiRow } from "@/components/molecules/meta-kpi-row"
 import { MetaStatsTable } from "@/components/molecules/meta-stats-table"
+import { RegionSwitcher } from "@/components/molecules/region-switcher"
 import { TopNavConfig } from "@/components/molecules/top-nav-config"
 import {
   Breadcrumb,
@@ -49,11 +50,10 @@ function normalizeSpecName(value: string): string {
 export default async function PvpBracketPage({ params, searchParams }: PageProps) {
   const { bracket, role } = await params
   const { region: regionParam, season: seasonParam } = await searchParams
-  const region = regionParam ?? "us"
-  const season = seasonParam ?? "40"
+  const region = regionParam ?? "all"
 
   const data = await fetchClassDistribution({
-    seasonId: season,
+    seasonId: seasonParam,
     role,
     bracket: String(bracket),
     region,
@@ -179,10 +179,11 @@ export default async function PvpBracketPage({ params, searchParams }: PageProps
 
         {/* Stats table */}
         <div className="rounded-lg border border-border bg-card/80">
-          <div className="border-b border-border px-4 py-3">
+          <div className="flex items-center justify-between border-b border-border px-4 py-3">
             <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
               Spec Rankings
             </h2>
+            <RegionSwitcher />
           </div>
           <MetaStatsTable entries={tableEntries} />
         </div>

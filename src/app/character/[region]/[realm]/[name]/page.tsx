@@ -99,24 +99,13 @@ export default async function CharacterPage({ params }: PageProps) {
   const statEntries = statPriorityFromPcts(character.stat_pcts ?? {})
 
   return (
-    <div className="animate-page-in space-y-6 px-6 pb-8 pt-2">
+    <div className="animate-page-in space-y-6 px-6 pb-8 pt-10">
       {/* Header */}
       <div className="flex items-center gap-4">
-        {character.inset_url ? (
-          <Image
-            src={character.inset_url}
-            alt=""
-            width={72}
-            height={96}
-            className="rounded-lg border border-border object-cover"
-            style={{
-              objectPosition: "top",
-            }}
-          />
-        ) : character.avatar_url ? (
+        {character.avatar_url ? (
           <Image
             src={character.avatar_url}
-            alt=""
+            alt={`${character.name}'s avatar`}
             width={72}
             height={72}
             className="rounded-lg border border-border"
@@ -143,6 +132,14 @@ export default async function CharacterPage({ params }: PageProps) {
             {character.race && `${character.race} `}
             {titleizeSlug(character.class_slug)}
           </div>
+          <a
+            href={`https://worldofwarcraft.blizzard.com/en-${region === "us" ? "us" : "gb"}/character/${region}/${character.realm}/${character.name}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-1.5 inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
+            View on WoW Armory ↗
+          </a>
         </div>
       </div>
 

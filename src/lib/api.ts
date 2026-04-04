@@ -280,22 +280,17 @@ export interface ClassDistributionSpec {
   spec_id: number
   role: string
   count: number
+  total_in_bracket: number
   total_games: number
   total_wins: number
   mean_rating: number
-  p90_rating: number
-  shrunk_winrate: number
-  shrunk_rating: number
-  volume_raw: number
-  games_share: number
-  percentage: number
-  winrate_score: number
-  rating_score: number
-  power_score: number
-  presence_score: number
-  volume_factor: number
-  meta_score: number
-  hidden_score: number
+  theta_hat: number
+  b_k: number
+  rating_ci_low: number
+  rating_ci_high: number
+  raw_winrate: number
+  wr_hat: number
+  score: number
 }
 
 export interface ClassDistributionResponse {
@@ -308,21 +303,21 @@ export interface ClassDistributionResponse {
 
 export function fetchClassDistribution(
   params: {
-    seasonId: string
+    seasonId?: string
     bracket: string
     region: string
     role: string
   },
   locale?: string,
 ): Promise<ClassDistributionResponse> {
-  return apiFetch(
-    "/api/v1/pvp/meta/class_distribution",
-    {
-      season_id: params.seasonId,
-      bracket: params.bracket,
-      region: params.region,
-      role: params.role,
-    },
-    locale,
-  )
+  const query: Record<string, string> = {
+    bracket: params.bracket,
+    region: params.region,
+    role: params.role,
+    new_model: "true",
+  }
+  if (params.seasonId) {
+    query.season_id = params.seasonId
+  }
+  return apiFetch("/api/v1/pvp/meta/class_distribution", query, locale)
 }
