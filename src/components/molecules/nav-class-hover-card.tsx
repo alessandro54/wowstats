@@ -5,21 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 import { SidebarMenuButton } from "@/components/ui/sidebar"
-
-const QUICK_BRACKETS = [
-  {
-    slug: "2v2",
-    label: "2v2",
-  },
-  {
-    slug: "3v3",
-    label: "3v3",
-  },
-  {
-    slug: "shuffle",
-    label: "Solo",
-  },
-] as const
+import { BRACKETS } from "@/config/wow/brackets-config"
 
 interface Props {
   item: NavMainItem
@@ -77,7 +63,7 @@ export function NavClassHoverCard({ item, onMouseEnter }: Props) {
               <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-200 ease-out group-hover/spec:grid-rows-[1fr]">
                 <div className="overflow-hidden">
                   <div className="flex justify-center gap-1 px-1 pt-0.5 pb-1 opacity-0 transition-opacity delay-75 duration-150 group-hover/spec:opacity-100">
-                    {QUICK_BRACKETS.map(({ slug, label }) => (
+                    {BRACKETS.map(({ slug, label }) => (
                       <Link
                         key={slug}
                         href={`${spec.url}/${slug}`}

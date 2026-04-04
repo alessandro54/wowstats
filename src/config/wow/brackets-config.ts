@@ -14,6 +14,11 @@ export const BRACKETS = [
     label: "Solo",
     description: "6-player round-robin arena",
   },
+  {
+    slug: "blitz",
+    label: "Blitz",
+    description: "10-player battlegrounds",
+  },
   //{ slug: "rbg", label: "RBG", description: "Rated Battleground" },
 ] as const
 

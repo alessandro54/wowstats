@@ -245,7 +245,7 @@ export default async function PvpBracketPage({ params, searchParams }: PageProps
         }
       />
 
-      <div className="p-4 lg:p-6 w-full">
+      <div className="mx-auto w-full p-4 lg:max-w-[80%] lg:p-6">
         <MetaStatsDashboard
           datasets={currentDatasets}
           allBrackets={allBrackets}

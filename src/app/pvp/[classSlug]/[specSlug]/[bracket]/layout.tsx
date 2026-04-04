@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation"
-import { SpecHeading } from "@/components/atoms/spec-heading"
+import { SpecStatBar } from "@/components/molecules/spec-stat-bar"
 import { StatPriority } from "@/components/organisms/stat-priority"
 import { apiBracket } from "@/config/app-config"
 import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
-import { fetchStatPriority } from "@/lib/api"
+import { fetchClassDistribution, fetchStatPriority } from "@/lib/api"
 
 interface Props {
   children: React.ReactNode
@@ -14,6 +14,27 @@ interface Props {
   }>
 }
 
+function normalizeClassSlug(value: string): string {
+  return value.trim().toLowerCase().replace(/_/g, "-")
+}
+
+function normalizeSpecName(value: string): string {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[-_\s]/g, "")
+}
+
+const SOLO_BRACKETS = [
+  "shuffle",
+  "blitz",
+]
+
+function apiDistBracket(bracket: string): string {
+  if (SOLO_BRACKETS.includes(bracket)) return `${bracket}-overall`
+  return bracket
+}
+
 export default async function PvpBracketLayout({ children, params }: Props) {
   const { classSlug, specSlug, bracket } = await params
 
@@ -22,44 +43,52 @@ export default async function PvpBracketLayout({ children, params }: Props) {
   if (!cls || !spec) notFound()
 
   const resolvedBracket = apiBracket(bracket, classSlug, specSlug)
-  const statPriority = await fetchStatPriority(resolvedBracket, spec.id).catch(() => ({
-    bracket: resolvedBracket,
-    spec_id: spec.id,
-    stats: [],
-  }))
+  const classColor = `var(--color-class-${classSlug})`
+
+  const [statPriority, distData] = await Promise.all([
+    fetchStatPriority(resolvedBracket, spec.id).catch(() => ({
+      bracket: resolvedBracket,
+      spec_id: spec.id,
+      stats: [],
+    })),
+    fetchClassDistribution({
+      bracket: apiDistBracket(bracket),
+      region: "all",
+      role: "all",
+    }).catch(() => null),
+  ])
+
+  let bracketWr = 0
+  let bracketPresence = 0
+  let bracketPlayers = 0
+
+  if (distData) {
+    const specEntry = distData.classes.find(
+      (s) =>
+        normalizeClassSlug(s.class) === classSlug &&
+        normalizeSpecName(s.spec) === normalizeSpecName(specSlug),
+    )
+    if (specEntry) {
+      bracketWr = specEntry.wr_hat
+      const total = distData.classes.reduce((s, r) => s + r.count, 0)
+      bracketPresence = total > 0 ? specEntry.count / total : 0
+      bracketPlayers = specEntry.count
+    }
+  }
 
   return (
     <>
-      <div className="flex w-auto flex-col">
-        <div className="shrink-0 px-6 py-3">
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2 md:gap-3">
-              <span className="icon-vignette icon-vignette-lg rounded-full">
-                <video
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  width={100}
-                  height={100}
-                  poster={spec.iconRemasteredUrl ?? spec.iconUrl}
-                  className="block size-12 md:size-25 rounded-full"
-                >
-                  <source src={spec.animationUrl} type="video/mp4" />
-                </video>
-              </span>
-              <SpecHeading className={cls.name} classSlug={cls.slug} specSlug={specSlug} />
-            </div>
-            <div className="hidden md:block">
-              <StatPriority stats={statPriority.stats} compact />
-            </div>
-            <div className="md:hidden">
-              <StatPriority stats={statPriority.stats} vertical />
-            </div>
-          </div>
-        </div>
-        <div className="flex-1 lg:px-5">{children}</div>
+      <div className="mx-auto max-w-5xl px-4 lg:px-6">
+        <SpecStatBar
+          winRate={bracketWr}
+          presence={bracketPresence}
+          playerCount={bracketPlayers}
+          classColor={classColor}
+        >
+          {statPriority.stats.length > 0 && <StatPriority stats={statPriority.stats} compact />}
+        </SpecStatBar>
       </div>
+      {children}
     </>
   )
 }

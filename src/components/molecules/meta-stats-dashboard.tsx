@@ -11,6 +11,7 @@ import { MetaTierList } from "@/components/molecules/meta-tier-list"
 import type { SpecBracketData } from "@/components/molecules/meta-tier-list"
 import { RegionSwitcher } from "@/components/molecules/region-switcher"
 import { RoleSwitcher } from "@/components/molecules/role-switcher"
+import { MetaInsightsPanel } from "@/components/molecules/meta-insights-panel"
 import { MetaStatsSkeleton } from "@/components/molecules/meta-stats-skeleton"
 import { tier, tierByPercentile } from "@/config/app-config"
 import type { Tier } from "@/config/app-config"
@@ -79,7 +80,8 @@ function filterByRole(dataset: MetaDataset, role: Role, bracket: string): MetaDa
   const total = filtered.length
   const entries = filtered.map((e, i) => {
     const normPct = (e.score / maxScore) * 100
-    const t = isSolo ? tierByPercentile(i + 1, total) : tier(normPct)
+    let t = isSolo ? tierByPercentile(i + 1, total) : tier(normPct)
+    if (role === "tank" && t === "S+") t = "S"
     return {
       ...e,
       normPct,
@@ -201,24 +203,7 @@ function DashboardInner({ datasets, allBrackets, bracket, initialRole, initialRe
     updateUrl(role, r)
   }
 
-  // Animate KPIs only on data changes (role/region)
-  const [kpiAnimating, setKpiAnimating] = useState(false)
-  const prevDataKey = useRef(`${role}-${region}`)
-
-  useEffect(() => {
-    const key = `${role}-${region}`
-    if (key !== prevDataKey.current) {
-      prevDataKey.current = key
-      setKpiAnimating(true)
-      const timer = setTimeout(() => setKpiAnimating(false), 200)
-      return () => clearTimeout(timer)
-    }
-  }, [
-    role,
-    region,
-  ])
-
-  // Animate content on data switch
+  // Animate content on data switch (KPIs stay static)
   const [contentAnimating, setContentAnimating] = useState(false)
   const prevContentKey = useRef(`${role}-${region}`)
 
@@ -237,21 +222,13 @@ function DashboardInner({ datasets, allBrackets, bracket, initialRole, initialRe
 
   return (
     <div className="space-y-6">
-      <div
-        className="transition-all duration-200 ease-out"
-        style={{
-          opacity: kpiAnimating ? 0 : 1,
-          transform: kpiAnimating ? "translateY(4px)" : "translateY(0)",
-        }}
-      >
-        <MetaKpiRow
-          totalPlayers={dataset.totalEntries}
-          weightedAvgRating={dataset.weightedRating}
-          weightedAvgWinRate={dataset.weightedWR}
-          topSpec={dataset.topSpec}
-          mostReliable={dataset.mostReliable}
-        />
-      </div>
+      <MetaKpiRow
+        totalPlayers={dataset.totalEntries}
+        weightedAvgRating={dataset.weightedRating}
+        weightedAvgWinRate={dataset.weightedWR}
+        topSpec={dataset.topSpec}
+        mostReliable={dataset.mostReliable}
+      />
 
       <div className="rounded-lg border border-border bg-card/80">
         <div className="flex items-center justify-between border-b border-border px-4 py-3">
@@ -270,12 +247,17 @@ function DashboardInner({ datasets, allBrackets, bracket, initialRole, initialRe
             transform: contentAnimating ? "translateY(4px)" : "translateY(0)",
           }}
         >
-          <MetaTierList
-            entries={dataset.entries}
-            bracketComparison={bracketComparison}
-            currentBracket={bracket}
-            defaultClassSlug={topClassName}
-          />
+          {/* Tier list + insights side by side */}
+          <div className="grid grid-cols-1 gap-4 p-4 xl:grid-cols-[1fr_280px]">
+            <MetaTierList
+              entries={dataset.entries}
+              bracketComparison={bracketComparison}
+              currentBracket={bracket}
+              defaultClassSlug={topClassName}
+            />
+            <MetaInsightsPanel entries={dataset.entries} />
+          </div>
+          {/* Full-width table */}
           <MetaStatsTable entries={dataset.entries} defaultClassSlug={topClassName} />
         </div>
       </div>

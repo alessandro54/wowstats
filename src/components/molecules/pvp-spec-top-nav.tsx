@@ -13,6 +13,7 @@ import {
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { BracketSelector } from "./bracket-selector"
 import { TopNavConfig } from "./top-nav-config"
+import { titleizeSlug } from "@/lib/utils"
 
 interface Props {
   className: string
@@ -32,11 +33,13 @@ export function PvpSpecTopNav({ className, specSlug, classSlug }: Props) {
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem className="hidden md:block">
-          <BreadcrumbLink href="#">{className}</BreadcrumbLink>
+          <BreadcrumbPage>{className}</BreadcrumbPage>
         </BreadcrumbItem>
         <BreadcrumbSeparator className="hidden md:block" />
         <BreadcrumbItem>
-          <BreadcrumbPage className="capitalize">{specSlug}</BreadcrumbPage>
+          <BreadcrumbLink href={`/pvp/${classSlug}/${specSlug}`}>
+            {titleizeSlug(specSlug)}
+          </BreadcrumbLink>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>

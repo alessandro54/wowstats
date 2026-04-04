@@ -81,7 +81,9 @@ export function Talents({ classSlug, talents, talentsMeta, hideStats }: Props) {
         <div className="hidden min-[1800px]:flex min-[1800px]:items-start min-[1800px]:justify-center min-[1800px]:gap-8">
           {classEntries && (
             <div className="flex flex-col">
-              <h2 className="mb-3 text-center text-lg font-semibold">{TYPE_LABELS.class}</h2>
+              <h2 className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground mb-1 text-center">
+                {TYPE_LABELS.class}
+              </h2>
               <TalentCard classSlug={classSlug} className="flex flex-col overflow-x-auto">
                 {renderTree(classEntries)}
               </TalentCard>
@@ -89,7 +91,9 @@ export function Talents({ classSlug, talents, talentsMeta, hideStats }: Props) {
           )}
           {heroEntries && (
             <div className="flex flex-col">
-              <h2 className="mb-3 text-center text-lg font-semibold">{TYPE_LABELS.hero}</h2>
+              <h2 className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground mb-1 text-center">
+                {TYPE_LABELS.hero}
+              </h2>
               <HeroSection
                 heroEntries={heroEntries}
                 activeColor={activeColor}
@@ -100,7 +104,9 @@ export function Talents({ classSlug, talents, talentsMeta, hideStats }: Props) {
           )}
           {specEntries && (
             <div className="flex flex-col">
-              <h2 className="mb-3 text-center text-lg font-semibold">{TYPE_LABELS.spec}</h2>
+              <h2 className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground mb-1 text-center">
+                {TYPE_LABELS.spec}
+              </h2>
               <TalentCard classSlug={classSlug} className="flex flex-col overflow-x-auto">
                 {renderTree(specEntries, true)}
               </TalentCard>

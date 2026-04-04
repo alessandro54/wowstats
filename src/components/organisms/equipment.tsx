@@ -12,42 +12,26 @@ import { TooltipProvider } from "@/components/ui/tooltip"
 import { formatSocketType, QUALITY_COLORS } from "@/config/equipment-config"
 import { useActiveColor } from "@/hooks/use-active-color"
 
-const LAYOUT_ROWS: [
-  string,
-  string,
-][] = [
-  [
-    "HEAD",
-    "NECK",
-  ],
-  [
-    "SHOULDER",
-    "BACK",
-  ],
-  [
-    "CHEST",
-    "WRIST",
-  ],
-  [
-    "HANDS",
-    "WAIST",
-  ],
-  [
-    "LEGS",
-    "FEET",
-  ],
-  [
-    "MAIN_HAND",
-    "OFF_HAND",
-  ],
-  [
-    "FINGER_1",
-    "FINGER_2",
-  ],
-  [
-    "TRINKET_1",
-    "TRINKET_2",
-  ],
+/** Paper-doll slot layout: left column, right column */
+const LEFT_SLOTS = [
+  "HEAD",
+  "SHOULDER",
+  "CHEST",
+  "HANDS",
+  "LEGS",
+  "MAIN_HAND",
+  "FINGER_1",
+  "TRINKET_1",
+]
+const RIGHT_SLOTS = [
+  "NECK",
+  "BACK",
+  "WRIST",
+  "WAIST",
+  "FEET",
+  "OFF_HAND",
+  "FINGER_2",
+  "TRINKET_2",
 ]
 
 interface ItemGroup {
@@ -92,41 +76,78 @@ export function Equipment({
     ]),
   )
 
+  const renderSlot = (slot: string) => {
+    if (!itemBySlot.has(slot)) return <div key={slot} className="h-[72px]" />
+    return (
+      <ItemCard
+        key={slot}
+        slot={slot}
+        entries={itemBySlot.get(slot)?.entries}
+        enchants={enchantBySlot}
+        fiberGems={fiberGems}
+        activeColor={activeColor}
+        pillStyle={pillStyle}
+      />
+    )
+  }
+
   return (
     <TooltipProvider>
       <div className="space-y-8">
-        {/* Items */}
-        <section className="space-y-3">
-          <h2 className="text-lg font-semibold">Items</h2>
+        {/* Gear section */}
+        <section>
+          <div className="mb-4 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <h2 className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
+                Gear
+              </h2>
+              <div className="ml-2 h-px w-16 bg-gradient-to-r from-border to-transparent" />
+            </div>
+            <div className="flex items-center gap-4 text-[10px] text-muted-foreground">
+              <span className="flex items-center gap-1.5">
+                <span
+                  className="inline-block size-2 rounded-full"
+                  style={{
+                    background: activeColor,
+                  }}
+                />
+                BiS
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="inline-block size-2 rounded-full bg-muted-foreground/40" />
+                Alt
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="inline-block size-2 rounded-full bg-amber-500" />
+                Crafted
+              </span>
+            </div>
+          </div>
+
           {itemBySlot.size === 0 ? (
-            <p className="text-muted-foreground text-sm">
+            <p className="text-sm text-muted-foreground">
               No item data available for this bracket.
             </p>
           ) : (
-            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 min-[1800px]:grid-cols-4">
-              {LAYOUT_ROWS.flat().map((slot) => {
-                if (!itemBySlot.has(slot)) return null
-                return (
-                  <ItemCard
-                    key={slot}
-                    slot={slot}
-                    entries={itemBySlot.get(slot)?.entries}
-                    enchants={enchantBySlot}
-                    fiberGems={fiberGems}
-                    activeColor={activeColor}
-                    pillStyle={pillStyle}
-                  />
-                )
-              })}
+            <div className="grid grid-cols-1 gap-2 lg:grid-cols-[1fr_1fr] lg:gap-x-6">
+              {/* Left column */}
+              <div className="flex flex-col gap-2">{LEFT_SLOTS.map(renderSlot)}</div>
+              {/* Right column */}
+              <div className="flex flex-col gap-2">{RIGHT_SLOTS.map(renderSlot)}</div>
             </div>
           )}
         </section>
 
-        {/* Gems */}
+        {/* Gems section */}
         {gemGroups.length > 0 && (
-          <section className="space-y-3">
-            <h2 className="text-lg font-semibold">Gems</h2>
-            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+          <section>
+            <div className="mb-4 flex items-center gap-2">
+              <h2 className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
+                Gems
+              </h2>
+              <div className="ml-2 h-px w-16 bg-gradient-to-r from-border to-transparent" />
+            </div>
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {gemGroups.map(({ socketType, entries }) => {
                 const primary = entries[0]
                 if (!primary) return null
@@ -147,9 +168,9 @@ export function Equipment({
                       <DistributionTooltip entries={distribution} activeColor={activeColor} />
                     }
                   >
-                    <div className="bg-card/40 hover:bg-muted/20 flex cursor-default gap-3 rounded-lg border p-3 backdrop-blur-sm transition-colors">
+                    <div className="flex cursor-default gap-3 rounded-lg border border-border/50 bg-card/30 p-3 backdrop-blur-sm transition-colors hover:bg-muted/20">
                       <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-                        <span className="text-muted-foreground text-[10px] leading-none font-semibold tracking-wider uppercase">
+                        <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
                           {formatSocketType(socketType)}
                         </span>
                         <div className="flex min-w-0 items-center gap-2">
@@ -165,7 +186,7 @@ export function Equipment({
                             </span>
                           )}
                           <p
-                            className="truncate text-sm leading-tight font-medium"
+                            className="truncate text-sm font-medium leading-tight"
                             style={{
                               color: QUALITY_COLORS[primary.item.quality?.toUpperCase()],
                             }}
@@ -174,14 +195,14 @@ export function Equipment({
                           </p>
                         </div>
                       </div>
-                      <div className="flex shrink-0 items-center justify-end">
+                      <div className="flex shrink-0 items-center">
                         <span
                           className="font-mono text-sm font-bold tabular-nums"
                           style={{
                             color: activeColor,
                           }}
                         >
-                          {primary.usage_pct.toFixed(1)}%
+                          {primary.usage_pct.toFixed(0)}%
                         </span>
                       </div>
                     </div>

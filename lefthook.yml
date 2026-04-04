@@ -10,8 +10,3 @@ pre-commit:
       glob: "*.{ts,tsx,mjs}"
       run: pnpm oxlint --fix {staged_files}
       stage_fixed: true
-
-    stylelint:
-      glob: "*.css"
-      run: stylelint --fix {staged_files}
-      stage_fixed: true

@@ -99,7 +99,7 @@ export default async function CharacterPage({ params }: PageProps) {
   const statEntries = statPriorityFromPcts(character.stat_pcts ?? {})
 
   return (
-    <div className="animate-page-in space-y-6 px-6 pb-8 pt-10">
+    <div className="animate-page-in mx-auto max-w-6xl space-y-6 px-6 pb-8 pt-10">
       {/* Header */}
       <div className="flex items-center gap-4">
         {character.avatar_url ? (

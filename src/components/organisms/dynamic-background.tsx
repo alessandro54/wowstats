@@ -14,8 +14,12 @@ export default function DynamicBackground() {
   const specSlug = (isPvpRoute ? segments[2] : segments[1]) ?? null
   const isSpecPage = isPvpRoute && classSlug && specSlug
 
+  const isHome = pathname === "/"
   const activeSlug = hoverSlug ?? classSlug
   const background = activeSlug ? `var(--color-class-${activeSlug})` : "oklch(0.7 0.15 340)"
+
+  // Spec pages (index + bracket) handle their own atmosphere via layout
+  if (isHome || isSpecPage) return null
 
   return (
     <>

@@ -68,7 +68,7 @@ function LanguageDropdown() {
 
 export function AppFooter() {
   return (
-    <footer className="border-t bg-card/20 px-6 py-10">
+    <footer className="mt-auto border-t border-border/10 px-6 py-10">
       <div className="mx-auto max-w-5xl space-y-8">
         {/* Top row: logo + brand + nav */}
         <div className="flex flex-col items-start gap-8 sm:flex-row sm:items-start sm:justify-between">
