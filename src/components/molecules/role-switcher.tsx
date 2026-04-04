@@ -1,29 +1,29 @@
 "use client"
 
-const REGIONS = [
+const ROLES = [
   {
-    value: "all",
-    label: "Global",
+    value: "dps",
+    label: "DPS",
   },
   {
-    value: "us",
-    label: "US",
+    value: "healer",
+    label: "Healer",
   },
   {
-    value: "eu",
-    label: "EU",
+    value: "tank",
+    label: "Tank",
   },
 ] as const
 
 interface Props {
-  current?: string
-  onSwitch?: (region: string) => void
+  current: string
+  onSwitch?: (role: string) => void
 }
 
-export function RegionSwitcher({ current = "all", onSwitch }: Props) {
+export function RoleSwitcher({ current, onSwitch }: Props) {
   return (
     <div className="flex items-center gap-1 rounded-lg border border-border bg-muted/40 p-0.5">
-      {REGIONS.map(({ value, label }) => {
+      {ROLES.map(({ value, label }) => {
         const isActive = current === value
         return (
           <button

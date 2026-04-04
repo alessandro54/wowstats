@@ -1,0 +1,206 @@
+"use client"
+
+import { Suspense, useEffect, useRef, useState } from "react"
+import { usePathname, useSearchParams } from "next/navigation"
+import { MetaKpiRow } from "@/components/molecules/meta-kpi-row"
+import { MetaStatsTable } from "@/components/molecules/meta-stats-table"
+import type { MetaStatsEntry } from "@/components/molecules/meta-stats-table"
+import { RegionSwitcher } from "@/components/molecules/region-switcher"
+import { RoleSwitcher } from "@/components/molecules/role-switcher"
+import { MetaStatsSkeleton } from "@/components/molecules/meta-stats-skeleton"
+import { tier, tierByPercentile } from "@/config/app-config"
+
+const SOLO_BRACKETS = [
+  "shuffle-overall",
+  "blitz-overall",
+]
+
+export type Region = "all" | "us" | "eu"
+export type Role = "dps" | "healer" | "tank"
+
+export interface MetaDataset {
+  entries: MetaStatsEntry[]
+  totalEntries: number
+  weightedRating: number
+  weightedWR: number
+  topSpec: {
+    name: string
+    className: string
+    color: string
+    iconUrl?: string
+  }
+  mostReliable: {
+    name: string
+    className: string
+    color: string
+    iconUrl?: string
+    bK: number
+  }
+}
+
+interface Props {
+  datasets: Record<Region, MetaDataset>
+  bracket: string
+  initialRole: Role
+  initialRegion: Region
+}
+
+function filterByRole(dataset: MetaDataset, role: Role, bracket: string): MetaDataset {
+  const filtered = dataset.entries.filter((e) => e.role === role)
+  if (filtered.length === 0) {
+    return {
+      ...dataset,
+      entries: [],
+    }
+  }
+
+  const isSolo = SOLO_BRACKETS.includes(bracket)
+  const maxScore = filtered[0]?.score ?? 1
+  const total = filtered.length
+  const entries = filtered.map((e, i) => {
+    const normPct = (e.score / maxScore) * 100
+    const t = isSolo ? tierByPercentile(i + 1, total) : tier(normPct)
+    return {
+      ...e,
+      normPct,
+      tier: t,
+    }
+  })
+
+  const totalCount = entries.reduce((s, e) => s + e.presence, 0) || 1
+  const weightedRating = entries.reduce((s, e) => s + e.thetaHat * e.presence, 0) / totalCount
+  const weightedWR = entries.reduce((s, e) => s + e.wrHat * e.presence, 0) / totalCount
+
+  const topRow = entries[0]
+  const reliableRow = [
+    ...entries,
+  ].sort((a, b) => b.bK - a.bK)[0]
+
+  return {
+    entries,
+    totalEntries: dataset.totalEntries,
+    weightedRating,
+    weightedWR,
+    topSpec: topRow
+      ? {
+          name: topRow.specName,
+          className: topRow.className,
+          color: topRow.color,
+          iconUrl: topRow.iconUrl,
+        }
+      : dataset.topSpec,
+    mostReliable: reliableRow
+      ? {
+          name: reliableRow.specName,
+          className: reliableRow.className,
+          color: reliableRow.color,
+          iconUrl: reliableRow.iconUrl,
+          bK: reliableRow.bK,
+        }
+      : dataset.mostReliable,
+  }
+}
+
+function DashboardInner({ datasets, bracket, initialRole, initialRegion }: Props) {
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+
+  const [role, setRole] = useState<Role>(initialRole)
+  const [region, setRegion] = useState<Region>(initialRegion)
+
+  const updateUrl = (newRole: Role, newRegion: Region) => {
+    const segments = pathname.split("/")
+    segments[4] = newRole
+    const params = new URLSearchParams(searchParams.toString())
+    if (newRegion === "all") {
+      params.delete("region")
+    } else {
+      params.set("region", newRegion)
+    }
+    const qs = params.toString()
+    const url = `${segments.join("/")}${qs ? `?${qs}` : ""}`
+    window.history.pushState(null, "", url)
+  }
+
+  const handleRoleChange = (newRole: string) => {
+    const r = newRole as Role
+    setRole(r)
+    updateUrl(r, region)
+  }
+
+  const handleRegionChange = (newRegion: string) => {
+    const r = newRegion as Region
+    setRegion(r)
+    updateUrl(role, r)
+  }
+
+  const dataset = filterByRole(datasets[region], role, bracket)
+
+  // Animate content on role/region switch
+  const contentRef = useRef<HTMLDivElement>(null)
+  const [animating, setAnimating] = useState(false)
+  const prevKey = useRef(`${role}-${region}`)
+
+  useEffect(() => {
+    const key = `${role}-${region}`
+    if (key !== prevKey.current) {
+      prevKey.current = key
+      setAnimating(true)
+      const timer = setTimeout(() => setAnimating(false), 200)
+      return () => clearTimeout(timer)
+    }
+  }, [
+    role,
+    region,
+  ])
+
+  return (
+    <div className="space-y-6">
+      <div
+        ref={contentRef}
+        className="transition-all duration-200 ease-out"
+        style={{
+          opacity: animating ? 0 : 1,
+          transform: animating ? "translateY(4px)" : "translateY(0)",
+        }}
+      >
+        <MetaKpiRow
+          totalPlayers={dataset.totalEntries}
+          weightedAvgRating={dataset.weightedRating}
+          weightedAvgWinRate={dataset.weightedWR}
+          topSpec={dataset.topSpec}
+          mostReliable={dataset.mostReliable}
+        />
+      </div>
+
+      <div className="rounded-lg border border-border bg-card/80">
+        <div className="flex items-center justify-between border-b border-border px-4 py-3">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+            Spec Rankings
+          </h2>
+          <div className="flex items-center gap-2">
+            <RoleSwitcher current={role} onSwitch={handleRoleChange} />
+            <RegionSwitcher current={region} onSwitch={handleRegionChange} />
+          </div>
+        </div>
+        <div
+          className="transition-all duration-200 ease-out"
+          style={{
+            opacity: animating ? 0 : 1,
+            transform: animating ? "translateY(4px)" : "translateY(0)",
+          }}
+        >
+          <MetaStatsTable entries={dataset.entries} />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export function MetaStatsDashboard(props: Props) {
+  return (
+    <Suspense fallback={<MetaStatsSkeleton />}>
+      <DashboardInner {...props} />
+    </Suspense>
+  )
+}

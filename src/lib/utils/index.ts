@@ -27,11 +27,11 @@ export function winRate(wins: number, losses: number): string {
   return `${Math.round((wins / total) * 100)}%`
 }
 
-/** "2v2" | "3v3" | "rbg" | "shuffle-*" → human-readable label */
+/** "2v2" | "3v3" | "rbg" | "shuffle-*" | "blitz-*" → human-readable label */
 export function formatBracket(bracket: string): string {
   if (bracket.startsWith("shuffle-")) return "Solo Shuffle"
+  if (bracket.startsWith("blitz-")) return "Blitz"
   if (bracket === "2v2") return "2v2 Arena"
   if (bracket === "3v3") return "3v3 Arena"
-  if (bracket === "rbg") return "Rated BG"
   return bracket.toUpperCase()
 }

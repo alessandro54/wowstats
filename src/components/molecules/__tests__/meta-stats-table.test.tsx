@@ -12,6 +12,7 @@ const entries: MetaStatsEntry[] = [
     key: "warrior-71",
     specName: "Arms",
     className: "Warrior",
+    role: "dps",
     score: 0.87,
     normPct: 100,
     tier: "S",
@@ -24,11 +25,13 @@ const entries: MetaStatsEntry[] = [
     bK: 0.92,
     color: "var(--color-class-warrior)",
     iconUrl: "/icons/arms.png",
+    specUrl: "/pvp/warrior/arms",
   },
   {
     key: "mage-62",
     specName: "Fire",
     className: "Mage",
+    role: "dps",
     score: 0.65,
     normPct: 74.7,
     tier: "A",
@@ -40,6 +43,7 @@ const entries: MetaStatsEntry[] = [
     presence: 0.085,
     bK: 0.55,
     color: "var(--color-class-mage)",
+    specUrl: "/pvp/mage/fire",
   },
 ]
 

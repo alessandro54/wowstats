@@ -1,3 +1,4 @@
+import { titleizeSlug } from "@/lib/utils"
 import Image from "next/image"
 
 interface TopSpec {
@@ -42,9 +43,7 @@ export function MetaKpiRow({
 
       {/* Avg Rating */}
       <div className="rounded-lg border border-border bg-card/80 px-4 py-3">
-        <p className="text-[10px] uppercase tracking-wide text-muted-foreground/70">
-          Avg Rating <span className="normal-case opacity-60">bayesian</span>
-        </p>
+        <p className="text-[10px] uppercase tracking-wide text-muted-foreground/70">Avg Rating</p>
         <p className="mt-0.5 text-xl font-bold tabular-nums text-foreground">
           {weightedAvgRating.toFixed(0)}
         </p>
@@ -62,9 +61,7 @@ export function MetaKpiRow({
 
       {/* Top Spec */}
       <div className="rounded-lg border border-border bg-card/80 px-4 py-3">
-        <p className="text-[10px] uppercase tracking-wide text-muted-foreground/70">
-          Top Spec <span className="normal-case opacity-60">highest score</span>
-        </p>
+        <p className="text-[10px] uppercase tracking-wide text-muted-foreground/70">Top Spec</p>
         <div className="mt-0.5 flex items-center gap-2">
           {topSpec.iconUrl && (
             <Image
@@ -82,7 +79,7 @@ export function MetaKpiRow({
               color: topSpec.color,
             }}
           >
-            {topSpec.name}
+            {titleizeSlug(topSpec.name)}
           </p>
         </div>
       </div>
@@ -90,7 +87,7 @@ export function MetaKpiRow({
       {/* Most Reliable */}
       <div className="rounded-lg border border-border bg-card/80 px-4 py-3">
         <p className="text-[10px] uppercase tracking-wide text-muted-foreground/70">
-          Most Reliable <span className="normal-case opacity-60">highest confidence</span>
+          Most Reliable
         </p>
         <div className="mt-0.5 flex items-center gap-2">
           {mostReliable.iconUrl && (
@@ -109,7 +106,7 @@ export function MetaKpiRow({
               color: mostReliable.color,
             }}
           >
-            {mostReliable.name}
+            {titleizeSlug(mostReliable.name)}
           </p>
         </div>
       </div>

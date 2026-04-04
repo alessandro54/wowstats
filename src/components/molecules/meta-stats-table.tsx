@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import Link from "next/link"
 import { useState } from "react"
 import {
   Table,
@@ -12,11 +13,14 @@ import {
 } from "@/components/ui/table"
 import { TIER_COLORS } from "@/config/app-config"
 import type { Tier } from "@/config/app-config"
+import { title } from "node:process"
+import { titleizeSlug } from "@/lib/utils"
 
 export interface MetaStatsEntry {
   key: string
   specName: string
   className: string
+  role: string
   score: number
   normPct: number
   tier: Tier
@@ -29,6 +33,7 @@ export interface MetaStatsEntry {
   bK: number
   color: string
   iconUrl?: string
+  specUrl: string
 }
 
 type SortKey = "rank" | "score" | "rating" | "winrate" | "presence" | "confidence"
@@ -64,12 +69,17 @@ function confidenceLevel(bK: number): {
   }
 }
 
-function scoreHeatBg(normPct: number): string {
-  if (normPct >= 85) return "bg-purple-500/15"
-  if (normPct >= 65) return "bg-amber-500/10"
-  if (normPct >= 45) return "bg-blue-500/10"
-  if (normPct >= 25) return "bg-emerald-500/10"
-  return "bg-muted/20"
+function scoreHeatBg(tier: Tier): string {
+  return (
+    {
+      "S+": "bg-red-500/15",
+      S: "bg-purple-500/15",
+      A: "bg-amber-500/10",
+      B: "bg-blue-500/10",
+      C: "bg-emerald-500/10",
+      D: "bg-muted/20",
+    }[tier] || "bg-muted/20"
+  )
 }
 
 export function MetaStatsTable({ entries }: { entries: MetaStatsEntry[] }) {
@@ -122,43 +132,50 @@ export function MetaStatsTable({ entries }: { entries: MetaStatsEntry[] }) {
   }
 
   return (
-    <Table>
-      <TableHeader>
+    <Table className="table-fixed">
+      <colgroup>
+        <col className="w-10" />
+        <col />
+        <col className="w-12" />
+        <col className="w-20" />
+        <col className="w-48" />
+        <col className="w-20" />
+        <col className="w-24" />
+        <col className="w-24" />
+      </colgroup>
+      <TableHeader className="sticky top-0 z-10 bg-card/95 backdrop-blur-sm">
         <TableRow className="text-[11px] uppercase tracking-wide">
           <TableHead
-            className="w-10 cursor-pointer select-none text-center"
+            className="cursor-pointer select-none text-center"
             onClick={() => handleSort("rank")}
           >
             #{sortIndicator("rank")}
           </TableHead>
-          <TableHead className="min-w-[140px]">Spec</TableHead>
-          <TableHead className="w-12 text-center">Tier</TableHead>
+          <TableHead>Spec</TableHead>
+          <TableHead className="text-center">Tier</TableHead>
           <TableHead
-            className="w-20 cursor-pointer select-none text-center"
+            className="cursor-pointer select-none text-center"
             onClick={() => handleSort("score")}
           >
             Score{sortIndicator("score")}
           </TableHead>
-          <TableHead
-            className="w-48 cursor-pointer select-none"
-            onClick={() => handleSort("rating")}
-          >
-            Bayesian Rating{sortIndicator("rating")}
+          <TableHead className="cursor-pointer select-none" onClick={() => handleSort("rating")}>
+            Rating{sortIndicator("rating")}
           </TableHead>
           <TableHead
-            className="w-20 cursor-pointer select-none text-right"
+            className="cursor-pointer select-none text-right"
             onClick={() => handleSort("winrate")}
           >
             Win%{sortIndicator("winrate")}
           </TableHead>
           <TableHead
-            className="w-24 cursor-pointer select-none text-right"
+            className="cursor-pointer select-none text-right"
             onClick={() => handleSort("presence")}
           >
             Presence{sortIndicator("presence")}
           </TableHead>
           <TableHead
-            className="w-24 cursor-pointer select-none text-center"
+            className="cursor-pointer select-none text-center"
             onClick={() => handleSort("confidence")}
           >
             Confidence{sortIndicator("confidence")}
@@ -180,7 +197,10 @@ export function MetaStatsTable({ entries }: { entries: MetaStatsEntry[] }) {
               </TableCell>
 
               <TableCell>
-                <div className="flex items-center gap-2">
+                <Link
+                  href={entry.specUrl}
+                  className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+                >
                   {entry.iconUrl ? (
                     <Image
                       src={entry.iconUrl}
@@ -205,10 +225,12 @@ export function MetaStatsTable({ entries }: { entries: MetaStatsEntry[] }) {
                       color: entry.color,
                     }}
                   >
-                    {entry.specName}
+                    {titleizeSlug(entry.specName)}
                   </span>
-                  <span className="text-[10px] text-muted-foreground">{entry.className}</span>
-                </div>
+                  <span className="text-[10px] text-muted-foreground">
+                    {titleizeSlug(entry.className)}
+                  </span>
+                </Link>
               </TableCell>
 
               <TableCell className="text-center">
@@ -219,7 +241,7 @@ export function MetaStatsTable({ entries }: { entries: MetaStatsEntry[] }) {
                 </span>
               </TableCell>
 
-              <TableCell className={`text-center ${scoreHeatBg(entry.normPct)}`}>
+              <TableCell className={`text-center ${scoreHeatBg(entry.tier)}`}>
                 <span className="font-mono text-sm font-semibold tabular-nums">
                   {(entry.score * 100).toFixed(1)}
                 </span>

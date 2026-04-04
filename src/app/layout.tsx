@@ -62,12 +62,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <SidebarProvider defaultOpen={defaultOpen} defaultWidth={defaultWidth}>
               <DynamicBackground />
               <AppSidebar />
-              <SidebarInset className="overflow-y-auto">
+              <SidebarInset className="h-dvh overflow-y-auto overflow-x-hidden">
                 <TopNavProvider>
                   <TopNav />
-                  <div className="flex-1 min-h-[calc(100vh-60px)] w-full lg:w-auto lg:max-w-[95%] mx-auto">
-                    {children}
-                  </div>
+                  <div className="flex-1 w-full lg:w-auto lg:max-w-[95%] mx-auto">{children}</div>
                   <AppFooter />
                 </TopNavProvider>
               </SidebarInset>
