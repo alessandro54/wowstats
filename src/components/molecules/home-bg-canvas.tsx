@@ -114,8 +114,8 @@ function BgCanvasInner() {
     const canvas = canvasRef.current
     if (!canvas) return
 
-    const isLowEnd = navigator.hardwareConcurrency != null && navigator.hardwareConcurrency <= 4
-    if (isLowEnd) {
+    // Quick bail-out for very low-memory Android devices (Chrome exposes deviceMemory)
+    if ("deviceMemory" in navigator && (navigator as Navigator & { deviceMemory: number }).deviceMemory < 1) {
       setUseFallback(true)
       return
     }
@@ -370,7 +370,33 @@ function BgCanvasInner() {
         renderer.render(bgScene, bgCamera)
         renderer.render(particleScene, particleCamera)
       }
-      raf = requestAnimationFrame(animate)
+      // Benchmark: render BENCH_FRAMES frames and measure average GPU time.
+      // If the device can't sustain ~15fps, fall back to the CSS version.
+      const BENCH_FRAMES = 8
+      const BENCH_THRESHOLD_MS = 66 // 1000ms / 15fps
+      let benchCount = 0
+      let benchStart = 0
+
+      function benchmark(now: number) {
+        if (benchCount === 0) benchStart = now
+        material.uniforms.uT.value = benchCount * 0.033
+        renderer.clear()
+        renderer.render(bgScene, bgCamera)
+        renderer.render(particleScene, particleCamera)
+        benchCount++
+        if (benchCount < BENCH_FRAMES) {
+          raf = requestAnimationFrame(benchmark)
+          return
+        }
+        const avgMs = (now - benchStart) / BENCH_FRAMES
+        if (avgMs > BENCH_THRESHOLD_MS) {
+          setUseFallback(true)
+          return
+        }
+        raf = requestAnimationFrame(animate)
+      }
+
+      raf = requestAnimationFrame(benchmark)
     }
 
     init().catch(() => setUseFallback(true))
