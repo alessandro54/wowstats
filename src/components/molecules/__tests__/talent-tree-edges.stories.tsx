@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import type { MetaTalent } from "../../lib/api"
-import type { TalentNode } from "../../lib/utils/talent-tree"
-import { NODE_SIZE } from "../../lib/utils/talent-tree"
+import type { MetaTalent } from "@/lib/api"
+import type { TalentNode } from "@/lib/utils/talent-tree"
+import { NODE_SIZE } from "@/lib/utils/talent-tree"
 import { TalentEdges } from "../talent-tree-edges"
 
 function makeTalent(id: number, row: number, col: number): MetaTalent {

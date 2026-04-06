@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { HoverProvider } from "../../components/providers/hover-provider"
-import type { MetaEnchant, MetaItem } from "../../lib/api"
+import { HoverProvider } from "@/components/providers/hover-provider"
+import type { MetaEnchant, MetaItem } from "@/lib/api"
 import type { EnchantGroup } from "../item-card"
 import { ItemCard } from "../item-card"
 

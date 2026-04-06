@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { HoverProvider } from "../../components/providers/hover-provider"
-import type { MetaTalent } from "../../lib/api"
+import { HoverProvider } from "@/components/providers/hover-provider"
+import type { MetaTalent } from "@/lib/api"
 import { Talents } from "../talents"
 
 function makeTalent(

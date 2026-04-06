@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import type { DistEntry } from "../../components/molecules/distribution-tooltip"
+import type { DistEntry } from "@/components/molecules/distribution-tooltip"
 import { DistList } from "../dist-list"
 
 const sampleEntries: DistEntry[] = [

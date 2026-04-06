@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { HoverProvider } from "../../components/providers/hover-provider"
-import { SidebarProvider } from "../../components/ui/sidebar"
+import { HoverProvider } from "@/components/providers/hover-provider"
+import { SidebarProvider } from "@/components/ui/sidebar"
 import { NavMain } from "../nav-main"
 
 const meta = {

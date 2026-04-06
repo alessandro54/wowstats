@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { useHoverSlug } from "../../components/providers/hover-provider"
+import { useHoverSlug } from "@/components/providers/hover-provider"
 import { ClassHoverZone } from "../class-hover-zone"
 
 const meta = {

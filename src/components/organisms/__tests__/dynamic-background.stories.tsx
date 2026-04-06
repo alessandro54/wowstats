@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { useEffect } from "react"
-import { HoverProvider, useSetHoverSlug } from "../../components/providers/hover-provider"
-import type { WowClassSlug } from "../../config/wow/classes/classes-config"
+import { HoverProvider, useSetHoverSlug } from "@/components/providers/hover-provider"
+import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import DynamicBackground from "../dynamic-background"
 
 const ALL_SLUGS: WowClassSlug[] = [

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import type { MetaStatsEntry } from "../../components/molecules/meta-stats-table"
+import type { MetaStatsEntry } from "@/components/molecules/meta-stats-table"
 import { TopPerformers } from "../top-performers"
 
 const mockEntries: MetaStatsEntry[] = [

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { SidebarMenu, SidebarMenuItem, SidebarProvider } from "../../components/ui/sidebar"
-import type { NavMainItem } from "../../config/wow/nav-config"
+import { SidebarMenu, SidebarMenuItem, SidebarProvider } from "@/components/ui/sidebar"
+import type { NavMainItem } from "@/config/wow/nav-config"
 import { NavClassHoverCard } from "../nav-class-hover-card"
 
 const warriorItem: NavMainItem = {

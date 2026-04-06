@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { TopNavProvider } from "../../components/providers/top-nav-provider"
-import { SidebarProvider } from "../../components/ui/sidebar"
+import { TopNavProvider } from "@/components/providers/top-nav-provider"
+import { SidebarProvider } from "@/components/ui/sidebar"
 import { PvpSpecTopNav } from "../pvp-spec-top-nav"
 import { TopNav } from "../top-nav"
 

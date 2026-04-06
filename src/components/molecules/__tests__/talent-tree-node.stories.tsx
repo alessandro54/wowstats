@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import type { MetaTalent } from "../../lib/api"
-import type { TalentNode } from "../../lib/utils/talent-tree"
-import { APEX_NODE_SIZE, NODE_SIZE } from "../../lib/utils/talent-tree"
+import type { MetaTalent } from "@/lib/api"
+import type { TalentNode } from "@/lib/utils/talent-tree"
+import { APEX_NODE_SIZE, NODE_SIZE } from "@/lib/utils/talent-tree"
 import { TalentNodeCard } from "../talent-tree-node"
 
 function makeTalent(

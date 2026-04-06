@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import type { TopPlayer } from "../../lib/api"
+import type { TopPlayer } from "@/lib/api"
 import { PlayerTooltip } from "../player-tooltip"
 
 const samplePlayer: TopPlayer = {

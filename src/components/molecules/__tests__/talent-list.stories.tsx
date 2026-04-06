@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import type { MetaTalent } from "../../lib/api"
+import type { MetaTalent } from "@/lib/api"
 import { TalentList } from "../talent-list"
 
 function makeTalent(
