@@ -102,14 +102,14 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: Bundle size check
-        run: pnpm perf:size
-
       - name: Build
         run: pnpm build
+
+      - name: Bundle size check
+        run: pnpm perf:size
 
       - name: Install Chromium
         run: npx playwright install chromium
 
       - name: Lighthouse CI
-        run: pnpm perf:lighthouse
+        run: npx @lhci/cli autorun

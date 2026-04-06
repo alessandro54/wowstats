@@ -22,7 +22,6 @@
     "stylelint": "stylelint \"src/**/*.css\"",
     "typecheck": "tsc --noEmit",
     "perf:size": "size-limit",
-    "perf:lighthouse": "CHROME_PATH=$(node -e \"process.stdout.write(require('playwright').chromium.executablePath())\") lhci autorun",
     "prepare": "lefthook install"
   },
   "dependencies": {
