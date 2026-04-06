@@ -1,25 +1,26 @@
 "use client"
 
-import { useEffect, useRef, useCallback } from "react"
-import type { SpecParticleEffect, SpecAtmosphere } from "@/config/wow/classes/classes-config"
+import type { FC } from "react"
+import { useCallback, useEffect, useRef } from "react"
+import type { SpecAtmosphere, SpecParticleEffect } from "@/config/wow/classes/classes-config"
 
 /* ── Atmosphere registry ───────────────────────────────────────────────── */
 
-import { FrostAtmosphere } from "@/lib/fx/atmospheres/frost"
-import { ToxicAtmosphere } from "@/lib/fx/atmospheres/toxic"
-import { BloodAtmosphere } from "@/lib/fx/atmospheres/blood"
-import { FireAtmosphere } from "@/lib/fx/atmospheres/fire"
-import { WarmAtmosphere } from "@/lib/fx/atmospheres/warm"
-import { HolyAtmosphere } from "@/lib/fx/atmospheres/holy"
-import { ShadowAtmosphere } from "@/lib/fx/atmospheres/shadow"
-import { FelAtmosphere } from "@/lib/fx/atmospheres/fel"
-import { NatureAtmosphere } from "@/lib/fx/atmospheres/nature"
-import { StormAtmosphere } from "@/lib/fx/atmospheres/storm"
 import { ArcaneAtmosphere } from "@/lib/fx/atmospheres/arcane"
+import { BloodAtmosphere } from "@/lib/fx/atmospheres/blood"
+import { FelAtmosphere } from "@/lib/fx/atmospheres/fel"
+import { FireAtmosphere } from "@/lib/fx/atmospheres/fire"
+import { FrostAtmosphere } from "@/lib/fx/atmospheres/frost"
+import { HolyAtmosphere } from "@/lib/fx/atmospheres/holy"
 import { IronAtmosphere } from "@/lib/fx/atmospheres/iron"
 import { MistAtmosphere } from "@/lib/fx/atmospheres/mist"
+import { NatureAtmosphere } from "@/lib/fx/atmospheres/nature"
+import { ShadowAtmosphere } from "@/lib/fx/atmospheres/shadow"
+import { StormAtmosphere } from "@/lib/fx/atmospheres/storm"
+import { ToxicAtmosphere } from "@/lib/fx/atmospheres/toxic"
+import { WarmAtmosphere } from "@/lib/fx/atmospheres/warm"
 
-const ATMOSPHERES: Record<SpecAtmosphere, React.FC> = {
+const ATMOSPHERES: Record<SpecAtmosphere, FC> = {
   frost: FrostAtmosphere,
   toxic: ToxicAtmosphere,
   blood: BloodAtmosphere,
@@ -35,23 +36,18 @@ const ATMOSPHERES: Record<SpecAtmosphere, React.FC> = {
   mist: MistAtmosphere,
 }
 
-/* ── Particle runner registry ──────────────────────────────────────────── */
+/* ── Particle runner registry (lazy-loaded per effect) ─────────────────── */
 
-import { runSnow } from "@/lib/fx/particles/snow"
-import { runPlague } from "@/lib/fx/particles/plague"
-import { runBlood } from "@/lib/fx/particles/blood"
-import { runRainOfFire } from "@/lib/fx/particles/rainoffire"
-import { runCoinRain } from "@/lib/fx/particles/coinrain"
+type RunnerFn = (ctx: CanvasRenderingContext2D, W: number, H: number) => () => void
 
-const RUNNERS: Record<
-  SpecParticleEffect,
-  (ctx: CanvasRenderingContext2D, W: number, H: number) => () => void
-> = {
-  snow: runSnow,
-  plague: runPlague,
-  blood: runBlood,
-  rainoffire: runRainOfFire,
-  coinrain: runCoinRain,
+const RUNNERS: Record<SpecParticleEffect, () => Promise<RunnerFn>> = {
+  snow: () => import("@/lib/fx/particles/snow").then((m) => m.runSnow),
+  plague: () => import("@/lib/fx/particles/plague").then((m) => m.runPlague),
+  blood: () => import("@/lib/fx/particles/blood").then((m) => m.runBlood),
+  rainoffire: () => import("@/lib/fx/particles/rainoffire").then((m) => m.runRainOfFire),
+  coinrain: () => import("@/lib/fx/particles/coinrain").then((m) => m.runCoinRain),
+  shadowsmoke: () => import("@/lib/fx/particles/shadowsmoke").then((m) => m.runShadowSmoke),
+  venomdrip: () => import("@/lib/fx/particles/venomdrip").then((m) => m.runVenomDrip),
 }
 
 /* ── Public component ──────────────────────────────────────────────────── */
@@ -83,47 +79,49 @@ export function SpecParticleFx({ effect, atmosphere }: Props) {
 function SpecParticleCanvas({ effect }: { effect: SpecParticleEffect }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
-  const initAndRun = useCallback(
-    (canvas: HTMLCanvasElement) => {
-      const runner = RUNNERS[effect]
-      if (!runner) return () => {}
-
-      const ctx = canvas.getContext("2d")
-      if (!ctx) return () => {}
-
-      let cleanup: () => void
-
-      function start() {
-        canvas.width = window.innerWidth
-        canvas.height = window.innerHeight
-        cleanup = runner(ctx!, window.innerWidth, window.innerHeight)
-      }
-
-      start()
-
-      const onResize = () => {
-        cleanup()
-        start()
-      }
-      window.addEventListener("resize", onResize)
-
-      return () => {
-        window.removeEventListener("resize", onResize)
-        cleanup()
-      }
-    },
-    [
-      effect,
-    ],
-  )
-
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
-    return initAndRun(canvas)
+
+    const loader = RUNNERS[effect]
+    if (!loader) return
+
+    const ctx = canvas.getContext("2d")
+    if (!ctx) return
+
+    let cleanup: (() => void) | undefined
+    let cancelled = false
+
+    async function start(runnerFn: RunnerFn) {
+      canvas!.width = window.innerWidth
+      canvas!.height = window.innerHeight
+      cleanup?.()
+      cleanup = runnerFn(ctx!, window.innerWidth, window.innerHeight)
+    }
+
+    let runnerFn: RunnerFn | null = null
+
+    loader().then((fn) => {
+      if (cancelled) return
+      runnerFn = fn
+      start(fn)
+    })
+
+    const onResize = () => {
+      if (runnerFn) start(runnerFn)
+    }
+    window.addEventListener("resize", onResize)
+
+    return () => {
+      cancelled = true
+      window.removeEventListener("resize", onResize)
+      cleanup?.()
+    }
   }, [
-    initAndRun,
+    effect,
   ])
 
-  return <canvas ref={canvasRef} className="pointer-events-none fixed inset-0 z-50 h-full w-full" />
+  return (
+    <canvas ref={canvasRef} className="pointer-events-none fixed inset-0 -z-10 h-full w-full" />
+  )
 }

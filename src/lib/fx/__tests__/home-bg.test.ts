@@ -1,19 +1,19 @@
 import { describe, expect, it, vi } from "vitest"
 import {
+  EMBER_PALETTE,
+  FRAME_INTERVAL,
+  initParticles,
+  isLowEndDevice,
   PARTICLE_COUNT,
+  pickEmberColor,
   SPREAD_X,
   SPREAD_Y,
-  FRAME_INTERVAL,
-  EMBER_PALETTE,
-  pickEmberColor,
-  initParticles,
   updateParticle,
-  isLowEndDevice,
 } from "../home-bg"
-import BG_VS from "../shaders/home-bg.vert"
 import BG_FS from "../shaders/home-bg.frag"
-import PARTICLE_VS from "../shaders/particle.vert"
+import BG_VS from "../shaders/home-bg.vert"
 import PARTICLE_FS from "../shaders/particle.frag"
+import PARTICLE_VS from "../shaders/particle.vert"
 
 describe("shaders", () => {
   it("loads home-bg vertex shader", () => {

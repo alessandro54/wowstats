@@ -1,8 +1,8 @@
-import { PARTICLE_COUNT, FRAME_INTERVAL, initParticles, updateParticle } from "./home-bg"
-import BG_VS from "./shaders/home-bg.vert"
+import { FRAME_INTERVAL, initParticles, PARTICLE_COUNT, updateParticle } from "./home-bg"
 import BG_FS from "./shaders/home-bg.frag"
-import PARTICLE_VS from "./shaders/particle.vert"
+import BG_VS from "./shaders/home-bg.vert"
 import PARTICLE_FS from "./shaders/particle.frag"
+import PARTICLE_VS from "./shaders/particle.vert"
 
 // --- Helpers ---
 
@@ -91,6 +91,7 @@ export function createHomeBgRenderer(
   resize()
 
   if (gl.isContextLost()) {
+    onFallback()
     return {
       dispose: () => {},
     }

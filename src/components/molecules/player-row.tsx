@@ -1,12 +1,12 @@
 "use client"
 
-import type { TopPlayer } from "@/lib/api"
-import { useRouter } from "next/navigation"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 import { ClickableTooltip } from "@/components/atoms/clickable-tooltip"
-import { PlayerTooltip, characterUrl } from "@/components/atoms/player-tooltip"
-import { classColor } from "@/hooks/use-active-color"
+import { characterUrl, PlayerTooltip } from "@/components/atoms/player-tooltip"
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
+import { classColor } from "@/hooks/use-active-color"
+import type { TopPlayer } from "@/lib/api"
 import { formatRealm, winRate } from "@/lib/utils"
 
 export function PlayerRow({ player, index }: { player: TopPlayer; index: number }) {

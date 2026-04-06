@@ -1,8 +1,8 @@
 "use client"
 
-import type { MetaGem } from "@/lib/api"
-import { getStatMeta } from "@/config/equipment-config"
 import { DistList } from "@/components/atoms/dist-list"
+import { getStatMeta } from "@/config/equipment-config"
+import type { MetaGem } from "@/lib/api"
 
 export interface DistEntry {
   name: string

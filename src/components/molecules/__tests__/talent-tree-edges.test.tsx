@@ -1,7 +1,7 @@
-import type { MetaTalent } from "@/lib/api"
-import type { TalentNode } from "@/lib/utils/talent-tree"
 import { render } from "@testing-library/react"
 import { describe, expect, it } from "vitest"
+import type { MetaTalent } from "@/lib/api"
+import type { TalentNode } from "@/lib/utils/talent-tree"
 import { TalentEdges } from "../talent-tree-edges"
 
 function makeTalent(id: number): MetaTalent {

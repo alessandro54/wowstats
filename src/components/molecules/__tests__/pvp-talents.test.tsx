@@ -1,6 +1,6 @@
-import type { MetaTalent } from "@/lib/api"
 import { render } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
+import type { MetaTalent } from "@/lib/api"
 import { PvpTalents } from "../pvp-talents"
 
 vi.mock("@/components/atoms/talent-icon", () => ({

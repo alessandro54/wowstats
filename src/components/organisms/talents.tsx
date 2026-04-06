@@ -1,13 +1,13 @@
 "use client"
 
-import type { WowClassSlug } from "@/config/wow/classes/classes-config"
-import type { MetaTalent, TalentsMeta } from "@/lib/api"
 import { TalentCard } from "@/components/atoms/talent-card"
 import { PvpTalents } from "@/components/molecules/pvp-talents"
 import { TalentList } from "@/components/molecules/talent-list"
 import { HeroSection } from "@/components/organisms/hero-section"
 import { hasTreeData, TalentTree, TalentTreeSkeleton } from "@/components/organisms/talent-tree"
+import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { useActiveColor } from "@/hooks/use-active-color"
+import type { MetaTalent, TalentsMeta } from "@/lib/api"
 
 const TYPE_LABELS: Record<string, string> = {
   spec: "Spec Talents",

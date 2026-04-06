@@ -1,5 +1,5 @@
-import type { WowClassConfig } from "./classes-config"
 import { cdnImage } from "@/config/cdn-config"
+import type { WowClassConfig } from "./classes-config"
 
 // Class color: #0070DE
 const ShamanConfig: WowClassConfig = {

@@ -1,5 +1,5 @@
-import type { MetaTalent } from "@/lib/api"
 import Image from "next/image"
+import type { MetaTalent } from "@/lib/api"
 
 interface Props {
   talent: MetaTalent

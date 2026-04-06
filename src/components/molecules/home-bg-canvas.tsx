@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { createPortal } from "react-dom"
 import { CssFallbackBg } from "@/components/atoms/css-fallback-bg"
 import { createHomeBgRenderer } from "@/lib/fx/home-bg-webgl"

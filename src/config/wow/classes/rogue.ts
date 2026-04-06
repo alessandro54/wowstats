@@ -1,5 +1,5 @@
-import type { WowClassConfig } from "./classes-config"
 import { cdnImage } from "@/config/cdn-config"
+import type { WowClassConfig } from "./classes-config"
 
 // Class color: #FFF468
 const RogueConfig: WowClassConfig = {
@@ -15,6 +15,8 @@ const RogueConfig: WowClassConfig = {
       url: "/pvp/rogue/assassination",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_rogue_deadlybrew.jpg",
       iconRemasteredUrl: cdnImage("/class_media/rogue/assassination_icon.png", 80),
+      effect: "venomdrip" as const,
+      atmosphere: "toxic" as const,
     },
     {
       id: 260,
@@ -31,6 +33,8 @@ const RogueConfig: WowClassConfig = {
       url: "/pvp/rogue/subtlety",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_stealth.jpg",
       iconRemasteredUrl: cdnImage("/class_media/rogue/subtlety_icon.png", 80),
+      effect: "shadowsmoke" as const,
+      atmosphere: "shadow" as const,
     },
   ],
 }

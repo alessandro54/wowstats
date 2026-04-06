@@ -1,6 +1,6 @@
-import type { TopPlayer } from "@/lib/api"
 import { render } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
+import type { TopPlayer } from "@/lib/api"
 import { PlayerRow } from "../player-row"
 
 vi.mock("next/image", () => ({

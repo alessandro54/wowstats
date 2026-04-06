@@ -1,6 +1,6 @@
-import type { TalentNode } from "@/lib/utils/talent-tree"
-import type { RankBar } from "@/lib/utils/talent-node-utils"
 import Image from "next/image"
+import type { RankBar } from "@/lib/utils/talent-node-utils"
+import type { TalentNode } from "@/lib/utils/talent-tree"
 
 interface Props {
   node: TalentNode

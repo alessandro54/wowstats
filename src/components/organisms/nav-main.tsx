@@ -1,11 +1,8 @@
 "use client"
 
-import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { ChevronRight } from "lucide-react"
-
 import Image from "next/image"
 import Link from "next/link"
-
 import { useCallback, useRef, useState } from "react"
 import { NavClassHoverCard } from "@/components/molecules/nav-class-hover-card"
 import { useSetHoverSlug } from "@/components/providers/hover-provider"
@@ -21,6 +18,7 @@ import {
   SidebarMenuSubItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { navMain } from "@/config/wow/nav-config"
 
 export function NavMain() {

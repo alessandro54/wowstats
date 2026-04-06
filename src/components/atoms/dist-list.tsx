@@ -1,5 +1,5 @@
-import type { DistEntry } from "@/components/molecules/distribution-tooltip"
 import Image from "next/image"
+import type { DistEntry } from "@/components/molecules/distribution-tooltip"
 import { QUALITY_COLORS } from "@/config/equipment-config"
 
 export function DistList({ entries }: { entries: DistEntry[] }) {

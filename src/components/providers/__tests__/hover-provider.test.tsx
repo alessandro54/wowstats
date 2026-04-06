@@ -1,6 +1,6 @@
-import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { fireEvent, render, screen } from "@testing-library/react"
 import { describe, expect, it } from "vitest"
+import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { HoverProvider, useHoverSlug, useSetHoverSlug } from "../hover-provider"
 
 function SlugReader() {

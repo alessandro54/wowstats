@@ -1,7 +1,7 @@
 "use client"
 
-import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { useSetHoverSlug } from "@/components/providers/hover-provider"
+import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { cn } from "@/lib/utils"
 
 interface Props {

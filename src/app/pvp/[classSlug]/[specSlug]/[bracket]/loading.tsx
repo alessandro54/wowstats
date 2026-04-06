@@ -4,20 +4,75 @@ import { Skeleton } from "@/components/ui/skeleton"
 export default function BracketLoading() {
   return (
     <div className="mx-auto max-w-5xl space-y-8 px-4 pb-12 pt-2 lg:px-6">
-      {/* Top Players */}
-      <div className="space-y-2">
-        <div className="mb-3 flex items-center justify-between">
-          <Skeleton className="h-5 w-28" />
-          <Skeleton className="h-7 w-32 rounded-full" />
+      {/* Top Players — full table matching real layout */}
+      <section>
+        <div className="mb-4 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <Skeleton className="size-2 rounded-full" />
+            <Skeleton className="h-3 w-20" />
+            <div className="ml-2 h-px w-16 bg-gradient-to-r from-border to-transparent" />
+          </div>
+          <Skeleton className="h-9 w-44 rounded-lg" />
         </div>
-        <div className="flex gap-3 overflow-hidden">
-          {Array.from({
-            length: 3,
-          }).map((_, i) => (
-            <Skeleton key={i} className="h-16 w-64 shrink-0 rounded-lg" />
-          ))}
+        <div className="overflow-x-auto rounded-xl border border-border/50 bg-card/30">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-border/30 bg-black/20">
+                <th className="w-16 px-4 py-3.5">
+                  <Skeleton className="mx-auto h-2.5 w-3" />
+                </th>
+                <th className="px-4 py-3.5 text-left">
+                  <Skeleton className="h-2.5 w-14" />
+                </th>
+                <th className="w-32 px-4 py-3.5">
+                  <Skeleton className="mx-auto h-2.5 w-14" />
+                </th>
+                <th className="hidden w-28 px-4 py-3.5 sm:table-cell">
+                  <Skeleton className="mx-auto h-2.5 w-10" />
+                </th>
+                <th className="w-24 px-4 py-3.5">
+                  <Skeleton className="mx-auto h-2.5 w-12" />
+                </th>
+                <th className="w-24 px-4 py-3.5">
+                  <Skeleton className="mx-auto h-2.5 w-14" />
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {Array.from({
+                length: 10,
+              }).map((_, i) => (
+                <tr key={i} className="border-b border-border/20">
+                  <td className="w-16 px-4 py-4 text-center">
+                    <Skeleton className="mx-auto h-5 w-6" />
+                  </td>
+                  <td className="px-4 py-4">
+                    <div className="flex items-center gap-3">
+                      <Skeleton className="size-10 shrink-0 rounded-full" />
+                      <div>
+                        <Skeleton className="mb-1.5 h-4 w-28" />
+                        <Skeleton className="h-3 w-20" />
+                      </div>
+                    </div>
+                  </td>
+                  <td className="w-32 px-4 py-4 text-center">
+                    <Skeleton className="mx-auto h-6 w-14" />
+                  </td>
+                  <td className="hidden w-28 px-4 py-4 text-center sm:table-cell">
+                    <Skeleton className="mx-auto h-4 w-16" />
+                  </td>
+                  <td className="w-24 px-4 py-4 text-center">
+                    <Skeleton className="mx-auto h-4 w-10" />
+                  </td>
+                  <td className="w-24 px-4 py-4 text-center">
+                    <Skeleton className="mx-auto h-4 w-8" />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      </div>
+      </section>
 
       {/* Talent trees */}
       <div className="sm:overflow-x-auto">
@@ -40,12 +95,25 @@ export default function BracketLoading() {
 
       {/* Equipment */}
       <div className="space-y-3">
-        <Skeleton className="h-5 w-24" />
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-3 w-10" />
+          <div className="ml-2 h-px flex-1 bg-gradient-to-r from-border to-transparent" />
+        </div>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
           {Array.from({
-            length: 8,
+            length: 16,
           }).map((_, i) => (
-            <Skeleton key={i} className="h-16 w-full rounded-lg" />
+            <div
+              key={i}
+              className="flex items-center gap-3 rounded-lg border border-border/30 bg-card/30 px-3 py-2.5"
+            >
+              <Skeleton className="size-9 shrink-0 rounded" />
+              <div className="flex-1">
+                <Skeleton className="mb-1 h-4 w-32" />
+                <Skeleton className="h-3 w-20" />
+              </div>
+              <Skeleton className="h-4 w-12" />
+            </div>
           ))}
         </div>
       </div>

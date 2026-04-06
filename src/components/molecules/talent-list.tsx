@@ -1,8 +1,8 @@
 "use client"
 
-import type { MetaTalent } from "@/lib/api"
 import Image from "next/image"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import type { MetaTalent } from "@/lib/api"
 
 export function TalentList({
   talents,

@@ -1,7 +1,7 @@
-import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { render } from "@testing-library/react"
 import { usePathname } from "next/navigation"
 import { describe, expect, it, vi } from "vitest"
+import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { SpecHeading } from "../spec-heading"
 
 vi.mock("next/navigation", () => ({

@@ -1,13 +1,13 @@
 "use client"
 
-import type { MetaTalent } from "@/lib/api"
-import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { useState } from "react"
+import { PvpTalentTooltip } from "@/components/atoms/pvp-talent-tooltip"
 import { TalentCard } from "@/components/atoms/talent-card"
 import { TalentIcon } from "@/components/atoms/talent-icon"
-import { PvpTalentTooltip } from "@/components/atoms/pvp-talent-tooltip"
-import { BORDER_SITUATIONAL } from "@/lib/utils/talent-tree"
+import type { WowClassSlug } from "@/config/wow/classes/classes-config"
+import type { MetaTalent } from "@/lib/api"
 import { cn } from "@/lib/utils"
+import { BORDER_SITUATIONAL } from "@/lib/utils/talent-tree"
 
 const GOLD_BORDER = "border-amber-400 dark:border-amber-300 border-2"
 const ICON_SIZE = 36

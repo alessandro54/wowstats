@@ -8,10 +8,10 @@ import { ThemeDropdown } from "@/components/atoms/theme-dropdown"
 import { ThemeSwitcher } from "@/components/atoms/theme-switcher"
 import { NavMain } from "@/components/organisms/nav-main"
 import {
-  SidebarHeader,
-  SidebarFooter,
   Sidebar,
   SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
   SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar"
@@ -32,6 +32,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             alt="Logo"
             width={90}
             height={90}
+            priority
             className={`block shrink-0 rounded-full object-contain transition-all duration-200 ${open ? "size-12" : "size-8"}`}
           />
           {open && <span className="text-sm font-semibold truncate">WoW Insights</span>}

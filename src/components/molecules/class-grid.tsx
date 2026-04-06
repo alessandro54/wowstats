@@ -1,11 +1,11 @@
 "use client"
 
-import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { useState } from "react"
 import { useSetHoverSlug } from "@/components/providers/hover-provider"
-import type { WowClassConfig, WowClassSlug } from "@/config/wow/classes/classes-config"
 import { BRACKETS } from "@/config/wow/brackets-config"
+import type { WowClassConfig, WowClassSlug } from "@/config/wow/classes/classes-config"
 import { cn } from "@/lib/utils"
 
 interface Props {

@@ -1,7 +1,7 @@
-import Link from "next/link"
 import { ChevronRight } from "lucide-react"
-import { TIER_COLORS } from "@/config/app-config"
+import Link from "next/link"
 import type { BracketData } from "@/app/pvp/[classSlug]/[specSlug]/page"
+import { TIER_COLORS } from "@/config/app-config"
 
 interface Props {
   brackets: BracketData[]

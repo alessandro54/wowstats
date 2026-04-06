@@ -1,9 +1,9 @@
-import type { DistEntry } from "@/components/molecules/distribution-tooltip"
-import type { MetaEnchant, MetaItem, MetaGem } from "@/lib/api"
 import Image from "next/image"
 import { ClickableTooltip } from "@/components/atoms/clickable-tooltip"
+import type { DistEntry } from "@/components/molecules/distribution-tooltip"
 import { DistributionTooltip } from "@/components/molecules/distribution-tooltip"
 import { formatSlot, isReshiiWraps, QUALITY_COLORS } from "@/config/equipment-config"
+import type { MetaEnchant, MetaGem, MetaItem } from "@/lib/api"
 
 export interface EnchantGroup {
   slot: string

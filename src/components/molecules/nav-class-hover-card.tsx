@@ -1,11 +1,11 @@
 "use client"
 
-import type { NavMainItem } from "@/config/wow/nav-config"
 import Image from "next/image"
 import Link from "next/link"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 import { SidebarMenuButton } from "@/components/ui/sidebar"
 import { BRACKETS } from "@/config/wow/brackets-config"
+import type { NavMainItem } from "@/config/wow/nav-config"
 
 interface Props {
   item: NavMainItem

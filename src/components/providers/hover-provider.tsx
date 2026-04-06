@@ -1,7 +1,7 @@
 "use client"
 
-import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { createContext, use, useState } from "react"
+import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 
 // Split into two contexts so setter-only consumers don't re-render on slug changes
 const HoverSlugContext = createContext<WowClassSlug | null>(null)

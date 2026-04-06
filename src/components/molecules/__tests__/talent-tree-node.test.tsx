@@ -1,7 +1,7 @@
-import type { MetaTalent } from "@/lib/api"
-import type { TalentNode } from "@/lib/utils/talent-tree"
 import { render } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
+import type { MetaTalent } from "@/lib/api"
+import type { TalentNode } from "@/lib/utils/talent-tree"
 import { TalentNodeCard } from "../talent-tree-node"
 
 vi.mock("next/image", () => ({

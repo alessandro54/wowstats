@@ -1,6 +1,6 @@
-import type { NavMainItem } from "@/config/wow/nav-config"
 import { render } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
+import type { NavMainItem } from "@/config/wow/nav-config"
 import { NavClassHoverCard } from "../nav-class-hover-card"
 
 vi.mock("@/components/ui/hover-card", () => ({

@@ -1,7 +1,7 @@
 "use client"
 
-import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { usePathname } from "next/navigation"
+import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 
 interface Props {
   className: string

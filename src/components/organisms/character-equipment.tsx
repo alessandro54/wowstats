@@ -1,5 +1,5 @@
-import type { CharacterEquipmentItem } from "@/lib/api"
 import { formatSlot, QUALITY_COLORS, SLOT_ORDER } from "@/config/equipment-config"
+import type { CharacterEquipmentItem } from "@/lib/api"
 
 interface Props {
   items: CharacterEquipmentItem[]
