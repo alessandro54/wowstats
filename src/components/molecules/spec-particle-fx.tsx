@@ -1,25 +1,26 @@
 "use client"
 
-import { useEffect, useRef, useCallback } from "react"
-import type { SpecParticleEffect, SpecAtmosphere } from "@/config/wow/classes/classes-config"
+import type { FC } from "react"
+import { useCallback, useEffect, useRef } from "react"
+import type { SpecAtmosphere, SpecParticleEffect } from "@/config/wow/classes/classes-config"
 
 /* ── Atmosphere registry ───────────────────────────────────────────────── */
 
-import { FrostAtmosphere } from "@/lib/fx/atmospheres/frost"
-import { ToxicAtmosphere } from "@/lib/fx/atmospheres/toxic"
-import { BloodAtmosphere } from "@/lib/fx/atmospheres/blood"
-import { FireAtmosphere } from "@/lib/fx/atmospheres/fire"
-import { WarmAtmosphere } from "@/lib/fx/atmospheres/warm"
-import { HolyAtmosphere } from "@/lib/fx/atmospheres/holy"
-import { ShadowAtmosphere } from "@/lib/fx/atmospheres/shadow"
-import { FelAtmosphere } from "@/lib/fx/atmospheres/fel"
-import { NatureAtmosphere } from "@/lib/fx/atmospheres/nature"
-import { StormAtmosphere } from "@/lib/fx/atmospheres/storm"
 import { ArcaneAtmosphere } from "@/lib/fx/atmospheres/arcane"
+import { BloodAtmosphere } from "@/lib/fx/atmospheres/blood"
+import { FelAtmosphere } from "@/lib/fx/atmospheres/fel"
+import { FireAtmosphere } from "@/lib/fx/atmospheres/fire"
+import { FrostAtmosphere } from "@/lib/fx/atmospheres/frost"
+import { HolyAtmosphere } from "@/lib/fx/atmospheres/holy"
 import { IronAtmosphere } from "@/lib/fx/atmospheres/iron"
 import { MistAtmosphere } from "@/lib/fx/atmospheres/mist"
+import { NatureAtmosphere } from "@/lib/fx/atmospheres/nature"
+import { ShadowAtmosphere } from "@/lib/fx/atmospheres/shadow"
+import { StormAtmosphere } from "@/lib/fx/atmospheres/storm"
+import { ToxicAtmosphere } from "@/lib/fx/atmospheres/toxic"
+import { WarmAtmosphere } from "@/lib/fx/atmospheres/warm"
 
-const ATMOSPHERES: Record<SpecAtmosphere, React.FC> = {
+const ATMOSPHERES: Record<SpecAtmosphere, FC> = {
   frost: FrostAtmosphere,
   toxic: ToxicAtmosphere,
   blood: BloodAtmosphere,
@@ -37,11 +38,13 @@ const ATMOSPHERES: Record<SpecAtmosphere, React.FC> = {
 
 /* ── Particle runner registry ──────────────────────────────────────────── */
 
-import { runSnow } from "@/lib/fx/particles/snow"
-import { runPlague } from "@/lib/fx/particles/plague"
 import { runBlood } from "@/lib/fx/particles/blood"
-import { runRainOfFire } from "@/lib/fx/particles/rainoffire"
 import { runCoinRain } from "@/lib/fx/particles/coinrain"
+import { runPlague } from "@/lib/fx/particles/plague"
+import { runRainOfFire } from "@/lib/fx/particles/rainoffire"
+import { runShadowSmoke } from "@/lib/fx/particles/shadowsmoke"
+import { runSnow } from "@/lib/fx/particles/snow"
+import { runVenomDrip } from "@/lib/fx/particles/venomdrip"
 
 const RUNNERS: Record<
   SpecParticleEffect,
@@ -52,6 +55,8 @@ const RUNNERS: Record<
   blood: runBlood,
   rainoffire: runRainOfFire,
   coinrain: runCoinRain,
+  shadowsmoke: runShadowSmoke,
+  venomdrip: runVenomDrip,
 }
 
 /* ── Public component ──────────────────────────────────────────────────── */
@@ -125,5 +130,7 @@ function SpecParticleCanvas({ effect }: { effect: SpecParticleEffect }) {
     initAndRun,
   ])
 
-  return <canvas ref={canvasRef} className="pointer-events-none fixed inset-0 z-50 h-full w-full" />
+  return (
+    <canvas ref={canvasRef} className="pointer-events-none fixed inset-0 -z-10 h-full w-full" />
+  )
 }

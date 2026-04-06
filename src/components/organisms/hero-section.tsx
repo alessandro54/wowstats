@@ -1,11 +1,11 @@
 "use client"
 
-import type { MetaTalent } from "@/lib/api"
-import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { useState } from "react"
 import { CornerPeel } from "@/components/atoms/corner-peel"
 import { TalentCard } from "@/components/atoms/talent-card"
 import { HeroTree } from "@/components/molecules/hero-tree"
+import type { WowClassSlug } from "@/config/wow/classes/classes-config"
+import type { MetaTalent } from "@/lib/api"
 import { splitHeroTrees } from "@/lib/utils/talent-tree"
 
 interface Props {

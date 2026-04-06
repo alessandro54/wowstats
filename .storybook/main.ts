@@ -1,14 +1,14 @@
-import type { StorybookConfig } from "@storybook/react-vite"
 import path, { dirname } from "node:path"
 // This file has been automatically migrated to valid ESM format by Storybook.
 import { fileURLToPath } from "node:url"
+import type { StorybookConfig } from "@storybook/react-vite"
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 const config: StorybookConfig = {
   stories: [
-    "../src/stories/**/*.stories.@(js|jsx|mjs|ts|tsx)",
+    "../src/components/**/*.stories.@(js|jsx|mjs|ts|tsx)",
   ],
   addons: [
     "@storybook/addon-docs",

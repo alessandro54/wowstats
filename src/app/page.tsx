@@ -1,13 +1,14 @@
+import { Suspense } from "react"
 import { LazySection } from "@/components/atoms/lazy-section"
 import { ScrollHint } from "@/components/atoms/scroll-hint"
 import { HomeBgCanvas } from "@/components/molecules/home-bg-canvas"
-import { HomeHero } from "@/components/molecules/home-hero"
-import { HomeBracketCards } from "@/components/molecules/home-bracket-cards"
 import type { BracketSummary } from "@/components/molecules/home-bracket-cards"
+import { HomeBracketCards } from "@/components/molecules/home-bracket-cards"
 import { HomeClassGrid } from "@/components/molecules/home-class-grid"
-import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
-import type { WowClassSlug } from "@/config/wow/classes/classes-config"
+import { HomeHero } from "@/components/molecules/home-hero"
 import { tier, tierByPercentile } from "@/config/app-config"
+import type { WowClassSlug } from "@/config/wow/classes/classes-config"
+import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
 import { fetchClassDistribution } from "@/lib/api"
 
 export const dynamic = "force-dynamic"
@@ -59,7 +60,7 @@ function findSpecIcon(classSlug: string, specSlug: string): string | undefined {
   return cls?.specs.find((s) => normalizeSpecName(s.name) === normalizeSpecName(specSlug))?.iconUrl
 }
 
-export default async function Home() {
+async function HomeContent() {
   const results = await Promise.all(
     BRACKETS.map(({ bracket }) =>
       fetchClassDistribution({
@@ -72,7 +73,6 @@ export default async function Home() {
 
   let seasonId = 41
   let totalEntries = 0
-
   const bracketSummaries: BracketSummary[] = []
   let sPlusSpec:
     | {
@@ -152,19 +152,32 @@ export default async function Home() {
   }
 
   return (
-    <div className="animate-page-in relative">
-      <HomeBgCanvas />
-      {/* Hero — full viewport */}
+    <>
       <div className="relative z-[2] flex min-h-[calc(100dvh-3.75rem)] items-center justify-center px-4 py-12 lg:px-6">
         <HomeHero seasonId={seasonId} totalEntries={totalEntries} sPlus={sPlusSpec} />
         <ScrollHint />
       </div>
-
-      {/* Content — lazy loaded when user scrolls near */}
       <LazySection className="relative z-[2] mx-auto w-full max-w-5xl space-y-10 px-4 pb-16 lg:px-6">
         <HomeBracketCards brackets={bracketSummaries} />
         <HomeClassGrid classes={WOW_CLASSES} />
       </LazySection>
+    </>
+  )
+}
+
+export default function Home() {
+  return (
+    <div className="animate-page-in relative">
+      <HomeBgCanvas />
+      <Suspense
+        fallback={
+          <div className="relative z-[2] flex min-h-[calc(100dvh-3.75rem)] items-center justify-center">
+            <ScrollHint />
+          </div>
+        }
+      >
+        <HomeContent />
+      </Suspense>
     </div>
   )
 }

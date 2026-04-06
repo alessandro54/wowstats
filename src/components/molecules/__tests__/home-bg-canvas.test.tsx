@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react"
-import { describe, expect, it, vi, beforeEach } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vitest"
 
 vi.mock("@/lib/fx/home-bg-webgl", () => ({
   createHomeBgRenderer: vi.fn(() => ({

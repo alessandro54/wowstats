@@ -1,6 +1,6 @@
-import type { TopPlayer } from "@/lib/api"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import type { TopPlayer } from "@/lib/api"
 import { formatRealm, titleizeSlug, winRate } from "@/lib/utils"
 
 export function characterUrl(player: TopPlayer): string {

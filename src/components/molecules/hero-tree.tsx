@@ -1,6 +1,6 @@
-import type { MetaTalent } from "@/lib/api"
 import { TalentList } from "@/components/molecules/talent-list"
 import { hasTreeData, TalentTree } from "@/components/organisms/talent-tree"
+import type { MetaTalent } from "@/lib/api"
 
 interface Props {
   talents: MetaTalent[]

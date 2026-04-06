@@ -1,5 +1,5 @@
-import type { WowClassConfig, SpecParticleEffect, SpecAtmosphere } from "./classes-config"
 import { CDN_BASE, cdnImage } from "@/config/cdn-config"
+import type { SpecAtmosphere, SpecParticleEffect, WowClassConfig } from "./classes-config"
 
 // Class color: #9482C9
 const WarlockConfig: WowClassConfig = {

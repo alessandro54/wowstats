@@ -1,8 +1,8 @@
 "use client"
 
-import type { StatPriorityEntry } from "@/lib/api"
-import { getStatMeta } from "@/config/equipment-config"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { getStatMeta } from "@/config/equipment-config"
+import type { StatPriorityEntry } from "@/lib/api"
 
 interface Props {
   stats: StatPriorityEntry[]

@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
-import { HomeBracketCards } from "../home-bracket-cards"
 import type { BracketSummary } from "../home-bracket-cards"
+import { HomeBracketCards } from "../home-bracket-cards"
 
 vi.mock("next/image", () => ({
   // eslint-disable-next-line next/no-img-element

@@ -1,7 +1,7 @@
-import type { TopPlayer } from "@/lib/api"
 import { render } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
-import { PlayerTooltip, characterUrl } from "../player-tooltip"
+import type { TopPlayer } from "@/lib/api"
+import { characterUrl, PlayerTooltip } from "../player-tooltip"
 
 vi.mock("@/lib/utils", () => ({
   formatRealm: (r: string) => r,

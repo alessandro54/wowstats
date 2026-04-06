@@ -1,16 +1,16 @@
 "use client"
 
-import type { DistEntry } from "@/components/molecules/distribution-tooltip"
-import type { EnchantGroup } from "@/components/molecules/item-card"
-import type { WowClassSlug } from "@/config/wow/classes/classes-config"
-import type { MetaGem, MetaItem } from "@/lib/api"
 import Image from "next/image"
 import { ClickableTooltip } from "@/components/atoms/clickable-tooltip"
+import type { DistEntry } from "@/components/molecules/distribution-tooltip"
 import { DistributionTooltip } from "@/components/molecules/distribution-tooltip"
+import type { EnchantGroup } from "@/components/molecules/item-card"
 import { ItemCard } from "@/components/molecules/item-card"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { formatSocketType, QUALITY_COLORS } from "@/config/equipment-config"
+import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { useActiveColor } from "@/hooks/use-active-color"
+import type { MetaGem, MetaItem } from "@/lib/api"
 
 /** Paper-doll slot layout: left column, right column */
 const LEFT_SLOTS = [

@@ -1,9 +1,9 @@
 "use client"
 
-import type * as React from "react"
-import type { MetaTalent } from "@/lib/api"
 import Image from "next/image"
+import type * as React from "react"
 import { ClickableTooltip } from "@/components/atoms/clickable-tooltip"
+import type { MetaTalent } from "@/lib/api"
 import { cn } from "@/lib/utils"
 
 export function TalentIcon({

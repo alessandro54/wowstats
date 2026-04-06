@@ -1,7 +1,7 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
 import { usePathname } from "next/navigation"
+import { useEffect, useRef, useState } from "react"
 import { useHoverSlug } from "@/components/providers/hover-provider"
 import { cn } from "@/lib/utils"
 

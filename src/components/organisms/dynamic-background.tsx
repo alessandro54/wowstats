@@ -1,8 +1,8 @@
 "use client"
 
-import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { usePathname } from "next/navigation"
 import { useHoverSlug } from "@/components/providers/hover-provider"
+import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 
 export default function DynamicBackground() {
   const hoverSlug = useHoverSlug()
@@ -10,15 +10,17 @@ export default function DynamicBackground() {
 
   const segments = pathname.split("/").filter(Boolean)
   const isPvpRoute = segments[0] === "pvp"
-  const classSlug = ((isPvpRoute ? segments[1] : segments[0]) as WowClassSlug | undefined) ?? null
-  const specSlug = (isPvpRoute ? segments[2] : segments[1]) ?? null
-  const isSpecPage = isPvpRoute && classSlug && specSlug
+  const isMetaPage = isPvpRoute && segments[1] === "meta"
+  const classSlug =
+    ((isPvpRoute && !isMetaPage ? segments[1] : segments[0]) as WowClassSlug | undefined) ?? null
+  const specSlug = isPvpRoute && !isMetaPage ? (segments[2] ?? null) : null
+  const isSpecPage = isPvpRoute && !isMetaPage && classSlug && specSlug
 
   const isHome = pathname === "/"
   const activeSlug = hoverSlug ?? classSlug
   const background = activeSlug ? `var(--color-class-${activeSlug})` : "oklch(0.7 0.15 340)"
 
-  // Spec pages (index + bracket) handle their own atmosphere via layout
+  // Spec pages handle their own atmosphere via layout; home has its own canvas
   if (isHome || isSpecPage) return null
 
   return (

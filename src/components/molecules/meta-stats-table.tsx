@@ -2,9 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { useState } from "react"
 import { useSetHoverSlug } from "@/components/providers/hover-provider"
-import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import {
   Table,
   TableBody,
@@ -13,8 +11,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { TIER_COLORS } from "@/config/app-config"
 import type { Tier } from "@/config/app-config"
+import { TIER_COLORS } from "@/config/app-config"
+import type { WowClassSlug } from "@/config/wow/classes/classes-config"
+import { useSortableTable } from "@/hooks/use-sortable-table"
 import { titleizeSlug } from "@/lib/utils"
 
 export interface MetaStatsEntry {
@@ -38,6 +38,15 @@ export interface MetaStatsEntry {
 }
 
 type SortKey = "rank" | "score" | "rating" | "winrate" | "presence" | "confidence"
+
+const SORT_COMPARATORS: Record<SortKey, (a: MetaStatsEntry, b: MetaStatsEntry) => number> = {
+  rank: (a, b) => b.score - a.score,
+  score: (a, b) => b.score - a.score,
+  rating: (a, b) => b.thetaHat - a.thetaHat,
+  winrate: (a, b) => b.wrHat - a.wrHat,
+  presence: (a, b) => b.presence - a.presence,
+  confidence: (a, b) => b.bK - a.bK,
+}
 
 function wrColor(wr: number): string {
   if (wr >= 0.53) return "text-emerald-400"
@@ -90,65 +99,27 @@ export function MetaStatsTable({
   entries: MetaStatsEntry[]
   defaultClassSlug?: WowClassSlug
 }) {
-  const [sortKey, setSortKey] = useState<SortKey>("rank")
-  const [sortAsc, setSortAsc] = useState(false)
   const setHoverSlug = useSetHoverSlug()
-
-  const handleSort = (key: SortKey) => {
-    if (sortKey === key) {
-      setSortAsc(!sortAsc)
-    } else {
-      setSortKey(key)
-      setSortAsc(false)
-    }
-  }
-
-  const sorted = [
-    ...entries,
-  ].sort((a, b) => {
-    let cmp = 0
-    switch (sortKey) {
-      case "rank":
-        cmp = b.score - a.score
-        break
-      case "score":
-        cmp = b.score - a.score
-        break
-      case "rating":
-        cmp = b.thetaHat - a.thetaHat
-        break
-      case "winrate":
-        cmp = b.wrHat - a.wrHat
-        break
-      case "presence":
-        cmp = b.presence - a.presence
-        break
-      case "confidence":
-        cmp = b.bK - a.bK
-        break
-    }
-    return sortAsc ? -cmp : cmp
-  })
+  const { sorted, handleSort, sortIndicator } = useSortableTable<MetaStatsEntry, SortKey>(
+    entries,
+    SORT_COMPARATORS,
+    "rank",
+  )
 
   const allCiLow = Math.min(...entries.map((e) => e.ratingCiLow))
   const allCiHigh = Math.max(...entries.map((e) => e.ratingCiHigh))
   const ciRange = allCiHigh - allCiLow || 1
 
-  const sortIndicator = (key: SortKey) => {
-    if (sortKey !== key) return ""
-    return sortAsc ? " \u25B2" : " \u25BC"
-  }
-
   return (
-    <Table className="table-fixed">
+    <Table className="min-w-[720px] table-fixed">
       <colgroup>
         <col className="w-10" />
-        <col />
+        <col className="w-44" />
         <col className="w-12" />
+        <col className="w-16" />
+        <col className="w-40" />
+        <col className="w-16" />
         <col className="w-20" />
-        <col className="w-48" />
-        <col className="w-20" />
-        <col className="w-24" />
         <col className="w-24" />
       </colgroup>
       <TableHeader className="sticky top-0 z-10 bg-card/95 backdrop-blur-sm">
@@ -208,7 +179,7 @@ export function MetaStatsTable({
                 {index + 1}
               </TableCell>
 
-              <TableCell>
+              <TableCell className="truncate">
                 <Link
                   href={entry.specUrl}
                   className="flex items-center gap-2 hover:opacity-80 transition-opacity"

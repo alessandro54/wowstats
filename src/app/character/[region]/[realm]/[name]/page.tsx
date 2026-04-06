@@ -2,14 +2,15 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 
 export const dynamic = "force-dynamic"
+
 import Image from "next/image"
 import { CharacterEquipment } from "@/components/organisms/character-equipment"
 import { StatPriority } from "@/components/organisms/stat-priority"
 import { Talents } from "@/components/organisms/talents"
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
-import { fetchCharacter } from "@/lib/api"
 import type { CharacterPvpEntry, StatPriorityEntry } from "@/lib/api"
+import { fetchCharacter } from "@/lib/api"
 import { formatBracket, formatRealm, titleizeSlug, winRate } from "@/lib/utils"
 
 interface PageProps {

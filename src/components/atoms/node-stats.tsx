@@ -1,5 +1,5 @@
-import type { TalentNode } from "@/lib/utils/talent-tree"
 import { displayUsagePct } from "@/lib/utils/talent-node-utils"
+import type { TalentNode } from "@/lib/utils/talent-tree"
 
 interface Props {
   hideStats?: boolean

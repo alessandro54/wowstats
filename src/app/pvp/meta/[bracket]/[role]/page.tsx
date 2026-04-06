@@ -1,12 +1,14 @@
 import type { Metadata } from "next"
+import { Suspense } from "react"
 import type { MetaStatsEntry } from "@/components/molecules/meta-stats-table"
-import type { MetaDataset, Region, Role } from "@/components/molecules/meta-stats-dashboard"
+import type { MetaDataset, Region, Role } from "@/components/organisms/meta-stats-dashboard"
 
 export const dynamic = "force-dynamic"
-import type { WowClassSlug } from "@/config/wow/classes/classes-config"
+
 import { BracketDropdown } from "@/components/molecules/bracket-dropdown"
-import { MetaStatsDashboard } from "@/components/molecules/meta-stats-dashboard"
+import { MetaStatsSkeleton } from "@/components/molecules/meta-stats-skeleton"
 import { TopNavConfig } from "@/components/molecules/top-nav-config"
+import { MetaStatsDashboard } from "@/components/organisms/meta-stats-dashboard"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -15,10 +17,11 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
 import { tier } from "@/config/app-config"
-import { fetchClassDistribution } from "@/lib/api"
+import type { WowClassSlug } from "@/config/wow/classes/classes-config"
+import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
 import type { ClassDistributionResponse } from "@/lib/api"
+import { fetchClassDistribution } from "@/lib/api"
 
 type Bracket = "2v2" | "3v3" | "rbg" | "shuffle-overall" | "blitz-overall"
 
@@ -82,7 +85,7 @@ function transformToEntries(data: ClassDistributionResponse, bracket: string): M
     return {
       key: `${row.class}-${row.spec_id}`,
       specName: row.spec,
-      className: row.class,
+      className: classSlug,
       role: row.role,
       score: row.score,
       normPct: 0,
@@ -130,16 +133,16 @@ function buildDataset(data: ClassDistributionResponse, bracket: string): MetaDat
     weightedWR,
     topSpec: {
       name: topRow?.spec ?? "",
-      className: topRow?.class ?? "",
-      color: topRow ? `var(--color-class-${normalizeClassSlug(topRow.class)})` : "#888",
+      className: topClassSlug ?? "",
+      color: topRow ? `var(--color-class-${topClassSlug})` : "#888",
       iconUrl: topClassConfig?.specs.find(
         (s) => normalizeSpecName(s.name) === normalizeSpecName(topRow?.spec ?? ""),
       )?.iconUrl,
     },
     mostReliable: {
       name: reliableRow?.spec ?? "",
-      className: reliableRow?.class ?? "",
-      color: reliableRow ? `var(--color-class-${normalizeClassSlug(reliableRow.class)})` : "#888",
+      className: reliableClassSlug ?? "",
+      color: reliableRow ? `var(--color-class-${reliableClassSlug})` : "#888",
       iconUrl: reliableClassConfig?.specs.find(
         (s) => normalizeSpecName(s.name) === normalizeSpecName(reliableRow?.spec ?? ""),
       )?.iconUrl,
@@ -166,14 +169,17 @@ const emptyDataset: MetaDataset = {
   },
 }
 
-export default async function PvpBracketPage({ params, searchParams }: PageProps) {
-  const { bracket, role } = await params
-  const { region: regionParam, season: seasonParam } = await searchParams
-  const initialRegion = (regionParam ?? "all") as Region
-  const initialRole = role as Role
-  const bracketStr = String(bracket)
-
-  // Fetch all 4 brackets × 3 regions in parallel (12 calls)
+async function MetaContent({
+  bracketStr,
+  initialRole,
+  initialRegion,
+  seasonParam,
+}: {
+  bracketStr: string
+  initialRole: Role
+  initialRegion: Region
+  seasonParam?: string
+}) {
   const fetchPromises = ALL_BRACKETS.flatMap((b) =>
     REGIONS.map((r) =>
       fetchClassDistribution({
@@ -197,14 +203,12 @@ export default async function PvpBracketPage({ params, searchParams }: PageProps
 
   const results = await Promise.all(fetchPromises)
 
-  // Build datasets for current bracket (used by KPIs + table)
   const currentDatasets: Record<Region, MetaDataset> = {
     all: emptyDataset,
     us: emptyDataset,
     eu: emptyDataset,
   }
 
-  // Build all brackets data (used by tier list bracket comparison)
   const allBrackets: Record<string, Record<Region, MetaDataset>> = {}
 
   for (const { bracket: b, region: r, data } of results) {
@@ -222,6 +226,24 @@ export default async function PvpBracketPage({ params, searchParams }: PageProps
       currentDatasets[r as Region] = dataset
     }
   }
+
+  return (
+    <MetaStatsDashboard
+      datasets={currentDatasets}
+      allBrackets={allBrackets}
+      bracket={bracketStr}
+      initialRole={initialRole}
+      initialRegion={initialRegion}
+    />
+  )
+}
+
+export default async function PvpBracketPage({ params, searchParams }: PageProps) {
+  const { bracket, role } = await params
+  const { region: regionParam, season: seasonParam } = await searchParams
+  const initialRegion = (regionParam ?? "all") as Region
+  const initialRole = role as Role
+  const bracketStr = String(bracket)
 
   return (
     <>
@@ -246,13 +268,14 @@ export default async function PvpBracketPage({ params, searchParams }: PageProps
       />
 
       <div className="mx-auto w-full p-4 lg:max-w-[80%] lg:p-6">
-        <MetaStatsDashboard
-          datasets={currentDatasets}
-          allBrackets={allBrackets}
-          bracket={bracketStr}
-          initialRole={initialRole}
-          initialRegion={initialRegion}
-        />
+        <Suspense fallback={<MetaStatsSkeleton />}>
+          <MetaContent
+            bracketStr={bracketStr}
+            initialRole={initialRole}
+            initialRegion={initialRegion}
+            seasonParam={seasonParam}
+          />
+        </Suspense>
       </div>
     </>
   )

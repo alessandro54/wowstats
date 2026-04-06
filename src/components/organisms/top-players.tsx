@@ -1,13 +1,13 @@
 "use client"
 
-import { useState } from "react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import type { TopPlayer } from "@/lib/api"
+import { useState } from "react"
+import { characterUrl } from "@/components/atoms/player-tooltip"
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { classColor } from "@/hooks/use-active-color"
+import type { TopPlayer } from "@/lib/api"
 import { formatRealm, winRate } from "@/lib/utils"
-import { characterUrl } from "@/components/atoms/player-tooltip"
 
 type Region = "all" | "us" | "eu" | "kr"
 

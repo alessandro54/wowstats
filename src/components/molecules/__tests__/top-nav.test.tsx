@@ -1,8 +1,8 @@
 import { render } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
 import { TopNavProvider } from "@/components/providers/top-nav-provider"
-import { TopNavConfig } from "../top-nav-config"
 import { TopNav } from "../top-nav"
+import { TopNavConfig } from "../top-nav-config"
 
 vi.mock("next/navigation", () => ({
   usePathname: vi.fn(() => "/pvp/warrior/arms/3v3"),

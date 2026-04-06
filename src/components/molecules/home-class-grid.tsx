@@ -1,8 +1,8 @@
 "use client"
 
-import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { useState } from "react"
 import { useSetHoverSlug } from "@/components/providers/hover-provider"
 import type { WowClassConfig, WowClassSlug } from "@/config/wow/classes/classes-config"
 import { titleizeSlug } from "@/lib/utils"
@@ -45,7 +45,7 @@ export function HomeClassGrid({ classes }: Props) {
     return (
       <div
         key={cls.slug}
-        className="relative"
+        className={`relative ${isActive ? "z-10" : ""}`}
         onMouseEnter={() => handleEnter(cls.slug as WowClassSlug)}
         onMouseLeave={handleLeave}
       >

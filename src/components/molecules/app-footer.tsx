@@ -19,8 +19,8 @@ import {
   DEFAULT_LOCALE,
   LOCALE_COOKIE,
   LOCALE_LABELS,
-  SUPPORTED_LOCALES,
   type Locale,
+  SUPPORTED_LOCALES,
 } from "@/lib/locale-config"
 
 function getCookie(name: string): string | undefined {

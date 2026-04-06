@@ -1,5 +1,5 @@
-import type { MetaTalent } from "@/lib/api"
 import { describe, expect, it } from "vitest"
+import type { MetaTalent } from "@/lib/api"
 import {
   buildEdgeSet,
   buildNodeMap,

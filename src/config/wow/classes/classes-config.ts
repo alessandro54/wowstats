@@ -69,7 +69,14 @@ export type WowClassSpecSlug =
   | "preservation"
   | "augmentation"
 
-export type SpecParticleEffect = "snow" | "plague" | "blood" | "rainoffire" | "coinrain"
+export type SpecParticleEffect =
+  | "snow"
+  | "plague"
+  | "blood"
+  | "rainoffire"
+  | "coinrain"
+  | "shadowsmoke"
+  | "venomdrip"
 
 export type SpecAtmosphere =
   | "frost"

@@ -3,12 +3,12 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
-import { useSetHoverSlug } from "@/components/providers/hover-provider"
-import type { WowClassSlug } from "@/config/wow/classes/classes-config"
-import { TIER_COLORS } from "@/config/app-config"
-import type { Tier } from "@/config/app-config"
 import type { MetaStatsEntry } from "@/components/molecules/meta-stats-table"
+import { useSetHoverSlug } from "@/components/providers/hover-provider"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
+import type { Tier } from "@/config/app-config"
+import { TIER_COLORS } from "@/config/app-config"
+import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { titleizeSlug } from "@/lib/utils"
 
 interface BracketRank {

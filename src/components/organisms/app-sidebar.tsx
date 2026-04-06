@@ -8,10 +8,10 @@ import { ThemeDropdown } from "@/components/atoms/theme-dropdown"
 import { ThemeSwitcher } from "@/components/atoms/theme-switcher"
 import { NavMain } from "@/components/organisms/nav-main"
 import {
-  SidebarHeader,
-  SidebarFooter,
   Sidebar,
   SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
   SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar"

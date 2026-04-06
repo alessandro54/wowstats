@@ -1,15 +1,15 @@
-import type { TalentNode } from "@/lib/utils/talent-tree"
 import { ChoiceChevrons } from "@/components/atoms/choice-chevrons"
 import { NodeStats } from "@/components/atoms/node-stats"
 import { TalentIcon } from "@/components/atoms/talent-icon"
 import { TalentNodeTooltip } from "@/components/atoms/talent-node-tooltip"
-import { APEX_NODE_SIZE, NODE_SIZE } from "@/lib/utils/talent-tree"
 import {
   bestTier,
   buildRankBars,
   investedRank as computeInvestedRank,
   metaBorderClass,
 } from "@/lib/utils/talent-node-utils"
+import type { TalentNode } from "@/lib/utils/talent-tree"
+import { APEX_NODE_SIZE, NODE_SIZE } from "@/lib/utils/talent-tree"
 
 interface Props {
   node: TalentNode

@@ -1,7 +1,6 @@
 "use client"
 
 import { usePathname } from "next/navigation"
-import { BRACKETS } from "@/config/wow/brackets-config"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -10,10 +9,11 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
+import { BRACKETS } from "@/config/wow/brackets-config"
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
+import { titleizeSlug } from "@/lib/utils"
 import { BracketSelector } from "./bracket-selector"
 import { TopNavConfig } from "./top-nav-config"
-import { titleizeSlug } from "@/lib/utils"
 
 interface Props {
   className: string

@@ -1,9 +1,9 @@
 "use client"
 
-import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { BRACKETS } from "@/config/wow/brackets-config"
+import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { useActiveColor } from "@/hooks/use-active-color"
 
 interface Props {

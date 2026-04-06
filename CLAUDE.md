@@ -20,6 +20,7 @@ pnpm build-storybook  # Build Storybook static
 pnpm format           # Biome formatter
 pnpm format:check     # Check formatting
 pnpm stylelint        # Lint CSS
+pnpm perf:size        # Bundle size check (≤ 300KB gzip)
 ```
 
 ## Environment Variables
@@ -31,12 +32,14 @@ pnpm stylelint        # Lint CSS
 
 ### Framework & Stack
 
-- **Next.js 16** with App Router and React Server Components
+- **Next.js 16** with App Router, React Server Components, and Suspense streaming
 - **React 19** — React Compiler enabled (`reactCompiler: true`), no manual `useMemo`/`useCallback` needed
 - **TypeScript 5.9** — strict mode, path alias `@/*` → `src/*`
 - **Tailwind v4** + Radix UI primitives + **shadcn/ui** (new-york style)
 - **Vitest** for unit tests; **Storybook 10** for component documentation
 - **Biome** for formatting; **oxlint** for linting
+- **Raw WebGL** for homepage background (no Three.js)
+- **Cloudflare R2 + Image Transforms** for CDN with auto-resize/AVIF
 
 ### Directory Structure
 
@@ -45,31 +48,45 @@ src/
 ├── app/                    # Next.js App Router pages and layouts
 ├── components/
 │   ├── atoms/              # Basic UI building blocks
+│   │   └── __tests__/      # Tests (.test.tsx) AND stories (.stories.tsx)
 │   ├── molecules/          # Mid-level feature components
-│   ├── organisms/          # High-level feature sections
+│   │   └── __tests__/      # Tests AND stories (colocated)
+│   ├── organisms/          # High-level feature sections / orchestrators
+│   │   └── __tests__/      # Tests AND stories (colocated)
 │   ├── providers/          # React context providers
 │   └── ui/                 # shadcn/ui primitives
 ├── config/
+│   ├── cdn-config.ts       # CDN_BASE, cdnImage() for Cloudflare transforms
 │   └── wow/                # WoW class/spec/bracket config + app config
 ├── hooks/                  # Custom React hooks
+│   ├── use-sortable-table.ts
+│   ├── use-class-panel-state.ts
+│   └── ...
 ├── lib/
 │   ├── api.ts              # All backend fetch functions + types
-│   ├── utils/              # cn(), titleizeSlug(), formatBracket(), etc.
+│   ├── fx/                 # Visual effects
+│   │   ├── shaders/        # .vert/.frag GLSL files (imported via raw loader)
+│   │   ├── particles/      # Canvas2D particle runners (snow, blood, plague, etc.)
+│   │   ├── atmospheres/    # CSS atmosphere layers per spec
+│   │   ├── home-bg.ts      # Homepage background particle data + constants
+│   │   └── home-bg-webgl.ts # Raw WebGL renderer for homepage
+│   ├── utils/              # cn(), titleizeSlug(), shannonEntropy(), etc.
 │   └── wow/                # Lookup helpers for classes, specs, brackets
-└── stories/                # Storybook stories
+└── types/
+    └── shaders.d.ts        # TypeScript declarations for .glsl/.vert/.frag imports
 ```
 
 ### Route Structure
 
 | Route | File | Purpose |
 |---|---|---|
-| `/` | `app/page.tsx` | Home — class/spec selection (ClassPanels / ClassAccordion) |
+| `/` | `app/page.tsx` | Home — hero + class grid (Suspense streamed) |
 | `/pvp/[classSlug]/[specSlug]` | `app/pvp/[classSlug]/[specSlug]/page.tsx` | Spec index — bracket selector |
-| `/pvp/[classSlug]/[specSlug]/[bracket]` | `app/pvp/[classSlug]/[specSlug]/[bracket]/page.tsx` | Main PvP BiS page |
-| `/pvp/meta/[bracket]/[role]` | `app/pvp/meta/[bracket]/[role]/page.tsx` | Meta tierlist by bracket + role |
+| `/pvp/[classSlug]/[specSlug]/[bracket]` | `app/pvp/[classSlug]/[specSlug]/[bracket]/page.tsx` | Main PvP BiS page (Suspense streamed) |
+| `/pvp/meta/[bracket]/[role]` | `app/pvp/meta/[bracket]/[role]/page.tsx` | Meta tierlist (Suspense streamed) |
 | `/character/[region]/[realm]/[name]` | `app/character/[region]/[realm]/[name]/page.tsx` | Character profile |
 
-All pages use `export const dynamic = "force-dynamic"` and `cache: "no-store"` fetches.
+All pages use `export const dynamic = "force-dynamic"`. Data-heavy pages use `<Suspense>` with skeleton fallbacks for streaming.
 
 ### Provider Chain (Root Layout)
 
@@ -77,7 +94,7 @@ All pages use `export const dynamic = "force-dynamic"` and `cache: "no-store"` f
 ThemeProvider (next-themes, dark mode)
   └─ HoverProvider (tracks hovered WoW class slug globally)
        └─ SidebarProvider (shadcn sidebar state)
-            └─ DynamicBackground (animated gradient)
+            └─ DynamicBackground (animated gradient, reacts to hover + meta page top spec)
                  └─ AppSidebar + SidebarInset
                       └─ TopNavProvider (dynamic top nav config)
                            └─ TopNav + main content + AppFooter
@@ -85,18 +102,23 @@ ThemeProvider (next-themes, dark mode)
 
 ### Data Fetching Pattern
 
-All API calls are server-side (RSC). Errors are silenced with `.catch(() => [])` so pages render empty states rather than crashing.
+All API calls are server-side (RSC) inside `<Suspense>` boundaries. Page shell renders instantly, data streams in.
 
 ```typescript
-export const dynamic = "force-dynamic"
+// Page shell renders immediately
+export default function Page() {
+  return (
+    <Suspense fallback={<Skeleton />}>
+      <AsyncContent />  {/* Data fetching happens here */}
+    </Suspense>
+  )
+}
 
-const [items, enchants, gems, talents, topPlayers] = await Promise.all([
-  fetchItems(bracket, spec.id, locale).catch(() => []),
-  fetchEnchants(bracket, spec.id, locale).catch(() => []),
-  fetchGems(bracket, spec.id, locale).catch(() => ({ meta: {...}, talents: [] })),
-  fetchTalents(bracket, spec.id, locale).catch(() => ({ ... })),
-  fetchTopPlayers(bracket, spec.id, region, locale).catch(() => ({ ... })),
-])
+// Async content streams in when API responds
+async function AsyncContent() {
+  const data = await fetchData().catch(() => fallback)
+  return <Component data={data} />
+}
 ```
 
 ### Localization
@@ -119,7 +141,7 @@ interface WowClassConfig {
   name: string            // "Warrior"
   slug: WowClassSlug      // "warrior"
   iconUrl: string
-  iconRemasteredUrl?: string
+  iconRemasteredUrl?: string  // cdnImage() transform URL
   bannerUrl?: string
   bgGradient?: string
   specs: WowClassSpec[]
@@ -133,107 +155,44 @@ interface WowClassSpec {
   iconRemasteredUrl?: string
   splash?: { url: string; position?: string }
   animationUrl?: string
+  effect?: SpecParticleEffect    // "snow" | "blood" | "shadowsmoke" | "venomdrip" | ...
+  atmosphere?: SpecAtmosphere    // "frost" | "toxic" | "shadow" | "fire" | ...
 }
 ```
 
 One file per class in `src/config/wow/classes/`: `warrior.ts`, `druid.ts`, etc.
 
-### Brackets (`brackets-config.ts`)
-
-```typescript
-BRACKETS: BracketConfig[]  // 2v2, 3v3, shuffle
-
-// Slugs: "2v2" | "3v3" | "shuffle"
-// Note: shuffle API bracket is "shuffle-{classSlug}-{specSlug}" or "shuffle-overall"
-// Use apiBracket(bracket, classSlug, specSlug) from src/config/wow/app-config.ts
-```
-
-### App Config (`app-config.ts`)
-
-```typescript
-// Class slug mapping for Blizzard API format
-API_CLASS_SLUG: Record<string, string>  // e.g. "death-knight" → "deathknight"
-
-// Build full API bracket string
-apiBracket(bracket: string, classSlug: string, specSlug: string): string
-// "shuffle" → "shuffle-warrior-arms"; others pass through as-is
-
-// Tier scoring
-tier(normPct: number): "S" | "A" | "B" | "C" | "D"
-TIER_COLORS: Record<Tier, string>
-
-TIERLIST_LINKS  // Meta tierlist nav links
-```
-
-### Equipment Config (`equipment-config.ts`)
-
-```typescript
-SLOT_ORDER: string[]   // 16 slots in display order
-SLOT_LABELS: Record<string, string>
-QUALITY_COLORS: Record<string, string>  // EPIC=#a335ee, RARE=#0070dd, etc.
-
-formatSlot(slot: string): string
-formatSocketType(type: string): string
-getStatMeta(stat: string): { label: string; color?: string }
-```
-
 ### CDN (`cdn-config.ts`)
 
 ```typescript
-CDN_BASE = process.env.NEXT_PUBLIC_CDN_URL ?? "https://pub-627f5a049a2d470c85b1b70cbd99a5ce.r2.dev"
-// Used for remastered class/spec icons, splash art, animations
-// Set NEXT_PUBLIC_CDN_URL in .env.local to override
+CDN_BASE = "https://cdn.wowinsights.xyz"
+// Direct asset URLs (banners, animations, splash art)
+
+cdnImage(path, width)
+// Returns Cloudflare Image Transform URL for auto-resize + AVIF
+// Uses R2 origin as source (can't self-reference cdn.wowinsights.xyz)
 ```
 
 ---
 
-## API Layer (`src/lib/api.ts`)
+## Visual Effects (`src/lib/fx/`)
 
-Base URL: `process.env.API_URL ?? "http://localhost:3000"`
+### Homepage Background (WebGL)
+- `home-bg.ts` — particle constants, init/update logic, device detection
+- `home-bg-webgl.ts` — raw WebGL renderer (FBM shader + point sprites)
+- `shaders/*.vert`, `shaders/*.frag` — GLSL files imported via custom Turbopack loader (`loaders/raw.js`)
+- GPU benchmark: renders 8 test frames, falls back to CSS if device can't sustain 15fps
 
-All functions use `cache: "no-store"`. Internal helper: `apiFetch<T>(path, params, locale?)`.
+### Spec Particle Effects (Canvas2D)
+- `particles/snow.ts`, `blood.ts`, `plague.ts`, `rainoffire.ts`, `coinrain.ts`, `shadowsmoke.ts`, `venomdrip.ts`
+- Each exports `runX(ctx, W, H): () => void` (returns cleanup function)
+- Registered in `spec-particle-fx.tsx` via `RUNNERS` record
 
-### Fetch Functions
-
-```typescript
-fetchItems(bracket, specId, locale?)       → MetaItem[]
-  // GET /api/v1/pvp/meta/items?bracket=&spec_id=&locale=
-
-fetchEnchants(bracket, specId, locale?)    → MetaEnchant[]
-  // GET /api/v1/pvp/meta/enchants?bracket=&spec_id=&locale=
-
-fetchGems(bracket, specId, locale?)        → MetaGem[]
-  // GET /api/v1/pvp/meta/gems?bracket=&spec_id=&locale=
-
-fetchTalents(bracket, specId, locale?)     → TalentsResponse
-  // GET /api/v1/pvp/meta/talents?bracket=&spec_id=&locale=
-
-fetchTopPlayers(bracket, specId, region?, locale?)  → TopPlayersResponse
-  // GET /api/v1/pvp/meta/top_players?bracket=&spec_id=&region=&locale=
-
-fetchStatPriority(bracket, specId, locale?)         → StatPriorityResponse
-  // GET /api/v1/pvp/meta/stat_priority?bracket=&spec_id=&locale=
-
-fetchClassDistribution({ seasonId, bracket, region, role }, locale?)  → ClassDistributionResponse
-  // GET /api/v1/pvp/meta/class_distribution?season_id=&bracket=&region=&role=&locale=
-
-fetchCharacter(region, realm, name, locale?)   → CharacterProfile | null
-  // GET /api/v1/characters/REGION/REALM/NAME — returns null on error
-```
-
-### Key Types
-
-```typescript
-MetaItem        { item: { id, blizzard_id, name, icon_url, quality }, slot, usage_count, usage_pct, crafted, top_crafting_stats }
-MetaEnchant     { enchantment: { id, blizzard_id, name }, slot, usage_count, usage_pct }
-MetaGem         { item: { ... }, slot, socket_type, usage_count, usage_pct }
-MetaTalent      { talent: { id, blizzard_id, name, description, talent_type, node_id, display_row, display_col, max_rank, icon_url, prerequisite_node_ids }, usage_count, usage_pct, in_top_build, top_build_rank, tier }
-TalentsResponse { meta: { bracket, spec_id, total_players, total_weighted, snapshot_at }, talents: MetaTalent[] }
-TopPlayer       { name, realm, region, rating, wins, losses, rank, score, avatar_url, class_slug }
-CharacterProfile { name, realm, region, class_slug, pvp_entries, equipment, talents, stat_pcts, avatar_url, inset_url }
-ClassDistributionSpec { class, spec, spec_id, role, count, meta_score, presence_score, winrate_score, rating_score, ... }
-StatPriorityResponse  { bracket, spec_id, stats: { stat, median }[] }
-```
+### Spec Atmospheres (CSS)
+- `atmospheres/frost.tsx`, `toxic.tsx`, `shadow.tsx`, `fire.tsx`, etc.
+- Pure CSS gradient overlays, no JS animation
+- Registered in `spec-particle-fx.tsx` via `ATMOSPHERES` record
+- Canvas renders at `z-index: -10`, atmospheres at `z-index: -1`
 
 ---
 
@@ -241,12 +200,21 @@ StatPriorityResponse  { bracket, spec_id, stats: { stat, median }[] }
 
 ### Atomic Design
 
-- **Atoms** (`src/components/atoms/`) — `talent-icon.tsx`, `item-card.tsx`, `dist-list.tsx`, `spec-heading.tsx`, `sticky-header.tsx`, `theme-switcher.tsx`, etc.
-- **Molecules** (`src/components/molecules/`) — `equipment.tsx`, `pvp-talents.tsx`, `top-players.tsx`, `bracket-selector.tsx`, `class-panels.tsx`, `meta-bar-chart.tsx`, `meta-donut-chart.tsx`, `meta-spec-table.tsx`, `talent-tree-node.tsx`, etc.
-- **Organisms** (`src/components/organisms/`) — `app-sidebar.tsx`, `equipment.tsx`, `talent-tree.tsx`, `talents.tsx`, `hero-section.tsx`, `stat-priority.tsx`, `dynamic-background.tsx`
-- **UI** (`src/components/ui/`) — shadcn primitives: `button`, `card`, `sidebar`, `tooltip`, `dropdown-menu`, `hover-card`, `skeleton`, `table`, `select`, `sheet`, `avatar`, etc.
+- **Atoms** (`src/components/atoms/`) — `diversity-meter.tsx`, `class-wheel.tsx`, `talent-icon.tsx`, `lazy-section.tsx`, `sliding-switch.tsx`, `theme-switcher.tsx`, etc.
+- **Molecules** (`src/components/molecules/`) — `meta-stats-table.tsx`, `meta-insights-panel.tsx`, `meta-tier-list.tsx`, `bracket-selector.tsx`, `class-panels.tsx`, `home-class-grid.tsx`, `spec-particle-fx.tsx`, etc.
+- **Organisms** (`src/components/organisms/`) — `meta-stats-dashboard.tsx`, `app-sidebar.tsx`, `equipment.tsx`, `talent-tree.tsx`, `talents.tsx`, `top-players.tsx`, `dynamic-background.tsx`
+- **UI** (`src/components/ui/`) — shadcn primitives
 
 Add new shadcn components: `pnpm dlx shadcn@latest add <component>`
+
+### Hooks
+
+```typescript
+useActiveColor(defaultSlug?)      // CSS var for hovered class color
+useIsMobile()                     // window width < 768px
+useSortableTable(entries, comparators, defaultKey)  // Generic sortable table
+useClassPanelState(classes)       // State management for class panel slider
+```
 
 ### Providers
 
@@ -258,64 +226,28 @@ Add new shadcn components: `pnpm dlx shadcn@latest add <component>`
 
 ---
 
-## Hooks (`src/hooks/`)
-
-```typescript
-useActiveColor(defaultSlug?)  // Returns CSS var for hovered class color; falls back to defaultSlug then --color-primary
-useIsMobile()                 // True if window width < 768px
-```
-
----
-
-## Utilities (`src/lib/`)
-
-```typescript
-// utils/index.ts
-cn(...inputs)                              // clsx + tailwind-merge
-titleizeSlug(slug)                         // "death-knight" → "Death Knight"
-formatRealm(realm)                         // alias for titleizeSlug
-winRate(wins, losses)                      // "73%" or "—"
-formatBracket(bracket)                     // "shuffle-overall" → "Solo Shuffle"
-
-// wow/classes.ts
-getWowClassBySlug(slug)
-getWowClassById(id)
-getAllClasses()
-
-// wow/specs.ts
-getSpecBySlug(classSlug, specSlug)
-getSpecById(specId)                        // returns { class, spec }
-getAllSpecs()
-
-// wow/brackets.ts
-getBracketBySlug(slug)
-isValidBracketSlug(slug)
-```
-
----
-
-## Styling Conventions
-
-- **CSS variables for class colors**: `var(--color-class-warrior)`, `var(--color-class-death-knight)`, etc.
-- **CSS variables for stat colors**: `var(--color-stat-haste)`, etc.
-- Use `<Image />` (next/image) for `render.worldofwarcraft.com` and CDN URLs
-- Use `<img />` for item/enchant/gem icons — these come from arbitrary Blizzard CDN subdomains not in the allowlist
-- Dark mode: `<html suppressHydrationWarning>` + `ThemeProvider`
-
-## Image Domains (`next.config.ts`)
-
-Only two domains allowed for `<Image />`:
-- `render.worldofwarcraft.com` — official WoW assets
-- `pub-627f5a049a2d470c85b1b70cbd99a5ce.r2.dev` — custom CDN (remastered icons, splash art)
-
----
-
 ## Testing
 
-- **Vitest** unit tests alongside components (`.test.tsx`)
-- **Storybook** stories alongside components (`.stories.tsx`)
-- All atoms, molecules, and organisms have both `.test.tsx` and `.stories.tsx`
-- Run: `pnpm test`, `pnpm storybook`
+- **Tests and stories are colocated** in `__tests__/` directories next to their components
+- Each component has both `.test.tsx` and `.stories.tsx` in the same `__tests__/` folder
+- Storybook config points to `src/components/**/*.stories.tsx`
+- Run: `pnpm test:unit` (Vitest), `pnpm storybook` (component explorer)
+
+## Performance
+
+- **Bundle size budget**: ≤ 300KB gzip (checked in CI via `size-limit`)
+- **No Three.js** — replaced with raw WebGL (~175KB savings)
+- **Cloudflare Image Transforms** — `cdnImage()` auto-resizes + converts to AVIF
+- **Suspense streaming** — page shell renders instantly, data streams in
+- **LazySection** — below-fold content deferred via IntersectionObserver
+- **Preconnect** — `cdn.wowinsights.xyz` and `render.worldofwarcraft.com`
+
+## Shader Imports
+
+GLSL files (`.vert`, `.frag`, `.glsl`) are imported as strings via:
+- **Turbopack**: `loaders/raw.js` configured in `next.config.ts` → `turbopack.rules`
+- **Vitest**: inline transform plugin in `vitest.config.ts`
+- **TypeScript**: declarations in `src/types/shaders.d.ts`
 
 ## Key Gotchas
 
@@ -325,3 +257,6 @@ Only two domains allowed for `<Image />`:
 4. **React Compiler**: Do not add manual `useMemo`/`useCallback` — compiler handles it.
 5. **Top nav is dynamic**: Set via `useTopNav()` in layout/pages; resets on navigation.
 6. **Hover state is global**: `HoverProvider` tracks one class slug app-wide for color transitions.
+7. **CDN transforms**: `cdnImage()` always uses R2 origin URL as source — Cloudflare can't transform from its own domain.
+8. **WebGL strict mode**: `dispose()` must NOT call `loseContext()` — React strict mode re-runs effects on the same canvas.
+9. **Shader precision**: FBM hash requires `precision highp float` — `mediump` produces garbage on some GPUs.

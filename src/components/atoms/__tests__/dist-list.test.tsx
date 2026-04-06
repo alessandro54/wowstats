@@ -1,6 +1,6 @@
-import type { DistEntry } from "@/components/molecules/distribution-tooltip"
 import { render } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
+import type { DistEntry } from "@/components/molecules/distribution-tooltip"
 import { DistList } from "../dist-list"
 
 vi.mock("next/image", () => ({

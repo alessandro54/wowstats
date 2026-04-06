@@ -1,7 +1,7 @@
 "use client"
 
-import type { TalentNode } from "@/lib/utils/talent-tree"
 import { useState } from "react"
+import type { TalentNode } from "@/lib/utils/talent-tree"
 
 interface Props {
   edgeSet: Set<string>

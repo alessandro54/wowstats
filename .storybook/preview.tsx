@@ -1,5 +1,5 @@
-import type { Preview } from "@storybook/react-vite"
 import { withThemeByClassName } from "@storybook/addon-themes"
+import type { Preview } from "@storybook/react-vite"
 import { HoverProvider } from "../src/components/providers/hover-provider"
 import { ThemeProvider } from "../src/components/providers/theme-provider"
 import "../src/app/globals.css"

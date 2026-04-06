@@ -1,10 +1,9 @@
 "use client"
 
-import type { MetaTalent } from "@/lib/api"
-import { Skeleton } from "@/components/ui/skeleton"
 import { TalentEdges } from "@/components/molecules/talent-tree-edges"
 import { TalentNodeCard } from "@/components/molecules/talent-tree-node"
-import { computeTreeLayout } from "@/lib/utils/talent-tree-layout"
+import { Skeleton } from "@/components/ui/skeleton"
+import type { MetaTalent } from "@/lib/api"
 import {
   APEX_NODE_SIZE,
   BORDER_BIS,
@@ -14,6 +13,7 @@ import {
   CELL_SIZE,
   NODE_SIZE,
 } from "@/lib/utils/talent-tree"
+import { computeTreeLayout } from "@/lib/utils/talent-tree-layout"
 
 export { hasTreeData } from "@/lib/utils/talent-tree"
 

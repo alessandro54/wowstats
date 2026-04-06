@@ -1,5 +1,5 @@
-import { titleizeSlug } from "@/lib/utils"
 import Image from "next/image"
+import { titleizeSlug } from "@/lib/utils"
 
 interface TopSpec {
   name: string

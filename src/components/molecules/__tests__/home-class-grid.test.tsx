@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
-import { HomeClassGrid } from "../home-class-grid"
 import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
+import { HomeClassGrid } from "../home-class-grid"
 
 vi.mock("next/image", () => ({
   // eslint-disable-next-line next/no-img-element

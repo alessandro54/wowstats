@@ -1,6 +1,6 @@
-import type { DistEntry } from "../distribution-tooltip"
 import { render } from "@testing-library/react"
 import { describe, expect, it } from "vitest"
+import type { DistEntry } from "../distribution-tooltip"
 import { DistributionTooltip } from "../distribution-tooltip"
 
 describe("distributionTooltip", () => {
