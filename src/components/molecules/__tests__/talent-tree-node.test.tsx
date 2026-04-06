@@ -5,6 +5,7 @@ import { describe, expect, it, vi } from "vitest"
 import { TalentNodeCard } from "../talent-tree-node"
 
 vi.mock("next/image", () => ({
+  // eslint-disable-next-line next/no-img-element
   default: (props: any) => <img {...props} />,
 }))
 

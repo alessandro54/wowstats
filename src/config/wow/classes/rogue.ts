@@ -23,6 +23,7 @@ const RogueConfig: WowClassConfig = {
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_rogue_waylay.jpg",
       iconRemasteredUrl: `${CDN_BASE}/class_media/rogue/outlaw_icon.png`,
       effect: "coinrain" as const,
+      atmosphere: "warm" as const,
     },
     {
       id: 261,

@@ -25,8 +25,8 @@ export default async function PvpSpecLayout({ children, params }: Props) {
     <>
       <PvpSpecTopNav className={cls.name} classSlug={cls.slug} specSlug={specSlug} />
       <div className="relative">
-        <SpecParticleFx effect={spec.effect} />
-        {!spec.effect && (
+        <SpecParticleFx effect={spec.effect} atmosphere={spec.atmosphere} />
+        {!spec.effect && !spec.atmosphere && (
           <div
             className="pointer-events-none fixed aspect-square w-[50vw] rounded-full animate-blob-drift-2"
             style={{

@@ -2,7 +2,6 @@
 
 import Image from "next/image"
 import type { MetaStatsEntry } from "@/components/molecules/meta-stats-table"
-import type { Tier } from "@/config/app-config"
 import { TIER_COLORS } from "@/config/app-config"
 import { titleizeSlug } from "@/lib/utils"
 

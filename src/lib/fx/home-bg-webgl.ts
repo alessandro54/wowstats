@@ -1,69 +1,8 @@
-import {
-  BG_FRAGMENT_SHADER,
-  PARTICLE_COUNT,
-  FRAME_INTERVAL,
-  initParticles,
-  updateParticle,
-} from "./home-bg"
-
-// Upgrade fragment shader precision — the FBM hash uses sin(p)*43758 which
-// produces garbage at mediump on some GPUs.
-const BG_FS_HIGHP = BG_FRAGMENT_SHADER.replace("precision mediump float;", "precision highp float;")
-
-// --- Particle shaders ---
-
-const PARTICLE_VS = `
-attribute vec3 aPos;
-attribute vec3 aCol;
-attribute float aSize;
-uniform vec2 uViewport;
-uniform vec2 uCamOff;
-uniform vec2 uRot;
-varying vec3 vCol;
-void main() {
-  vCol = aCol;
-  // Apply small rotation (uRot.x = rotY, uRot.y = rotX)
-  float x = aPos.x + uCamOff.x;
-  float y = aPos.y + uCamOff.y;
-  float z = aPos.z;
-  // Rotate around Y then X (small angles, so approximate)
-  float rx = x - uRot.x * z;
-  float ry = y + uRot.y * z;
-  float rz = z + uRot.x * x - uRot.y * y;
-  // Simple perspective: fov=60, camera at z=100
-  float depth = 100.0 - rz;
-  float scale = 1.7321 / depth; // 1/tan(30deg) = sqrt(3)
-  gl_Position = vec4(
-    rx * scale / (uViewport.x / uViewport.y),
-    ry * scale,
-    0.0, 1.0
-  );
-  gl_PointSize = max(aSize * uViewport.y * scale * 0.5, 0.0);
-}
-`
-
-const PARTICLE_FS = `
-precision mediump float;
-uniform sampler2D uSprite;
-uniform float uOpacity;
-varying vec3 vCol;
-void main() {
-  float a = texture2D(uSprite, gl_PointCoord).a;
-  if (a < 0.01) discard;
-  gl_FragColor = vec4(vCol * a, a * uOpacity);
-}
-`
-
-// --- BG quad vertex shader (raw WebGL — uses attribute, not Three's `uv`) ---
-
-const BG_VS_RAW = `
-attribute vec2 aPosition;
-varying vec2 vUv;
-void main() {
-  vUv = aPosition * 0.5 + 0.5;
-  gl_Position = vec4(aPosition, 0.0, 1.0);
-}
-`
+import { PARTICLE_COUNT, FRAME_INTERVAL, initParticles, updateParticle } from "./home-bg"
+import BG_VS from "./shaders/home-bg.vert"
+import BG_FS from "./shaders/home-bg.frag"
+import PARTICLE_VS from "./shaders/particle.vert"
+import PARTICLE_FS from "./shaders/particle.frag"
 
 // --- Helpers ---
 
@@ -160,8 +99,8 @@ export function createHomeBgRenderer(
   // --- BG program ---
   const bgProg = linkProgram(
     gl,
-    compileShader(gl, gl.VERTEX_SHADER, BG_VS_RAW),
-    compileShader(gl, gl.FRAGMENT_SHADER, BG_FS_HIGHP),
+    compileShader(gl, gl.VERTEX_SHADER, BG_VS),
+    compileShader(gl, gl.FRAGMENT_SHADER, BG_FS),
   )
   const bgPosAttr = gl.getAttribLocation(bgProg, "aPosition")
   const bgUniT = gl.getUniformLocation(bgProg, "uT")
@@ -311,31 +250,6 @@ export function createHomeBgRenderer(
     gl!.disableVertexAttribArray(ptAttrCol)
     gl!.disableVertexAttribArray(ptAttrSize)
     gl!.disable(gl!.BLEND)
-  }
-
-  // --- GPU benchmark: 8 frames, fall back if avg > 66ms ---
-
-  const BENCH_FRAMES = 8
-  const BENCH_THRESHOLD_MS = 66
-  let benchCount = 0
-  let benchStart = 0
-
-  function benchmark(now: number) {
-    if (benchCount === 0) benchStart = now
-    gl!.clear(gl!.COLOR_BUFFER_BIT)
-    renderBg()
-    renderParticles()
-    benchCount++
-    if (benchCount < BENCH_FRAMES) {
-      raf = requestAnimationFrame(benchmark)
-      return
-    }
-    const avgMs = (now - benchStart) / BENCH_FRAMES
-    if (avgMs > BENCH_THRESHOLD_MS) {
-      onFallback()
-      return
-    }
-    raf = requestAnimationFrame(animate)
   }
 
   // --- Main loop ---

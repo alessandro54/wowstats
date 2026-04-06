@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import type { MetaEnchant, MetaGem, MetaItem } from "../../lib/api"
+import type { MetaEnchant, MetaItem } from "../../lib/api"
 import type { EnchantGroup } from "../../components/molecules/item-card"
 import { ItemCard } from "../../components/molecules/item-card"
 import { HoverProvider } from "../../components/providers/hover-provider"
@@ -49,24 +49,6 @@ function makeEnchant(slot: string, name: string, pct: number): MetaEnchant {
   }
 }
 
-function makeGem(socketType: string, name: string, pct: number): MetaGem {
-  return {
-    id: (Math.random() * 100000) | 0,
-    item: {
-      id: (Math.random() * 100000) | 0,
-      blizzard_id: 300000 + ((Math.random() * 1000) | 0),
-      name,
-      icon_url: "https://wow.zamimg.com/images/wow/icons/large/inv_misc_gem_sapphire_02.jpg",
-      quality: "RARE",
-    },
-    slot: "GEM",
-    socket_type: socketType,
-    usage_count: Math.round(pct * 10),
-    usage_pct: pct,
-    snapshot_at: "2026-03-03T00:00:00Z",
-  }
-}
-
 const headEntries: MetaItem[] = [
   makeItem("HEAD", "Dreadful Helm of Conquest", 72.1),
   makeItem("HEAD", "Primal Helm of the Gladiator", 20.3),
@@ -95,11 +77,6 @@ const enchants = new Map<string, EnchantGroup>([
     },
   ],
 ])
-
-const fiberGems: MetaGem[] = [
-  makeGem("TINKER", "Magnificent Jeweler's Setting", 85.0),
-  makeGem("TINKER", "Masterful Jewel Doublet", 15.0),
-]
 
 const pillStyle = {
   "--pill-color": "#c79c6e",

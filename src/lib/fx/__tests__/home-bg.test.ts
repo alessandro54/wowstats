@@ -1,7 +1,5 @@
 import { describe, expect, it, vi } from "vitest"
 import {
-  BG_VERTEX_SHADER,
-  BG_FRAGMENT_SHADER,
   PARTICLE_COUNT,
   SPREAD_X,
   SPREAD_Y,
@@ -12,18 +10,34 @@ import {
   updateParticle,
   isLowEndDevice,
 } from "../home-bg"
+import BG_VS from "../shaders/home-bg.vert"
+import BG_FS from "../shaders/home-bg.frag"
+import PARTICLE_VS from "../shaders/particle.vert"
+import PARTICLE_FS from "../shaders/particle.frag"
+
+describe("shaders", () => {
+  it("loads home-bg vertex shader", () => {
+    expect(typeof BG_VS).toBe("string")
+    expect(BG_VS).toContain("gl_Position")
+  })
+
+  it("loads home-bg fragment shader", () => {
+    expect(typeof BG_FS).toBe("string")
+    expect(BG_FS).toContain("gl_FragColor")
+  })
+
+  it("loads particle vertex shader", () => {
+    expect(typeof PARTICLE_VS).toBe("string")
+    expect(PARTICLE_VS).toContain("gl_PointSize")
+  })
+
+  it("loads particle fragment shader", () => {
+    expect(typeof PARTICLE_FS).toBe("string")
+    expect(PARTICLE_FS).toContain("gl_PointCoord")
+  })
+})
 
 describe("home-bg constants", () => {
-  it("exports vertex shader as non-empty string", () => {
-    expect(typeof BG_VERTEX_SHADER).toBe("string")
-    expect(BG_VERTEX_SHADER).toContain("gl_Position")
-  })
-
-  it("exports fragment shader as non-empty string", () => {
-    expect(typeof BG_FRAGMENT_SHADER).toBe("string")
-    expect(BG_FRAGMENT_SHADER).toContain("gl_FragColor")
-  })
-
   it("exports numeric constants", () => {
     expect(PARTICLE_COUNT).toBe(80)
     expect(SPREAD_X).toBe(160)

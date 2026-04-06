@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from "vitest"
 import { HomeHero } from "../home-hero"
 
 vi.mock("next/image", () => ({
+  // eslint-disable-next-line next/no-img-element
   default: (props: any) => <img {...props} />,
 }))
 

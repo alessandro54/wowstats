@@ -19,6 +19,14 @@ export default defineConfig({
           // React Compiler is intentionally disabled in tests — it generates
           // internal memoization branches that skew coverage metrics.
           react(),
+          {
+            name: "raw-glsl",
+            transform(code: string, id: string) {
+              if (/\.(glsl|vert|frag)$/.test(id)) {
+                return { code: `export default ${JSON.stringify(code)};`, map: null }
+              }
+            },
+          },
         ],
         test: {
           name: "unit",

@@ -5,6 +5,7 @@ import { describe, expect, it, vi } from "vitest"
 import { ItemCard } from "../item-card"
 
 vi.mock("next/image", () => ({
+  // eslint-disable-next-line next/no-img-element
   default: (props: any) => <img {...props} />,
 }))
 

@@ -14,6 +14,7 @@ vi.mock("@/components/atoms/talent-card", () => ({
 }))
 
 vi.mock("next/image", () => ({
+  // eslint-disable-next-line next/no-img-element
   default: (props: any) => <img {...props} />,
 }))
 

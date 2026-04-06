@@ -1,4 +1,4 @@
-import type { WowClassConfig, SpecEffect } from "./classes-config"
+import type { WowClassConfig, SpecParticleEffect, SpecAtmosphere } from "./classes-config"
 import { CDN_BASE } from "@/config/cdn-config"
 
 // Class color: #9482C9
@@ -33,7 +33,8 @@ const WarlockConfig: WowClassConfig = {
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_shadow_rainoffire.jpg",
       iconRemasteredUrl: `${CDN_BASE}/class_media/warlock/destruction_icon.png`,
       animationUrl: `${CDN_BASE}/class_media/warlock/destruction_animation.mp4`,
-      effect: "rainoffire" as SpecEffect,
+      effect: "rainoffire" as SpecParticleEffect,
+      atmosphere: "fire" as SpecAtmosphere,
     },
   ],
 }

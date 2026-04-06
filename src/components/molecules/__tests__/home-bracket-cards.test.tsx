@@ -4,6 +4,7 @@ import { HomeBracketCards } from "../home-bracket-cards"
 import type { BracketSummary } from "../home-bracket-cards"
 
 vi.mock("next/image", () => ({
+  // eslint-disable-next-line next/no-img-element
   default: (props: any) => <img {...props} />,
 }))
 

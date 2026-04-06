@@ -28,7 +28,7 @@ export function SpecStatBar({ winRate, presence, playerCount, classColor, childr
   ]
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-b border-border/30 pb-6">
+    <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 pb-6">
       <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
         {pills.map((pill) => (
           <div key={pill.label} className="flex items-center gap-2">

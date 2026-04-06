@@ -1,5 +1,5 @@
 import { CDN_BASE } from "@/config/cdn-config"
-import type { SpecEffect, WowClassConfig } from "./classes-config"
+import type { SpecAtmosphere, SpecParticleEffect, WowClassConfig } from "./classes-config"
 
 // Class color: #C41E3A
 const DeathKnightConfig: WowClassConfig = {
@@ -21,7 +21,8 @@ const DeathKnightConfig: WowClassConfig = {
         position: "right 20%",
       },
       animationUrl: `${CDN_BASE}/class_media/death-knight/frost_animation.mp4`,
-      effect: "snow" as SpecEffect,
+      effect: "snow" as SpecParticleEffect,
+      atmosphere: "frost" as SpecAtmosphere,
     },
     {
       id: 252,
@@ -34,7 +35,8 @@ const DeathKnightConfig: WowClassConfig = {
         url: `${CDN_BASE}/class_media/death-knight/unholy_splash.png`,
       },
       animationUrl: `${CDN_BASE}/class_media/death-knight/unholy_animation.mp4`,
-      effect: "plague" as SpecEffect,
+      effect: "plague" as SpecParticleEffect,
+      atmosphere: "toxic" as SpecAtmosphere,
     },
     {
       id: 250,
@@ -47,7 +49,8 @@ const DeathKnightConfig: WowClassConfig = {
         position: "80% top",
       },
       animationUrl: `${CDN_BASE}/class_media/death-knight/blood_animation.mp4`,
-      effect: "blood" as SpecEffect,
+      effect: "blood" as SpecParticleEffect,
+      atmosphere: "blood" as SpecAtmosphere,
     },
   ],
 }

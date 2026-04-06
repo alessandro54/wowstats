@@ -4,6 +4,7 @@ import { HomeClassGrid } from "../home-class-grid"
 import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
 
 vi.mock("next/image", () => ({
+  // eslint-disable-next-line next/no-img-element
   default: (props: any) => <img {...props} />,
 }))
 
