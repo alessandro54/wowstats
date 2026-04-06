@@ -21,6 +21,8 @@
     "format:check": "biome format .",
     "stylelint": "stylelint \"src/**/*.css\"",
     "typecheck": "tsc --noEmit",
+    "perf:size": "size-limit",
+    "perf:lighthouse": "CHROME_PATH=$(node -e \"process.stdout.write(require('playwright').chromium.executablePath())\") lhci autorun",
     "prepare": "lefthook install"
   },
   "dependencies": {
@@ -48,6 +50,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.10",
+    "@lhci/cli": "^0.15.1",
+    "@size-limit/file": "^12.0.1",
     "@storybook/addon-docs": "^10.3.4",
     "@storybook/addon-themes": "^10.3.4",
     "@storybook/addon-vitest": "10.2.14",
@@ -71,6 +75,7 @@
     "lefthook": "^2.1.4",
     "oxlint": "^1.58.0",
     "playwright": "^1.59.1",
+    "size-limit": "^12.0.1",
     "storybook": "^10.3.4",
     "stylelint": "^17.6.0",
     "stylelint-config-standard": "^40.0.0",

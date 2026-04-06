@@ -1,5 +1,5 @@
 import type { WowClassConfig } from "./classes-config"
-import { CDN_BASE } from "@/config/cdn-config"
+import { cdnImage } from "@/config/cdn-config"
 
 // Class color: #AAD372
 const HunterConfig: WowClassConfig = {
@@ -7,7 +7,7 @@ const HunterConfig: WowClassConfig = {
   name: "Hunter",
   slug: "hunter",
   iconUrl: "https://render.worldofwarcraft.com/us/icons/56/classicon_hunter.jpg",
-  iconRemasteredUrl: `${CDN_BASE}/class_media/hunter/class_icon.png`,
+  iconRemasteredUrl: cdnImage("/class_media/hunter/class_icon.png", 80),
   specs: [
     {
       id: 253,
@@ -15,21 +15,21 @@ const HunterConfig: WowClassConfig = {
       url: "/pvp/hunter/beast-mastery",
       iconUrl:
         "https://render.worldofwarcraft.com/us/icons/56/ability_hunter_bestialdiscipline.jpg",
-      iconRemasteredUrl: `${CDN_BASE}/class_media/hunter/beastmastery_icon.png`,
+      iconRemasteredUrl: cdnImage("/class_media/hunter/beastmastery_icon.png", 80),
     },
     {
       id: 254,
       name: "marksmanship",
       url: "/pvp/hunter/marksmanship",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_hunter_focusedaim.jpg",
-      iconRemasteredUrl: `${CDN_BASE}/class_media/hunter/marksmanship_icon.png`,
+      iconRemasteredUrl: cdnImage("/class_media/hunter/marksmanship_icon.png", 80),
     },
     {
       id: 255,
       name: "survival",
       url: "/pvp/hunter/survival",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_hunter_camouflage.jpg",
-      iconRemasteredUrl: `${CDN_BASE}/class_media/hunter/survival_icon.png`,
+      iconRemasteredUrl: cdnImage("/class_media/hunter/survival_icon.png", 80),
     },
   ],
 }

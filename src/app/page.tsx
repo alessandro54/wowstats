@@ -1,3 +1,4 @@
+import { LazySection } from "@/components/atoms/lazy-section"
 import { ScrollHint } from "@/components/atoms/scroll-hint"
 import { HomeBgCanvas } from "@/components/molecules/home-bg-canvas"
 import { HomeHero } from "@/components/molecules/home-hero"
@@ -159,11 +160,11 @@ export default async function Home() {
         <ScrollHint />
       </div>
 
-      {/* Content */}
-      <div className="relative z-[2] mx-auto w-full max-w-5xl space-y-10 px-4 pb-16 lg:px-6">
+      {/* Content — lazy loaded when user scrolls near */}
+      <LazySection className="relative z-[2] mx-auto w-full max-w-5xl space-y-10 px-4 pb-16 lg:px-6">
         <HomeBracketCards brackets={bracketSummaries} />
         <HomeClassGrid classes={WOW_CLASSES} />
-      </div>
+      </LazySection>
     </div>
   )
 }
