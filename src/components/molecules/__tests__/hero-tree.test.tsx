@@ -31,8 +31,8 @@ function makeTalent(
       talent_type: "hero",
       spell_id: null,
       node_id: id,
-      display_row: "row" in opts ? opts.row : 0,
-      display_col: "col" in opts ? opts.col : 0,
+      display_row: opts.row ?? 0,
+      display_col: opts.col ?? 0,
       max_rank: 1,
       default_points: 0,
       icon_url: null,
@@ -42,7 +42,7 @@ function makeTalent(
     usage_pct: pct,
     in_top_build: pct > 50,
     top_build_rank: 1,
-    tier: (pct > 50 ? "bis" : pct > 15 ? "situational" : "common") as const,
+    tier: pct > 50 ? ("bis" as const) : pct > 15 ? ("situational" as const) : ("common" as const),
     snapshot_at: null,
   }
 }
