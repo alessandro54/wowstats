@@ -28,6 +28,14 @@ function getCookie(name: string): string | undefined {
   return match?.[1]
 }
 
+function getLocaleLabel(locale: string): string {
+  if (locale === "en_US" || locale === "es_MX") {
+    return LOCALE_LABELS[locale]
+  }
+
+  return LOCALE_LABELS[DEFAULT_LOCALE]
+}
+
 function LanguageDropdown() {
   const router = useRouter()
   const [locale, setLocale] = useState<Locale>(DEFAULT_LOCALE)
@@ -49,15 +57,15 @@ function LanguageDropdown() {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="sm" className="gap-1.5 text-xs text-muted-foreground">
           <Globe className="size-3.5" />
-          {LOCALE_LABELS[locale]}
+          {getLocaleLabel(locale)}
           <ChevronDown className="size-3" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="min-w-36">
         <DropdownMenuRadioGroup value={locale} onValueChange={handleChange}>
-          {SUPPORTED_LOCALES.map((loc) => (
+          {SUPPORTED_LOCALES.map((loc: Locale) => (
             <DropdownMenuRadioItem key={loc} value={loc}>
-              {LOCALE_LABELS[loc]}
+              {getLocaleLabel(loc)}
             </DropdownMenuRadioItem>
           ))}
         </DropdownMenuRadioGroup>
