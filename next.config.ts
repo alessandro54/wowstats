@@ -1,8 +1,14 @@
 import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
-  /* config options here */
   reactCompiler: true,
+  turbopack: {
+    rules: {
+      "*.glsl": { loaders: ["./loaders/raw.js"], as: "*.js" },
+      "*.vert": { loaders: ["./loaders/raw.js"], as: "*.js" },
+      "*.frag": { loaders: ["./loaders/raw.js"], as: "*.js" },
+    },
+  },
   images: {
     unoptimized: true,
     remotePatterns: [

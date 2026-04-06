@@ -1,5 +1,5 @@
-import { CDN_BASE } from "@/config/cdn-config"
-import type { SpecEffect, WowClassConfig } from "./classes-config"
+import { CDN_BASE, cdnImage } from "@/config/cdn-config"
+import type { SpecAtmosphere, SpecParticleEffect, WowClassConfig } from "./classes-config"
 
 // Class color: #C41E3A
 const DeathKnightConfig: WowClassConfig = {
@@ -7,7 +7,7 @@ const DeathKnightConfig: WowClassConfig = {
   name: "Death Knight",
   slug: "death-knight",
   iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_deathknight_classicon.jpg",
-  iconRemasteredUrl: `${CDN_BASE}/class_media/death-knight/class_icon.png`,
+  iconRemasteredUrl: cdnImage("/class_media/death-knight/class_icon.png", 80),
   bannerUrl: `${CDN_BASE}/class_media/death-knight/class_banner.png`,
   specs: [
     {
@@ -15,13 +15,14 @@ const DeathKnightConfig: WowClassConfig = {
       name: "frost",
       url: "/pvp/death-knight/frost",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_deathknight_frostpresence.jpg",
-      iconRemasteredUrl: `${CDN_BASE}/class_media/death-knight/frost_icon.png`,
+      iconRemasteredUrl: cdnImage("/class_media/death-knight/frost_icon.png", 80),
       splash: {
         url: `${CDN_BASE}/class_media/death-knight/frost_splash.png`,
         position: "right 20%",
       },
       animationUrl: `${CDN_BASE}/class_media/death-knight/frost_animation.mp4`,
-      effect: "snow" as SpecEffect,
+      effect: "snow" as SpecParticleEffect,
+      atmosphere: "frost" as SpecAtmosphere,
     },
     {
       id: 252,
@@ -29,25 +30,27 @@ const DeathKnightConfig: WowClassConfig = {
       url: "/pvp/death-knight/unholy",
       iconUrl:
         "https://render.worldofwarcraft.com/us/icons/56/spell_deathknight_unholypresence.jpg",
-      iconRemasteredUrl: `${CDN_BASE}/class_media/death-knight/unholy_icon.png`,
+      iconRemasteredUrl: cdnImage("/class_media/death-knight/unholy_icon.png", 80),
       splash: {
         url: `${CDN_BASE}/class_media/death-knight/unholy_splash.png`,
       },
       animationUrl: `${CDN_BASE}/class_media/death-knight/unholy_animation.mp4`,
-      effect: "plague" as SpecEffect,
+      effect: "plague" as SpecParticleEffect,
+      atmosphere: "toxic" as SpecAtmosphere,
     },
     {
       id: 250,
       name: "blood",
       url: "/pvp/death-knight/blood",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_deathknight_bloodpresence.jpg",
-      iconRemasteredUrl: `${CDN_BASE}/class_media/death-knight/blood_icon.png`,
+      iconRemasteredUrl: cdnImage("/class_media/death-knight/blood_icon.png", 80),
       splash: {
         url: `${CDN_BASE}/class_media/death-knight/blood_splash.png`,
         position: "80% top",
       },
       animationUrl: `${CDN_BASE}/class_media/death-knight/blood_animation.mp4`,
-      effect: "blood" as SpecEffect,
+      effect: "blood" as SpecParticleEffect,
+      atmosphere: "blood" as SpecAtmosphere,
     },
   ],
 }

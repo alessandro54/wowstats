@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from "vitest"
 import { PlayerRow } from "../player-row"
 
 vi.mock("next/image", () => ({
+  // eslint-disable-next-line next/no-img-element
   default: (props: any) => <img {...props} />,
 }))
 

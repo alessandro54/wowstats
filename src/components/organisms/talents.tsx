@@ -23,7 +23,7 @@ interface Props {
   hideStats?: boolean
 }
 
-export function Talents({ classSlug, talents, talentsMeta, hideStats }: Props) {
+export function Talents({ classSlug, talents, talentsMeta: _talentsMeta, hideStats }: Props) {
   const activeColor = useActiveColor(classSlug)
 
   const safeTalents = Array.isArray(talents) ? talents : []

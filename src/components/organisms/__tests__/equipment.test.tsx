@@ -10,6 +10,7 @@ vi.mock("@/hooks/use-active-color", () => ({
 
 vi.mock("next/image", () => ({
   // eslint-disable-next-line next/no-img-element
+  // eslint-disable-next-line next/no-img-element
   default: (props: any) => <img {...props} />,
 }))
 
@@ -143,7 +144,7 @@ describe("equipment", () => {
     expect(container.textContent).toContain("Breastplate")
   })
 
-  it("renders the Items heading", () => {
+  it("renders the Gear heading", () => {
     const { container } = render(
       <Equipment
         classSlug="warrior"
@@ -153,7 +154,7 @@ describe("equipment", () => {
         fiberGems={[]}
       />,
     )
-    expect(container.textContent).toContain("Items")
+    expect(container.textContent).toContain("Gear")
   })
 
   it("shows empty state when no items", () => {

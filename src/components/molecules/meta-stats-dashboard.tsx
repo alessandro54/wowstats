@@ -14,7 +14,6 @@ import { RoleSwitcher } from "@/components/molecules/role-switcher"
 import { MetaInsightsPanel } from "@/components/molecules/meta-insights-panel"
 import { MetaStatsSkeleton } from "@/components/molecules/meta-stats-skeleton"
 import { tier, tierByPercentile } from "@/config/app-config"
-import type { Tier } from "@/config/app-config"
 
 const SOLO_BRACKETS = [
   "shuffle-overall",

@@ -56,6 +56,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       suppressHydrationWarning
       className={`${inter.variable} ${jetbrainsMono.variable}`}
     >
+      <head>
+        <link rel="preconnect" href="https://cdn.wowinsights.xyz" />
+        <link rel="preconnect" href="https://render.worldofwarcraft.com" />
+      </head>
       <body className="bg-background text-foreground h-dvh overflow-hidden antialiased">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <HoverProvider>

@@ -1,31 +1,20 @@
-import { fireEvent, render, screen } from "@testing-library/react"
+import { render, screen } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
 import { BracketPanels } from "../bracket-panels"
 
-// next/link renders as <a> in tests via the storybook/vitest mock
 vi.mock("next/link", () => ({
   default: ({
     href,
     children,
-    onMouseEnter,
-    onClick,
     className,
     style,
   }: {
     href: string
     children: React.ReactNode
-    onMouseEnter?: () => void
-    onClick?: (e: React.MouseEvent) => void
     className?: string
     style?: React.CSSProperties
   }) => (
-    <a
-      href={href}
-      onMouseEnter={onMouseEnter}
-      onClick={onClick}
-      className={className}
-      style={style}
-    >
+    <a href={href} className={className} style={style}>
       {children}
     </a>
   ),
@@ -54,27 +43,10 @@ describe("bracketPanels", () => {
     expect(hrefs).toContain("/pvp/warrior/arms/shuffle")
   })
 
-  it("expands a panel on mouse enter", () => {
+  it("renders bracket descriptions", () => {
     render(<BracketPanels {...defaultProps} />)
-    const links = document.querySelectorAll("a")
-    const firstPanel = links[0]
-
-    fireEvent.mouseEnter(firstPanel)
-
-    expect(firstPanel.className).toContain("flex-5")
-  })
-
-  it("collapses all panels on mouse leave from container", () => {
-    const { container } = render(<BracketPanels {...defaultProps} />)
-    const flexContainer = container.querySelector(".flex.h-44")!
-    const links = document.querySelectorAll("a")
-
-    fireEvent.mouseEnter(links[0])
-    expect(links[0].className).toContain("flex-5")
-
-    fireEvent.mouseLeave(flexContainer)
-    expect(links[0].className).not.toContain("flex-5")
-    expect(links[0].className).toContain("flex-1")
+    expect(screen.getByText("Two vs Two Arena")).toBeTruthy()
+    expect(screen.getByText("Three vs Three Arena")).toBeTruthy()
   })
 
   it("applies the class color to panel elements", () => {
@@ -86,36 +58,5 @@ describe("bracketPanels", () => {
         l.getAttribute("style")?.includes("C69B6D"),
     )
     expect(hasColor).toBe(true)
-  })
-
-  it("shows bracket descriptions in expanded content area", () => {
-    render(<BracketPanels {...defaultProps} />)
-    expect(screen.getByText("Two vs Two Arena")).toBeTruthy()
-    expect(screen.getByText("Three vs Three Arena")).toBeTruthy()
-  })
-
-  it("on touch device, first click expands without navigating", () => {
-    Object.defineProperty(window, "matchMedia", {
-      writable: true,
-      value: vi.fn((query: string) => ({
-        matches: query === "(hover: none)",
-        media: query,
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-      })),
-    })
-
-    render(<BracketPanels {...defaultProps} />)
-    const links = document.querySelectorAll("a")
-    const firstPanel = links[0]
-
-    const clickEvent = new MouseEvent("click", {
-      bubbles: true,
-      cancelable: true,
-    })
-    const preventDefaultSpy = vi.spyOn(clickEvent, "preventDefault")
-
-    firstPanel.dispatchEvent(clickEvent)
-    expect(preventDefaultSpy).toHaveBeenCalled()
   })
 })

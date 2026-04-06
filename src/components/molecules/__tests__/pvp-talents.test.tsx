@@ -14,6 +14,7 @@ vi.mock("@/components/atoms/talent-card", () => ({
 }))
 
 vi.mock("next/image", () => ({
+  // eslint-disable-next-line next/no-img-element
   default: (props: any) => <img {...props} />,
 }))
 
@@ -39,7 +40,7 @@ function makeTalent(id: number, name: string, pct: number): MetaTalent {
     usage_pct: pct,
     in_top_build: pct > 50,
     top_build_rank: 1,
-    tier: (pct > 50 ? "bis" : pct > 15 ? "situational" : "common") as const,
+    tier: pct > 50 ? ("bis" as const) : pct > 15 ? ("situational" as const) : ("common" as const),
     snapshot_at: null,
   }
 }

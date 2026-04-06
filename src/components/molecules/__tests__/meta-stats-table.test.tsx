@@ -4,6 +4,7 @@ import type { MetaStatsEntry } from "../meta-stats-table"
 import { MetaStatsTable } from "../meta-stats-table"
 
 vi.mock("next/image", () => ({
+  // eslint-disable-next-line next/no-img-element
   default: (props: any) => <img {...props} />,
 }))
 

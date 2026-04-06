@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/table"
 import { TIER_COLORS } from "@/config/app-config"
 import type { Tier } from "@/config/app-config"
-import { title } from "node:process"
 import { titleizeSlug } from "@/lib/utils"
 
 export interface MetaStatsEntry {

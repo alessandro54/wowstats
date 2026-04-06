@@ -69,7 +69,22 @@ export type WowClassSpecSlug =
   | "preservation"
   | "augmentation"
 
-export type SpecEffect = "snow" | "plague" | "blood" | "rainoffire"
+export type SpecParticleEffect = "snow" | "plague" | "blood" | "rainoffire" | "coinrain"
+
+export type SpecAtmosphere =
+  | "frost"
+  | "toxic"
+  | "blood"
+  | "fire"
+  | "warm"
+  | "holy"
+  | "shadow"
+  | "fel"
+  | "nature"
+  | "storm"
+  | "arcane"
+  | "iron"
+  | "mist"
 
 export interface WowClassSpec {
   id: number
@@ -83,7 +98,8 @@ export interface WowClassSpec {
   } // position is CSS object-position, e.g. "80% center" or "right top"
   splashPosition?: string // CSS object-position, e.g. "80% center" or "right top"
   animationUrl?: string
-  effect?: SpecEffect
+  effect?: SpecParticleEffect
+  atmosphere?: SpecAtmosphere
 }
 
 export interface WowClassConfig {

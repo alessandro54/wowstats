@@ -1,6 +1,5 @@
 import { render } from "@testing-library/react"
 import { usePathname } from "next/navigation"
-
 import { describe, expect, it, vi } from "vitest"
 import { useHoverSlug } from "@/components/providers/hover-provider"
 import DynamicBackground from "../dynamic-background"
@@ -15,50 +14,39 @@ vi.mock("@/components/providers/hover-provider", () => ({
 
 describe("dynamicBackground", () => {
   it("renders the top blob with class color from pathname", () => {
+    // Use a non-spec pvp route (e.g. /pvp/warrior) so the component doesn't return null
+    vi.mocked(usePathname).mockReturnValue("/pvp/warrior")
     const { container } = render(<DynamicBackground />)
     const blob = container.querySelector("div")!
     expect(blob).toBeDefined()
     expect(blob.style.background).toBe("var(--color-class-warrior)")
   })
 
-  it("uses fallback color on non-class routes", () => {
-    vi.mocked(usePathname).mockReturnValue("/dashboard")
-    const { container } = render(<DynamicBackground />)
-    const blob = container.querySelector("div")!
-    // /dashboard has segments[0]="dashboard" which is treated as a slug
-    expect(blob.style.background).toBe("var(--color-class-dashboard)")
-  })
-
-  it("renders fallback gradient on root path", () => {
+  it("returns null on home page", () => {
     vi.mocked(usePathname).mockReturnValue("/")
     const { container } = render(<DynamicBackground />)
-    const blob = container.querySelector("div")!
-    expect(blob.style.background).toBe("oklch(0.7 0.15 340)")
+    expect(container.innerHTML).toBe("")
+  })
+
+  it("returns null on spec pages (they handle their own atmosphere)", () => {
+    vi.mocked(usePathname).mockReturnValue("/pvp/warrior/arms/3v3")
+    const { container } = render(<DynamicBackground />)
+    expect(container.innerHTML).toBe("")
   })
 
   it("prefers hoverSlug over pathname slug", () => {
-    vi.mocked(usePathname).mockReturnValue("/pvp/warrior/arms/3v3")
+    vi.mocked(usePathname).mockReturnValue("/pvp/warrior")
     vi.mocked(useHoverSlug).mockReturnValue("mage")
     const { container } = render(<DynamicBackground />)
     const blob = container.querySelector("div")!
     expect(blob.style.background).toBe("var(--color-class-mage)")
   })
 
-  it("renders spec gradient on spec pages", () => {
-    vi.mocked(usePathname).mockReturnValue("/pvp/warrior/arms/3v3")
+  it("uses fallback color on non-class routes", () => {
     vi.mocked(useHoverSlug).mockReturnValue(null)
-    const { container } = render(<DynamicBackground />)
-    const divs = container.querySelectorAll("div")
-    // Should have blob + spec gradient = 2 divs
-    expect(divs.length).toBe(2)
-    expect(divs[1].className).toContain("spec-warrior-arms")
-  })
-
-  it("does not render spec gradient on non-spec pages", () => {
     vi.mocked(usePathname).mockReturnValue("/pvp")
-    vi.mocked(useHoverSlug).mockReturnValue(null)
     const { container } = render(<DynamicBackground />)
-    const divs = container.querySelectorAll("div")
-    expect(divs.length).toBe(1)
+    const blob = container.querySelector("div")!
+    expect(blob.style.background).toBe("oklch(0.7 0.15 340)")
   })
 })

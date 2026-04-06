@@ -67,7 +67,7 @@ export function TalentNodeTooltip({
       {/* Rank distribution bars (meta only) */}
       {!hideStats && rankBars && (
         <div className="mt-2 space-y-1 border-t border-border/50 pt-2">
-          {rankBars.map((bar, i) => (
+          {rankBars.map((bar) => (
             <div key={bar.label} className="flex items-center justify-between gap-3">
               <span className="text-muted-foreground w-6 text-[11px]">{bar.label}</span>
               <div className="bg-muted/30 relative h-1.5 w-20 overflow-hidden rounded-full">

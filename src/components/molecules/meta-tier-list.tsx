@@ -49,13 +49,6 @@ const TIER_LABELS: Record<Tier, string> = {
   D: "Weak",
 }
 
-const BRACKET_LABELS: Record<string, string> = {
-  "2v2": "2v2",
-  "3v3": "3v3",
-  "shuffle-overall": "Shuffle",
-  "blitz-overall": "Blitz",
-}
-
 function ScoreBar({ score, color, maxScore }: { score: number; color: string; maxScore: number }) {
   const pct = maxScore > 0 ? (score / maxScore) * 100 : 0
   return (

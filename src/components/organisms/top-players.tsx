@@ -52,7 +52,7 @@ export function TopPlayers({ playersByRegion }: Props) {
           <h2 className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
             Top Players
           </h2>
-          <div className="ml-2 h-px flex-1 bg-gradient-to-r from-border to-transparent" />
+          <div className="ml-2 h-px w-16 bg-gradient-to-r from-border to-transparent" />
         </div>
         <div className="flex rounded-lg border border-border/50 bg-card/30">
           {REGIONS.map((r) => (

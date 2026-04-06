@@ -18,12 +18,12 @@ type NextImageProps = Omit<ImgHTMLAttributes<HTMLImageElement>, "src"> & {
 export default function Image({
   src,
   alt = "",
-  unoptimized,
-  priority,
-  quality,
-  fill,
-  sizes,
-  loader,
+  unoptimized: _unoptimized,
+  priority: _priority,
+  quality: _quality,
+  fill: _fill,
+  sizes: _sizes,
+  loader: _loader,
   ...props
 }: NextImageProps) {
   const resolvedSrc = typeof src === "string" ? src : src.src

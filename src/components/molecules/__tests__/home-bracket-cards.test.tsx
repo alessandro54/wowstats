@@ -4,7 +4,12 @@ import { HomeBracketCards } from "../home-bracket-cards"
 import type { BracketSummary } from "../home-bracket-cards"
 
 vi.mock("next/image", () => ({
+  // eslint-disable-next-line next/no-img-element
   default: (props: any) => <img {...props} />,
+}))
+
+vi.mock("@/components/providers/hover-provider", () => ({
+  useHoverSlug: vi.fn(() => null),
 }))
 
 const brackets: BracketSummary[] = [
@@ -40,7 +45,10 @@ describe("HomeBracketCards", () => {
   it("renders bracket label and player count", () => {
     render(<HomeBracketCards brackets={brackets} />)
     expect(screen.getByText("2v2")).toBeDefined()
-    expect(screen.getByText("2,418 players")).toBeDefined()
+    expect(
+      screen.getAllByText((_, el) => el?.tagName === "SPAN" && el?.textContent === "2,418 players")
+        .length,
+    ).toBeGreaterThan(0)
   })
 
   it("renders top spec icons", () => {

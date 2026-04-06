@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { FOOTER_LINKS } from "@/config/app-config"
-import { CDN_BASE } from "@/config/cdn-config"
+import { cdnImage } from "@/config/cdn-config"
 import {
   DEFAULT_LOCALE,
   LOCALE_COOKIE,
@@ -75,7 +75,7 @@ export function AppFooter() {
           {/* Brand */}
           <Link href="/" className="flex items-center gap-3 shrink-0">
             <Image
-              src={`${CDN_BASE}/assets/logo.png`}
+              src={cdnImage("/assets/logo.png", 48)}
               alt="WoW Insights"
               width={48}
               height={48}

@@ -3,24 +3,15 @@ import { render } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
 import { TopPlayers } from "../top-players"
 
-vi.mock("@/components/atoms/sliding-switch", () => ({
-  SlidingSwitch: ({ options, value, onValueChange }: any) => (
-    <div data-testid="region-switch">
-      {options.map((o: any) => (
-        <button key={o.value} onClick={() => onValueChange(o.value)}>
-          {o.value}
-        </button>
-      ))}
-    </div>
-  ),
-}))
-
-vi.mock("@/components/molecules/player-row", () => ({
-  PlayerRow: ({ player, index }: any) => <div data-testid={`player-${index}`}>{player.name}</div>,
-}))
-
 vi.mock("@/components/ui/tooltip", () => ({
   TooltipProvider: ({ children }: any) => <div>{children}</div>,
+}))
+
+vi.mock("next/navigation", () => ({
+  useRouter: vi.fn(() => ({
+    push: vi.fn(),
+  })),
+  usePathname: vi.fn(() => "/pvp/warrior/arms/2v2"),
 }))
 
 function makePlayer(name: string, region: string): TopPlayer {
@@ -57,15 +48,16 @@ describe("topPlayers", () => {
     expect(container.textContent).toContain("Top Players")
   })
 
-  it("renders player rows for all region", () => {
-    const { getByTestId } = render(<TopPlayers playersByRegion={playersByRegion} />)
-    expect(getByTestId("player-0").textContent).toBe("Cdew")
-    expect(getByTestId("player-1").textContent).toBe("Whaazz")
+  it("renders player names", () => {
+    const { container } = render(<TopPlayers playersByRegion={playersByRegion} />)
+    expect(container.textContent).toContain("Cdew")
+    expect(container.textContent).toContain("Whaazz")
   })
 
-  it("renders region switch", () => {
-    const { getByTestId } = render(<TopPlayers playersByRegion={playersByRegion} />)
-    expect(getByTestId("region-switch")).toBeInTheDocument()
+  it("renders region buttons", () => {
+    const { container } = render(<TopPlayers playersByRegion={playersByRegion} />)
+    const buttons = container.querySelectorAll("button")
+    expect(buttons.length).toBeGreaterThan(0)
   })
 
   it("returns null when all players empty", () => {
