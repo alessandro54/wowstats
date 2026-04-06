@@ -153,11 +153,11 @@ async function HomeContent() {
 
   return (
     <>
-      <div className="relative z-[2] flex min-h-[calc(100dvh-3.75rem)] items-center justify-center px-4 py-12 lg:px-6">
+      <div className="animate-stream-in relative z-[2] flex min-h-[calc(100dvh-3.75rem)] items-center justify-center px-4 py-12 lg:px-6">
         <HomeHero seasonId={seasonId} totalEntries={totalEntries} sPlus={sPlusSpec} />
         <ScrollHint />
       </div>
-      <LazySection className="relative z-[2] mx-auto w-full max-w-5xl space-y-10 px-4 pb-16 lg:px-6">
+      <LazySection className="animate-stream-in relative z-[2] mx-auto w-full max-w-5xl space-y-10 px-4 pb-16 lg:px-6">
         <HomeBracketCards brackets={bracketSummaries} />
         <HomeClassGrid classes={WOW_CLASSES} />
       </LazySection>

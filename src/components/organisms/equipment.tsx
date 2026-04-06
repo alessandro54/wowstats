@@ -5,12 +5,11 @@ import { ClickableTooltip } from "@/components/atoms/clickable-tooltip"
 import type { DistEntry } from "@/components/molecules/distribution-tooltip"
 import { DistributionTooltip } from "@/components/molecules/distribution-tooltip"
 import type { EnchantGroup } from "@/components/molecules/item-card"
-import { ItemCard } from "@/components/molecules/item-card"
 import { TooltipProvider } from "@/components/ui/tooltip"
-import { formatSocketType, QUALITY_COLORS } from "@/config/equipment-config"
+import { formatSlot, QUALITY_COLORS } from "@/config/equipment-config"
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { useActiveColor } from "@/hooks/use-active-color"
-import type { MetaGem, MetaItem } from "@/lib/api"
+import type { MetaEnchant, MetaGem, MetaItem } from "@/lib/api"
 
 /** Paper-doll slot layout: left column, right column */
 const LEFT_SLOTS = [
@@ -49,19 +48,146 @@ interface EquipmentProps {
   enchantGroups: EnchantGroup[]
   gemGroups: GemGroup[]
   fiberGems: MetaGem[]
+  /** Optional spec info for the center card */
+  specIconUrl?: string
+  specName?: string
+  className?: string
+  bracketLabel?: string
+}
+
+function borderColor(isBis: boolean, isCrafted: boolean, activeColor: string): string {
+  if (isCrafted) return "rgb(245 158 11)" // amber-500
+  if (isBis) return activeColor
+  return "rgb(100 100 100 / 0.4)" // muted
+}
+
+function SlotCard({
+  slot,
+  entries,
+  enchantBySlot,
+  fiberGems,
+  activeColor,
+  isBis,
+}: {
+  slot: string
+  entries?: MetaItem[]
+  enchantBySlot: Map<
+    string,
+    {
+      slot: string
+      entries: MetaEnchant[]
+    }
+  >
+  fiberGems: MetaGem[]
+  activeColor: string
+  isBis: boolean
+}) {
+  if (!entries || entries.length === 0) return <div className="h-[76px]" />
+
+  const primary = entries[0]
+  const isCrafted = primary.crafted
+  const border = borderColor(isBis, isCrafted, activeColor)
+
+  const enchantGroup = enchantBySlot.get(slot)
+  const primaryEnchant = enchantGroup?.entries[0]
+
+  const distribution = entries.slice(0, 6).map(
+    (e): DistEntry => ({
+      name: e.item.name,
+      icon_url: e.item.icon_url,
+      quality: e.item.quality,
+      pct: e.usage_pct,
+    }),
+  )
+  const enchantDist = enchantGroup?.entries.slice(0, 6).map(
+    (e): DistEntry => ({
+      name: e.enchantment.name,
+      pct: e.usage_pct,
+    }),
+  )
+
+  return (
+    <ClickableTooltip
+      side="bottom"
+      align="end"
+      content={
+        <DistributionTooltip
+          entries={distribution}
+          enchantEntries={enchantDist}
+          activeColor={activeColor}
+          craftingStats={primary.crafted ? primary.top_crafting_stats : undefined}
+        />
+      }
+    >
+      <div
+        className="flex cursor-default items-center gap-3 rounded-lg border-l-2 bg-card/30 px-3 py-2.5 backdrop-blur-sm transition-colors hover:bg-muted/20"
+        style={{
+          borderLeftColor: border,
+        }}
+      >
+        {primary.item.icon_url && (
+          <span className="icon-vignette shrink-0 rounded">
+            <Image
+              src={primary.item.icon_url}
+              alt={primary.item.name}
+              width={36}
+              height={36}
+              className="block rounded"
+            />
+          </span>
+        )}
+        <div className="min-w-0 flex-1">
+          <span className="text-[9px] font-semibold uppercase tracking-wider text-muted-foreground">
+            {formatSlot(slot)}
+          </span>
+          <p
+            className="truncate text-sm font-medium leading-tight"
+            style={{
+              color: QUALITY_COLORS[primary.item.quality?.toUpperCase()],
+            }}
+          >
+            {primary.item.name}
+          </p>
+          {primaryEnchant ? (
+            <p className="truncate text-[10px] leading-tight text-lime-600 dark:text-[#00ff00]">
+              {primaryEnchant.enchantment.name}
+            </p>
+          ) : (
+            <p className="text-[10px] leading-tight text-muted-foreground/30">—</p>
+          )}
+        </div>
+        <div className="flex shrink-0 flex-col items-end gap-0.5">
+          {isCrafted && (
+            <span className="rounded bg-amber-500/20 px-1.5 py-0.5 text-[8px] font-bold uppercase text-amber-400">
+              Crafted
+            </span>
+          )}
+          <span
+            className="font-mono text-sm font-bold tabular-nums"
+            style={{
+              color: isBis ? activeColor : "rgb(160 160 160)",
+            }}
+          >
+            {primary.usage_pct.toFixed(1)}%
+          </span>
+        </div>
+      </div>
+    </ClickableTooltip>
+  )
 }
 
 export function Equipment({
   classSlug,
   itemGroups,
   enchantGroups,
-  gemGroups,
+  gemGroups: _gemGroups,
   fiberGems,
+  specIconUrl,
+  specName,
+  className: wowClassName,
+  bracketLabel,
 }: EquipmentProps) {
   const activeColor = useActiveColor(classSlug)
-  const pillStyle = {
-    "--pill-color": activeColor,
-  } as React.CSSProperties
 
   const itemBySlot = new Map(
     itemGroups.map((g) => [
@@ -76,143 +202,109 @@ export function Equipment({
     ]),
   )
 
-  const renderSlot = (slot: string) => {
-    if (!itemBySlot.has(slot)) return <div key={slot} className="h-[72px]" />
+  // Find the highest usage item across all slots to determine BIS threshold
+  const allPrimaries = itemGroups.map((g) => g.entries[0]).filter(Boolean)
+  const maxUsage = allPrimaries.length > 0 ? Math.max(...allPrimaries.map((e) => e.usage_pct)) : 0
+  const bisThreshold = maxUsage * 0.7 // Top 70% usage = BIS
+
+  const renderSlot = (slot: string, idx: number) => {
+    const group = itemBySlot.get(slot)
+    const primary = group?.entries[0]
+    const isBis = primary ? primary.usage_pct >= bisThreshold : false
+
     return (
-      <ItemCard
+      <SlotCard
         key={slot}
         slot={slot}
-        entries={itemBySlot.get(slot)?.entries}
-        enchants={enchantBySlot}
+        entries={group?.entries}
+        enchantBySlot={enchantBySlot}
         fiberGems={fiberGems}
         activeColor={activeColor}
-        pillStyle={pillStyle}
+        isBis={isBis}
       />
     )
   }
 
+  if (itemBySlot.size === 0) {
+    return <p className="text-sm text-muted-foreground">No item data available for this bracket.</p>
+  }
+
   return (
     <TooltipProvider>
-      <div className="space-y-8">
-        {/* Gear section */}
-        <section>
-          <div className="mb-4 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <h2 className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
-                Gear
-              </h2>
-              <div className="ml-2 h-px w-16 bg-gradient-to-r from-border to-transparent" />
-            </div>
-            <div className="flex items-center gap-4 text-[10px] text-muted-foreground">
-              <span className="flex items-center gap-1.5">
-                <span
-                  className="inline-block size-2 rounded-full"
-                  style={{
-                    background: activeColor,
-                  }}
+      <section>
+        {/* Header */}
+        <div className="mb-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <h2 className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
+              Gear
+            </h2>
+            <div className="ml-2 h-px w-16 bg-gradient-to-r from-border to-transparent" />
+          </div>
+          <div className="flex items-center gap-4 text-[10px] text-muted-foreground">
+            <span className="flex items-center gap-1.5">
+              <span
+                className="inline-block size-2 rounded-full"
+                style={{
+                  background: activeColor,
+                }}
+              />
+              BiS
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="inline-block size-2 rounded-full bg-muted-foreground/40" />
+              Alt
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="inline-block size-2 rounded-full bg-amber-500" />
+              Crafted
+            </span>
+          </div>
+        </div>
+
+        {/* Paper-doll 3-column layout */}
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_auto_1fr]">
+          {/* Left column */}
+          <div className="flex flex-col gap-2">
+            {LEFT_SLOTS.map((slot, i) => renderSlot(slot, i))}
+          </div>
+
+          {/* Center card */}
+          <div className="hidden lg:flex">
+            <div className="flex w-56 flex-col items-center justify-center gap-4 rounded-lg border border-border/30 bg-card/20 p-6">
+              {specIconUrl && (
+                <Image
+                  src={specIconUrl}
+                  alt={specName ?? ""}
+                  width={80}
+                  height={80}
+                  className="rounded-xl opacity-80"
                 />
-                BiS
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span className="inline-block size-2 rounded-full bg-muted-foreground/40" />
-                Alt
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span className="inline-block size-2 rounded-full bg-amber-500" />
-                Crafted
-              </span>
+              )}
+              {specName && wowClassName && (
+                <div className="text-center">
+                  <p
+                    className="text-xs font-bold uppercase tracking-wider"
+                    style={{
+                      color: activeColor,
+                    }}
+                  >
+                    {specName}
+                  </p>
+                  <p className="text-sm font-bold text-foreground">{wowClassName}</p>
+                  {bracketLabel && (
+                    <p className="mt-0.5 text-[10px] text-muted-foreground">{bracketLabel} · PvP</p>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
-          {itemBySlot.size === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              No item data available for this bracket.
-            </p>
-          ) : (
-            <div className="grid grid-cols-1 gap-2 lg:grid-cols-[1fr_1fr] lg:gap-x-6">
-              {/* Left column */}
-              <div className="flex flex-col gap-2">{LEFT_SLOTS.map(renderSlot)}</div>
-              {/* Right column */}
-              <div className="flex flex-col gap-2">{RIGHT_SLOTS.map(renderSlot)}</div>
-            </div>
-          )}
-        </section>
-
-        {/* Gems section */}
-        {gemGroups.length > 0 && (
-          <section>
-            <div className="mb-4 flex items-center gap-2">
-              <h2 className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
-                Gems
-              </h2>
-              <div className="ml-2 h-px w-16 bg-gradient-to-r from-border to-transparent" />
-            </div>
-            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
-              {gemGroups.map(({ socketType, entries }) => {
-                const primary = entries[0]
-                if (!primary) return null
-                const distribution = entries.slice(0, 6).map(
-                  (e): DistEntry => ({
-                    name: e.item.name,
-                    icon_url: e.item.icon_url,
-                    quality: e.item.quality,
-                    pct: e.usage_pct,
-                  }),
-                )
-                return (
-                  <ClickableTooltip
-                    key={socketType}
-                    side="bottom"
-                    align="end"
-                    content={
-                      <DistributionTooltip entries={distribution} activeColor={activeColor} />
-                    }
-                  >
-                    <div className="flex cursor-default gap-3 rounded-lg border border-border/50 bg-card/30 p-3 backdrop-blur-sm transition-colors hover:bg-muted/20">
-                      <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-                        <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                          {formatSocketType(socketType)}
-                        </span>
-                        <div className="flex min-w-0 items-center gap-2">
-                          {primary.item.icon_url && (
-                            <span className="icon-vignette shrink-0 rounded">
-                              <Image
-                                src={primary.item.icon_url}
-                                alt={primary.item.name}
-                                width={28}
-                                height={28}
-                                className="block rounded"
-                              />
-                            </span>
-                          )}
-                          <p
-                            className="truncate text-sm font-medium leading-tight"
-                            style={{
-                              color: QUALITY_COLORS[primary.item.quality?.toUpperCase()],
-                            }}
-                          >
-                            {primary.item.name}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex shrink-0 items-center">
-                        <span
-                          className="font-mono text-sm font-bold tabular-nums"
-                          style={{
-                            color: activeColor,
-                          }}
-                        >
-                          {primary.usage_pct.toFixed(0)}%
-                        </span>
-                      </div>
-                    </div>
-                  </ClickableTooltip>
-                )
-              })}
-            </div>
-          </section>
-        )}
-      </div>
+          {/* Right column */}
+          <div className="flex flex-col gap-2">
+            {RIGHT_SLOTS.map((slot, i) => renderSlot(slot, i))}
+          </div>
+        </div>
+      </section>
     </TooltipProvider>
   )
 }

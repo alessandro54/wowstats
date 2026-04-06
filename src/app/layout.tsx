@@ -48,7 +48,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const widthCookie = cookieStore.get("sidebar_width")
   const stateCookie = cookieStore.get("sidebar_state")
   const defaultWidth = widthCookie ? Number(widthCookie.value) : undefined
-  const defaultOpen = stateCookie ? stateCookie.value === "true" : true
+  const defaultOpen = stateCookie ? stateCookie.value === "true" : false
 
   return (
     <html
