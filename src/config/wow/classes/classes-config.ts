@@ -69,7 +69,7 @@ export type WowClassSpecSlug =
   | "preservation"
   | "augmentation"
 
-export type SpecEffect = "snow" | "plague" | "blood" | "rainoffire"
+export type SpecEffect = "snow" | "plague" | "blood" | "rainoffire" | "coinrain"
 
 export interface WowClassSpec {
   id: number

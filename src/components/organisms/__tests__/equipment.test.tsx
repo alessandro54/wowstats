@@ -143,7 +143,7 @@ describe("equipment", () => {
     expect(container.textContent).toContain("Breastplate")
   })
 
-  it("renders the Items heading", () => {
+  it("renders the Gear heading", () => {
     const { container } = render(
       <Equipment
         classSlug="warrior"
@@ -153,7 +153,7 @@ describe("equipment", () => {
         fiberGems={[]}
       />,
     )
-    expect(container.textContent).toContain("Items")
+    expect(container.textContent).toContain("Gear")
   })
 
   it("shows empty state when no items", () => {

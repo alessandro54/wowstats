@@ -37,7 +37,7 @@ describe("pvpSpecTopNav", () => {
     const left = screen.getByTestId("left")
     expect(left.textContent).toContain("PvP")
     expect(left.textContent).toContain("Warrior")
-    expect(left.textContent).toContain("arms")
+    expect(left.textContent).toContain("Arms")
   })
 
   it("does not render a center slot when not on a bracket route", () => {

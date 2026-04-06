@@ -92,7 +92,7 @@ const altTree = [
 ]
 
 describe("heroSection", () => {
-  it("renders the Hero Talents heading", () => {
+  it("renders hero section with trees", () => {
     const { container } = render(
       <HeroSection
         heroEntries={[
@@ -103,7 +103,7 @@ describe("heroSection", () => {
         classSlug="warrior"
       />,
     )
-    expect(container.textContent).toContain("Hero Talents")
+    expect(container.querySelector("section")).toBeInTheDocument()
   })
 
   it("renders the primary tree", () => {

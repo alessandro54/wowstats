@@ -7,6 +7,10 @@ vi.mock("next/image", () => ({
   default: (props: any) => <img {...props} />,
 }))
 
+vi.mock("@/components/providers/hover-provider", () => ({
+  useHoverSlug: vi.fn(() => null),
+}))
+
 const brackets: BracketSummary[] = [
   {
     bracket: "2v2",
@@ -40,7 +44,10 @@ describe("HomeBracketCards", () => {
   it("renders bracket label and player count", () => {
     render(<HomeBracketCards brackets={brackets} />)
     expect(screen.getByText("2v2")).toBeDefined()
-    expect(screen.getByText("2,418 players")).toBeDefined()
+    expect(
+      screen.getAllByText((_, el) => el?.tagName === "SPAN" && el?.textContent === "2,418 players")
+        .length,
+    ).toBeGreaterThan(0)
   })
 
   it("renders top spec icons", () => {
