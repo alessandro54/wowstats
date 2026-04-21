@@ -3,6 +3,7 @@
 import { TalentCard } from "@/components/atoms/talent-card"
 import { PvpTalents } from "@/components/molecules/pvp-talents"
 import { TalentList } from "@/components/molecules/talent-list"
+import { Badge } from "@/components/ui/badge"
 import { HeroSection } from "@/components/organisms/hero-section"
 import { hasTreeData, TalentTree, TalentTreeSkeleton } from "@/components/organisms/talent-tree"
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
@@ -23,7 +24,7 @@ interface Props {
   hideStats?: boolean
 }
 
-export function Talents({ classSlug, talents, talentsMeta: _talentsMeta, hideStats }: Props) {
+export function Talents({ classSlug, talents, talentsMeta, hideStats }: Props) {
   const activeColor = useActiveColor(classSlug)
 
   const safeTalents = Array.isArray(talents) ? talents : []
@@ -76,6 +77,13 @@ export function Talents({ classSlug, talents, talentsMeta: _talentsMeta, hideSta
 
   return (
     <div className="space-y-8">
+      {talentsMeta?.data_confidence !== "high" && (
+        <Badge variant="outline" className="border-amber-500/50 text-amber-400 bg-amber-500/10">
+          {talentsMeta?.data_confidence === "low"
+            ? "Limited data — may not reflect current patch"
+            : "Partial data"}
+        </Badge>
+      )}
       {/* ── 2K+ single row: hero + class + spec ─────────────── */}
       {allInOneRow && (
         <div className="hidden min-[1800px]:flex min-[1800px]:items-start min-[1800px]:justify-center min-[1800px]:gap-8">

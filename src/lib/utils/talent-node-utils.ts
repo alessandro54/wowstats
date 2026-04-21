@@ -32,8 +32,11 @@ export function metaBorderClass(tier: string, isFree: boolean): string | undefin
 
 export function investedRank(node: TalentNode): number {
   if (!node.isRanked) return node.primary.top_build_rank
-  const sum = node.all.filter((t) => t.in_top_build).reduce((s, t) => s + t.top_build_rank, 0)
-  return Math.min(sum, node.maxRank)
+
+  const inTopBuild = node.all.filter((t) => t.in_top_build)
+  if (inTopBuild.length === 0) return 0
+
+  return Math.min(Math.max(...inTopBuild.map((t) => t.top_build_rank)), node.maxRank)
 }
 
 export interface RankBar {

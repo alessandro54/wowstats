@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
-import type { MetaTalent } from "@/lib/api"
+import type { MetaTalent, TalentsMeta } from "@/lib/api"
 
 import { Talents } from "../talents"
 
@@ -159,5 +159,41 @@ describe("talents", () => {
   it("renders hero section when hero talents exist", () => {
     const { getByTestId } = render(<Talents classSlug="warrior" talents={heroTalents} />)
     expect(getByTestId("hero-section").textContent).toContain("1 hero talents")
+  })
+})
+
+function makeMeta(confidence: "low" | "medium" | "high"): TalentsMeta {
+  return {
+    bracket: "2v2",
+    spec_id: 71,
+    total_players: confidence === "high" ? 150 : confidence === "medium" ? 45 : 10,
+    total_weighted: 100,
+    snapshot_at: null,
+    data_confidence: confidence,
+    stale_count: confidence === "high" ? 0 : confidence === "medium" ? 2 : 5,
+  }
+}
+
+describe("confidence badge", () => {
+  it("shows no badge when confidence is high", () => {
+    const { queryByText } = render(
+      <Talents classSlug="warrior" talents={specTalents} talentsMeta={makeMeta("high")} />,
+    )
+    expect(queryByText(/Limited data/i)).toBeNull()
+    expect(queryByText(/Partial data/i)).toBeNull()
+  })
+
+  it("shows 'Limited data' badge when confidence is low", () => {
+    const { getByText } = render(
+      <Talents classSlug="warrior" talents={specTalents} talentsMeta={makeMeta("low")} />,
+    )
+    expect(getByText(/Limited data/i)).toBeDefined()
+  })
+
+  it("shows 'Partial data' badge when confidence is medium", () => {
+    const { getByText } = render(
+      <Talents classSlug="warrior" talents={specTalents} talentsMeta={makeMeta("medium")} />,
+    )
+    expect(getByText(/Partial data/i)).toBeDefined()
   })
 })

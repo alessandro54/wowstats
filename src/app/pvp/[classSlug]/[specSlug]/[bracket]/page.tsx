@@ -154,6 +154,8 @@ async function TalentsSection({
         total_players: 0,
         total_weighted: 0,
         snapshot_at: null,
+        data_confidence: "low" as const,
+        stale_count: 0,
       },
       talents: [],
     }),

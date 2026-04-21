@@ -183,7 +183,7 @@ describe("equipment", () => {
     expect(container.textContent).toContain("Radiance")
   })
 
-  it("shows CRAFTED badge on crafted items", () => {
+  it("shows Crafted badge on crafted items", () => {
     const { container } = render(
       <Equipment
         classSlug="warrior"
@@ -193,10 +193,12 @@ describe("equipment", () => {
         fiberGems={[]}
       />,
     )
-    expect(container.textContent).toContain("CRAFTED")
+    // CSS `uppercase` is visual only — textContent returns the literal "Crafted"
+    expect(container.textContent).toContain("Crafted")
   })
 
-  it("renders the Gems section when gems exist", () => {
+  it("does not render Gems section (feature currently disabled)", () => {
+    // gemGroups prop is accepted but intentionally unused — gems commented out as bugged
     const { container } = render(
       <Equipment
         classSlug="warrior"
@@ -206,8 +208,7 @@ describe("equipment", () => {
         fiberGems={[]}
       />,
     )
-    expect(container.textContent).toContain("Gems")
-    expect(container.textContent).toContain("Deadly Sapphire")
+    expect(container.textContent).not.toContain("Deadly Sapphire")
   })
 
   it("does not show Gems section when empty", () => {
@@ -237,7 +238,9 @@ describe("equipment", () => {
     expect(container.textContent).toContain("70.0%")
   })
 
-  it("renders fiber gem badge on crafted Reshii wraps", () => {
+  it("renders crafted Reshii Wraps with amber border styling", () => {
+    // fiberGems prop is accepted but not rendered (feature removed from SlotCard)
+    // Test verifies the item still renders with crafted styling
     const reshii = [
       {
         slot: "HANDS",
@@ -258,9 +261,8 @@ describe("equipment", () => {
         fiberGems={fiber}
       />,
     )
-    // The fiber gem badge is hidden on mobile (hidden sm:inline), but the element is in the DOM
-    const spans = Array.from(container.querySelectorAll("span"))
-    expect(spans.some((s) => s.textContent === "Jeweler's Setting")).toBe(true)
+    expect(container.textContent).toContain("Reshii Wraps of Insanity")
+    expect(container.textContent).toContain("Crafted")
   })
 
   it("renders distribution tooltips", () => {

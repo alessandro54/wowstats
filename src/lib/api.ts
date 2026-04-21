@@ -141,6 +141,8 @@ export interface TalentsMeta {
   total_players: number
   total_weighted: number
   snapshot_at: string | null
+  data_confidence: "low" | "medium" | "high"
+  stale_count: number
 }
 
 export interface TalentsResponse {
