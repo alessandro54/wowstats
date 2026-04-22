@@ -4,11 +4,11 @@ export const API_CLASS_SLUG: Record<string, string> = {
   "demon-hunter": "demonhunter",
 }
 
-/** Resolves the API bracket string, handling shuffle's class-spec suffix. */
+/** Resolves the API bracket string, handling shuffle/blitz class-spec suffix. */
 export function apiBracket(bracket: string, classSlug: string, specSlug: string): string {
-  if (bracket === "shuffle") {
+  if (bracket === "shuffle" || bracket === "blitz") {
     const apiClass = API_CLASS_SLUG[classSlug] ?? classSlug
-    return `shuffle-${apiClass}-${specSlug}`
+    return `${bracket}-${apiClass}-${specSlug}`
   }
   return bracket
 }

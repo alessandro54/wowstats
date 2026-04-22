@@ -107,46 +107,24 @@ describe("distributionTooltip", () => {
     expect(container.textContent).not.toContain("Alternatives")
   })
 
-  it("renders fiber gems section when provided", () => {
-    const fiberGems = [
+  it("renders gems section when provided", () => {
+    const gemEntries: DistEntry[] = [
       {
-        id: 1,
-        item: {
-          id: 1,
-          blizzard_id: 100,
-          name: "Fiber Gem A",
-          icon_url: "",
-          quality: "RARE",
-        },
-        slot: "prismatic",
-        socket_type: "FIBER",
-        usage_count: 50,
-        usage_pct: 60.0,
-        snapshot_at: "",
+        name: "Gem A",
+        pct: 60.0,
       },
       {
-        id: 2,
-        item: {
-          id: 2,
-          blizzard_id: 101,
-          name: "Fiber Gem B",
-          icon_url: "",
-          quality: "UNCOMMON",
-        },
-        slot: "prismatic",
-        socket_type: "FIBER",
-        usage_count: 30,
-        usage_pct: 30.0,
-        snapshot_at: "",
+        name: "Gem B",
+        pct: 30.0,
       },
     ]
 
     const { container } = render(
-      <DistributionTooltip entries={mockEntries} activeColor="#C69B6D" fiberGems={fiberGems} />,
+      <DistributionTooltip entries={mockEntries} activeColor="#C69B6D" gemEntries={gemEntries} />,
     )
 
-    expect(container.textContent).toContain("Fiber socket")
-    expect(container.textContent).toContain("Fiber Gem A")
+    expect(container.textContent).toContain("Gems")
+    expect(container.textContent).toContain("Gem A")
     expect(container.textContent).toContain("60.0%")
   })
 

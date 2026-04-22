@@ -25,7 +25,7 @@ function spawnSplash(x: number, y: number, r: number) {
   })
 }
 
-function updateSplashes(ctx: CanvasRenderingContext2D, H: number) {
+function updateSplashes(ctx: CanvasRenderingContext2D, _H: number) {
   for (let i = splashes.length - 1; i >= 0; i--) {
     const s = splashes[i]
     s.life++

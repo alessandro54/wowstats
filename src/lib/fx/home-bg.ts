@@ -1,8 +1,8 @@
 // --- Constants ---
 
-export const PARTICLE_COUNT = 80
-export const SPREAD_X = 160
-export const SPREAD_Y = 120
+export const PARTICLE_COUNT = 220
+export const SPREAD_X = 230
+export const SPREAD_Y = 130
 export const FRAME_INTERVAL = 1000 / 30
 
 // --- Palette ---
@@ -96,9 +96,9 @@ export function initParticles(count: number): ParticleData {
   for (let i = 0; i < count; i++) {
     positions[i * 3] = (Math.random() - 0.5) * SPREAD_X
     positions[i * 3 + 1] = (Math.random() - 0.5) * SPREAD_Y
-    positions[i * 3 + 2] = (Math.random() - 0.5) * 60
+    positions[i * 3 + 2] = (Math.random() - 0.5) * 20
     px0[i] = positions[i * 3]
-    vy[i] = 0.018 + Math.random() * 0.055
+    vy[i] = 0.12 + Math.random() * 0.22
     vx[i] = (Math.random() - 0.5) * 0.012
     swayAmplitude[i] = 0.15 + Math.random() * 0.6
     swayFrequency[i] = 0.008 + Math.random() * 0.018

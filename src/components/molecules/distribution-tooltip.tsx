@@ -1,35 +1,39 @@
 "use client"
 
+import type { Trend } from "@/lib/api"
 import { DistList } from "@/components/atoms/dist-list"
 import { getStatMeta } from "@/config/equipment-config"
-import type { MetaGem } from "@/lib/api"
 
 export interface DistEntry {
   name: string
   icon_url?: string | null
   quality?: string
   pct: number
+  statDots?: string[]
+  trend?: Trend
 }
 
 export function DistributionTooltip({
   entries,
   enchantEntries,
+  gemEntries,
   activeColor: _activeColor,
   craftingStats,
-  fiberGems,
 }: {
   entries: DistEntry[]
   enchantEntries?: DistEntry[]
+  gemEntries?: DistEntry[]
   activeColor: string
   craftingStats?: string[]
-  fiberGems?: MetaGem[]
 }) {
   const alternatives = entries.slice(1)
   const enchantAlternatives = enchantEntries?.slice(1)
+  const hasRightCol =
+    (enchantAlternatives && enchantAlternatives.length > 0) || (gemEntries && gemEntries.length > 0)
 
   return (
-    <div className={enchantEntries ? "flex gap-5" : "min-w-48 space-y-2.5"}>
-      <div className="min-w-44 space-y-2.5">
+    <div className={hasRightCol ? "flex gap-6" : "min-w-56 space-y-3"}>
+      <div className="min-w-52 space-y-3">
         {alternatives.length > 0 && (
           <>
             <p className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
@@ -59,28 +63,31 @@ export function DistributionTooltip({
             })}
           </div>
         )}
-        {fiberGems && fiberGems.length > 0 && (
-          <div className="border-border/50 space-y-1 border-t pt-2">
-            <p className="text-muted-foreground text-[10px] tracking-wider uppercase">
-              Fiber socket
-            </p>
-            {fiberGems.map((gem) => (
-              <div key={gem.id} className="flex items-center justify-between gap-3">
-                <span className="text-xs">{gem.item.name}</span>
-                <span className="text-muted-foreground font-mono text-[11px]">
-                  {gem.usage_pct.toFixed(1)}%
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
       </div>
-      {enchantEntries && enchantAlternatives && enchantAlternatives.length > 0 && (
-        <div className="border-border/50 min-w-40 space-y-2.5 border-l pl-5">
-          <p className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
-            Enchant alternatives
-          </p>
-          <DistList entries={enchantAlternatives} />
+      {hasRightCol && (
+        <div className="border-border/50 min-w-48 space-y-3 border-l pl-6">
+          {enchantAlternatives && enchantAlternatives.length > 0 && (
+            <>
+              <p className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
+                Enchant alternatives
+              </p>
+              <DistList entries={enchantAlternatives} />
+            </>
+          )}
+          {gemEntries && gemEntries.length > 0 && (
+            <div
+              className={
+                enchantAlternatives && enchantAlternatives.length > 0
+                  ? "border-border/50 border-t pt-2"
+                  : ""
+              }
+            >
+              <p className="text-muted-foreground mb-2 text-[10px] font-semibold tracking-wider uppercase">
+                Gems
+              </p>
+              <DistList entries={gemEntries} />
+            </div>
+          )}
         </div>
       )}
     </div>

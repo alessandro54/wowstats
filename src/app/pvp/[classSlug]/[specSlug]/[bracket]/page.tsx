@@ -1,7 +1,14 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { Suspense } from "react"
-import type { MetaEnchant, MetaItem, TalentsResponse, TopPlayersResponse } from "@/lib/api"
+import type {
+  MetaEnchant,
+  MetaGem,
+  MetaItem,
+  MetaStats,
+  TalentsResponse,
+  TopPlayersResponse,
+} from "@/lib/api"
 
 export const dynamic = "force-dynamic"
 
@@ -15,7 +22,14 @@ import { SLOT_ORDER } from "@/config/equipment-config"
 import { BRACKETS } from "@/config/wow/brackets-config"
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
-import { fetchEnchants, fetchItems, fetchTalents, fetchTopPlayers } from "@/lib/api"
+import {
+  fetchEnchants,
+  fetchGems,
+  fetchItems,
+  fetchStats,
+  fetchTalents,
+  fetchTopPlayers,
+} from "@/lib/api"
 import { getLocale } from "@/lib/locale"
 import { titleizeSlug } from "@/lib/utils"
 
@@ -189,30 +203,33 @@ async function EquipmentSection({
   bracketLabel?: string
 }) {
   const locale = await getLocale()
-  const [items, enchants] = await Promise.all([
+  const [items, enchants, gems, statsData] = await Promise.all([
     fetchItems(resolvedBracket, specId, locale).catch((): MetaItem[] => []),
     fetchEnchants(resolvedBracket, specId, locale).catch((): MetaEnchant[] => []),
+    fetchGems(resolvedBracket, specId, locale).catch((): MetaGem[] => []),
+    fetchStats(resolvedBracket, specId, locale).catch(
+      (): MetaStats => ({
+        avg_ilvl: null,
+        stats: {},
+      }),
+    ),
   ])
 
   const itemGroups = sortedBySlotOrder(groupBy(items, (i) => i.slot.toUpperCase()))
   const enchantGroups = sortedBySlotOrder(groupBy(enchants, (e) => e.slot.toUpperCase()))
-
-  // Gems commented out — currently bugged
-  // const gems = await fetchGems(resolvedBracket, specId, locale).catch((): MetaGem[] => [])
-  // const fiberGems = gems.filter((g) => g.socket_type === "FIBER")
-  // const gemGroups = ...
+  const gemGroups = sortedBySlotOrder(groupBy(gems, (g) => g.slot.toUpperCase()))
 
   return (
     <Equipment
       classSlug={classSlug}
       itemGroups={itemGroups}
       enchantGroups={enchantGroups}
-      gemGroups={[]}
-      fiberGems={[]}
+      gemGroups={gemGroups}
       specIconUrl={specIconUrl}
       specName={specName}
       className={wowClassName}
       bracketLabel={bracketLabel}
+      statsData={statsData}
     />
   )
 }
@@ -329,7 +346,7 @@ export default async function SpecPage({ params }: PageProps) {
   const resolvedBracket = apiBracket(bracket, classSlug, specSlug)
 
   return (
-    <div className="mx-auto max-w-5xl space-y-8 px-4 pb-12 lg:px-6">
+    <div className="mx-auto max-w-6xl space-y-8 px-4 pb-12 lg:px-6">
       <Suspense fallback={<TopPlayersSkeleton />}>
         <TopPlayersSection
           resolvedBracket={resolvedBracket}

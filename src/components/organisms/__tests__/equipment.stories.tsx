@@ -22,6 +22,7 @@ function makeItem(
     slot,
     usage_count: Math.round(pct * 10),
     usage_pct: pct,
+    prev_usage_pct: null,
     snapshot_at: "2026-03-03T00:00:00Z",
     crafted,
     top_crafting_stats: crafted
@@ -44,6 +45,7 @@ function makeEnchant(slot: string, name: string, pct: number): MetaEnchant {
     slot,
     usage_count: Math.round(pct * 10),
     usage_pct: pct,
+    prev_usage_pct: null,
     snapshot_at: "2026-03-03T00:00:00Z",
   }
 }
@@ -62,6 +64,7 @@ function makeGem(socketType: string, name: string, pct: number, quality = "RARE"
     socket_type: socketType,
     usage_count: Math.round(pct * 10),
     usage_pct: pct,
+    prev_usage_pct: null,
     snapshot_at: "2026-03-03T00:00:00Z",
   }
 }
@@ -134,20 +137,16 @@ const sampleEnchants: {
 ]
 
 const sampleGems: {
-  socketType: string
+  slot: string
   entries: MetaGem[]
 }[] = [
   {
-    socketType: "PRISMATIC",
+    slot: "HEAD",
     entries: [
       makeGem("PRISMATIC", "Deadly Sapphire", 73.0),
       makeGem("PRISMATIC", "Masterful Emerald", 27.0),
     ],
   },
-]
-
-const fiberGems: MetaGem[] = [
-  makeGem("TINKER", "Magnificent Jeweler's Setting", 85.0),
 ]
 
 const meta = {
@@ -189,22 +188,20 @@ export const Default: Story = {
     itemGroups: sampleItems,
     enchantGroups: sampleEnchants,
     gemGroups: sampleGems,
-    fiberGems: [],
   },
 }
 
-export const WithFiberGems: Story = {
+export const WithGems: Story = {
   args: {
     classSlug: "warrior",
     itemGroups: sampleItems,
     enchantGroups: sampleEnchants,
     gemGroups: sampleGems,
-    fiberGems,
   },
   parameters: {
     docs: {
       description: {
-        story: "Shows the fiber gem badge on crafted items (Reshii Wraps).",
+        story: "Shows gem data on slots with sockets.",
       },
     },
   },
@@ -216,7 +213,6 @@ export const EmptySlots: Story = {
     itemGroups: [],
     enchantGroups: [],
     gemGroups: [],
-    fiberGems: [],
   },
   parameters: {
     docs: {

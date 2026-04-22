@@ -74,18 +74,17 @@ async function HomeContent() {
   let seasonId = 41
   let totalEntries = 0
   const bracketSummaries: BracketSummary[] = []
-  let sPlusSpec:
-    | {
-        specName: string
-        className: string
-        bracket: string
-        wrHat: number
-        presence: number
-        iconUrl?: string
-        color: string
-        specUrl: string
-      }
-    | undefined
+  let topHeroSpecs: {
+    specName: string
+    className: string
+    bracket: string
+    wrHat: number
+    presence: number
+    iconUrl?: string
+    color: string
+    specUrl: string
+    tier: string
+  }[] = []
 
   for (let i = 0; i < BRACKETS.length; i++) {
     const { bracket, label } = BRACKETS[i]
@@ -130,31 +129,31 @@ async function HomeContent() {
       topSpecs,
     })
 
-    if (dps.length > 0 && !sPlusSpec) {
-      const topDps = dps[0]
-      const normPct = (topDps.score / maxScore) * 100
-      const t = isSolo ? tierByPercentile(1, dps.length) : tier(normPct)
-      if (t === "S+") {
-        const classSlug = normalizeClassSlug(topDps.class)
-        const presenceTotal = sorted.reduce((s, r) => s + r.count, 0)
-        sPlusSpec = {
-          specName: topDps.spec,
-          className: topDps.class,
+    if (bracket === "3v3" && topHeroSpecs.length === 0) {
+      const presenceTotal = sorted.reduce((s, r) => s + r.count, 0)
+      topHeroSpecs = dps.slice(0, 3).map((spec) => {
+        const classSlug = normalizeClassSlug(spec.class)
+        const normPct = (spec.score / maxScore) * 100
+        const t = isSolo ? tierByPercentile(dps.indexOf(spec) + 1, dps.length) : tier(normPct)
+        return {
+          specName: spec.spec,
+          className: spec.class,
           bracket,
-          wrHat: topDps.wr_hat,
-          presence: presenceTotal > 0 ? topDps.count / presenceTotal : 0,
-          iconUrl: findSpecIcon(classSlug, topDps.spec),
+          wrHat: spec.wr_hat,
+          presence: presenceTotal > 0 ? spec.count / presenceTotal : 0,
+          iconUrl: findSpecIcon(classSlug, spec.spec),
           color: `var(--color-class-${classSlug})`,
-          specUrl: `/pvp/meta/${bracket}/dps`,
+          specUrl: `/pvp/${classSlug}/${spec.spec.toLowerCase()}/${bracket}`,
+          tier: t,
         }
-      }
+      })
     }
   }
 
   return (
     <>
       <div className="animate-stream-in relative z-[2] flex min-h-[calc(100dvh-3.75rem)] items-center justify-center px-4 py-12 lg:px-6">
-        <HomeHero seasonId={seasonId} totalEntries={totalEntries} sPlus={sPlusSpec} />
+        <HomeHero seasonId={seasonId} totalEntries={totalEntries} topSpecs={topHeroSpecs} />
         <ScrollHint />
       </div>
       <LazySection className="animate-stream-in relative z-[2] mx-auto w-full max-w-5xl space-y-10 px-4 pb-16 lg:px-6">

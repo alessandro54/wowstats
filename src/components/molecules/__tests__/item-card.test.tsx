@@ -48,6 +48,7 @@ function makeItem(
     slot,
     usage_count: Math.round(pct * 10),
     usage_pct: pct,
+    prev_usage_pct: null,
     snapshot_at: "2026-01-01",
     crafted,
     top_crafting_stats: crafted
@@ -70,6 +71,7 @@ function makeEnchant(slot: string, name: string, pct: number): MetaEnchant {
     slot,
     usage_count: Math.round(pct * 10),
     usage_pct: pct,
+    prev_usage_pct: null,
     snapshot_at: "2026-01-01",
   }
 }
@@ -88,6 +90,7 @@ function makeGem(socketType: string, name: string, pct: number): MetaGem {
     socket_type: socketType,
     usage_count: Math.round(pct * 10),
     usage_pct: pct,
+    prev_usage_pct: null,
     snapshot_at: "2026-01-01",
   }
 }

@@ -90,3 +90,59 @@ export function getStatMeta(stat: string): {
 export function isReshiiWraps(name: string | null | undefined): boolean {
   return !!name?.toLowerCase().includes("reshii wraps")
 }
+
+// TWW S2 PvP gem variants (Heliotrope family) — update each season
+export const PVP_GEM_BLIZZARD_IDS = new Set([
+  241142,
+  241143,
+  241144,
+])
+
+// Primary stat from adjective in gem name
+const GEM_ADJECTIVE_STATS: [
+  RegExp,
+  string,
+][] = [
+  [
+    /\b(quick|haste)\b/i,
+    "HASTE_RATING",
+  ],
+  [
+    /\b(deadly|critical|crit)\b/i,
+    "CRIT_RATING",
+  ],
+  [
+    /\b(masterful|mastery)\b/i,
+    "MASTERY_RATING",
+  ],
+  [
+    /\b(versatile|versatility)\b/i,
+    "VERSATILITY",
+  ],
+]
+
+// Secondary stat from gem stone type (add entries as confirmed)
+const GEM_STONE_SECONDARY: [
+  RegExp,
+  string,
+][] = [
+  [
+    /amethyst/i,
+    "MASTERY_RATING",
+  ],
+]
+
+export function gemStatColors(name: string): string[] {
+  const stats = new Set<string>()
+  for (const [re, stat] of GEM_ADJECTIVE_STATS) {
+    if (re.test(name)) stats.add(stat)
+  }
+  for (const [re, stat] of GEM_STONE_SECONDARY) {
+    if (re.test(name)) stats.add(stat)
+  }
+  return [
+    ...stats,
+  ]
+    .map((s) => STAT_COLOR_VARS[s])
+    .filter(Boolean)
+}

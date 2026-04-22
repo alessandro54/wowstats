@@ -8,7 +8,6 @@ import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { classColor } from "@/hooks/use-active-color"
 import type { TopPlayer } from "@/lib/api"
 import { formatRealm, winRate } from "@/lib/utils"
-import { useHoverSlug } from "../providers/hover-provider"
 
 type Region = "all" | "us" | "eu" | "kr"
 

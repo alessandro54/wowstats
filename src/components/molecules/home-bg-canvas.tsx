@@ -27,20 +27,14 @@ export function BgCanvasInner() {
   if (useFallback) return <CssFallbackBg />
 
   return (
-    <>
-      {/* Light mode: CSS fallback (no sidebar bleed). Dark mode: WebGL canvas */}
-      <div className="block dark:hidden">
-        <CssFallbackBg />
-      </div>
-      <div
-        className="pointer-events-none fixed inset-0 overflow-hidden hidden dark:block"
-        style={{
-          zIndex: -1,
-        }}
-      >
-        <canvas ref={canvasRef} className="h-full w-full" />
-      </div>
-    </>
+    <div
+      className="pointer-events-none fixed inset-0 overflow-hidden"
+      style={{
+        zIndex: -1,
+      }}
+    >
+      <canvas ref={canvasRef} className="h-full w-full" />
+    </div>
   )
 }
 

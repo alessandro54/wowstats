@@ -24,7 +24,7 @@ vi.mock("@/components/providers/hover-provider", () => ({
 
 vi.mock("@/components/ui/hover-card", () => ({
   HoverCard: ({ children }: any) => <div data-testid="hover-card">{children}</div>,
-  HoverCardTrigger: ({ children, asChild }: any) => (
+  HoverCardTrigger: ({ children, asChild: _asChild }: any) => (
     <div data-testid="hover-card-trigger">{children}</div>
   ),
   HoverCardContent: ({ children }: any) => <div data-testid="hover-card-content">{children}</div>,

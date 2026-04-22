@@ -168,7 +168,7 @@ export function createHomeBgRenderer(
     camY = 0,
     rotX = 0,
     rotY = 0
-  let particleOpacity = isDark ? 0.35 : 0.08
+  let particleOpacity = isDark ? 0.35 : 0.18
 
   const themeObs = new MutationObserver(() => {
     isDark = document.documentElement.classList.contains("dark") ? 1.0 : 0.0
@@ -272,7 +272,7 @@ export function createHomeBgRenderer(
       updateParticle(i, particles, frame)
     }
 
-    particleOpacity += ((isDark ? 0.35 : 0.08) - particleOpacity) * 0.05
+    particleOpacity += ((isDark ? 0.35 : 0.18) - particleOpacity) * 0.05
 
     // Mouse parallax
     rotY += (mx * 0.06 - rotY) * 0.03

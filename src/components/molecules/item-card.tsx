@@ -49,6 +49,14 @@ export function ItemCard({
       pct: e.usage_pct,
     }),
   )
+  const fiberGemEntries = hasFiber
+    ? fiberGems.slice(0, 6).map(
+        (g): DistEntry => ({
+          name: g.item.name,
+          pct: g.usage_pct,
+        }),
+      )
+    : undefined
 
   return (
     <ClickableTooltip
@@ -59,9 +67,9 @@ export function ItemCard({
         <DistributionTooltip
           entries={distribution}
           enchantEntries={enchantDist}
+          gemEntries={fiberGemEntries}
           activeColor={activeColor}
           craftingStats={primary.crafted ? primary.top_crafting_stats : undefined}
-          fiberGems={hasFiber ? fiberGems : undefined}
         />
       }
     >
