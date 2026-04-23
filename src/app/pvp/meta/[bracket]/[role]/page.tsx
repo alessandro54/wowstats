@@ -267,7 +267,7 @@ export default async function PvpBracketPage({ params, searchParams }: PageProps
         }
       />
 
-      <div className="mx-auto w-full p-4 lg:max-w-[80%] lg:p-6">
+      <div className="mx-auto w-full p-4 lg:max-w-7txl lg:p-6">
         <Suspense fallback={<MetaStatsSkeleton />}>
           <MetaContent
             bracketStr={bracketStr}

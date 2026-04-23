@@ -38,14 +38,23 @@ export function ScrollHint() {
   return (
     <div
       ref={ref}
-      className="pointer-events-none absolute inset-x-0 bottom-8 z-[3] flex flex-col items-center gap-3 opacity-40"
+      className="pointer-events-none absolute inset-x-0 bottom-8 z-[3] flex flex-col items-center gap-2 opacity-75"
     >
-      <span className="text-[10px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
+      <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground/70">
         Scroll
       </span>
-      <div className="relative h-8 w-px overflow-hidden">
-        <div className="animate-scroll-line absolute inset-x-0 top-0 h-full bg-gradient-to-b from-primary to-transparent" />
+      <div className="relative h-10 w-px overflow-hidden">
+        <div className="animate-scroll-line absolute inset-x-0 top-0 h-full bg-gradient-to-b from-primary via-primary/60 to-transparent" />
       </div>
+      <svg
+        className="animate-bounce text-primary/70"
+        width="12"
+        height="8"
+        viewBox="0 0 12 8"
+        fill="none"
+      >
+        <path d="M1 1L6 6L11 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      </svg>
     </div>
   )
 }

@@ -35,7 +35,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             priority
             className={`block shrink-0 rounded-full object-contain transition-all duration-200 ${open ? "size-12" : "size-8"}`}
           />
-          {open && <span className="text-sm font-semibold truncate">WoW Insights</span>}
+          {open && <span className="text-sm font-semibold truncate">WoW Overseer</span>}
         </Link>
       </SidebarHeader>
       <SidebarContent>

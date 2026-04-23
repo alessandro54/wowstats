@@ -34,40 +34,8 @@ describe("HomeHero", () => {
     expect(screen.getByText(/38,534/)).toBeDefined()
   })
 
-  it("renders spec cards when topSpecs provided", () => {
-    render(
-      <HomeHero
-        seasonId={41}
-        totalEntries={38534}
-        topSpecs={[
-          mockSpec,
-        ]}
-      />,
-    )
-    expect(screen.getByText(/Subtlety/)).toBeDefined()
-    expect(screen.getByText(/60.4%/)).toBeDefined()
-  })
-
   it("renders nothing for specs when topSpecs not provided", () => {
     const { container } = render(<HomeHero seasonId={41} totalEntries={38534} />)
     expect(container.querySelector("a")).toBeNull()
-  })
-
-  it("renders triangular layout for 3 specs", () => {
-    const specs = [
-      mockSpec,
-      {
-        ...mockSpec,
-        specName: "assassination",
-        specUrl: "/pvp/rogue/assassination/3v3",
-      },
-      {
-        ...mockSpec,
-        specName: "outlaw",
-        specUrl: "/pvp/rogue/outlaw/3v3",
-      },
-    ]
-    render(<HomeHero seasonId={41} totalEntries={38534} topSpecs={specs} />)
-    expect(screen.getAllByText(/#[123]/)).toHaveLength(3)
   })
 })

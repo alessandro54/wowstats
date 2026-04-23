@@ -29,13 +29,13 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:5123"),
   title: {
-    default: "WoW Meta Insights | WoW PvP Meta ",
-    template: "%s | WoW PvP Meta",
+    default: "WoW Overseer | PvP & PvE Meta",
+    template: "%s | WoW Overseer",
   },
   description:
-    "PvP insights for WoW Arena, Solo Shuffle, and RBG. Best in slot gear based on real player data.",
+    "PvP & PvE meta for WoW Arena, Solo Shuffle, RBG and more. Best in slot gear based on real player data.",
   openGraph: {
-    siteName: "WoW Meta Insights",
+    siteName: "WoW Overseer",
     type: "website",
   },
   twitter: {

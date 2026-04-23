@@ -40,6 +40,9 @@ export function NavMain() {
             fetch(`/api/prefetch/items?spec_id=${spec.id}&bracket=3v3`, {
               priority: "low",
             }).catch(() => {})
+            fetch(`/api/prefetch/talents?spec_id=${spec.id}&bracket=3v3`, {
+              priority: "low",
+            }).catch(() => {})
           })
         }
       }, 80)

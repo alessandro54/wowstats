@@ -67,7 +67,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { classSlug, specSlug } = await params
   const cls = WOW_CLASSES.find((c) => c.slug === classSlug)
   return {
-    title: `${titleizeSlug(specSlug)} ${cls?.name ?? titleizeSlug(classSlug)} PvP | WoW Meta`,
+    title: `${titleizeSlug(specSlug)} ${cls?.name ?? titleizeSlug(classSlug)} PvP | WoW Overseer`,
   }
 }
 
@@ -145,7 +145,8 @@ export default async function SpecIndexPage({ params }: PageProps) {
     }
 
     const isSolo = SOLO_BRACKETS.includes(bracket.apiSlug)
-    const maxScore = sorted[0]?.score ?? 1
+    const roleSpecs = sorted.filter((s) => s.role === specEntry.role)
+    const maxScore = (isSolo ? sorted[0] : roleSpecs[0])?.score ?? 1
     const normPct = (specEntry.score / maxScore) * 100
     const rank =
       sorted.findIndex(
