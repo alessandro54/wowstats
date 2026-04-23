@@ -7,6 +7,26 @@ vi.mock("next/image", () => ({
   default: (props: any) => <img {...props} />,
 }))
 
+vi.mock("next/link", () => ({
+  default: ({ href, children, ...rest }: any) => (
+    <a href={href} {...rest}>
+      {children}
+    </a>
+  ),
+}))
+
+const mockSpec = {
+  specName: "subtlety",
+  className: "rogue",
+  bracket: "3v3",
+  wrHat: 0.604,
+  presence: 0.113,
+  iconUrl: "/icons/sub.png",
+  color: "var(--color-class-rogue)",
+  specUrl: "/pvp/rogue/subtlety/3v3",
+  tier: "s+",
+}
+
 describe("HomeHero", () => {
   it("renders season number and total entries", () => {
     render(<HomeHero seasonId={41} totalEntries={38534} />)
@@ -14,29 +34,40 @@ describe("HomeHero", () => {
     expect(screen.getByText(/38,534/)).toBeDefined()
   })
 
-  it("renders S+ callout when provided", () => {
+  it("renders spec cards when topSpecs provided", () => {
     render(
       <HomeHero
         seasonId={41}
         totalEntries={38534}
-        sPlus={{
-          specName: "subtlety",
-          className: "rogue",
-          bracket: "2v2",
-          wrHat: 0.604,
-          presence: 0.113,
-          iconUrl: "/icons/sub.png",
-          color: "var(--color-class-rogue)",
-          specUrl: "/pvp/rogue/subtlety/2v2",
-        }}
+        topSpecs={[
+          mockSpec,
+        ]}
       />,
     )
     expect(screen.getByText(/Subtlety/)).toBeDefined()
     expect(screen.getByText(/60.4%/)).toBeDefined()
   })
 
-  it("hides S+ callout when not provided", () => {
+  it("renders nothing for specs when topSpecs not provided", () => {
     const { container } = render(<HomeHero seasonId={41} totalEntries={38534} />)
-    expect(container.querySelector("[data-testid='splus-callout']")).toBeNull()
+    expect(container.querySelector("a")).toBeNull()
+  })
+
+  it("renders triangular layout for 3 specs", () => {
+    const specs = [
+      mockSpec,
+      {
+        ...mockSpec,
+        specName: "assassination",
+        specUrl: "/pvp/rogue/assassination/3v3",
+      },
+      {
+        ...mockSpec,
+        specName: "outlaw",
+        specUrl: "/pvp/rogue/outlaw/3v3",
+      },
+    ]
+    render(<HomeHero seasonId={41} totalEntries={38534} topSpecs={specs} />)
+    expect(screen.getAllByText(/#[123]/)).toHaveLength(3)
   })
 })

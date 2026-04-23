@@ -12,7 +12,7 @@ export default function DynamicBackground() {
   const isPvpRoute = segments[0] === "pvp"
   const isMetaPage = isPvpRoute && segments[1] === "meta"
   const classSlug =
-    ((isPvpRoute && !isMetaPage ? segments[1] : segments[0]) as WowClassSlug | undefined) ?? null
+    isPvpRoute && !isMetaPage ? ((segments[1] as WowClassSlug | undefined) ?? null) : null
   const specSlug = isPvpRoute && !isMetaPage ? (segments[2] ?? null) : null
   const isSpecPage = isPvpRoute && !isMetaPage && classSlug && specSlug
 

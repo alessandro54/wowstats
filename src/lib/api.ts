@@ -1,5 +1,7 @@
 const API_URL = process.env.API_URL ?? "http://localhost:3000"
 
+export type Trend = "up" | "down" | "stable" | "new"
+
 export interface MetaItem {
   id: number
   item: {
@@ -12,6 +14,8 @@ export interface MetaItem {
   slot: string
   usage_count: number
   usage_pct: number
+  prev_usage_pct: number | null
+  trend?: Trend
   snapshot_at: string
   crafted: boolean
   top_crafting_stats: string[]
@@ -27,6 +31,8 @@ export interface MetaEnchant {
   slot: string
   usage_count: number
   usage_pct: number
+  prev_usage_pct: number | null
+  trend?: Trend
   snapshot_at: string
 }
 
@@ -43,6 +49,8 @@ export interface MetaGem {
   socket_type: string
   usage_count: number
   usage_pct: number
+  prev_usage_pct: number | null
+  trend?: Trend
   snapshot_at: string
 }
 
@@ -99,6 +107,27 @@ export function fetchEnchants(
   )
 }
 
+export interface MetaStats {
+  avg_ilvl: number | null
+  stats: {
+    VERSATILITY?: number
+    MASTERY_RATING?: number
+    HASTE_RATING?: number
+    CRIT_RATING?: number
+  }
+}
+
+export function fetchStats(bracket: string, specId: number, locale?: string): Promise<MetaStats> {
+  return apiFetch(
+    "/api/v1/pvp/meta/stats",
+    {
+      bracket,
+      spec_id: String(specId),
+    },
+    locale,
+  )
+}
+
 export function fetchGems(bracket: string, specId: number, locale?: string): Promise<MetaGem[]> {
   return apiFetch(
     "/api/v1/pvp/meta/gems",
@@ -141,6 +170,8 @@ export interface TalentsMeta {
   total_players: number
   total_weighted: number
   snapshot_at: string | null
+  data_confidence: "low" | "medium" | "high"
+  stale_count: number
 }
 
 export interface TalentsResponse {

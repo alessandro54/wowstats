@@ -1,7 +1,7 @@
 "use client"
 
 import type { FC } from "react"
-import { useCallback, useEffect, useRef } from "react"
+import { useEffect, useRef } from "react"
 import type { SpecAtmosphere, SpecParticleEffect } from "@/config/wow/classes/classes-config"
 
 /* ── Atmosphere registry ───────────────────────────────────────────────── */

@@ -174,18 +174,19 @@ describe("talentNodeCard", () => {
   })
 
   it("shows inline % and rank for ranked nodes on meta page", () => {
+    // rank-1 variant (1 point invested) and rank-2 variant (2 points = full investment)
     const v1 = makeTalent(41, "Impale", 90, {
       topBuildRank: 1,
       maxRank: 2,
     })
     const v2 = makeTalent(42, "Impale", 85, {
-      topBuildRank: 1,
+      topBuildRank: 2,
       maxRank: 2,
     })
     const node = makeNode({
       maxRank: 2,
       isRanked: true,
-      primary: v2,
+      primary: v1,
       all: [
         v1,
         v2,
@@ -212,13 +213,13 @@ describe("talentNodeCard", () => {
       maxRank: 2,
     })
     const v2 = makeTalent(42, "Impale", 85, {
-      topBuildRank: 1,
+      topBuildRank: 2,
       maxRank: 2,
     })
     const node = makeNode({
       maxRank: 2,
       isRanked: true,
-      primary: v2,
+      primary: v1,
       all: [
         v1,
         v2,

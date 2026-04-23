@@ -3,7 +3,7 @@ import Link from "next/link"
 import { TIER_COLORS } from "@/config/app-config"
 import { titleizeSlug } from "@/lib/utils"
 
-interface SPlusSpec {
+interface HeroSpec {
   specName: string
   className: string
   bracket: string
@@ -12,15 +12,16 @@ interface SPlusSpec {
   iconUrl?: string
   color: string
   specUrl: string
+  tier: string
 }
 
 interface Props {
   seasonId: number
   totalEntries: number
-  sPlus?: SPlusSpec
+  topSpecs?: HeroSpec[]
 }
 
-export function HomeHero({ seasonId, totalEntries, sPlus }: Props) {
+export function HomeHero({ seasonId, totalEntries, topSpecs }: Props) {
   return (
     <div className="space-y-6 text-center">
       {/* Season badge */}
@@ -46,69 +47,128 @@ export function HomeHero({ seasonId, totalEntries, sPlus }: Props) {
         </p>
       </div>
 
-      {/* S+ Spotlight */}
-      {sPlus && (
-        <Link
-          href={sPlus.specUrl}
-          data-testid="splus-callout"
-          className="group relative mx-auto flex max-w-md items-center gap-4 overflow-hidden rounded-xl border border-red-500/20 bg-card/80 px-5 py-4 backdrop-blur-sm transition-all hover:scale-[1.02] hover:border-red-500/40"
-        >
-          {/* Top accent */}
-          <div className="absolute inset-x-0 top-0 flex justify-center">
-            <span className="rounded-b-lg bg-gradient-to-r from-amber-400 to-orange-500 px-3 py-0.5 text-[9px] font-bold uppercase tracking-wider text-black">
-              #1 This Season
-            </span>
-          </div>
+      {/* Top specs podium */}
+      {topSpecs && topSpecs.length > 0 && (
+        <div className="mx-auto w-full max-w-sm space-y-2">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground">
+            3v3 Arena
+          </p>
 
-          {/* Icon */}
-          {sPlus.iconUrl && (
-            <Image
-              src={sPlus.iconUrl}
-              alt={sPlus.specName}
-              width={46}
-              height={46}
-              className="shrink-0 rounded-xl"
-              style={{
-                border: `2px solid ${sPlus.color}`,
-              }}
-              unoptimized
-            />
+          {topSpecs.length === 1 ? (
+            <div className="flex justify-center">
+              <div className="w-full max-w-[200px]">
+                <SpecCard spec={topSpecs[0]} rank={1} />
+              </div>
+            </div>
+          ) : topSpecs.length === 2 ? (
+            <div className="grid grid-cols-2 gap-2">
+              {topSpecs.map((spec, i) => (
+                <SpecCard key={spec.specName} spec={spec} rank={i + 1} />
+              ))}
+            </div>
+          ) : (
+            /* Triangular: 1 top centered, 2 below */
+            <div className="grid grid-cols-2 gap-2">
+              <div className="col-span-2 flex justify-center">
+                <div className="w-full max-w-[200px]">
+                  <SpecCard spec={topSpecs[0]} rank={1} />
+                </div>
+              </div>
+              <SpecCard spec={topSpecs[1]} rank={2} />
+              <SpecCard spec={topSpecs[2]} rank={3} />
+            </div>
           )}
-
-          {/* Spec info */}
-          <div className="text-left">
-            <p
-              className="text-sm font-bold"
-              style={{
-                color: sPlus.color,
-              }}
-            >
-              {titleizeSlug(sPlus.specName)}
-            </p>
-            <p className="text-[11px] text-muted-foreground">{titleizeSlug(sPlus.className)}</p>
-            <div className="mt-1.5 flex gap-1.5">
-              <span className={`rounded px-1.5 py-0.5 text-[9px] font-bold ${TIER_COLORS["S+"]}`}>
-                S+
-              </span>
-              <span className="rounded border border-emerald-500/20 bg-emerald-500/10 px-1.5 py-0.5 text-[9px] font-semibold text-emerald-400">
-                {(sPlus.wrHat * 100).toFixed(1)}% WR
-              </span>
-              <span className="rounded border border-border px-1.5 py-0.5 text-[9px] text-muted-foreground">
-                {(sPlus.presence * 100).toFixed(1)}% Presence
-              </span>
-            </div>
-          </div>
-
-          {/* Divider + meta */}
-          <div className="mx-2 hidden h-10 w-px bg-border/50 sm:block" />
-          <div className="hidden gap-4 sm:flex">
-            <div className="text-center">
-              <p className="text-sm font-bold">#1</p>
-              <p className="text-[10px] text-muted-foreground">3v3 Arena</p>
-            </div>
-          </div>
-        </Link>
+        </div>
       )}
     </div>
+  )
+}
+
+function SpecCard({ spec, rank }: { spec: HeroSpec; rank: number }) {
+  const rankColor =
+    rank === 1 ? "#FFD700" : rank === 2 ? "#C0C0C0" : rank === 3 ? "#CD7F32" : undefined
+
+  return (
+    <Link
+      href={spec.specUrl}
+      className="group relative overflow-hidden rounded-xl border border-border/40 bg-card/80 p-3 backdrop-blur-sm transition-all hover:scale-[1.02] hover:border-border/70 block"
+      style={
+        rankColor
+          ? {
+              borderColor: `${rankColor}35`,
+            }
+          : undefined
+      }
+    >
+      {/* Class gradient bg */}
+      <div
+        className="pointer-events-none absolute inset-0 rounded-xl"
+        style={{
+          background: `linear-gradient(-45deg, color-mix(in oklch, ${spec.color} 10%, transparent), transparent 60%)`,
+        }}
+      />
+
+      <div className="relative flex flex-col items-center gap-1.5 text-center">
+        {/* Rank */}
+        <span
+          className="text-[10px] font-bold tabular-nums"
+          style={{
+            color: rankColor ?? "var(--color-muted-foreground)",
+          }}
+        >
+          #{rank}
+        </span>
+
+        {/* Icon */}
+        {spec.iconUrl ? (
+          <Image
+            src={spec.iconUrl}
+            alt={spec.specName}
+            width={40}
+            height={40}
+            className="rounded-xl"
+            style={{
+              border: `2px solid ${spec.color}`,
+            }}
+            unoptimized
+            priority
+          />
+        ) : (
+          <div
+            className="size-10 rounded-xl bg-muted/30"
+            style={{
+              border: `2px solid ${spec.color}50`,
+            }}
+          />
+        )}
+
+        {/* Name */}
+        <div className="w-full min-w-0">
+          <p
+            className="truncate text-sm font-bold"
+            style={{
+              color: spec.color,
+            }}
+          >
+            {titleizeSlug(spec.specName)}
+          </p>
+          <p className="truncate text-[11px] text-muted-foreground">
+            {titleizeSlug(spec.className)}
+          </p>
+        </div>
+
+        {/* Badges */}
+        <div className="flex flex-wrap justify-center gap-1">
+          <span
+            className={`rounded px-1.5 py-0.5 text-[9px] font-bold ${TIER_COLORS[spec.tier as keyof typeof TIER_COLORS] ?? ""}`}
+          >
+            {spec.tier}
+          </span>
+          <span className="rounded border border-emerald-500/20 bg-emerald-500/10 px-1.5 py-0.5 text-[9px] font-semibold text-emerald-400">
+            {(spec.wrHat * 100).toFixed(1)}% WR
+          </span>
+        </div>
+      </div>
+    </Link>
   )
 }

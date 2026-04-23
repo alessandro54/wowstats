@@ -36,36 +36,14 @@ const enchantEntries: DistEntry[] = [
   },
 ]
 
-const fiberGems = [
+const gemEntries: DistEntry[] = [
   {
-    id: 1,
-    item: {
-      id: 1,
-      blizzard_id: 222111,
-      name: "Masterful Jewel Doublet",
-      icon_url: "",
-      quality: "rare",
-    },
-    slot: "fiber",
-    socket_type: "fiber",
-    usage_count: 450,
-    usage_pct: 72.4,
-    snapshot_at: "2026-03-02T00:00:00Z",
+    name: "Masterful Jewel Doublet",
+    pct: 72.4,
   },
   {
-    id: 2,
-    item: {
-      id: 2,
-      blizzard_id: 222112,
-      name: "Quick Jewel Cluster",
-      icon_url: "",
-      quality: "rare",
-    },
-    slot: "fiber",
-    socket_type: "fiber",
-    usage_count: 171,
-    usage_pct: 27.6,
-    snapshot_at: "2026-03-02T00:00:00Z",
+    name: "Quick Jewel Cluster",
+    pct: 27.6,
   },
 ]
 
@@ -133,14 +111,14 @@ export const WithCraftingStats: Story = {
   },
 }
 
-export const WithFiberGems: Story = {
+export const WithGems: Story = {
   args: {
-    fiberGems,
+    gemEntries,
   },
   parameters: {
     docs: {
       description: {
-        story: "Shows fiber socket gem options below the alternatives.",
+        story: "Shows gem options below the alternatives.",
       },
     },
   },
@@ -153,7 +131,7 @@ export const FullTooltip: Story = {
       "haste",
       "crit",
     ],
-    fiberGems,
+    gemEntries,
   },
   parameters: {
     docs: {

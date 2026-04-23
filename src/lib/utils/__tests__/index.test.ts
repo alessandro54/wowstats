@@ -7,7 +7,7 @@ describe("cn", () => {
   })
 
   it("handles conditional classes", () => {
-    expect(cn("base", false && "hidden", "active")).toBe("base active")
+    expect(cn("base", (false as boolean) && "hidden", "active")).toBe("base active")
   })
 
   it("deduplicates tailwind classes", () => {

@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 export default function BracketLoading() {
   return (
-    <div className="mx-auto max-w-5xl space-y-8 px-4 pb-12 pt-2 lg:px-6">
+    <div className="space-y-8">
       {/* Top Players — full table matching real layout */}
       <section>
         <div className="mb-4 flex items-center justify-between gap-4">

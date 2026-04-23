@@ -52,6 +52,7 @@ function makeItem(
     slot,
     usage_count: Math.round(pct * 10),
     usage_pct: pct,
+    prev_usage_pct: null,
     snapshot_at: "2026-01-01",
     crafted,
     top_crafting_stats: crafted
@@ -74,11 +75,12 @@ function makeEnchant(slot: string, name: string, pct: number): MetaEnchant {
     slot,
     usage_count: Math.round(pct * 10),
     usage_pct: pct,
+    prev_usage_pct: null,
     snapshot_at: "2026-01-01",
   }
 }
 
-function makeGem(socketType: string, name: string, pct: number): MetaGem {
+function makeGem(slot: string, name: string, pct: number): MetaGem {
   return {
     id: 1,
     item: {
@@ -88,10 +90,11 @@ function makeGem(socketType: string, name: string, pct: number): MetaGem {
       icon_url: "/gem.jpg",
       quality: "RARE",
     },
-    slot: "GEM",
-    socket_type: socketType,
+    slot,
+    socket_type: "PRISMATIC",
     usage_count: Math.round(pct * 10),
     usage_pct: pct,
+    prev_usage_pct: null,
     snapshot_at: "2026-01-01",
   }
 }
@@ -122,9 +125,9 @@ const enchants = [
 
 const gems = [
   {
-    socketType: "PRISMATIC",
+    slot: "HEAD",
     entries: [
-      makeGem("PRISMATIC", "Deadly Sapphire", 73),
+      makeGem("HEAD", "Deadly Sapphire", 73),
     ],
   },
 ]
@@ -132,13 +135,7 @@ const gems = [
 describe("equipment", () => {
   it("renders item names", () => {
     const { container } = render(
-      <Equipment
-        classSlug="warrior"
-        itemGroups={items}
-        enchantGroups={[]}
-        gemGroups={[]}
-        fiberGems={[]}
-      />,
+      <Equipment classSlug="warrior" itemGroups={items} enchantGroups={[]} gemGroups={[]} />,
     )
     expect(container.textContent).toContain("Helm of Glory")
     expect(container.textContent).toContain("Breastplate")
@@ -146,98 +143,56 @@ describe("equipment", () => {
 
   it("renders the Gear heading", () => {
     const { container } = render(
-      <Equipment
-        classSlug="warrior"
-        itemGroups={items}
-        enchantGroups={[]}
-        gemGroups={[]}
-        fiberGems={[]}
-      />,
+      <Equipment classSlug="warrior" itemGroups={items} enchantGroups={[]} gemGroups={[]} />,
     )
     expect(container.textContent).toContain("Gear")
   })
 
   it("shows empty state when no items", () => {
     const { container } = render(
-      <Equipment
-        classSlug="warrior"
-        itemGroups={[]}
-        enchantGroups={[]}
-        gemGroups={[]}
-        fiberGems={[]}
-      />,
+      <Equipment classSlug="warrior" itemGroups={[]} enchantGroups={[]} gemGroups={[]} />,
     )
     expect(container.textContent).toContain("No item data available")
   })
 
   it("renders enchant names on items", () => {
     const { container } = render(
-      <Equipment
-        classSlug="warrior"
-        itemGroups={items}
-        enchantGroups={enchants}
-        gemGroups={[]}
-        fiberGems={[]}
-      />,
+      <Equipment classSlug="warrior" itemGroups={items} enchantGroups={enchants} gemGroups={[]} />,
     )
     expect(container.textContent).toContain("Radiance")
   })
 
-  it("shows CRAFTED badge on crafted items", () => {
+  it("shows Crafted badge on crafted items", () => {
     const { container } = render(
-      <Equipment
-        classSlug="warrior"
-        itemGroups={items}
-        enchantGroups={[]}
-        gemGroups={[]}
-        fiberGems={[]}
-      />,
+      <Equipment classSlug="warrior" itemGroups={items} enchantGroups={[]} gemGroups={[]} />,
     )
-    expect(container.textContent).toContain("CRAFTED")
+    // CSS `uppercase` is visual only — textContent returns the literal "Crafted"
+    expect(container.textContent).toContain("Crafted")
   })
 
-  it("renders the Gems section when gems exist", () => {
+  it("renders gem names on matching slots", () => {
     const { container } = render(
-      <Equipment
-        classSlug="warrior"
-        itemGroups={items}
-        enchantGroups={[]}
-        gemGroups={gems}
-        fiberGems={[]}
-      />,
+      <Equipment classSlug="warrior" itemGroups={items} enchantGroups={[]} gemGroups={gems} />,
     )
-    expect(container.textContent).toContain("Gems")
     expect(container.textContent).toContain("Deadly Sapphire")
   })
 
   it("does not show Gems section when empty", () => {
     const { container } = render(
-      <Equipment
-        classSlug="warrior"
-        itemGroups={items}
-        enchantGroups={[]}
-        gemGroups={[]}
-        fiberGems={[]}
-      />,
+      <Equipment classSlug="warrior" itemGroups={items} enchantGroups={[]} gemGroups={[]} />,
     )
     expect(container.textContent).not.toContain("Gems")
   })
 
   it("shows usage percentages", () => {
     const { container } = render(
-      <Equipment
-        classSlug="warrior"
-        itemGroups={items}
-        enchantGroups={[]}
-        gemGroups={[]}
-        fiberGems={[]}
-      />,
+      <Equipment classSlug="warrior" itemGroups={items} enchantGroups={[]} gemGroups={[]} />,
     )
     expect(container.textContent).toContain("85.0%")
     expect(container.textContent).toContain("70.0%")
   })
 
-  it("renders fiber gem badge on crafted Reshii wraps", () => {
+  it("renders crafted Reshii Wraps with crafted styling", () => {
     const reshii = [
       {
         slot: "HANDS",
@@ -246,32 +201,16 @@ describe("equipment", () => {
         ],
       },
     ]
-    const fiber = [
-      makeGem("TINKER", "Jeweler's Setting", 80),
-    ]
     const { container } = render(
-      <Equipment
-        classSlug="warrior"
-        itemGroups={reshii}
-        enchantGroups={[]}
-        gemGroups={[]}
-        fiberGems={fiber}
-      />,
+      <Equipment classSlug="warrior" itemGroups={reshii} enchantGroups={[]} gemGroups={[]} />,
     )
-    // The fiber gem badge is hidden on mobile (hidden sm:inline), but the element is in the DOM
-    const spans = Array.from(container.querySelectorAll("span"))
-    expect(spans.some((s) => s.textContent === "Jeweler's Setting")).toBe(true)
+    expect(container.textContent).toContain("Reshii Wraps of Insanity")
+    expect(container.textContent).toContain("Crafted")
   })
 
   it("renders distribution tooltips", () => {
     const { getAllByTestId } = render(
-      <Equipment
-        classSlug="warrior"
-        itemGroups={items}
-        enchantGroups={[]}
-        gemGroups={[]}
-        fiberGems={[]}
-      />,
+      <Equipment classSlug="warrior" itemGroups={items} enchantGroups={[]} gemGroups={[]} />,
     )
     expect(getAllByTestId("tooltip-wrapper").length).toBeGreaterThan(0)
   })

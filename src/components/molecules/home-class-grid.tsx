@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useSetHoverSlug } from "@/components/providers/hover-provider"
 import type { WowClassConfig, WowClassSlug } from "@/config/wow/classes/classes-config"
 import { titleizeSlug } from "@/lib/utils"
@@ -14,6 +14,21 @@ interface Props {
 export function HomeClassGrid({ classes }: Props) {
   const setHoverSlug = useSetHoverSlug()
   const [activeSlug, setActiveSlug] = useState<string | null>(null)
+
+  useEffect(() => {
+    for (const cls of classes) {
+      for (const spec of cls.specs) {
+        const src = spec.iconRemasteredUrl || spec.iconUrl
+        if (!src) continue
+        const link = document.createElement("link")
+        link.rel = "preload"
+        link.as = "image"
+        link.href = src
+        document.head.appendChild(link)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const activeClass = activeSlug ? classes.find((c) => c.slug === activeSlug) : null
 

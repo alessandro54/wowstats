@@ -46,8 +46,8 @@ void main() {
   dCol = mix(dCol, vec3(0.75, 0.22, 0.03), clamp(f * f * 3.5, 0.0, 1.0));
   dCol *= 0.35;
 
-  vec3 lCol = mix(vec3(0.98, 0.975, 0.97), vec3(0.96, 0.95, 0.93), clamp(f * 2.0, 0.0, 1.0));
-  lCol = mix(lCol, vec3(0.94, 0.92, 0.89), clamp(f * f * 1.5, 0.0, 1.0));
+  vec3 lCol = mix(vec3(0.96, 0.94, 0.92), vec3(0.90, 0.86, 0.82), clamp(f * 2.0, 0.0, 1.0));
+  lCol = mix(lCol, vec3(0.85, 0.78, 0.70), clamp(f * f * 2.0, 0.0, 1.0));
 
   vec3 col = mix(lCol, dCol, uDark);
 

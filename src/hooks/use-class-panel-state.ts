@@ -28,7 +28,7 @@ export interface ClassPanelState {
 }
 
 export function useClassPanelState(classes: WowClassConfig[]): ClassPanelState {
-  const [active, setActive] = useState<string | null>(null)
+  const [active, setActive] = useState<WowClassSlug | null>(null)
   const [hovered, setHovered] = useState<WowClassSlug | null>(null)
   const [hoveredSpec, setHoveredSpec] = useState<number | null>(null)
   const [activeSpec, setActiveSpec] = useState<number | null>(null)
@@ -39,7 +39,7 @@ export function useClassPanelState(classes: WowClassConfig[]): ClassPanelState {
   const N = classes.length
   const activeIndex = active ? classes.findIndex((c) => c.slug === active) : -1
   const activeClass = activeIndex >= 0 ? classes[activeIndex] : null
-  const thumbPercent = activeIndex >= 0 ? (activeIndex / (N - 1)) * 100 : null
+  const thumbPercent = activeIndex >= 0 && N > 1 ? (activeIndex / (N - 1)) * 100 : null
 
   function selectIndex(idx: number) {
     const slug = classes[idx].slug as WowClassSlug

@@ -78,7 +78,7 @@ export default async function PvpBracketLayout({ children, params }: Props) {
 
   return (
     <>
-      <div className="mx-auto max-w-5xl px-4 lg:px-6">
+      <div className="mx-auto max-w-6xl px-4 lg:px-6">
         <SpecStatBar
           winRate={bracketWr}
           presence={bracketPresence}

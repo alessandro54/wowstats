@@ -39,9 +39,9 @@ describe("shaders", () => {
 
 describe("home-bg constants", () => {
   it("exports numeric constants", () => {
-    expect(PARTICLE_COUNT).toBe(80)
-    expect(SPREAD_X).toBe(160)
-    expect(SPREAD_Y).toBe(120)
+    expect(PARTICLE_COUNT).toBe(220)
+    expect(SPREAD_X).toBe(230)
+    expect(SPREAD_Y).toBe(130)
     expect(FRAME_INTERVAL).toBeCloseTo(1000 / 30)
   })
 

@@ -1,8 +1,8 @@
 "use client"
 
-import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { LazyImage } from "@/components/atoms/lazy-image"
 import { characterUrl } from "@/components/atoms/player-tooltip"
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { classColor } from "@/hooks/use-active-color"
@@ -13,6 +13,10 @@ type Region = "all" | "us" | "eu" | "kr"
 
 interface Props {
   playersByRegion: Record<string, TopPlayer[]>
+  /** If provided, fetches US/EU data lazily after mount */
+  lazyRegionsUrl?: string
+  /** Class slug for color fallback when nothing is hovered */
+  defaultClassSlug?: WowClassSlug
 }
 
 const REGIONS: {
@@ -37,10 +41,48 @@ const REGIONS: {
   },
 ]
 
-export function TopPlayers({ playersByRegion }: Props) {
+export function TopPlayers({ playersByRegion, lazyRegionsUrl, defaultClassSlug }: Props) {
   const [region, setRegion] = useState<Region>("all")
-  const players = (playersByRegion[region] ?? []).slice(0, 10)
+  const [lazyData, setLazyData] = useState<Record<string, TopPlayer[]>>({})
   const router = useRouter()
+  const activeColor = defaultClassSlug
+    ? `var(--color-class-${defaultClassSlug})`
+    : "var(--color-primary)"
+
+  // Fetch US/EU data in background after mount
+  useEffect(() => {
+    if (!lazyRegionsUrl) return
+    const controller = new AbortController()
+
+    async function fetchRegion(r: string) {
+      try {
+        const res = await fetch(`${lazyRegionsUrl}&region=${r}`, {
+          signal: controller.signal,
+        })
+        if (!res.ok) return
+        const data = await res.json()
+        setLazyData((prev) => ({
+          ...prev,
+          [r]: data.players ?? [],
+        }))
+      } catch {
+        // Silently fail — user sees "No data" for that region
+      }
+    }
+
+    fetchRegion("us")
+    fetchRegion("eu")
+
+    return () => controller.abort()
+  }, [
+    lazyRegionsUrl,
+  ])
+
+  const merged = {
+    ...playersByRegion,
+    ...lazyData,
+  }
+  const players = (merged[region] ?? []).slice(0, 10)
 
   if ((playersByRegion.all ?? []).length === 0) return null
 
@@ -61,10 +103,15 @@ export function TopPlayers({ playersByRegion }: Props) {
               type="button"
               onClick={() => setRegion(r.value)}
               className={`px-3 py-1.5 text-[11px] font-medium transition-colors ${
-                region === r.value
-                  ? "bg-primary/15 text-primary"
-                  : "text-muted-foreground hover:text-foreground"
+                region === r.value ? "bg-white/10" : "text-muted-foreground hover:text-foreground"
               } ${r.value === "all" ? "rounded-l-lg" : ""} ${r.value === "kr" ? "rounded-r-lg" : ""}`}
+              style={
+                region === r.value
+                  ? {
+                      color: activeColor,
+                    }
+                  : undefined
+              }
             >
               {r.label}
             </button>
@@ -161,7 +208,7 @@ function TopPlayerRow({
       <td className="px-4 py-3">
         <div className="flex items-center gap-3">
           {player.avatar_url && (
-            <Image
+            <LazyImage
               src={player.avatar_url}
               alt=""
               width={32}
