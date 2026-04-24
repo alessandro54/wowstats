@@ -67,7 +67,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { classSlug, specSlug } = await params
   const cls = WOW_CLASSES.find((c) => c.slug === classSlug)
   return {
-    title: `${titleizeSlug(specSlug)} ${cls?.name ?? titleizeSlug(classSlug)} PvP | WoW Overseer`,
+    title: `${titleizeSlug(specSlug)} ${cls?.name ?? titleizeSlug(classSlug)} PvP | WoW Stats`,
   }
 }
 

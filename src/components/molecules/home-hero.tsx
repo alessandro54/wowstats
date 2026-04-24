@@ -37,7 +37,7 @@ export function HomeHero({ seasonId, totalEntries, topSpecs }: Props) {
         <h1 className="text-4xl font-black tracking-tight lg:text-5xl">
           <span className="block">WoW</span>
           <span className="block bg-gradient-to-r from-amber-300 via-orange-400 to-amber-600 bg-clip-text text-transparent">
-            Overseer
+            Stats
           </span>
         </h1>
         <p className="mt-3 text-sm text-muted-foreground">

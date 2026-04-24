@@ -47,7 +47,7 @@ describe("appSidebar", () => {
 
   it("shows title when sidebar is open", () => {
     const { container } = render(<AppSidebar />)
-    expect(container.textContent).toContain("WoW Overseer")
+    expect(container.textContent).toContain("WoW Stats")
   })
 
   it("renders link to home", () => {
