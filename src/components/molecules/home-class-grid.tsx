@@ -61,8 +61,12 @@ export function HomeClassGrid({ classes }: Props) {
       <div
         key={cls.slug}
         className={`relative ${isActive ? "z-10" : ""}`}
-        onMouseEnter={() => handleEnter(cls.slug as WowClassSlug)}
-        onMouseLeave={handleLeave}
+        onPointerEnter={(e) => {
+          if (e.pointerType === "mouse") handleEnter(cls.slug as WowClassSlug)
+        }}
+        onPointerLeave={(e) => {
+          if (e.pointerType === "mouse") handleLeave()
+        }}
       >
         <div
           role="button"

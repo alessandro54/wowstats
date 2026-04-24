@@ -1,5 +1,6 @@
 "use client"
 
+import { useMemo } from "react"
 import { TalentEdges } from "@/components/molecules/talent-tree-edges"
 import { TalentNodeCard } from "@/components/molecules/talent-tree-node"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -97,18 +98,41 @@ export function TalentTree({
   hideStats?: boolean
   apexCircle?: boolean
 }) {
-  const nodeMap = buildNodeMap(talents)
-  const nodes = Array.from(nodeMap.values())
+  const nodeMap = useMemo(
+    () => buildNodeMap(talents),
+    [
+      talents,
+    ],
+  )
+  const nodes = useMemo(
+    () => Array.from(nodeMap.values()),
+    [
+      nodeMap,
+    ],
+  )
+  const layout = useMemo(
+    () =>
+      computeTreeLayout(nodes, {
+        apexExtra,
+        apexCircle,
+      }),
+    [
+      nodes,
+      apexExtra,
+      apexCircle,
+    ],
+  )
+  const edgeSet = useMemo(
+    () => buildEdgeSet(talents),
+    [
+      talents,
+    ],
+  )
 
   if (nodes.length === 0) return null
 
-  const layout = computeTreeLayout(nodes, {
-    apexExtra,
-    apexCircle,
-  })
   const { svgW, svgH, maxRow, botApex, nodeCX, nodeY } = layout
   const useApex = apexCircle && botApex
-  const edgeSet = buildEdgeSet(talents)
 
   return (
     <div className="flex h-full min-h-0 flex-col">
