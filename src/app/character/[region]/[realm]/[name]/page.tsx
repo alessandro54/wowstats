@@ -26,10 +26,50 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const character = await fetchCharacter(region, realm, name)
   if (!character) return {}
 
-  const title = `${character.name} — ${formatRealm(character.realm)} (${character.region})`
+  const displayRealm = formatRealm(character.realm)
+  const title = `${character.name} — ${displayRealm} (${character.region.toUpperCase()})`
+  const specSlug = character.class_slug?.replace(/_/g, "-")
+  const classConfig = WOW_CLASSES.find((c) => c.slug === specSlug)
+  const specIcon = classConfig?.specs.find((s) => s.id === character.primary_spec_id)?.iconUrl
+  const topRating = character.pvp_entries.reduce((max, e) => Math.max(max, e.rating), 0)
+  const description =
+    topRating > 0
+      ? `${character.name}-${displayRealm} · ${topRating} rating · WoW PvP profile with gear, talents, and stats.`
+      : `WoW character profile for ${character.name}-${displayRealm}. Gear, talents, and PvP stats.`
+
   return {
     title,
-    description: `PvP profile for ${character.name}-${formatRealm(character.realm)} on ${character.region}.`,
+    description,
+    openGraph: {
+      title,
+      description,
+      ...(specIcon
+        ? {
+            images: [
+              {
+                url: specIcon,
+                width: 64,
+                height: 64,
+              },
+            ],
+          }
+        : {}),
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+      ...(specIcon
+        ? {
+            images: [
+              specIcon,
+            ],
+          }
+        : {}),
+    },
+    alternates: {
+      canonical: `/character/${region}/${realm}/${name}`,
+    },
   }
 }
 

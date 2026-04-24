@@ -30,7 +30,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "cdn.wowinsights.xyz",
+        hostname: "cdn.wowstats.gg",
         port: "",
         pathname: "/**",
       },
@@ -43,6 +43,8 @@ export default withSentryConfig(nextConfig, {
   project: "wow-bis-web-production",
   silent: !process.env.CI,
   widenClientFileUpload: true,
-  disableLogger: true,
-  automaticVercelMonitors: true,
+  webpack: {
+    treeshake: { removeDebugLogging: true },
+    automaticVercelMonitors: true,
+  },
 })

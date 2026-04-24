@@ -23,9 +23,9 @@ interface Props {
 
 export function HomeHero({ seasonId, totalEntries, topSpecs }: Props) {
   return (
-    <div className="space-y-6 text-center">
+    <div className="space-y-6 text-center lg:text-left">
       {/* Season badge */}
-      <div className="flex justify-center">
+      <div className="flex justify-center lg:justify-start">
         <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-primary">
           <span className="inline-block size-1.5 rounded-full bg-primary shadow-[0_0_6px] shadow-primary" />
           Season {seasonId} &middot; Live Data
@@ -34,52 +34,18 @@ export function HomeHero({ seasonId, totalEntries, topSpecs }: Props) {
 
       {/* Title */}
       <div>
-        <h1 className="text-4xl font-black tracking-tight lg:text-6xl">
+        <h1 className="text-4xl font-black tracking-tight lg:text-5xl">
           <span className="block">WoW</span>
           <span className="block bg-gradient-to-r from-amber-300 via-orange-400 to-amber-600 bg-clip-text text-transparent">
-            Meta Insights
+            Overseer
           </span>
         </h1>
         <p className="mt-3 text-sm text-muted-foreground">
-          Data-driven PvP rankings from{" "}
-          <strong className="text-foreground">{totalEntries.toLocaleString()}</strong> ladder
-          entries
+          Data-driven PvP & PvE meta from{" "}
+          <strong className="text-foreground">{totalEntries.toLocaleString()}</strong> ranked
+          players
         </p>
       </div>
-
-      {/* Top specs podium */}
-      {topSpecs && topSpecs.length > 0 && (
-        <div className="mx-auto w-full max-w-sm space-y-2">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground">
-            3v3 Arena
-          </p>
-
-          {topSpecs.length === 1 ? (
-            <div className="flex justify-center">
-              <div className="w-full max-w-[200px]">
-                <SpecCard spec={topSpecs[0]} rank={1} />
-              </div>
-            </div>
-          ) : topSpecs.length === 2 ? (
-            <div className="grid grid-cols-2 gap-2">
-              {topSpecs.map((spec, i) => (
-                <SpecCard key={spec.specName} spec={spec} rank={i + 1} />
-              ))}
-            </div>
-          ) : (
-            /* Triangular: 1 top centered, 2 below */
-            <div className="grid grid-cols-2 gap-2">
-              <div className="col-span-2 flex justify-center">
-                <div className="w-full max-w-[200px]">
-                  <SpecCard spec={topSpecs[0]} rank={1} />
-                </div>
-              </div>
-              <SpecCard spec={topSpecs[1]} rank={2} />
-              <SpecCard spec={topSpecs[2]} rank={3} />
-            </div>
-          )}
-        </div>
-      )}
     </div>
   )
 }

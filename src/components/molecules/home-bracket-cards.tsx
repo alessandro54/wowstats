@@ -53,7 +53,7 @@ export function HomeBracketCards({ brackets }: Props) {
             <Link
               key={b.bracket}
               href={b.href}
-              className="group relative overflow-hidden rounded-xl border border-border/50 bg-card/40 px-5 pb-4 pt-5 transition-all hover:-translate-y-1 hover:border-border hover:bg-card/70 hover:shadow-lg"
+              className="group relative flex flex-col gap-1.5 overflow-hidden rounded-xl border border-white/[0.05] bg-white/[0.02] px-5 py-3.5 transition-all hover:border-white/[0.1] hover:bg-white/[0.05]"
             >
               {/* Top accent line */}
               <div

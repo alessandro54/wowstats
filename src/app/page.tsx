@@ -6,6 +6,8 @@ import type { BracketSummary } from "@/components/molecules/home-bracket-cards"
 import { HomeBracketCards } from "@/components/molecules/home-bracket-cards"
 import { HomeClassGrid } from "@/components/molecules/home-class-grid"
 import { HomeHero } from "@/components/molecules/home-hero"
+import type { TopSpecBracket, TopSpecEntry } from "@/components/molecules/home-top-specs-list"
+import { HomeTopSpecsList } from "@/components/molecules/home-top-specs-list"
 import { tier, tierByPercentile } from "@/config/app-config"
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
@@ -150,12 +152,85 @@ async function HomeContent() {
     }
   }
 
+  // Build per-bracket tier lookup: "ClassName-SpecName" -> TopSpecBracket[]
+  const specBracketTiers = new Map<string, TopSpecBracket[]>()
+  for (let i = 0; i < BRACKETS.length; i++) {
+    const data = results[i]
+    if (!data) continue
+    const { bracket, label } = BRACKETS[i]
+    const isSolo = SOLO_BRACKETS.includes(bracket)
+    const sorted = [
+      ...data.classes,
+    ].sort((a, b) => b.score - a.score)
+    const dps = sorted.filter((s) => s.role === "dps")
+    const maxScore = dps[0]?.score ?? 1
+    dps.forEach((spec, idx) => {
+      const key = `${spec.class}-${spec.spec}`
+      const normPct = (spec.score / maxScore) * 100
+      const t = isSolo ? tierByPercentile(idx + 1, dps.length) : tier(normPct)
+      const entry: TopSpecBracket = {
+        label,
+        slug: bracket,
+        tier: t,
+      }
+      const existing = specBracketTiers.get(key)
+      if (existing) existing.push(entry)
+      else
+        specBracketTiers.set(key, [
+          entry,
+        ])
+    })
+  }
+
+  // Top DPS specs across all brackets, deduped and ranked by win rate
+  const seenSpecs = new Set<string>()
+  const topSpecsList: TopSpecEntry[] = results
+    .flatMap((data, i) => {
+      if (!data) return []
+      const bracket = BRACKETS[i].bracket
+      const sorted = [
+        ...data.classes,
+      ].sort((a, b) => b.score - a.score)
+      return sorted
+        .filter((s) => s.role === "dps")
+        .slice(0, 3)
+        .map((spec) => {
+          const classSlug = normalizeClassSlug(spec.class)
+          const key = `${spec.class}-${spec.spec}`
+          return {
+            specName: spec.spec,
+            className: spec.class,
+            wrHat: spec.wr_hat,
+            iconUrl: findSpecIcon(classSlug, spec.spec),
+            color: `var(--color-class-${classSlug})`,
+            specUrl: `/pvp/${classSlug}/${spec.spec.toLowerCase()}/${bracket}`,
+            brackets: specBracketTiers.get(key) ?? [],
+          }
+        })
+    })
+    .sort((a, b) => b.wrHat - a.wrHat)
+    .filter((s) => {
+      const key = `${s.className}-${s.specName}`
+      if (seenSpecs.has(key)) return false
+      seenSpecs.add(key)
+      return true
+    })
+    .slice(0, 4)
+
   return (
     <>
-      <div className="animate-stream-in relative z-[2] flex min-h-[calc(100dvh-3.75rem)] items-center justify-center px-4 py-12 lg:px-6">
-        <HomeHero seasonId={seasonId} totalEntries={totalEntries} topSpecs={topHeroSpecs} />
+      {/* Step 1 — identity: who we are + top specs */}
+      <div className="animate-stream-in relative z-[2] flex min-h-[calc(100dvh-3.75rem)] items-center px-4 py-12 lg:px-6">
+        <div className="mx-auto w-full max-w-5xl">
+          <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-center lg:gap-16">
+            <HomeHero seasonId={seasonId} totalEntries={totalEntries} topSpecs={topHeroSpecs} />
+            <HomeTopSpecsList specs={topSpecsList} />
+          </div>
+        </div>
         <ScrollHint />
       </div>
+
+      {/* Step 2 — discovery: bracket cards + class grid */}
       <LazySection className="animate-stream-in relative z-[2] mx-auto w-full max-w-5xl space-y-10 px-4 pb-16 lg:px-6">
         <HomeBracketCards brackets={bracketSummaries} />
         <HomeClassGrid classes={WOW_CLASSES} />

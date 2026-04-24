@@ -1,5 +1,5 @@
 /** Custom domain — used for direct asset URLs (banners, animations, splash art) */
-export const CDN_BASE = "https://cdn.wowinsights.xyz"
+export const CDN_BASE = "https://cdn.wowstats.gg"
 
 /** R2 public endpoint — used as the source for Cloudflare Image Transforms
  *  (transforms can't fetch from the same domain they run on). */

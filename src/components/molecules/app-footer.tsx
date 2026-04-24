@@ -84,14 +84,14 @@ export function AppFooter() {
           <Link href="/" className="flex items-center gap-3 shrink-0">
             <Image
               src={cdnImage("/assets/logo.png", 48)}
-              alt="WoW Insights"
+              alt="WoW Overseer"
               width={48}
               height={48}
               className="rounded-full"
             />
             <div>
-              <p className="text-sm font-semibold leading-tight">WoW Insights</p>
-              <p className="text-xs text-muted-foreground">PvP Meta Tracker</p>
+              <p className="text-sm font-semibold leading-tight">WoW Overseer</p>
+              <p className="text-xs text-muted-foreground">PvP & PvE Meta</p>
             </div>
           </Link>
 
@@ -112,7 +112,7 @@ export function AppFooter() {
         {/* Bottom row: copyright + locale */}
         <div className="flex flex-col items-center gap-3 border-t pt-6 sm:flex-row sm:justify-between">
           <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} WoW Insights. Not affiliated with Blizzard Entertainment.
+            © {new Date().getFullYear()} WoW Overseer. Not affiliated with Blizzard Entertainment.
           </p>
           <LanguageDropdown />
         </div>
