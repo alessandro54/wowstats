@@ -86,13 +86,22 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!cls || !spec) return {}
 
   const bracketLabel = BRACKETS.find((b) => b.slug === bracket)?.label ?? bracket
-  const title = `${titleizeSlug(specSlug)} • ${cls.name} • ${bracketLabel} BiS`
-  const description = `Best in slot items, enchants, and gems for ${cls.name} ${specSlug} in ${bracketLabel}. Based on real WoW PvP data.`
+  const title = `${titleizeSlug(specSlug)} ${cls.name} ${bracketLabel} — BiS Gear & Meta | WoW Stats`
+  const description =
+    `Top ${titleizeSlug(specSlug)} ${cls.name} builds for ${bracketLabel} in WoW. ` +
+    `Best in slot gear, enchants, gems, and talents from real ladder data. Updated every 6 hours.`
   const image = spec.iconRemasteredUrl ?? spec.iconUrl
 
   return {
     title,
     description,
+    keywords: [
+      `${specSlug} ${cls.name.toLowerCase()} bis`,
+      `${specSlug} pvp gear`,
+      `wow ${bracketLabel.toLowerCase()} meta`,
+      `${cls.name.toLowerCase()} pvp build`,
+      `${specSlug} talents pvp`,
+    ],
     openGraph: {
       title,
       description,
@@ -101,16 +110,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
           url: image,
           width: 1024,
           height: 1024,
+          alt: `${titleizeSlug(specSlug)} ${cls.name}`,
         },
       ],
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title,
       description,
       images: [
         image,
       ],
+    },
+    alternates: {
+      canonical: `/pvp/${classSlug}/${specSlug}/${bracket}`,
     },
   }
 }

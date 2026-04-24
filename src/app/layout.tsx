@@ -26,20 +26,68 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
 })
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:5123"
+const SITE_NAME = "WoW Stats"
+const DEFAULT_DESCRIPTION =
+  "Live WoW PvP & PvE meta stats powered by real Blizzard ladder data. " +
+  "Spec rankings, BiS gear, enchants, gems, and talents for Arena, Solo Shuffle, Blitz, and M+. " +
+  "Updated every 6 hours. — Estadísticas en vivo de WoW PvP y PvE."
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:5123"),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "WoW Overseer | PvP & PvE Meta",
-    template: "%s | WoW Overseer",
+    default: `${SITE_NAME} | Live WoW PvP & PvE Meta`,
+    template: `%s | ${SITE_NAME}`,
   },
-  description:
-    "PvP & PvE meta for WoW Arena, Solo Shuffle, RBG and more. Best in slot gear based on real player data.",
+  description: DEFAULT_DESCRIPTION,
+  keywords: [
+    "wow tier",
+    "wow meta",
+    "WoW PvP meta",
+    "WoW arena stats",
+    "solo shuffle meta",
+    "WoW best in slot",
+    "WoW spec rankings",
+    "World of Warcraft PvP tier list",
+    "WoW ladder data",
+    "wow pvp meta midnight",
+    "arena tier list",
+    "wow stats",
+    "wowstats",
+  ],
+  authors: [
+    {
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
+  ],
+  creator: SITE_NAME,
   openGraph: {
-    siteName: "WoW Overseer",
+    siteName: SITE_NAME,
     type: "website",
+    locale: "en_US",
+    alternateLocale: [
+      "es_MX",
+    ],
+    url: SITE_URL,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
+    site: "@wowstatsgg",
+    creator: "@wowstatsgg",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-snippet": -1,
+      "max-image-preview": "large",
+    },
+  },
+  alternates: {
+    canonical: SITE_URL,
   },
 }
 
@@ -57,8 +105,28 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       className={`${inter.variable} ${jetbrainsMono.variable}`}
     >
       <head>
-        <link rel="preconnect" href="https://cdn.wowinsights.xyz" />
+        <link rel="preconnect" href="https://cdn.wowstats.gg" />
         <link rel="preconnect" href="https://render.worldofwarcraft.com" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: SITE_NAME,
+              url: SITE_URL,
+              description: "Live WoW PvP & PvE meta stats powered by real Blizzard ladder data.",
+              potentialAction: {
+                "@type": "SearchAction",
+                target: {
+                  "@type": "EntryPoint",
+                  urlTemplate: `${SITE_URL}/character/{region}/{realm}/{name}`,
+                },
+                "query-input": "required name=name",
+              },
+            }),
+          }}
+        />
       </head>
       <body className="bg-background text-foreground h-dvh overflow-hidden antialiased">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>

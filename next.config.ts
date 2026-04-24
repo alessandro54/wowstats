@@ -30,7 +30,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "cdn.wowinsights.xyz",
+        hostname: "cdn.wowstats.gg",
         port: "",
         pathname: "/**",
       },
