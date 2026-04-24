@@ -71,6 +71,10 @@ export function HomeClassGrid({ classes }: Props) {
         <div
           role="button"
           tabIndex={0}
+          onTouchEnd={(e) => {
+            e.preventDefault()
+            handleToggle(cls.slug as WowClassSlug)
+          }}
           onClick={() => handleToggle(cls.slug as WowClassSlug)}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") handleToggle(cls.slug as WowClassSlug)
