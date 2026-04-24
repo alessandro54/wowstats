@@ -3,9 +3,7 @@ import { withSentryConfig } from "@sentry/nextjs"
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
-  experimental: {
-    staleTimes: { dynamic: 0 },
-  },
+  experimental: {},
   turbopack: {
     rules: {
       "*.glsl": { loaders: ["./loaders/raw.js"], as: "*.js" },

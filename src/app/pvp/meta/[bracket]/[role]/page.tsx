@@ -3,7 +3,7 @@ import { Suspense } from "react"
 import type { MetaStatsEntry } from "@/components/molecules/meta-stats-table"
 import type { MetaDataset, Region, Role } from "@/components/organisms/meta-stats-dashboard"
 
-export const dynamic = "force-dynamic"
+export const dynamic = "force-static"
 
 import { BracketDropdown } from "@/components/molecules/bracket-dropdown"
 import { MetaStatsSkeleton } from "@/components/molecules/meta-stats-skeleton"
@@ -267,7 +267,7 @@ export default async function PvpBracketPage({ params, searchParams }: PageProps
         }
       />
 
-      <div className="mx-auto w-full p-4 lg:max-w-7txl lg:p-6">
+      <div className="mx-auto w-full p-4 lg:max-w-7xl lg:p-6">
         <Suspense fallback={<MetaStatsSkeleton />}>
           <MetaContent
             bracketStr={bracketStr}
