@@ -146,12 +146,15 @@ describe("navMain", () => {
     vi.useRealTimers()
   })
 
-  it("shows NavClassHoverCard when sidebar is collapsed", () => {
+  it("shows NavClassHoverCard when sidebar is collapsed and pointer is mouse", () => {
     vi.mocked(useSidebar).mockReturnValue({
       open: false,
       isMobile: false,
     } as any)
-    const { getAllByTestId } = render(<NavMain />)
+    const { getAllByTestId, container } = render(<NavMain />)
+    fireEvent.pointerDown(container, {
+      pointerType: "mouse",
+    })
     const hoverCards = getAllByTestId("hover-card")
     expect(hoverCards.length).toBeGreaterThan(0)
   })
