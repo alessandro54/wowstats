@@ -3,7 +3,7 @@
 import { ChevronRight } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { useCallback, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { NavClassHoverCard } from "@/components/molecules/nav-class-hover-card"
 import { useSetHoverSlug } from "@/components/providers/hover-provider"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
@@ -27,6 +27,16 @@ export function NavMain() {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const prefetchedRef = useRef<Set<string>>(new Set())
   const { open: sidebarOpen } = useSidebar()
+  const [isMouse, setIsMouse] = useState(false)
+  useEffect(() => {
+    const handler = (e: PointerEvent) => {
+      if (e.pointerType === "mouse") setIsMouse(true)
+    }
+    window.addEventListener("pointerdown", handler, {
+      once: true,
+    })
+    return () => window.removeEventListener("pointerdown", handler)
+  }, [])
 
   const handleItemEnter = useCallback(
     (item: (typeof navMain)[number]) => {
@@ -69,11 +79,20 @@ export function NavMain() {
             key={item.title}
             asChild
             open={openSlug === item.slug}
+            onOpenChange={(open) => {
+              if (open) {
+                setOpenSlug(item.slug)
+                setSlug(item.slug as WowClassSlug)
+              } else {
+                setOpenSlug(null)
+                setSlug(null)
+              }
+            }}
             className="group/collapsible"
             onMouseEnter={() => handleItemEnter(item)} // item ref is stable (navMain is a module-level const)
           >
             <SidebarMenuItem>
-              {sidebarOpen ? (
+              {sidebarOpen || !isMouse ? (
                 <CollapsibleTrigger asChild>
                   <SidebarMenuButton tooltip={item.title}>
                     <span className="icon-vignette rounded-full">

@@ -46,13 +46,13 @@ void main() {
   dCol = mix(dCol, vec3(0.75, 0.22, 0.03), clamp(f * f * 3.5, 0.0, 1.0));
   dCol *= 0.35;
 
-  vec3 lCol = mix(vec3(0.96, 0.94, 0.92), vec3(0.90, 0.86, 0.82), clamp(f * 2.0, 0.0, 1.0));
-  lCol = mix(lCol, vec3(0.85, 0.78, 0.70), clamp(f * f * 2.0, 0.0, 1.0));
+  vec3 lCol = mix(vec3(0.98, 0.96, 0.94), vec3(0.94, 0.91, 0.87), clamp(f * 2.0, 0.0, 1.0));
+  lCol = mix(lCol, vec3(0.90, 0.84, 0.76), clamp(f * f * 2.0, 0.0, 1.0));
 
   vec3 col = mix(lCol, dCol, uDark);
 
   vec2 vPos = vUv * 2.0 - 1.0;
-  float vig = mix(0.25, 0.55, uDark);
+  float vig = mix(0.0, 0.55, uDark);
   col *= 1.0 - vig * dot(vPos, vPos);
 
   gl_FragColor = vec4(col, 1.0);

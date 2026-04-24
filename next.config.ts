@@ -43,8 +43,7 @@ export default withSentryConfig(nextConfig, {
   project: "wow-bis-web-production",
   silent: !process.env.CI,
   widenClientFileUpload: true,
-  webpack: {
-    treeshake: { removeDebugLogging: true },
-    automaticVercelMonitors: true,
-  },
+  autoInstrumentAppDirectory: true,
+  automaticVercelMonitors: true,
+  treeshake: { removeDebugLogging: true },
 })

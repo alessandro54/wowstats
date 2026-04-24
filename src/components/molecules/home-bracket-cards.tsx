@@ -53,7 +53,7 @@ export function HomeBracketCards({ brackets }: Props) {
             <Link
               key={b.bracket}
               href={b.href}
-              className="group relative flex flex-col gap-1.5 overflow-hidden rounded-xl border border-white/[0.05] bg-white/[0.02] px-5 py-3.5 transition-all hover:border-white/[0.1] hover:bg-white/[0.05]"
+              className="group relative flex flex-col gap-1.5 overflow-hidden rounded-xl border border-black/10 bg-black/[0.04] px-5 py-3.5 transition-all hover:border-black/15 hover:bg-black/[0.07] dark:border-white/[0.05] dark:bg-white/[0.02] dark:hover:border-white/[0.1] dark:hover:bg-white/[0.05]"
             >
               {/* Top accent line */}
               <div
@@ -86,7 +86,7 @@ export function HomeBracketCards({ brackets }: Props) {
                       {(topWr * 100).toFixed(1)}%
                     </span>
                   </div>
-                  <div className="mt-1 h-[2px] rounded-full bg-white/[0.05]">
+                  <div className="mt-1 h-[2px] rounded-full bg-black/[0.06] dark:bg-white/[0.05]">
                     <div
                       className="h-full rounded-full opacity-65"
                       style={{
@@ -99,11 +99,11 @@ export function HomeBracketCards({ brackets }: Props) {
               )}
 
               {/* Top 3 spec chips */}
-              <div className="flex flex-wrap gap-1.5 border-t border-white/[0.04] pt-3">
+              <div className="flex flex-wrap gap-1.5 border-t border-black/[0.06] pt-3 dark:border-white/[0.04]">
                 {b.topSpecs.slice(0, 3).map((spec) => (
                   <div
                     key={spec.specName}
-                    className="flex items-center gap-1.5 rounded border border-white/[0.06] bg-white/[0.03] px-1.5 py-1"
+                    className="flex items-center gap-1.5 rounded border border-black/[0.08] bg-black/[0.04] px-1.5 py-1 dark:border-white/[0.06] dark:bg-white/[0.03]"
                   >
                     {spec.iconUrl ? (
                       <Image
