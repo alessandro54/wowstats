@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "Sentry": {
+      "url": "https://mcp.sentry.dev/mcp/wow-bis/wow-bis-web-production"
+    }
+  }
+}
