@@ -10,7 +10,6 @@ function makeTalent(overrides: Partial<MetaTalent> = {}): MetaTalent {
       id: 1,
       blizzard_id: 1001,
       name: "Test Talent",
-      description: null,
       talent_type: "spec",
       spell_id: null,
       node_id: 10,
@@ -26,7 +25,6 @@ function makeTalent(overrides: Partial<MetaTalent> = {}): MetaTalent {
     in_top_build: true,
     top_build_rank: 4,
     tier: "bis",
-    snapshot_at: null,
     ...overrides,
   }
 }

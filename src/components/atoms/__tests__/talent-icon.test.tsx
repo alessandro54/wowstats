@@ -24,7 +24,6 @@ const mockTalent: MetaTalent = {
     id: 1,
     blizzard_id: 12345,
     name: "Test Talent",
-    description: null,
     talent_type: "active",
     spell_id: null,
     node_id: null,
@@ -40,7 +39,6 @@ const mockTalent: MetaTalent = {
   in_top_build: false,
   top_build_rank: 0,
   tier: "common" as const,
-  snapshot_at: null,
 }
 
 describe("talentIcon", () => {

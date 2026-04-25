@@ -29,7 +29,6 @@ function makeTalent(
       id,
       blizzard_id: 10000 + id,
       name,
-      description: "A powerful warrior ability dealing heavy physical damage.",
       talent_type: "active",
       spell_id: null,
       node_id: id,
@@ -45,7 +44,6 @@ function makeTalent(
     in_top_build: inTopBuild,
     top_build_rank: topBuildRank,
     tier,
-    snapshot_at: "2026-03-02T00:00:00Z",
   }
 }
 

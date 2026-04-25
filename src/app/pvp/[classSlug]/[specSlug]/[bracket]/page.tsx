@@ -4,8 +4,8 @@ import { Suspense } from "react"
 import type {
   MetaEnchant,
   MetaGem,
-  MetaItem,
   MetaStats,
+  ItemsResponse,
   TalentsResponse,
   TopPlayersResponse,
 } from "@/lib/api"
@@ -216,8 +216,15 @@ async function EquipmentSection({
   bracketLabel?: string
 }) {
   const locale = await getLocale()
-  const [items, enchants, gems, statsData] = await Promise.all([
-    fetchItems(resolvedBracket, specId, locale).catch((): MetaItem[] => []),
+  const [itemsData, enchants, gems, statsData] = await Promise.all([
+    fetchItems(resolvedBracket, specId, locale).catch(
+      (): ItemsResponse => ({
+        meta: {
+          snapshot_at: null,
+        },
+        items: [],
+      }),
+    ),
     fetchEnchants(resolvedBracket, specId, locale).catch((): MetaEnchant[] => []),
     fetchGems(resolvedBracket, specId, locale).catch((): MetaGem[] => []),
     fetchStats(resolvedBracket, specId, locale).catch(
@@ -228,7 +235,7 @@ async function EquipmentSection({
     ),
   ])
 
-  const itemGroups = sortedBySlotOrder(groupBy(items, (i) => i.slot.toUpperCase()))
+  const itemGroups = sortedBySlotOrder(groupBy(itemsData.items, (i) => i.slot.toUpperCase()))
   const enchantGroups = sortedBySlotOrder(groupBy(enchants, (e) => e.slot.toUpperCase()))
   const gemGroups = sortedBySlotOrder(groupBy(gems, (g) => g.slot.toUpperCase()))
 

@@ -33,7 +33,6 @@ function makeTalent(
       id,
       blizzard_id: id + 5000,
       name,
-      description: null,
       talent_type: "spec",
       spell_id: null,
       node_id: id,
@@ -49,7 +48,6 @@ function makeTalent(
     in_top_build: inTopBuild,
     top_build_rank: topBuildRank,
     tier,
-    snapshot_at: null,
   }
 }
 

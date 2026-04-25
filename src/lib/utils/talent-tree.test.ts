@@ -25,7 +25,6 @@ function makeTalent(
       id,
       blizzard_id: 10000 + id,
       name: `Talent ${id}`,
-      description: null,
       talent_type: "active",
       spell_id: null,
       node_id: nodeId,
@@ -41,7 +40,6 @@ function makeTalent(
     in_top_build: true,
     top_build_rank: maxRank,
     tier: usagePct > 50 ? "bis" : usagePct > 15 ? "situational" : "common",
-    snapshot_at: "2026-03-02T00:00:00Z",
   }
 }
 

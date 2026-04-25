@@ -57,7 +57,6 @@ function makeTalent(
       id,
       blizzard_id: id + 3000,
       name,
-      description: null,
       talent_type: type,
       spell_id: null,
       node_id: id,
@@ -73,7 +72,6 @@ function makeTalent(
     in_top_build: pct > 50,
     top_build_rank: 1,
     tier: pct > 50 ? ("bis" as const) : pct > 15 ? ("situational" as const) : ("common" as const),
-    snapshot_at: null,
   }
 }
 

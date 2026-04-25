@@ -22,7 +22,6 @@ function makeTalent(
       id,
       blizzard_id: 90000 + id,
       name,
-      description: `${name} — deals damage or provides a buff.`,
       talent_type: "spec",
       spell_id: null,
       node_id: id,
@@ -43,7 +42,6 @@ function makeTalent(
       | "bis"
       | "situational"
       | "common",
-    snapshot_at: "2026-03-03T00:00:00Z",
   }
 }
 

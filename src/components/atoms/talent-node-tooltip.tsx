@@ -1,6 +1,10 @@
+"use client"
+
 import Image from "next/image"
+import { useEffect, useState } from "react"
 import type { RankBar } from "@/lib/utils/talent-node-utils"
 import type { TalentNode } from "@/lib/utils/talent-tree"
+import { Skeleton } from "@/components/ui/skeleton"
 
 interface Props {
   node: TalentNode
@@ -19,6 +23,24 @@ export function TalentNodeTooltip({
   rankBars,
   maxBarPct,
 }: Props) {
+  const [description, setDescription] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
+  const talentId = node.primary.talent.id
+
+  useEffect(() => {
+    if (!talentId) {
+      setLoading(false)
+      return
+    }
+    fetch(`/api/pvp/meta/talents/${talentId}`)
+      .then((r) => r.json())
+      .then((d) => setDescription(d.description ?? null))
+      .catch(() => {})
+      .finally(() => setLoading(false))
+  }, [
+    talentId,
+  ])
+
   const alternatives = node.isChoice
     ? node.all.filter((t) => t.talent.id !== node.primary.talent.id)
     : []
@@ -47,11 +69,14 @@ export function TalentNodeTooltip({
             )}
           </div>
         </div>
-        {node.primary.talent.description && (
-          <p className="text-muted-foreground max-w-52 text-[11px] leading-snug">
-            {node.primary.talent.description}
-          </p>
-        )}
+        {loading ? (
+          <div className="space-y-1">
+            <Skeleton className="h-2 w-48" />
+            <Skeleton className="h-2 w-36" />
+          </div>
+        ) : description ? (
+          <p className="text-muted-foreground max-w-52 text-[11px] leading-snug">{description}</p>
+        ) : null}
         {!hideStats && !rankBars && (
           <p
             className="font-mono text-[11px] font-bold"

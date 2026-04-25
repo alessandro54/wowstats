@@ -11,7 +11,6 @@ function makeTalent(id: number): MetaTalent {
       id,
       blizzard_id: id + 5000,
       name: `Talent ${id}`,
-      description: null,
       talent_type: "spec",
       spell_id: null,
       node_id: id,
@@ -27,7 +26,6 @@ function makeTalent(id: number): MetaTalent {
     in_top_build: true,
     top_build_rank: 1,
     tier: "bis",
-    snapshot_at: null,
   }
 }
 

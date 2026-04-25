@@ -9,7 +9,6 @@ function makeTalent(id: number, name: string, pct: number): MetaTalent {
       id,
       blizzard_id: id + 5000,
       name,
-      description: `${name} — a powerful PvP talent.`,
       talent_type: "pvp",
       spell_id: null,
       node_id: id,
@@ -28,7 +27,6 @@ function makeTalent(id: number, name: string, pct: number): MetaTalent {
       | "bis"
       | "situational"
       | "common",
-    snapshot_at: "2026-03-03T00:00:00Z",
   }
 }
 

@@ -11,7 +11,6 @@ function makeTalent(id: number, row: number, col: number): MetaTalent {
       id,
       blizzard_id: 10000 + id,
       name: `Talent ${id}`,
-      description: null,
       talent_type: "active",
       spell_id: null,
       node_id: id,
@@ -27,7 +26,6 @@ function makeTalent(id: number, row: number, col: number): MetaTalent {
     in_top_build: true,
     top_build_rank: 1,
     tier: "bis" as const,
-    snapshot_at: "2026-03-02T00:00:00Z",
   }
 }
 
