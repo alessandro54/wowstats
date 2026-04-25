@@ -339,6 +339,7 @@ export interface ClassDistributionSpec {
   raw_winrate: number
   wr_hat: number
   score: number
+  rank_change: number | null
 }
 
 export interface ClassDistributionResponse {

@@ -307,21 +307,33 @@ function TopPlayersSkeleton() {
 
 function TalentsSkeleton() {
   return (
-    <div className="sm:overflow-x-auto">
-      <div className="flex flex-col items-stretch gap-6 sm:min-w-max sm:flex-row">
-        {(
-          [
-            "Class Talents",
-            "Spec Talents",
-          ] as const
-        ).map((label) => (
-          <div key={label} className="flex flex-1 flex-col">
-            <Skeleton className="mx-auto mb-3 h-5 w-28" />
-            <div className="rounded-xl border p-4">
-              <TalentTreeSkeleton />
-            </div>
+    <div className="space-y-8">
+      {/* Hero at top */}
+      <div className="flex justify-center">
+        <div className="flex flex-col items-center">
+          <Skeleton className="mx-auto mb-3 h-4 w-24" />
+          <div className="rounded-xl border p-4">
+            <TalentTreeSkeleton cols={5} rows={8} />
           </div>
-        ))}
+        </div>
+      </div>
+      {/* Class + Spec below */}
+      <div className="sm:overflow-x-auto">
+        <div className="flex flex-col items-stretch gap-6 sm:min-w-max sm:flex-row">
+          {(
+            [
+              "Class Talents",
+              "Spec Talents",
+            ] as const
+          ).map((label) => (
+            <div key={label} className="flex flex-1 flex-col">
+              <Skeleton className="mx-auto mb-3 h-5 w-28" />
+              <div className="rounded-xl border p-4">
+                <TalentTreeSkeleton />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )
