@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     )
   }
 
-  revalidateTag("pvp")
+  revalidateTag("pvp", {})
   return NextResponse.json({
     revalidated: true,
     tag: "pvp",
