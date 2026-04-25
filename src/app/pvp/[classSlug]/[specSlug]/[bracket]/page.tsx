@@ -10,7 +10,7 @@ import type {
   TopPlayersResponse,
 } from "@/lib/api"
 
-export const dynamic = "force-dynamic"
+export const dynamic = "force-static"
 
 import { Equipment } from "@/components/organisms/equipment"
 import { TalentTreeSkeleton } from "@/components/organisms/talent-tree"

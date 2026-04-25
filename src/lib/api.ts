@@ -66,7 +66,11 @@ async function apiFetch<T>(
   }
   if (locale) url.searchParams.set("locale", locale)
   const res = await fetch(url.toString(), {
-    cache: "no-store",
+    next: {
+      tags: [
+        "pvp",
+      ],
+    },
   })
   if (!res.ok) throw new Error(`Backend ${path} failed: ${res.status} ${res.statusText}`)
   const json = await res.json()
