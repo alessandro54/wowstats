@@ -20,13 +20,10 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
+import { BRACKETS } from "@/config/wow/brackets-config"
 import { navMain } from "@/config/wow/nav-config"
 
-const PREFETCH_BRACKETS = [
-  "3v3",
-  "2v2",
-  "shuffle",
-] as const
+const PREFETCH_BRACKETS = BRACKETS.map((b) => b.slug)
 
 export function NavMain() {
   const router = useRouter()
@@ -40,10 +37,10 @@ export function NavMain() {
     const handler = (e: PointerEvent) => {
       if (e.pointerType === "mouse") setIsMouse(true)
     }
-    window.addEventListener("pointerdown", handler, {
+    window.addEventListener("pointermove", handler, {
       once: true,
     })
-    return () => window.removeEventListener("pointerdown", handler)
+    return () => window.removeEventListener("pointermove", handler)
   }, [])
 
   const handleItemEnter = useCallback(
@@ -152,20 +149,14 @@ export function NavMain() {
                         <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-200 ease-out group-hover/spec:grid-rows-[1fr]">
                           <div className="overflow-hidden">
                             <div className="flex justify-center gap-1 px-2 pt-0.5 pb-1.5 opacity-0 transition-opacity delay-75 duration-150 group-hover/spec:opacity-100">
-                              {(
-                                [
-                                  "2v2",
-                                  "3v3",
-                                  "shuffle",
-                                ] as const
-                              ).map((bracket) => (
+                              {BRACKETS.map((b) => (
                                 <Link
-                                  key={bracket}
-                                  href={`/pvp/${item.slug}/${subItem.title}/${bracket}`}
+                                  key={b.slug}
+                                  href={`/pvp/${item.slug}/${subItem.title}/${b.slug}`}
                                   className="class-pill rounded px-1.5 py-0.5 text-[10px] font-semibold"
                                   style={pillStyle}
                                 >
-                                  {bracket === "shuffle" ? "Solo" : bracket}
+                                  {b.label}
                                 </Link>
                               ))}
                             </div>
