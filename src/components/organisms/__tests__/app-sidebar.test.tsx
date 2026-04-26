@@ -3,6 +3,13 @@ import { describe, expect, it, vi } from "vitest"
 
 import { AppSidebar } from "../app-sidebar"
 
+vi.mock("next/navigation", () => ({
+  useRouter: vi.fn(() => ({
+    push: vi.fn(),
+  })),
+  usePathname: vi.fn(() => "/"),
+}))
+
 vi.mock("next/image", () => ({
   // eslint-disable-next-line next/no-img-element
   default: (props: any) => <img {...props} />,

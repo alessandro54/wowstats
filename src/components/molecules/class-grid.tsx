@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import Link from "next/link"
+import { TransitionLink as Link } from "@/components/atoms/transition-link"
 import { useState } from "react"
 import { useSetHoverSlug } from "@/components/providers/hover-provider"
 import { BRACKETS } from "@/config/wow/brackets-config"

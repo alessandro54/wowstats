@@ -1,7 +1,7 @@
 "use client"
 
 import { ChevronRight } from "lucide-react"
-import Link from "next/link"
+import { TransitionLink as Link } from "@/components/atoms/transition-link"
 import { BRACKETS } from "@/config/wow/brackets-config"
 
 interface BracketPanelsProps {

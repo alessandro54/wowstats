@@ -6,6 +6,9 @@ import { PvpSpecTopNav } from "../pvp-spec-top-nav"
 
 vi.mock("next/navigation", () => ({
   usePathname: vi.fn(() => "/pvp/warrior/arms"),
+  useRouter: vi.fn(() => ({
+    push: vi.fn(),
+  })),
 }))
 
 vi.mock("@/hooks/use-active-color", () => ({

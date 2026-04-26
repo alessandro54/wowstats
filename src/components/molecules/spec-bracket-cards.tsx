@@ -1,5 +1,7 @@
+"use client"
+
 import { ChevronRight } from "lucide-react"
-import Link from "next/link"
+import { TransitionLink as Link } from "@/components/atoms/transition-link"
 import type { BracketData } from "@/app/pvp/[classSlug]/[specSlug]/page"
 import { TIER_COLORS } from "@/config/app-config"
 

@@ -2,6 +2,13 @@ import { render, screen } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
 import { BracketPanels } from "../bracket-panels"
 
+vi.mock("next/navigation", () => ({
+  useRouter: vi.fn(() => ({
+    push: vi.fn(),
+  })),
+  usePathname: vi.fn(() => "/"),
+}))
+
 vi.mock("next/link", () => ({
   default: ({
     href,

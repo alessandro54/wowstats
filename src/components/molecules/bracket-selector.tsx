@@ -1,6 +1,6 @@
 "use client"
 
-import Link from "next/link"
+import { TransitionLink as Link } from "@/components/atoms/transition-link"
 import { usePathname } from "next/navigation"
 import { BRACKETS } from "@/config/wow/brackets-config"
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"

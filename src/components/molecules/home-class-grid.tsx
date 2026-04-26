@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import Link from "next/link"
+import { TransitionLink as Link } from "@/components/atoms/transition-link"
 import { useState, useEffect } from "react"
 import { useSetHoverSlug } from "@/components/providers/hover-provider"
 import type { WowClassConfig, WowClassSlug } from "@/config/wow/classes/classes-config"

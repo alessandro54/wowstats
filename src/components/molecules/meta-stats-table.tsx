@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import Link from "next/link"
+import { TransitionLink as Link } from "@/components/atoms/transition-link"
 import { useSetHoverSlug } from "@/components/providers/hover-provider"
 import {
   Table,
