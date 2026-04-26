@@ -4,9 +4,8 @@ import { SpecHero } from "@/components/molecules/spec-hero"
 import { SpecParticleFx } from "@/components/molecules/spec-particle-fx"
 import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
 
-export const dynamic = "force-static"
-
 export function generateStaticParams() {
+  if (process.env.NODE_ENV !== "production") return []
   const params: {
     classSlug: string
     specSlug: string

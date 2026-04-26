@@ -6,9 +6,8 @@ import { BRACKETS } from "@/config/wow/brackets-config"
 import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
 import { fetchClassDistribution, fetchStatPriority } from "@/lib/api"
 
-export const dynamic = "force-static"
-
 export function generateStaticParams() {
+  if (process.env.NODE_ENV !== "production") return []
   const params: {
     classSlug: string
     specSlug: string

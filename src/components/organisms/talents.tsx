@@ -31,22 +31,8 @@ export function Talents({ classSlug, talents, talentsMeta, hideStats }: Props) {
 
   if (safeTalents.length === 0) {
     return (
-      <div className="sm:overflow-x-auto">
-        <div className="flex flex-col items-stretch gap-6 sm:min-w-max sm:flex-row">
-          {(
-            [
-              "Class Talents",
-              "Spec Talents",
-            ] as const
-          ).map((label) => (
-            <div key={label} className="flex flex-1 flex-col">
-              <h2 className="mb-3 text-center text-lg font-semibold">{label}</h2>
-              <div className="rounded-xl border p-4">
-                <TalentTreeSkeleton />
-              </div>
-            </div>
-          ))}
-        </div>
+      <div className="flex items-center justify-center rounded-xl border border-border/30 bg-card/20 py-16">
+        <p className="text-sm text-muted-foreground">No talent data available for this bracket.</p>
       </div>
     )
   }
