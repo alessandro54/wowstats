@@ -6,6 +6,9 @@ import { NavMain } from "../nav-main"
 
 vi.mock("next/navigation", () => ({
   usePathname: vi.fn(() => "/pvp/warrior/arms/3v3"),
+  useRouter: vi.fn(() => ({
+    push: vi.fn(),
+  })),
 }))
 
 vi.mock("next/image", () => ({

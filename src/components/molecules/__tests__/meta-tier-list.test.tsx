@@ -4,6 +4,13 @@ import type { MetaStatsEntry } from "../meta-stats-table"
 import type { SpecBracketData } from "../meta-tier-list"
 import { MetaTierList } from "../meta-tier-list"
 
+vi.mock("next/navigation", () => ({
+  useRouter: vi.fn(() => ({
+    push: vi.fn(),
+  })),
+  usePathname: vi.fn(() => "/"),
+}))
+
 vi.mock("next/image", () => ({
   // eslint-disable-next-line next/no-img-element
   default: (props: any) => <img {...props} />,
