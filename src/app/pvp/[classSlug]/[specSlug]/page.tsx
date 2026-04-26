@@ -13,6 +13,22 @@ import { titleizeSlug } from "@/lib/utils"
 
 export const dynamic = "force-static"
 
+export function generateStaticParams() {
+  const params: {
+    classSlug: string
+    specSlug: string
+  }[] = []
+  for (const cls of WOW_CLASSES) {
+    for (const spec of cls.specs) {
+      params.push({
+        classSlug: cls.slug,
+        specSlug: spec.name,
+      })
+    }
+  }
+  return params
+}
+
 interface PageProps {
   params: Promise<{
     classSlug: string

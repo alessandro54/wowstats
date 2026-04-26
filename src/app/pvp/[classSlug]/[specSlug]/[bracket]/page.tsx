@@ -34,6 +34,26 @@ import {
 import { getLocale } from "@/lib/locale"
 import { titleizeSlug } from "@/lib/utils"
 
+export function generateStaticParams() {
+  const params: {
+    classSlug: string
+    specSlug: string
+    bracket: string
+  }[] = []
+  for (const cls of WOW_CLASSES) {
+    for (const spec of cls.specs) {
+      for (const bracket of BRACKETS) {
+        params.push({
+          classSlug: cls.slug,
+          specSlug: spec.name,
+          bracket: bracket.slug,
+        })
+      }
+    }
+  }
+  return params
+}
+
 function groupBy<T>(items: T[], key: (item: T) => string): Map<string, T[]> {
   const map = new Map<string, T[]>()
   for (const item of items) {
