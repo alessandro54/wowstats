@@ -4,6 +4,7 @@ import { Suspense } from "react"
 import type {
   MetaEnchant,
   MetaGem,
+  MetaItem,
   MetaStats,
   ItemsResponse,
   TalentsResponse,
@@ -235,7 +236,8 @@ async function EquipmentSection({
     ),
   ])
 
-  const itemGroups = sortedBySlotOrder(groupBy(itemsData.items, (i) => i.slot.toUpperCase()))
+  const rawItems = Array.isArray(itemsData) ? (itemsData as MetaItem[]) : (itemsData.items ?? [])
+  const itemGroups = sortedBySlotOrder(groupBy(rawItems, (i) => i.slot.toUpperCase()))
   const enchantGroups = sortedBySlotOrder(groupBy(enchants, (e) => e.slot.toUpperCase()))
   const gemGroups = sortedBySlotOrder(groupBy(gems, (g) => g.slot.toUpperCase()))
 

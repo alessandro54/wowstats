@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import Link from "next/link"
+import { TransitionLink as Link } from "@/components/atoms/transition-link"
 import * as React from "react"
 
 import { ThemeDropdown } from "@/components/atoms/theme-dropdown"

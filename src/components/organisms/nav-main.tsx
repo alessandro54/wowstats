@@ -2,7 +2,7 @@
 
 import { ChevronRight } from "lucide-react"
 import Image from "next/image"
-import Link from "next/link"
+import { TransitionLink as Link } from "@/components/atoms/transition-link"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { NavClassHoverCard } from "@/components/molecules/nav-class-hover-card"
 import { useSetHoverSlug } from "@/components/providers/hover-provider"
