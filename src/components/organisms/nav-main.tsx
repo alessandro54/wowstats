@@ -2,6 +2,7 @@
 
 import { ChevronRight } from "lucide-react"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 import { TransitionLink as Link } from "@/components/atoms/transition-link"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { NavClassHoverCard } from "@/components/molecules/nav-class-hover-card"
@@ -21,7 +22,14 @@ import {
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { navMain } from "@/config/wow/nav-config"
 
+const PREFETCH_BRACKETS = [
+  "3v3",
+  "2v2",
+  "shuffle",
+] as const
+
 export function NavMain() {
+  const router = useRouter()
   const setSlug = useSetHoverSlug()
   const [openSlug, setOpenSlug] = useState<WowClassSlug | null>(null)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -47,6 +55,12 @@ export function NavMain() {
         if (!prefetchedRef.current.has(item.slug)) {
           prefetchedRef.current.add(item.slug)
           item.items.forEach((spec) => {
+            // Prefetch RSC payloads from CDN — instant on click
+            router.prefetch(spec.url)
+            PREFETCH_BRACKETS.forEach((bracket) => {
+              router.prefetch(`${spec.url}/${bracket}`)
+            })
+            // Also warm Rails cache for cold ISR regeneration
             fetch(`/api/prefetch/items?spec_id=${spec.id}&bracket=3v3`, {
               priority: "low",
             }).catch(() => {})
@@ -58,6 +72,7 @@ export function NavMain() {
       }, 80)
     },
     [
+      router,
       setSlug,
     ],
   )
