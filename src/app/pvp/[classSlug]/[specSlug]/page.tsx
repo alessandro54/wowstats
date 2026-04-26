@@ -11,7 +11,6 @@ import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
 import { fetchClassDistribution } from "@/lib/api"
 import { titleizeSlug } from "@/lib/utils"
 
-export const dynamic = "force-static"
 export const revalidate = 21600
 
 export function generateStaticParams() {

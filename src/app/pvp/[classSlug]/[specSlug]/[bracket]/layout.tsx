@@ -1,3 +1,4 @@
+import { Suspense } from "react"
 import { notFound } from "next/navigation"
 import { SpecStatBar } from "@/components/molecules/spec-stat-bar"
 import { StatPriority } from "@/components/organisms/stat-priority"
@@ -5,6 +6,8 @@ import { apiBracket } from "@/config/app-config"
 import { BRACKETS } from "@/config/wow/brackets-config"
 import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
 import { fetchClassDistribution, fetchStatPriority } from "@/lib/api"
+
+export const revalidate = 21600
 
 export function generateStaticParams() {
   if (process.env.NODE_ENV !== "production") return []
@@ -57,20 +60,25 @@ function apiDistBracket(bracket: string): string {
   return bracket
 }
 
-export default async function PvpBracketLayout({ children, params }: Props) {
-  const { classSlug, specSlug, bracket } = await params
-
-  const cls = WOW_CLASSES.find((c) => c.slug === classSlug)
-  const spec = cls?.specs.find((s) => s.name === specSlug)
-  if (!cls || !spec) notFound()
-
-  const resolvedBracket = apiBracket(bracket, classSlug, specSlug)
-  const classColor = `var(--color-class-${classSlug})`
-
+async function StatBarSection({
+  classSlug,
+  specSlug,
+  resolvedBracket,
+  bracket,
+  classColor,
+  specId,
+}: {
+  classSlug: string
+  specSlug: string
+  resolvedBracket: string
+  bracket: string
+  classColor: string
+  specId: number
+}) {
   const [statPriority, distData] = await Promise.all([
-    fetchStatPriority(resolvedBracket, spec.id).catch(() => ({
+    fetchStatPriority(resolvedBracket, specId).catch(() => ({
       bracket: resolvedBracket,
-      spec_id: spec.id,
+      spec_id: specId,
       stats: [],
     })),
     fetchClassDistribution({
@@ -99,16 +107,44 @@ export default async function PvpBracketLayout({ children, params }: Props) {
   }
 
   return (
+    <SpecStatBar
+      winRate={bracketWr}
+      presence={bracketPresence}
+      playerCount={bracketPlayers}
+      classColor={classColor}
+    >
+      {statPriority.stats.length > 0 && <StatPriority stats={statPriority.stats} compact />}
+    </SpecStatBar>
+  )
+}
+
+export default async function PvpBracketLayout({ children, params }: Props) {
+  const { classSlug, specSlug, bracket } = await params
+
+  const cls = WOW_CLASSES.find((c) => c.slug === classSlug)
+  const spec = cls?.specs.find((s) => s.name === specSlug)
+  if (!cls || !spec) notFound()
+
+  const resolvedBracket = apiBracket(bracket, classSlug, specSlug)
+  const classColor = `var(--color-class-${classSlug})`
+
+  return (
     <>
       <div className="mx-auto max-w-6xl px-4 lg:px-6">
-        <SpecStatBar
-          winRate={bracketWr}
-          presence={bracketPresence}
-          playerCount={bracketPlayers}
-          classColor={classColor}
+        <Suspense
+          fallback={
+            <SpecStatBar winRate={0} presence={0} playerCount={0} classColor={classColor} />
+          }
         >
-          {statPriority.stats.length > 0 && <StatPriority stats={statPriority.stats} compact />}
-        </SpecStatBar>
+          <StatBarSection
+            classSlug={classSlug}
+            specSlug={specSlug}
+            resolvedBracket={resolvedBracket}
+            bracket={bracket}
+            classColor={classColor}
+            specId={spec.id}
+          />
+        </Suspense>
       </div>
       {children}
     </>
