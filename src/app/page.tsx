@@ -13,7 +13,7 @@ import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
 import { fetchClassDistribution } from "@/lib/api"
 
-export const dynamic = "force-dynamic"
+export const dynamic = "force-static"
 
 const BRACKETS = [
   {

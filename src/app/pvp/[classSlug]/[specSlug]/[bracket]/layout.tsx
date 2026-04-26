@@ -2,8 +2,31 @@ import { notFound } from "next/navigation"
 import { SpecStatBar } from "@/components/molecules/spec-stat-bar"
 import { StatPriority } from "@/components/organisms/stat-priority"
 import { apiBracket } from "@/config/app-config"
+import { BRACKETS } from "@/config/wow/brackets-config"
 import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
 import { fetchClassDistribution, fetchStatPriority } from "@/lib/api"
+
+export const dynamic = "force-static"
+
+export function generateStaticParams() {
+  const params: {
+    classSlug: string
+    specSlug: string
+    bracket: string
+  }[] = []
+  for (const cls of WOW_CLASSES) {
+    for (const spec of cls.specs) {
+      for (const bracket of BRACKETS) {
+        params.push({
+          classSlug: cls.slug,
+          specSlug: spec.name,
+          bracket: bracket.slug,
+        })
+      }
+    }
+  }
+  return params
+}
 
 interface Props {
   children: React.ReactNode

@@ -23,14 +23,38 @@ import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
 import type { ClassDistributionResponse } from "@/lib/api"
 import { fetchClassDistribution } from "@/lib/api"
 
-type Bracket = "2v2" | "3v3" | "rbg" | "shuffle-overall" | "blitz-overall"
+const META_ROLES = [
+  "dps",
+  "healer",
+  "tank",
+] as const
 
-const ALL_BRACKETS = [
+const META_BRACKETS = [
   "2v2",
   "3v3",
   "shuffle-overall",
   "blitz-overall",
-]
+] as const
+
+export function generateStaticParams() {
+  const params: {
+    bracket: string
+    role: string
+  }[] = []
+  for (const bracket of META_BRACKETS) {
+    for (const role of META_ROLES) {
+      params.push({
+        bracket,
+        role,
+      })
+    }
+  }
+  return params
+}
+
+type Bracket = "2v2" | "3v3" | "rbg" | "shuffle-overall" | "blitz-overall"
+
+const ALL_BRACKETS = META_BRACKETS
 const REGIONS: Region[] = [
   "all",
   "us",

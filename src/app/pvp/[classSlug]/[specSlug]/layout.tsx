@@ -4,6 +4,24 @@ import { SpecHero } from "@/components/molecules/spec-hero"
 import { SpecParticleFx } from "@/components/molecules/spec-particle-fx"
 import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
 
+export const dynamic = "force-static"
+
+export function generateStaticParams() {
+  const params: {
+    classSlug: string
+    specSlug: string
+  }[] = []
+  for (const cls of WOW_CLASSES) {
+    for (const spec of cls.specs) {
+      params.push({
+        classSlug: cls.slug,
+        specSlug: spec.name,
+      })
+    }
+  }
+  return params
+}
+
 interface Props {
   children: React.ReactNode
   params: Promise<{
