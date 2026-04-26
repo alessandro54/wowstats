@@ -108,9 +108,7 @@ const pvpTalents = [
 describe("talents", () => {
   it("returns null for empty talents", () => {
     const { container } = render(<Talents classSlug="warrior" talents={[]} />)
-    // Component renders a skeleton state with Class/Spec headings when talents array is empty
-    expect(container.textContent).toContain("Class Talents")
-    expect(container.textContent).toContain("Spec Talents")
+    expect(container.textContent).toContain("No talent data available for this bracket.")
   })
 
   it("renders all four talent sections", () => {
