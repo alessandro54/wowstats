@@ -23,7 +23,6 @@ function makeItem(
     usage_count: Math.round(pct * 10),
     usage_pct: pct,
     prev_usage_pct: null,
-    snapshot_at: "2026-03-03T00:00:00Z",
     crafted,
     top_crafting_stats: crafted
       ? [

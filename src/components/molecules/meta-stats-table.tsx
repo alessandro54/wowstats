@@ -35,6 +35,7 @@ export interface MetaStatsEntry {
   color: string
   iconUrl?: string
   specUrl: string
+  rankChange?: number | null
 }
 
 type SortKey = "rank" | "score" | "rating" | "winrate" | "presence" | "confidence"
@@ -77,6 +78,15 @@ function confidenceLevel(bK: number): {
     dots: 1,
     label: "Low",
   }
+}
+
+function RankTrend({ change }: { change: number | null | undefined }) {
+  if (change == null) return null
+  if (change > 0)
+    return <span className="ml-0.5 text-[9px] font-bold text-emerald-400">▲{change}</span>
+  if (change < 0)
+    return <span className="ml-0.5 text-[9px] font-bold text-red-400">▼{Math.abs(change)}</span>
+  return <span className="ml-0.5 text-[9px] text-muted-foreground">—</span>
 }
 
 function scoreHeatBg(tier: Tier): string {
@@ -176,7 +186,10 @@ export function MetaStatsTable({
               onMouseLeave={() => setHoverSlug(defaultClassSlug ?? null)}
             >
               <TableCell className="text-center font-mono text-xs text-muted-foreground">
-                {index + 1}
+                <span className="inline-flex items-baseline gap-0">
+                  {index + 1}
+                  <RankTrend change={entry.rankChange} />
+                </span>
               </TableCell>
 
               <TableCell className="truncate">

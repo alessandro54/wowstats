@@ -100,6 +100,7 @@ function transformToEntries(data: ClassDistributionResponse, bracket: string): M
       color: classConfig ? `var(--color-class-${classSlug})` : "#888",
       iconUrl: specConfig?.iconUrl,
       specUrl: `/pvp/${classSlug}/${row.spec}/${bracket}`,
+      rankChange: row.rank_change ?? null,
     }
   })
 }

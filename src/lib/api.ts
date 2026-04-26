@@ -16,9 +16,15 @@ export interface MetaItem {
   usage_pct: number
   prev_usage_pct: number | null
   trend?: Trend
-  snapshot_at: string
   crafted: boolean
   top_crafting_stats: string[]
+}
+
+export interface ItemsResponse {
+  meta: {
+    snapshot_at: string | null
+  }
+  items: MetaItem[]
 }
 
 export interface MetaEnchant {
@@ -85,7 +91,11 @@ async function apiFetch<T>(
   return json as T
 }
 
-export function fetchItems(bracket: string, specId: number, locale?: string): Promise<MetaItem[]> {
+export function fetchItems(
+  bracket: string,
+  specId: number,
+  locale?: string,
+): Promise<ItemsResponse> {
   return apiFetch(
     "/api/v1/pvp/meta/items",
     {
@@ -149,7 +159,6 @@ export interface MetaTalent {
     id: number
     blizzard_id: number
     name: string
-    description: string | null
     talent_type: string
     spell_id: number | null
     node_id: number | null
@@ -165,7 +174,11 @@ export interface MetaTalent {
   in_top_build: boolean
   top_build_rank: number
   tier: "bis" | "situational" | "common"
-  snapshot_at: string | null
+}
+
+export interface TalentTooltipData {
+  id: number
+  description: string | null
 }
 
 export interface TalentsMeta {
@@ -326,6 +339,7 @@ export interface ClassDistributionSpec {
   raw_winrate: number
   wr_hat: number
   score: number
+  rank_change: number | null
 }
 
 export interface ClassDistributionResponse {

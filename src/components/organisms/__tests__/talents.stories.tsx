@@ -21,7 +21,6 @@ function makeTalent(
       id,
       blizzard_id: 70000 + id,
       name,
-      description: `${name} — ${talentType} talent.`,
       talent_type: talentType,
       spell_id: null,
       node_id: id,
@@ -40,7 +39,6 @@ function makeTalent(
       | "bis"
       | "situational"
       | "common",
-    snapshot_at: "2026-03-03T00:00:00Z",
   }
 }
 

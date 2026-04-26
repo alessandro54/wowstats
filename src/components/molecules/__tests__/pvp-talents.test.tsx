@@ -25,7 +25,6 @@ function makeTalent(id: number, name: string, pct: number): MetaTalent {
       id,
       blizzard_id: id + 5000,
       name,
-      description: `${name} description`,
       talent_type: "pvp",
       spell_id: null,
       node_id: id,
@@ -41,7 +40,6 @@ function makeTalent(id: number, name: string, pct: number): MetaTalent {
     in_top_build: pct > 50,
     top_build_rank: 1,
     tier: pct > 50 ? ("bis" as const) : pct > 15 ? ("situational" as const) : ("common" as const),
-    snapshot_at: null,
   }
 }
 

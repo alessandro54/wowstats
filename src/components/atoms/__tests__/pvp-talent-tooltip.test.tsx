@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react"
+import { render, waitFor } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
 import type { MetaTalent } from "@/lib/api"
 import { PvpTalentTooltip } from "../pvp-talent-tooltip"
@@ -11,7 +11,6 @@ vi.mock("next/image", () => ({
 function makeTalent(
   overrides: Partial<{
     name: string
-    description: string | null
     icon_url: string | null
     pct: number
   }> = {},
@@ -22,7 +21,6 @@ function makeTalent(
       id: 1,
       blizzard_id: 5001,
       name: overrides.name ?? "War Banner",
-      description: overrides.description !== undefined ? overrides.description : "Places a banner",
       talent_type: "pvp",
       spell_id: null,
       node_id: 1,
@@ -39,7 +37,6 @@ function makeTalent(
     in_top_build: true,
     top_build_rank: 1,
     tier: "bis",
-    snapshot_at: null,
   }
 }
 
@@ -49,9 +46,16 @@ describe("pvpTalentTooltip", () => {
     expect(container.textContent).toContain("War Banner")
   })
 
-  it("renders talent description", () => {
+  it("lazy-loads and renders description from API", async () => {
+    global.fetch = vi.fn().mockResolvedValue({
+      json: () =>
+        Promise.resolve({
+          id: 1,
+          description: "Places a banner",
+        }),
+    } as any)
     const { container } = render(<PvpTalentTooltip talent={makeTalent()} activeColor="#c79c6e" />)
-    expect(container.textContent).toContain("Places a banner")
+    await waitFor(() => expect(container.textContent).toContain("Places a banner"))
   })
 
   it("renders usage percentage", () => {
@@ -83,15 +87,9 @@ describe("pvpTalentTooltip", () => {
     expect(container.querySelector("img")).toBeNull()
   })
 
-  it("hides description when null", () => {
-    const { container } = render(
-      <PvpTalentTooltip
-        talent={makeTalent({
-          description: null,
-        })}
-        activeColor="#c79c6e"
-      />,
-    )
+  it("shows no description before API responds", () => {
+    global.fetch = vi.fn().mockReturnValue(new Promise(() => {}))
+    const { container } = render(<PvpTalentTooltip talent={makeTalent()} activeColor="#c79c6e" />)
     expect(container.textContent).not.toContain("Places a banner")
   })
 

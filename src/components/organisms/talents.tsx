@@ -84,63 +84,51 @@ export function Talents({ classSlug, talents, talentsMeta, hideStats }: Props) {
             : "Partial data"}
         </Badge>
       )}
-      {/* ── 2K+ single row: hero + class + spec ─────────────── */}
+      {/* ── 2K+: hero at top, class + spec below ────────────── */}
       {allInOneRow && (
-        <div className="hidden min-[1800px]:flex min-[1800px]:items-start min-[1800px]:justify-center min-[1800px]:gap-8">
-          {classEntries && (
-            <div className="flex flex-col">
-              <h2 className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground mb-1 text-center">
-                {TYPE_LABELS.class}
-              </h2>
-              <TalentCard classSlug={classSlug} className="flex flex-col overflow-x-auto">
-                {renderTree(classEntries)}
-              </TalentCard>
-            </div>
-          )}
+        <div className="hidden min-[1800px]:flex min-[1800px]:flex-col min-[1800px]:items-center min-[1800px]:gap-8">
           {heroEntries && (
-            <div className="flex flex-col">
+            <div className="flex flex-col items-center">
               <h2 className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground mb-1 text-center">
                 {TYPE_LABELS.hero}
               </h2>
-              <HeroSection
-                heroEntries={heroEntries}
-                activeColor={activeColor}
-                classSlug={classSlug}
-                hideStats={hideStats}
-              />
+              <div className="relative inline-flex flex-col items-center md:block">
+                <HeroSection
+                  heroEntries={heroEntries}
+                  activeColor={activeColor}
+                  classSlug={classSlug}
+                  hideStats={hideStats}
+                />
+                {pvpEntries && (
+                  <div className="mt-6 md:absolute md:top-1/2 md:z-20 md:mt-0 md:left-[calc(100%+50px)] md:-translate-y-1/2">
+                    <PvpTalents
+                      talents={pvpEntries}
+                      activeColor={activeColor}
+                      classSlug={classSlug}
+                      hideStats={hideStats}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
           )}
-          {specEntries && (
-            <div className="flex flex-col">
-              <h2 className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground mb-1 text-center">
-                {TYPE_LABELS.spec}
-              </h2>
-              <TalentCard classSlug={classSlug} className="flex flex-col overflow-x-auto">
-                {renderTree(specEntries, true)}
-              </TalentCard>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* ── Below 2K: class + spec row ──────────────────────── */}
-      {(classEntries?.length || specEntries?.length) && (
-        <div
-          className={allInOneRow ? "min-[1800px]:hidden sm:overflow-x-auto" : "sm:overflow-x-auto"}
-        >
-          <div className="flex flex-col items-stretch gap-6 sm:min-w-max sm:flex-row">
+          <div className="flex items-start justify-center gap-8">
             {classEntries && (
-              <div className="flex flex-1 flex-col">
-                <h2 className="mb-3 text-center text-lg font-semibold">{TYPE_LABELS.class}</h2>
-                <TalentCard classSlug={classSlug} className="flex flex-1 flex-col overflow-x-auto">
+              <div className="flex flex-col">
+                <h2 className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground mb-1 text-center">
+                  {TYPE_LABELS.class}
+                </h2>
+                <TalentCard classSlug={classSlug} className="flex flex-col overflow-x-auto">
                   {renderTree(classEntries)}
                 </TalentCard>
               </div>
             )}
             {specEntries && (
-              <div className="flex flex-1 flex-col">
-                <h2 className="mb-3 text-center text-lg font-semibold">{TYPE_LABELS.spec}</h2>
-                <TalentCard classSlug={classSlug} className="flex flex-1 flex-col overflow-x-auto">
+              <div className="flex flex-col">
+                <h2 className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground mb-1 text-center">
+                  {TYPE_LABELS.spec}
+                </h2>
+                <TalentCard classSlug={classSlug} className="flex flex-col overflow-x-auto">
                   {renderTree(specEntries, true)}
                 </TalentCard>
               </div>
@@ -149,7 +137,7 @@ export function Talents({ classSlug, talents, talentsMeta, hideStats }: Props) {
         </div>
       )}
 
-      {/* ── Below 2K: hero centered + pvp floating ──────────── */}
+      {/* ── Below 2K: hero centered at top ──────────────────── */}
       {(heroEntries || pvpEntries) && (
         <div
           className={
@@ -175,6 +163,32 @@ export function Talents({ classSlug, talents, talentsMeta, hideStats }: Props) {
                   classSlug={classSlug}
                   hideStats={hideStats}
                 />
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ── Below 2K: class + spec row below hero ────────────── */}
+      {(classEntries?.length || specEntries?.length) && (
+        <div
+          className={allInOneRow ? "min-[1800px]:hidden sm:overflow-x-auto" : "sm:overflow-x-auto"}
+        >
+          <div className="flex flex-col items-stretch gap-6 sm:min-w-max sm:flex-row">
+            {classEntries && (
+              <div className="flex flex-1 flex-col">
+                <h2 className="mb-3 text-center text-lg font-semibold">{TYPE_LABELS.class}</h2>
+                <TalentCard classSlug={classSlug} className="flex flex-1 flex-col overflow-x-auto">
+                  {renderTree(classEntries)}
+                </TalentCard>
+              </div>
+            )}
+            {specEntries && (
+              <div className="flex flex-1 flex-col">
+                <h2 className="mb-3 text-center text-lg font-semibold">{TYPE_LABELS.spec}</h2>
+                <TalentCard classSlug={classSlug} className="flex flex-1 flex-col overflow-x-auto">
+                  {renderTree(specEntries, true)}
+                </TalentCard>
               </div>
             )}
           </div>

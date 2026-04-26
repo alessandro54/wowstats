@@ -19,7 +19,6 @@ function makeTalent(
       id,
       blizzard_id: 80000 + id,
       name,
-      description: `${name} — a powerful hero talent.`,
       talent_type: "hero",
       spell_id: null,
       node_id: opts.nodeId ?? id,
@@ -38,7 +37,6 @@ function makeTalent(
       | "bis"
       | "situational"
       | "common",
-    snapshot_at: "2026-03-03T00:00:00Z",
   }
 }
 

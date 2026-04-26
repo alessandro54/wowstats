@@ -4,8 +4,8 @@ import { Suspense } from "react"
 import type {
   MetaEnchant,
   MetaGem,
-  MetaItem,
   MetaStats,
+  ItemsResponse,
   TalentsResponse,
   TopPlayersResponse,
 } from "@/lib/api"
@@ -216,8 +216,15 @@ async function EquipmentSection({
   bracketLabel?: string
 }) {
   const locale = await getLocale()
-  const [items, enchants, gems, statsData] = await Promise.all([
-    fetchItems(resolvedBracket, specId, locale).catch((): MetaItem[] => []),
+  const [itemsData, enchants, gems, statsData] = await Promise.all([
+    fetchItems(resolvedBracket, specId, locale).catch(
+      (): ItemsResponse => ({
+        meta: {
+          snapshot_at: null,
+        },
+        items: [],
+      }),
+    ),
     fetchEnchants(resolvedBracket, specId, locale).catch((): MetaEnchant[] => []),
     fetchGems(resolvedBracket, specId, locale).catch((): MetaGem[] => []),
     fetchStats(resolvedBracket, specId, locale).catch(
@@ -228,7 +235,7 @@ async function EquipmentSection({
     ),
   ])
 
-  const itemGroups = sortedBySlotOrder(groupBy(items, (i) => i.slot.toUpperCase()))
+  const itemGroups = sortedBySlotOrder(groupBy(itemsData.items, (i) => i.slot.toUpperCase()))
   const enchantGroups = sortedBySlotOrder(groupBy(enchants, (e) => e.slot.toUpperCase()))
   const gemGroups = sortedBySlotOrder(groupBy(gems, (g) => g.slot.toUpperCase()))
 
@@ -300,21 +307,33 @@ function TopPlayersSkeleton() {
 
 function TalentsSkeleton() {
   return (
-    <div className="sm:overflow-x-auto">
-      <div className="flex flex-col items-stretch gap-6 sm:min-w-max sm:flex-row">
-        {(
-          [
-            "Class Talents",
-            "Spec Talents",
-          ] as const
-        ).map((label) => (
-          <div key={label} className="flex flex-1 flex-col">
-            <Skeleton className="mx-auto mb-3 h-5 w-28" />
-            <div className="rounded-xl border p-4">
-              <TalentTreeSkeleton />
-            </div>
+    <div className="space-y-8">
+      {/* Hero at top */}
+      <div className="flex justify-center">
+        <div className="flex flex-col items-center">
+          <Skeleton className="mx-auto mb-3 h-4 w-24" />
+          <div className="rounded-xl border p-4">
+            <TalentTreeSkeleton cols={5} rows={8} />
           </div>
-        ))}
+        </div>
+      </div>
+      {/* Class + Spec below */}
+      <div className="sm:overflow-x-auto">
+        <div className="flex flex-col items-stretch gap-6 sm:min-w-max sm:flex-row">
+          {(
+            [
+              "Class Talents",
+              "Spec Talents",
+            ] as const
+          ).map((label) => (
+            <div key={label} className="flex flex-1 flex-col">
+              <Skeleton className="mx-auto mb-3 h-5 w-28" />
+              <div className="rounded-xl border p-4">
+                <TalentTreeSkeleton />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )

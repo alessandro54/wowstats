@@ -16,7 +16,6 @@ function makeTalent(
       id: 1,
       blizzard_id: 5001,
       name,
-      description: desc,
       talent_type: "pvp",
       spell_id: null,
       node_id: 1,
@@ -32,7 +31,6 @@ function makeTalent(
     in_top_build: true,
     top_build_rank: 1,
     tier: "bis",
-    snapshot_at: null,
   }
 }
 
