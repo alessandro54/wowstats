@@ -7,6 +7,7 @@ vi.mock("next/navigation", () => ({
   usePathname: vi.fn(() => "/pvp/warrior/arms/3v3"),
   useRouter: vi.fn(() => ({
     push: vi.fn(),
+    prefetch: vi.fn(),
   })),
 }))
 

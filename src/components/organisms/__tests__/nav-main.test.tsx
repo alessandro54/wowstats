@@ -156,7 +156,7 @@ describe("navMain", () => {
       isMobile: false,
     } as any)
     const { getAllByTestId, container } = render(<NavMain />)
-    fireEvent.pointerDown(container, {
+    fireEvent.pointerMove(container, {
       pointerType: "mouse",
     })
     const hoverCards = getAllByTestId("hover-card")

@@ -1,7 +1,8 @@
 "use client"
 
 import { TransitionLink as Link } from "@/components/atoms/transition-link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
+import { useEffect } from "react"
 import { BRACKETS } from "@/config/wow/brackets-config"
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { useActiveColor } from "@/hooks/use-active-color"
@@ -12,9 +13,23 @@ interface Props {
 }
 
 export function BracketSelector({ classSlug, specSlug }: Props) {
+  const router = useRouter()
   const activeColor = useActiveColor(classSlug)
   const pathname = usePathname()
   const currentBracket = pathname.split("/")[4] ?? ""
+
+  useEffect(() => {
+    BRACKETS.forEach((b) => {
+      if (b.slug !== currentBracket) {
+        router.prefetch(`/pvp/${classSlug}/${specSlug}/${b.slug}`)
+      }
+    })
+  }, [
+    router,
+    classSlug,
+    specSlug,
+    currentBracket,
+  ])
 
   return (
     <div className="flex gap-1">
