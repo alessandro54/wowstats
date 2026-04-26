@@ -42,7 +42,7 @@ export default withSentryConfig(nextConfig, {
 
   org: "wow-bis",
 
-  project: "wow-bis-web-production",
+  project: "wowstats-web",
 
   // Only print logs for uploading source maps in CI
   silent: !process.env.CI,

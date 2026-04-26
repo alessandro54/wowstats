@@ -12,8 +12,10 @@ import { fetchClassDistribution } from "@/lib/api"
 import { titleizeSlug } from "@/lib/utils"
 
 export const dynamic = "force-static"
+export const revalidate = 21600
 
 export function generateStaticParams() {
+  if (process.env.NODE_ENV !== "production") return []
   const params: {
     classSlug: string
     specSlug: string

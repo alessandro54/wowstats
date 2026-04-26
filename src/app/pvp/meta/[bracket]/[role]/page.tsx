@@ -4,6 +4,7 @@ import type { MetaStatsEntry } from "@/components/molecules/meta-stats-table"
 import type { MetaDataset, Region, Role } from "@/components/organisms/meta-stats-dashboard"
 
 export const dynamic = "force-static"
+export const revalidate = 21600
 
 import { BracketDropdown } from "@/components/molecules/bracket-dropdown"
 import { MetaStatsSkeleton } from "@/components/molecules/meta-stats-skeleton"
@@ -37,6 +38,7 @@ const META_BRACKETS = [
 ] as const
 
 export function generateStaticParams() {
+  if (process.env.NODE_ENV !== "production") return []
   const params: {
     bracket: string
     role: string

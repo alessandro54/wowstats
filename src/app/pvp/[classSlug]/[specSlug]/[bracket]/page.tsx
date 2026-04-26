@@ -12,6 +12,7 @@ import type {
 } from "@/lib/api"
 
 export const dynamic = "force-static"
+export const revalidate = 21600
 
 import { Equipment } from "@/components/organisms/equipment"
 import { TalentTreeSkeleton } from "@/components/organisms/talent-tree"
@@ -35,6 +36,7 @@ import { getLocale } from "@/lib/locale"
 import { titleizeSlug } from "@/lib/utils"
 
 export function generateStaticParams() {
+  if (process.env.NODE_ENV !== "production") return []
   const params: {
     classSlug: string
     specSlug: string
