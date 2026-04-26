@@ -11,7 +11,6 @@ import type {
   TopPlayersResponse,
 } from "@/lib/api"
 
-export const dynamic = "force-static"
 export const revalidate = 21600
 
 import { Equipment } from "@/components/organisms/equipment"
@@ -32,7 +31,7 @@ import {
   fetchTalents,
   fetchTopPlayers,
 } from "@/lib/api"
-import { getLocale } from "@/lib/locale"
+import { DEFAULT_LOCALE } from "@/lib/locale"
 import { titleizeSlug } from "@/lib/utils"
 
 export function generateStaticParams() {
@@ -161,7 +160,7 @@ async function TopPlayersSection({
   specId: number
   classSlug: WowClassSlug
 }) {
-  const locale = await getLocale()
+  const locale = DEFAULT_LOCALE
   const topAll = await fetchTopPlayers(resolvedBracket, specId, undefined, locale).catch(
     (): TopPlayersResponse => ({
       bracket: resolvedBracket,
@@ -195,7 +194,7 @@ async function TalentsSection({
   specId: number
   classSlug: WowClassSlug
 }) {
-  const locale = await getLocale()
+  const locale = DEFAULT_LOCALE
   const talentsResponse = await fetchTalents(resolvedBracket, specId, locale).catch(
     (): TalentsResponse => ({
       meta: {
@@ -238,7 +237,7 @@ async function EquipmentSection({
   wowClassName?: string
   bracketLabel?: string
 }) {
-  const locale = await getLocale()
+  const locale = DEFAULT_LOCALE
   const [itemsData, enchants, gems, statsData] = await Promise.all([
     fetchItems(resolvedBracket, specId, locale).catch(
       (): ItemsResponse => ({
