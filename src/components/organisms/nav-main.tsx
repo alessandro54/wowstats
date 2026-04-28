@@ -52,11 +52,12 @@ export function NavMain() {
         if (!prefetchedRef.current.has(item.slug)) {
           prefetchedRef.current.add(item.slug)
           item.items.forEach((spec) => {
-            // Prefetch RSC payloads from CDN — instant on click
-            router.prefetch(spec.url)
-            PREFETCH_BRACKETS.forEach((bracket) => {
-              router.prefetch(`${spec.url}/${bracket}`)
-            })
+            if (process.env.NODE_ENV !== "development") {
+              router.prefetch(spec.url)
+              PREFETCH_BRACKETS.forEach((bracket) => {
+                router.prefetch(`${spec.url}/${bracket}`)
+              })
+            }
             // Also warm Rails cache for cold ISR regeneration
             fetch(`/api/prefetch/items?spec_id=${spec.id}&bracket=3v3`, {
               priority: "low",
@@ -101,7 +102,8 @@ export function NavMain() {
               }
             }}
             className="group/collapsible"
-            onMouseEnter={() => handleItemEnter(item)} // item ref is stable (navMain is a module-level const)
+            onMouseEnter={() => handleItemEnter(item)}
+            onTouchStart={() => handleItemEnter(item)}
           >
             <SidebarMenuItem>
               {sidebarOpen || !isMouse ? (

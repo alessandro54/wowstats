@@ -28,44 +28,47 @@ export function DistributionTooltip({
 }) {
   const alternatives = entries.slice(1)
   const enchantAlternatives = enchantEntries?.slice(1)
+  const hasLeftCol = alternatives.length > 0 || (craftingStats && craftingStats.length > 0)
   const hasRightCol =
     (enchantAlternatives && enchantAlternatives.length > 0) || (gemEntries && gemEntries.length > 0)
 
   return (
-    <div className={hasRightCol ? "flex gap-6" : "min-w-56 space-y-3"}>
-      <div className="min-w-52 space-y-3">
-        {alternatives.length > 0 && (
-          <>
-            <p className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
-              Alternatives
-            </p>
-            <DistList entries={alternatives} />
-          </>
-        )}
-        {craftingStats && craftingStats.length > 0 && (
-          <div className="border-border/50 flex flex-wrap items-center gap-1.5 border-t pt-2">
-            <span className="text-muted-foreground text-[10px] tracking-wider uppercase">
-              Crafted — top stats:
-            </span>
-            {craftingStats.map((stat) => {
-              const { label, color } = getStatMeta(stat)
-              return (
-                <span
-                  key={stat}
-                  className="text-[11px] font-semibold"
-                  style={{
-                    color: color ?? "inherit",
-                  }}
-                >
-                  {label}
-                </span>
-              )
-            })}
-          </div>
-        )}
-      </div>
+    <div className={hasLeftCol && hasRightCol ? "flex gap-6" : "min-w-56 space-y-3"}>
+      {hasLeftCol && (
+        <div className="min-w-52 space-y-3">
+          {alternatives.length > 0 && (
+            <>
+              <p className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
+                Alternatives
+              </p>
+              <DistList entries={alternatives} />
+            </>
+          )}
+          {craftingStats && craftingStats.length > 0 && (
+            <div className="border-border/50 flex flex-wrap items-center gap-1.5 border-t pt-2">
+              <span className="text-muted-foreground text-[10px] tracking-wider uppercase">
+                Crafted — top stats:
+              </span>
+              {craftingStats.map((stat) => {
+                const { label, color } = getStatMeta(stat)
+                return (
+                  <span
+                    key={stat}
+                    className="text-[11px] font-semibold"
+                    style={{
+                      color: color ?? "inherit",
+                    }}
+                  >
+                    {label}
+                  </span>
+                )
+              })}
+            </div>
+          )}
+        </div>
+      )}
       {hasRightCol && (
-        <div className="border-border/50 min-w-48 space-y-3 border-l pl-6">
+        <div className={`min-w-48 space-y-3${hasLeftCol ? " border-border/50 border-l pl-6" : ""}`}>
           {enchantAlternatives && enchantAlternatives.length > 0 && (
             <>
               <p className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
