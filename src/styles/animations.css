@@ -1,30 +1,16 @@
 /* ─── View Transitions API ───────────────────────────────────────────────── */
-@keyframes vt-out {
+::view-transition-old(root) {
+  animation: 150ms ease-in both fade-out;
+}
+
+::view-transition-new(root) {
+  animation: 200ms ease-out both fade-in;
+}
+
+@keyframes fade-out {
   to {
     opacity: 0;
-    transform: translateY(-6px);
   }
-}
-
-@keyframes vt-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-}
-
-/* Suppress full-page transition — only main-content animates */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none;
-}
-
-::view-transition-old(main-content) {
-  animation: 120ms ease-in vt-out both;
-}
-
-::view-transition-new(main-content) {
-  animation: 200ms ease-out vt-in both;
 }
 
 /* ─── Page transition ────────────────────────────────────────────────────── */

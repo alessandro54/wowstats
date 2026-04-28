@@ -19,6 +19,7 @@ export function BracketSelector({ classSlug, specSlug }: Props) {
   const currentBracket = pathname.split("/")[4] ?? ""
 
   useEffect(() => {
+    if (process.env.NODE_ENV === "development") return
     BRACKETS.forEach((b) => {
       if (b.slug !== currentBracket) {
         router.prefetch(`/pvp/${classSlug}/${specSlug}/${b.slug}`)

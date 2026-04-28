@@ -137,14 +137,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               <SidebarInset className="h-dvh overflow-y-auto overflow-x-hidden">
                 <TopNavProvider>
                   <TopNav />
-                  <div
-                    className="flex-1 w-full pb-45"
-                    style={{
-                      viewTransitionName: "main-content",
-                    }}
-                  >
-                    {children}
-                  </div>
+                  <div className="flex-1 w-full pb-45">{children}</div>
                   <AppFooter />
                 </TopNavProvider>
               </SidebarInset>
