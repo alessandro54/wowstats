@@ -17,5 +17,8 @@ export function proxyImage(url: string, width: number): string {
 
 export function iconUrl(url: string | null | undefined, size = 56): string | undefined {
   if (!url) return undefined
+  // External URLs (e.g. render.worldofwarcraft.com) load fine in the browser directly.
+  // Cloudflare Image Transforms gets 403 fetching from Blizzard's CDN, so skip proxying.
+  if (url.startsWith("http://") || url.startsWith("https://")) return url
   return proxyImage(url, size)
 }
