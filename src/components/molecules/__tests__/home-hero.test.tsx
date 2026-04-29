@@ -15,18 +15,6 @@ vi.mock("next/link", () => ({
   ),
 }))
 
-const mockSpec = {
-  specName: "subtlety",
-  className: "rogue",
-  bracket: "3v3",
-  wrHat: 0.604,
-  presence: 0.113,
-  iconUrl: "/icons/sub.png",
-  color: "var(--color-class-rogue)",
-  specUrl: "/pvp/rogue/subtlety/3v3",
-  tier: "s+",
-}
-
 describe("HomeHero", () => {
   it("renders season number and total entries", () => {
     render(<HomeHero seasonId={41} totalEntries={38534} />)

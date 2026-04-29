@@ -3,6 +3,7 @@
 import Image from "next/image"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import type { MetaTalent } from "@/lib/api"
+import { iconUrl } from "@/config/cdn-config"
 
 export function TalentList({
   talents,
@@ -24,7 +25,7 @@ export function TalentList({
             <Tooltip>
               <TooltipTrigger asChild>
                 <Image
-                  src={record.talent.icon_url}
+                  src={iconUrl(record.talent.icon_url, 24)!}
                   alt={record.talent.name}
                   width={24}
                   height={24}

@@ -2,6 +2,7 @@ import Image from "next/image"
 import type { DistEntry } from "@/components/molecules/distribution-tooltip"
 import { QUALITY_COLORS } from "@/config/equipment-config"
 import { TrendArrow } from "@/components/atoms/trend-arrow"
+import { iconUrl } from "@/config/cdn-config"
 
 export function DistList({ entries }: { entries: DistEntry[] }) {
   return (
@@ -10,7 +11,7 @@ export function DistList({ entries }: { entries: DistEntry[] }) {
         <div key={`${e.name}-${i}`} className="flex items-center gap-1.5">
           {e.icon_url && (
             <Image
-              src={e.icon_url}
+              src={iconUrl(e.icon_url, 20)!}
               width={20}
               height={20}
               className="shrink-0 rounded opacity-90"

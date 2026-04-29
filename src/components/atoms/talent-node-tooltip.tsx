@@ -4,6 +4,7 @@ import Image from "next/image"
 import { useEffect, useState } from "react"
 import type { RankBar } from "@/lib/utils/talent-node-utils"
 import type { TalentNode } from "@/lib/utils/talent-tree"
+import { iconUrl } from "@/config/cdn-config"
 import { Skeleton } from "@/components/ui/skeleton"
 
 interface Props {
@@ -52,7 +53,7 @@ export function TalentNodeTooltip({
         <div className="flex items-center gap-2">
           {node.primary.talent.icon_url && (
             <Image
-              src={node.primary.talent.icon_url}
+              src={iconUrl(node.primary.talent.icon_url, 50)!}
               width={50}
               height={50}
               className="shrink-0 rounded-full"
@@ -128,7 +129,7 @@ export function TalentNodeTooltip({
             <div key={t.talent.id} className="flex items-center gap-2">
               {t.talent.icon_url && (
                 <Image
-                  src={t.talent.icon_url}
+                  src={iconUrl(t.talent.icon_url, 16)!}
                   width={16}
                   height={16}
                   className="shrink-0 rounded opacity-80"

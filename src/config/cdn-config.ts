@@ -14,3 +14,8 @@ export function proxyImage(url: string, width: number): string {
   const w = width * 2
   return `${CDN_BASE}/cdn-cgi/image/width=${w},format=auto,quality=85/${url}`
 }
+
+export function iconUrl(url: string | null | undefined, size = 56): string | undefined {
+  if (!url) return undefined
+  return proxyImage(url, size)
+}
