@@ -35,8 +35,6 @@ interface Props {
 export function HomeTopSpecsList({ specs }: Props) {
   if (specs.length === 0) return null
 
-  const maxWr = specs[0].wrHat
-
   return (
     <div className="space-y-3">
       <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">

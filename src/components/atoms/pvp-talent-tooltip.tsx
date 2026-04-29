@@ -3,6 +3,7 @@
 import Image from "next/image"
 import { useEffect, useState } from "react"
 import type { MetaTalent } from "@/lib/api"
+import { iconUrl } from "@/config/cdn-config"
 import { Skeleton } from "@/components/ui/skeleton"
 
 interface Props {
@@ -33,7 +34,7 @@ export function PvpTalentTooltip({ talent, activeColor }: Props) {
       <div className="flex items-center gap-2">
         {talent.talent.icon_url && (
           <Image
-            src={talent.talent.icon_url}
+            src={iconUrl(talent.talent.icon_url, 50)!}
             width={50}
             height={50}
             className="shrink-0 rounded-full"

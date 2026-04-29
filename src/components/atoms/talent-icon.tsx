@@ -4,6 +4,7 @@ import Image from "next/image"
 import type * as React from "react"
 import { ClickableTooltip } from "@/components/atoms/clickable-tooltip"
 import type { MetaTalent } from "@/lib/api"
+import { iconUrl } from "@/config/cdn-config"
 import { cn } from "@/lib/utils"
 
 export function TalentIcon({
@@ -59,7 +60,7 @@ export function TalentIcon({
       <div className={cn("absolute inset-0 overflow-hidden", radius)}>
         {talent.talent.icon_url ? (
           <Image
-            src={talent.talent.icon_url}
+            src={iconUrl(talent.talent.icon_url, size)!}
             alt={talent.talent.name || "Talent Icon"}
             width={size}
             height={size}

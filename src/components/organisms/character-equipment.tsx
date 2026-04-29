@@ -1,5 +1,6 @@
 import { formatSlot, QUALITY_COLORS, SLOT_ORDER } from "@/config/equipment-config"
 import type { CharacterEquipmentItem } from "@/lib/api"
+import { iconUrl } from "@/config/cdn-config"
 
 interface Props {
   items: CharacterEquipmentItem[]
@@ -58,7 +59,7 @@ export function CharacterEquipment({ items }: Props) {
               {item.icon_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
-                  src={item.icon_url}
+                  src={iconUrl(item.icon_url, 32)}
                   alt=""
                   width={32}
                   height={32}

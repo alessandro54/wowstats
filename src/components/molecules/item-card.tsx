@@ -4,6 +4,7 @@ import type { DistEntry } from "@/components/molecules/distribution-tooltip"
 import { DistributionTooltip } from "@/components/molecules/distribution-tooltip"
 import { formatSlot, isReshiiWraps, QUALITY_COLORS } from "@/config/equipment-config"
 import type { MetaEnchant, MetaGem, MetaItem } from "@/lib/api"
+import { iconUrl } from "@/config/cdn-config"
 
 export interface EnchantGroup {
   slot: string
@@ -82,7 +83,7 @@ export function ItemCard({
             {primary.item.icon_url && (
               <span className="icon-vignette shrink-0 rounded">
                 <Image
-                  src={primary.item.icon_url}
+                  src={iconUrl(primary.item.icon_url, 28)!}
                   alt={primary.item.name}
                   width={28}
                   height={28}

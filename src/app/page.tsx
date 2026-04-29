@@ -223,7 +223,7 @@ async function HomeContent() {
       <div className="animate-stream-in relative z-[2] flex min-h-[calc(100dvh-3.75rem)] items-center px-4 py-12 lg:px-6">
         <div className="mx-auto w-full max-w-5xl">
           <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-center lg:gap-16">
-            <HomeHero seasonId={seasonId} totalEntries={totalEntries} topSpecs={topHeroSpecs} />
+            <HomeHero seasonId={seasonId} totalEntries={totalEntries} />
             <HomeTopSpecsList specs={topSpecsList} />
           </div>
         </div>
