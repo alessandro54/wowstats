@@ -63,8 +63,8 @@ describe("CharacterEquipment", () => {
     const images = container.querySelectorAll("img")
     expect(images.length).toBeGreaterThan(0)
     const srcs = Array.from(images).map((img) => img.getAttribute("src"))
-    expect(srcs).toContain("/icon-head.jpg")
-    expect(srcs).toContain("/icon-chest.jpg")
+    expect(srcs.some((s) => s?.includes("/icon-head.jpg"))).toBe(true)
+    expect(srcs.some((s) => s?.includes("/icon-chest.jpg"))).toBe(true)
   })
 
   it("renders a placeholder div when icon_url is null", () => {

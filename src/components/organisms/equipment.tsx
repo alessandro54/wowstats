@@ -14,7 +14,6 @@ import {
   QUALITY_COLORS,
 } from "@/config/equipment-config"
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
-import { iconUrl } from "@/config/cdn-config"
 import { useActiveColor } from "@/hooks/use-active-color"
 import type { MetaEnchant, MetaGem, MetaItem, MetaStats } from "@/lib/api"
 
@@ -162,12 +161,11 @@ function SlotCard({
         {primary.item.icon_url && (
           <span className="icon-vignette shrink-0 rounded">
             <Image
-              src={iconUrl(primary.item.icon_url, 36)!}
+              src={primary.item.icon_url}
               alt={primary.item.name}
               width={36}
               height={36}
               className="block rounded"
-              unoptimized
             />
           </span>
         )}
@@ -466,12 +464,11 @@ export function Equipment({
                         <div className="flex items-center gap-2">
                           {pvpGem.item.icon_url && (
                             <Image
-                              src={iconUrl(pvpGem.item.icon_url, 28)!}
+                              src={pvpGem.item.icon_url}
                               alt={pvpGem.item.name}
                               width={28}
                               height={28}
                               className="shrink-0 rounded"
-                              unoptimized
                             />
                           )}
                           <div>
@@ -505,12 +502,11 @@ export function Equipment({
                     >
                       {pvpGem.item.icon_url && (
                         <Image
-                          src={iconUrl(pvpGem.item.icon_url, 24)!}
+                          src={pvpGem.item.icon_url}
                           alt={pvpGem.item.name}
                           width={24}
                           height={24}
                           className="shrink-0 rounded"
-                          unoptimized
                         />
                       )}
                       <p className="truncate text-xs font-medium text-foreground">
@@ -530,12 +526,11 @@ export function Equipment({
                   <div className="flex items-center gap-2">
                     {topGem.item.icon_url && (
                       <Image
-                        src={iconUrl(topGem.item.icon_url, 24)!}
+                        src={topGem.item.icon_url}
                         alt={topGem.item.name}
                         width={24}
                         height={24}
                         className="shrink-0 rounded"
-                        unoptimized
                       />
                     )}
                     <div className="min-w-0">
