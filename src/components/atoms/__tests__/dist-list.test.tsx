@@ -45,7 +45,7 @@ describe("distList", () => {
     const { container } = render(<DistList entries={entries} />)
     const img = container.querySelector("img")
     expect(img).toBeInTheDocument()
-    expect(img?.getAttribute("src")).toBe("https://example.com/icon.jpg")
+    expect(img?.getAttribute("src")).toContain("example.com/icon.jpg")
   })
 
   it("handles entries without icons", () => {

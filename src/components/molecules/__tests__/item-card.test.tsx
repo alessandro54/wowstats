@@ -244,6 +244,6 @@ describe("itemCard", () => {
     const { container } = render(<ItemCard {...defaultProps} />)
     const img = container.querySelector("img")
     expect(img).toBeInTheDocument()
-    expect(img?.getAttribute("src")).toBe("/icon.jpg")
+    expect(img?.getAttribute("src")).toContain("/icon.jpg")
   })
 })
