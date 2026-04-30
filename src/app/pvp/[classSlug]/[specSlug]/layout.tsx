@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
-import { PvpSpecTopNav } from "@/components/molecules/pvp-spec-top-nav"
-import { SpecHero } from "@/components/molecules/spec-hero"
+import { PvpSpecTopNav } from "@/features/spec/components/pvp-spec-top-nav"
+import { SpecHero } from "@/features/spec/components/spec-hero"
 import { SpecParticleFx } from "@/components/molecules/spec-particle-fx"
 import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
 

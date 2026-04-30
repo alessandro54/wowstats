@@ -24,6 +24,11 @@ interface Props {
   hideStats?: boolean
 }
 
+/**
+ * Top-level talent display orchestrator. Splits talents into class tree, spec
+ * tree, hero trees, and PvP talents. Used by both character profile and spec
+ * meta pages — `hideStats` toggles meta-stats columns for character page.
+ */
 export function Talents({ classSlug, talents, talentsMeta, hideStats }: Props) {
   const activeColor = useActiveColor(classSlug)
 

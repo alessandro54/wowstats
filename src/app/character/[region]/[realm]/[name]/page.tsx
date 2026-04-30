@@ -4,9 +4,9 @@ import { notFound } from "next/navigation"
 
 export const dynamic = "force-dynamic"
 
-import { CharacterEquipment } from "@/components/organisms/character-equipment"
+import { CharacterEquipment } from "@/features/character/components/character-equipment"
 import { Talents } from "@/components/organisms/talents"
-import { CharacterHero } from "@/components/molecules/character-hero"
+import { CharacterHero } from "@/features/character/components/character-hero"
 import { SpecParticleFx } from "@/components/molecules/spec-particle-fx"
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { WOW_CLASSES } from "@/config/wow/classes/classes-config"

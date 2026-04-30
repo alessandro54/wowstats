@@ -13,10 +13,10 @@ import type {
 
 export const revalidate = 21600
 
-import { Equipment } from "@/components/organisms/equipment"
+import { Equipment } from "@/features/spec/components/equipment"
 import { TalentTreeSkeleton } from "@/components/organisms/talent-tree"
 import { Talents } from "@/components/organisms/talents"
-import { TopPlayers } from "@/components/organisms/top-players"
+import { TopPlayers } from "@/features/spec/components/top-players"
 import { Skeleton } from "@/components/ui/skeleton"
 import { apiBracket } from "@/config/app-config"
 import { SLOT_ORDER } from "@/config/equipment-config"

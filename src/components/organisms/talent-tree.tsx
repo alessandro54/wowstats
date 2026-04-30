@@ -79,6 +79,14 @@ export function TalentTreeSkeleton({ cols = 7, rows = 10 }: { cols?: number; row
   )
 }
 
+/**
+ * Renders a class or spec talent tree as positioned nodes with edges.
+ * Layout uses fixed CELL_SIZE grid (lib/utils/talent-tree.ts).
+ *
+ * Hero trees use `apexExtra` to render an additional apex node row.
+ * `onlyChoicePct` and `fullOpacity` are character-page modes that disable
+ * meta stat shading.
+ */
 export function TalentTree({
   talents,
   activeColor,

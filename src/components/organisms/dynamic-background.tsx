@@ -1,7 +1,7 @@
 "use client"
 
 import { usePathname } from "next/navigation"
-import { HomeBgCanvas } from "@/components/molecules/home-bg-canvas"
+import { HomeBgCanvas } from "@/features/home/components/home-bg-canvas"
 import { useHoverSlug } from "@/components/providers/hover-provider"
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { bracketColor } from "@/config/wow/brackets-config"

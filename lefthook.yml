@@ -10,3 +10,11 @@ pre-commit:
       glob: "*.{ts,tsx,mjs}"
       run: pnpm oxlint --fix {staged_files}
       stage_fixed: true
+
+    component-size:
+      glob: "src/{components,features}/**/*.tsx"
+      run: bash scripts/check-component-size.sh {staged_files}
+
+    test-exists:
+      glob: "src/{components,features}/**/*.tsx"
+      run: bash scripts/check-test-exists.sh {staged_files}
