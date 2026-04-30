@@ -1,10 +1,10 @@
 /* ─── View Transitions API ───────────────────────────────────────────────── */
 ::view-transition-old(root) {
-  animation: 150ms ease-in both fade-out;
+  animation: 220ms ease-in both fade-out;
 }
 
 ::view-transition-new(root) {
-  animation: 200ms ease-out both fade-in;
+  animation: 300ms ease-out both fade-in;
 }
 
 @keyframes fade-out {

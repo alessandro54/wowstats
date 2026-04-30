@@ -1,8 +1,16 @@
 "use client"
 
 import { usePathname } from "next/navigation"
+import { HomeBgCanvas } from "@/components/molecules/home-bg-canvas"
 import { useHoverSlug } from "@/components/providers/hover-provider"
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
+
+const BRACKET_COLORS: Record<string, string> = {
+  "2v2": "#7ec8e3",
+  "3v3": "#c8a84b",
+  "shuffle-overall": "#7b68ee",
+  "blitz-overall": "#ff6b35",
+}
 
 export default function DynamicBackground() {
   const hoverSlug = useHoverSlug()
@@ -20,28 +28,26 @@ export default function DynamicBackground() {
   const activeSlug = hoverSlug ?? classSlug
   const background = activeSlug ? `var(--color-class-${activeSlug})` : "oklch(0.7 0.15 340)"
 
-  // Spec pages handle their own atmosphere via layout; home has its own canvas
+  // bracket slug sits at segments[2] for /pvp/meta/[bracket]/[role]
+  const bracketSlug = isMetaPage ? segments[2] : null
+  const bracketColor = bracketSlug ? BRACKET_COLORS[bracketSlug] : undefined
+
+  // Home has its own canvas; spec pages have their own atmosphere
   if (isHome || isSpecPage) return null
 
+  if (isMetaPage) {
+    // Hover overrides bracket color for live class tinting
+    const bgColor = activeSlug ? `var(--color-class-${activeSlug})` : bracketColor
+    return <HomeBgCanvas color={bgColor} />
+  }
+
   return (
-    <>
-      <div
-        className="animate-blob animation-delay-6000 pointer-events-none fixed -top-[40vw] left-1/2 h-[50vw] w-[90vw] -translate-x-1/2 overflow-hidden rounded-full opacity-15 blur-3xl filter transition-all duration-700 ease-in-out"
-        style={{
-          zIndex: -1,
-          background,
-        }}
-      />
-      {isSpecPage && (
-        <div
-          className={`pointer-events-none fixed inset-x-0 bottom-0 h-96 transition-all duration-700 spec-${classSlug}-${specSlug}`}
-          style={{
-            zIndex: -1,
-            backgroundImage:
-              "linear-gradient(to top, oklch(from var(--spec-color) l c h / 0.18), transparent)",
-          }}
-        />
-      )}
-    </>
+    <div
+      className="animate-blob animation-delay-6000 pointer-events-none fixed -top-[40vw] left-1/2 h-[50vw] w-[90vw] -translate-x-1/2 overflow-hidden rounded-full opacity-15 blur-3xl filter transition-all duration-700 ease-in-out"
+      style={{
+        zIndex: -1,
+        background,
+      }}
+    />
   )
 }

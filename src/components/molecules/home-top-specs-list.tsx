@@ -61,12 +61,12 @@ export function HomeTopSpecsList({ specs }: Props) {
                   alt={spec.specName}
                   width={40}
                   height={40}
-                  className="shrink-0 self-stretch rounded-lg object-cover"
+                  className="size-10 shrink-0 rounded-lg object-cover"
                   unoptimized
                 />
               ) : (
                 <div
-                  className="w-10 shrink-0 self-stretch rounded-lg bg-muted/30"
+                  className="size-10 shrink-0 rounded-lg bg-muted/30"
                   style={{
                     border: `1px solid ${spec.color}50`,
                   }}

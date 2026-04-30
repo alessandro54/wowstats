@@ -39,10 +39,10 @@ describe("shaders", () => {
 
 describe("home-bg constants", () => {
   it("exports numeric constants", () => {
-    expect(PARTICLE_COUNT).toBe(220)
+    expect(PARTICLE_COUNT).toBe(130)
     expect(SPREAD_X).toBe(230)
     expect(SPREAD_Y).toBe(130)
-    expect(FRAME_INTERVAL).toBeCloseTo(1000 / 30)
+    expect(FRAME_INTERVAL).toBeCloseTo(1000 / 25)
   })
 
   it("exports ember palette with 6 RGB triplets", () => {

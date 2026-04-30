@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { forwardRef, startTransition } from "react"
+import { forwardRef } from "react"
 import type { ComponentPropsWithoutRef } from "react"
 
 type Props = ComponentPropsWithoutRef<typeof Link>
@@ -21,12 +21,12 @@ export const TransitionLink = forwardRef<HTMLAnchorElement, Props>(function Tran
     const url = href.toString()
 
     if (!("startViewTransition" in document)) {
-      startTransition(() => router.push(url))
+      router.push(url)
       return
     }
 
     document.startViewTransition(() => {
-      startTransition(() => router.push(url))
+      router.push(url)
     })
   }
 

@@ -60,7 +60,7 @@ describe("distributionTooltip", () => {
       />,
     )
 
-    expect(container.textContent).toContain("Enchant alternatives")
+    expect(container.textContent).toContain("Enchants")
     expect(container.textContent).toContain("Enchant 2")
     expect(container.textContent).not.toContain("Enchant 1")
   })
@@ -103,7 +103,8 @@ describe("distributionTooltip", () => {
       <DistributionTooltip entries={singleEntry} activeColor="#C69B6D" />,
     )
 
-    expect(container.textContent).not.toContain("Only Item")
+    expect(container.textContent).toContain("Only Item")
+    expect(container.textContent).toContain("Currently equipped")
     expect(container.textContent).not.toContain("Alternatives")
   })
 
@@ -190,6 +191,6 @@ describe("distributionTooltip", () => {
     )
 
     expect(container.textContent).toContain("Alt Item")
-    expect(container.textContent).not.toContain("Iconic Item")
+    expect(container.textContent).toContain("Iconic Item")
   })
 })

@@ -1,8 +1,9 @@
 "use client"
 
+import React from "react"
 import Image from "next/image"
 import { TransitionLink as Link } from "@/components/atoms/transition-link"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useSetHoverSlug } from "@/components/providers/hover-provider"
 import type { WowClassConfig, WowClassSlug } from "@/config/wow/classes/classes-config"
 import { titleizeSlug } from "@/lib/utils"
@@ -79,7 +80,7 @@ export function HomeClassGrid({ classes }: Props) {
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") handleToggle(cls.slug as WowClassSlug)
           }}
-          className={`group flex h-28 w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 transition-all sm:h-36 sm:gap-3 ${
+          className={`group flex h-28 w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 transition-all md:h-36 md:gap-3 ${
             hasActive && !isActive ? "opacity-40 scale-[0.97]" : ""
           }`}
           style={{
@@ -92,10 +93,10 @@ export function HomeClassGrid({ classes }: Props) {
             alt={cls.name}
             width={80}
             height={80}
-            className="size-14 rounded-xl opacity-70 transition-opacity group-hover:opacity-100 sm:size-20"
+            className="size-14 rounded-xl opacity-70 transition-opacity group-hover:opacity-100 md:size-20"
           />
           <span
-            className="text-xs font-semibold transition-colors sm:text-sm"
+            className="text-xs font-semibold transition-colors md:text-sm"
             style={{
               color,
             }}
@@ -104,10 +105,10 @@ export function HomeClassGrid({ classes }: Props) {
           </span>
         </div>
 
-        {/* Desktop dropdown — absolute below card */}
+        {/* Desktop dropdown — absolute below card, clamped to viewport */}
         {isActive && (
-          <div className="absolute left-1/2 top-full z-30 hidden -translate-x-1/2 pt-1 sm:block">
-            <SpecDropdown cls={cls} color={color} />
+          <div className="absolute left-1/2 top-full z-30 hidden -translate-x-1/2 pt-1 md:block">
+            <ClampedSpecDropdown cls={cls} color={color} />
           </div>
         )}
       </div>
@@ -125,44 +126,95 @@ export function HomeClassGrid({ classes }: Props) {
         </p>
         <div className="ml-2 h-px flex-1 bg-gradient-to-r from-border to-transparent" />
       </div>
-      {/* Mobile: 4 rows of 3 centered, last row centered separately */}
-      <div className="flex flex-col items-center gap-2 sm:hidden">
-        <div className="grid w-full grid-cols-3 gap-2">{classes.slice(0, 12).map(renderCard)}</div>
-        <div
-          className="grid grid-cols-1 gap-2"
-          style={{
-            width: "calc(33.333% - 0.333rem)",
-          }}
-        >
-          {classes.slice(12).map(renderCard)}
-        </div>
+      {/* Mobile: rows of 3, dropdown injected inline after active row */}
+      <div className="flex flex-col gap-2 md:hidden">
+        {[
+          0,
+          1,
+          2,
+          3,
+        ].map((rowIdx) => {
+          const row = classes.slice(rowIdx * 3, rowIdx * 3 + 3)
+          if (row.length === 0) return null
+          const rowHasActive = activeClass ? row.some((c) => c.slug === activeClass.slug) : false
+          return (
+            <React.Fragment key={rowIdx}>
+              <div className="grid grid-cols-3 gap-2">{row.map(renderCard)}</div>
+              {rowHasActive && activeClass && (
+                <div className="animate-in fade-in slide-in-from-top-1 duration-150">
+                  <SpecDropdown
+                    cls={activeClass}
+                    color={`var(--color-class-${activeClass.slug})`}
+                  />
+                </div>
+              )}
+            </React.Fragment>
+          )
+        })}
+        {/* 13th class (Warrior) centered */}
+        {classes.slice(12).length > 0 &&
+          (() => {
+            const tail = classes.slice(12)
+            const tailHasActive = activeClass
+              ? tail.some((c) => c.slug === activeClass.slug)
+              : false
+            return (
+              <>
+                <div
+                  className="mx-auto grid grid-cols-1 gap-2"
+                  style={{
+                    width: "calc(33.333% - 0.333rem)",
+                  }}
+                >
+                  {tail.map(renderCard)}
+                </div>
+                {tailHasActive && activeClass && (
+                  <div className="animate-in fade-in slide-in-from-top-1 duration-150">
+                    <SpecDropdown
+                      cls={activeClass}
+                      color={`var(--color-class-${activeClass.slug})`}
+                    />
+                  </div>
+                )}
+              </>
+            )
+          })()}
       </div>
-      <div className="hidden flex-col items-center gap-3 sm:flex">
+      <div className="hidden flex-col items-center gap-3 md:flex">
         <div className="grid w-full grid-cols-7 gap-3">{firstRow.map(renderCard)}</div>
         <div className="grid w-full max-w-[85.7%] grid-cols-6 gap-3">
           {secondRow.map(renderCard)}
         </div>
       </div>
+    </div>
+  )
+}
 
-      {/* Mobile dropdown — fixed to bottom of viewport */}
-      {activeClass && (
-        <div className="fixed inset-x-0 bottom-0 z-50 p-3 sm:hidden">
-          <div
-            className="mx-auto max-w-sm animate-in fade-in slide-in-from-bottom-2 duration-200"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <SpecDropdown cls={activeClass} color={`var(--color-class-${activeClass.slug})`} />
-          </div>
-          {/* Backdrop */}
-          <div
-            className="fixed inset-0 -z-10 bg-black/40"
-            onClick={() => {
-              setActiveSlug(null)
-              setHoverSlug(null)
-            }}
-          />
-        </div>
-      )}
+function ClampedSpecDropdown({ cls, color }: { cls: WowClassConfig; color: string }) {
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    el.style.transform = ""
+    const rect = el.getBoundingClientRect()
+    const vw = window.innerWidth
+    const pad = 8
+    // Account for sidebar which sits at left edge of viewport
+    const sidebarEl = document.querySelector("[data-sidebar=sidebar]") as HTMLElement | null
+    const sidebarWidth = sidebarEl ? sidebarEl.getBoundingClientRect().right : 0
+    const leftBound = sidebarWidth + pad
+    let dx = 0
+    if (rect.right > vw - pad) dx = -(rect.right - vw + pad)
+    if (rect.left < leftBound) dx = leftBound - rect.left
+    if (dx !== 0) el.style.transform = `translateX(${dx}px)`
+  }, [
+    cls.slug,
+  ])
+
+  return (
+    <div ref={ref}>
+      <SpecDropdown cls={cls} color={color} />
     </div>
   )
 }

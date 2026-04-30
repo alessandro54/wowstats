@@ -233,7 +233,7 @@ function DashboardInner({ datasets, allBrackets, bracket, initialRole, initialRe
         mostReliable={dataset.mostReliable}
       />
 
-      <div className="rounded-lg border border-border bg-card/80">
+      <div className="rounded-lg border border-border/30 bg-card/20 backdrop-blur-sm dark:bg-black/40">
         <div className="flex items-center justify-between border-b border-border px-4 py-3">
           <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
             Spec Rankings
@@ -245,7 +245,7 @@ function DashboardInner({ datasets, allBrackets, bracket, initialRole, initialRe
         </div>
         <div>
           {/* Tier list + insights side by side */}
-          <div className="grid grid-cols-1 gap-4 p-4 xl:grid-cols-[1fr_280px]">
+          <div className="grid grid-cols-1 gap-4 p-4 lg:grid-cols-[1fr_280px]">
             <MetaTierList
               entries={dataset.entries}
               bracketComparison={bracketComparison}

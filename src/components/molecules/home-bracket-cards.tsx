@@ -53,7 +53,11 @@ export function HomeBracketCards({ brackets }: Props) {
             <Link
               key={b.bracket}
               href={b.href}
-              className="group relative flex flex-col gap-1.5 overflow-hidden rounded-xl border border-black/10 bg-black/[0.04] px-5 py-3.5 transition-all hover:border-black/15 hover:bg-black/[0.07] dark:border-white/[0.05] dark:bg-white/[0.02] dark:hover:border-white/[0.1] dark:hover:bg-white/[0.05]"
+              className="group relative flex flex-col gap-1.5 overflow-hidden rounded-xl border px-5 py-3.5 transition-all"
+              style={{
+                borderColor: `color-mix(in oklch, ${accentColor} 20%, transparent)`,
+                background: `color-mix(in oklch, ${accentColor} 5%, transparent)`,
+              }}
             >
               {/* Top accent line */}
               <div

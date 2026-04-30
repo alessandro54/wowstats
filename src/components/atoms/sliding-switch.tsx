@@ -1,7 +1,7 @@
 "use client"
 
 import { usePathname } from "next/navigation"
-import { useEffect, useRef, useState } from "react"
+import { useLayoutEffect, useRef, useState } from "react"
 import { useHoverSlug } from "@/components/providers/hover-provider"
 import { cn } from "@/lib/utils"
 
@@ -35,22 +35,26 @@ export function SlidingSwitch<T extends string>({
     : "var(--primary)"
 
   const containerRef = useRef<HTMLDivElement>(null)
+  const firstRender = useRef(true)
   const [indicatorStyle, setIndicatorStyle] = useState<React.CSSProperties>({
     opacity: 0,
   })
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!containerRef.current) return
     const activeIndex = options.findIndex((o) => o.value === value)
     if (activeIndex === -1) return
     // +1 to skip the indicator div itself
     const button = containerRef.current.children[activeIndex + 1] as HTMLElement
     if (!button) return
+    const isFirst = firstRender.current
+    firstRender.current = false
     setIndicatorStyle({
       width: button.offsetWidth,
       height: button.offsetHeight,
       transform: `translateX(${button.offsetLeft - 2}px)`,
       opacity: 1,
+      transition: isFirst ? "none" : undefined,
     })
   }, [
     value,

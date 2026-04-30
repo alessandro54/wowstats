@@ -3,6 +3,7 @@ uniform float uT;
 uniform vec2 uRes;
 uniform vec2 uMouse;
 uniform float uDark;
+uniform vec3 uColor;
 varying vec2 vUv;
 
 vec2 hash2(vec2 p) {
@@ -42,12 +43,14 @@ void main() {
   float f = fbm(uv + 3.0 * r);
   f = f * 0.5 + 0.5;
 
-  vec3 dCol = mix(vec3(0.02, 0.005, 0.005), vec3(0.45, 0.07, 0.01), clamp(f * 2.0, 0.0, 1.0));
-  dCol = mix(dCol, vec3(0.75, 0.22, 0.03), clamp(f * f * 3.5, 0.0, 1.0));
+  vec3 dCol = mix(uColor * 0.08, uColor * 0.6, clamp(f * 2.0, 0.0, 1.0));
+  dCol = mix(dCol, uColor, clamp(f * f * 3.5, 0.0, 1.0));
   dCol *= 0.35;
 
   vec3 lCol = mix(vec3(0.98, 0.96, 0.94), vec3(0.94, 0.91, 0.87), clamp(f * 2.0, 0.0, 1.0));
   lCol = mix(lCol, vec3(0.90, 0.84, 0.76), clamp(f * f * 2.0, 0.0, 1.0));
+  // Tint with class/bracket color — stronger in high-noise areas
+  lCol = mix(lCol, uColor, clamp(f * f * 0.5, 0.0, 0.18));
 
   vec3 col = mix(lCol, dCol, uDark);
 

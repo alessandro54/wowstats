@@ -205,12 +205,6 @@ export default async function SpecIndexPage({ params }: PageProps) {
         playerCount={totalPlayers}
         classColor={classColor}
       />
-      <section>
-        <p className="mb-4 text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
-          Choose Bracket
-        </p>
-        <SpecBracketCards brackets={bracketData} classSlug={classSlug} />
-      </section>
 
       <section>
         <p className="mb-4 text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
@@ -220,6 +214,13 @@ export default async function SpecIndexPage({ params }: PageProps) {
           <SpecWinRateChart brackets={bracketData} />
           <SpecDistributionChart brackets={bracketData} />
         </div>
+      </section>
+
+      <section>
+        <p className="mb-4 text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
+          Choose Bracket
+        </p>
+        <SpecBracketCards brackets={bracketData} classSlug={classSlug} />
       </section>
 
       <section>

@@ -5,7 +5,7 @@ import { useSidebar } from "@/components/ui/sidebar"
 import { NavMain } from "../nav-main"
 
 vi.mock("next/navigation", () => ({
-  usePathname: vi.fn(() => "/pvp/warrior/arms/3v3"),
+  usePathname: vi.fn(() => "/"),
   useRouter: vi.fn(() => ({
     push: vi.fn(),
     prefetch: vi.fn(),
@@ -28,6 +28,11 @@ vi.mock("next/link", () => ({
 
 vi.mock("@/components/providers/hover-provider", () => ({
   useSetHoverSlug: vi.fn(() => vi.fn()),
+  useHoverSlug: vi.fn(() => null),
+}))
+
+vi.mock("@/hooks/use-active-color", () => ({
+  useActiveColor: vi.fn(() => "var(--color-primary)"),
 }))
 
 vi.mock("@/components/ui/sidebar", () => ({
@@ -75,8 +80,10 @@ vi.mock("@/components/molecules/nav-class-hover-card", () => ({
 
 describe("navMain", () => {
   it("renders the Guides label", () => {
-    const { getByTestId } = render(<NavMain />)
-    expect(getByTestId("sidebar-group-label").textContent).toBe("Guides")
+    const { getAllByTestId } = render(<NavMain />)
+    const labels = getAllByTestId("sidebar-group-label").map((el) => el.textContent)
+    expect(labels).toContain("Class Guides")
+    expect(labels).toContain("PvP Meta Guides")
   })
 
   it("renders all WoW classes as collapsible items", () => {
@@ -121,8 +128,9 @@ describe("navMain", () => {
       vi.advanceTimersByTime(80)
     })
 
-    // Leave the menu
-    fireEvent.mouseLeave(getByTestId("sidebar-menu"))
+    // Leave the class guides menu (last sidebar-menu — first is PvP Meta)
+    const menus = getAllByTestId("sidebar-menu")
+    fireEvent.mouseLeave(menus[menus.length - 1])
 
     const openItem = getAllByTestId("collapsible").find((el) => el.dataset.open === "true")
     expect(openItem).toBeUndefined()
@@ -185,7 +193,7 @@ describe("navMain", () => {
     vi.useFakeTimers()
     const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response())
 
-    const { getAllByTestId, getByTestId } = render(<NavMain />)
+    const { getAllByTestId } = render(<NavMain />)
     const first = getAllByTestId("collapsible")[0]
 
     // First hover
@@ -195,8 +203,9 @@ describe("navMain", () => {
     })
     const callCount = fetchSpy.mock.calls.length
 
-    // Leave and re-hover
-    fireEvent.mouseLeave(getByTestId("sidebar-menu"))
+    // Leave and re-hover (target class guides menu — last sidebar-menu)
+    const menus = getAllByTestId("sidebar-menu")
+    fireEvent.mouseLeave(menus[menus.length - 1])
     fireEvent.mouseEnter(first)
     act(() => {
       vi.advanceTimersByTime(80)

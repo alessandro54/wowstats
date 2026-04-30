@@ -99,8 +99,8 @@ function SlotCard({
 
   const borderClass =
     side === "left"
-      ? "border-t-2 lg:border-t-0 lg:border-l-2"
-      : "border-t-2 lg:border-t-0 lg:border-r-2"
+      ? "border-t-2 md:border-t-0 md:border-l-2"
+      : "border-t-2 md:border-t-0 md:border-r-2"
 
   const primary = entries[0]
   const isCrafted = primary.crafted
@@ -382,220 +382,225 @@ export function Equipment({
         </div>
 
         {/* Paper-doll 3-column layout */}
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_auto_1fr]">
-          {/* Left column */}
-          <div className="flex flex-col gap-2">
-            {LEFT_SLOTS.map((slot) => renderSlot(slot, "left"))}
-          </div>
-
-          {/* Center card */}
-          <div className="hidden lg:flex">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-[1fr_auto_1fr]">
+          {/* Center card — first in DOM so it's at top on sm/md/lg */}
+          {/* On xl: explicit placement to column 2 */}
+          <div className="flex justify-center md:col-span-2 xl:col-start-2 xl:col-span-1 xl:row-start-1">
             <div
-              className="flex w-56 flex-col items-center gap-5 rounded-xl border border-border/40 px-6 py-8 backdrop-blur-sm"
+              className="w-full rounded-xl border border-border/40 px-6 py-8 backdrop-blur-sm xl:w-72"
               style={{
                 background: `linear-gradient(-45deg, color-mix(in oklch, var(--color-class-${classSlug}) 8%, transparent), transparent 60%)`,
               }}
             >
-              {/* Spec icon with class-color ring */}
-              {specIconUrl && (
-                <div
-                  className="rounded-full p-1"
-                  style={{
-                    boxShadow: `0 0 0 3px ${activeColor}40`,
-                    background: `${activeColor}18`,
-                  }}
-                >
-                  <Image
-                    src={specIconUrl}
-                    alt={specName ?? ""}
-                    width={64}
-                    height={64}
-                    className="rounded-full"
-                  />
-                </div>
-              )}
-
-              {/* Spec / class / bracket */}
-              {specName && wowClassName && (
-                <div className="text-center leading-tight">
-                  <p
-                    className="text-sm font-bold uppercase tracking-wider"
-                    style={{
-                      color: activeColor,
-                    }}
-                  >
-                    {specName}
-                  </p>
-                  <p className="text-sm font-bold text-foreground">{wowClassName}</p>
-                  {bracketLabel && (
-                    <p className="mt-0.5 text-[10px] text-muted-foreground">{bracketLabel} · PvP</p>
+              {/* Mobile: 3-col grid. Desktop: vertical stack */}
+              <div className="grid grid-cols-3 items-center gap-4 xl:flex xl:flex-col xl:items-center xl:gap-5">
+                {/* Col 1 — icon + spec name + avg ilvl */}
+                <div className="flex flex-col items-center gap-3">
+                  {specIconUrl && (
+                    <div
+                      className="rounded-full border-2 p-1"
+                      style={{
+                        borderColor: activeColor,
+                        background: `${activeColor}18`,
+                      }}
+                    >
+                      <Image
+                        src={specIconUrl}
+                        alt={specName ?? ""}
+                        width={64}
+                        height={64}
+                        className="rounded-full"
+                      />
+                    </div>
+                  )}
+                  {specName && wowClassName && (
+                    <div className="text-center leading-tight">
+                      <p
+                        className="text-sm font-bold uppercase tracking-wider"
+                        style={{
+                          color: activeColor,
+                        }}
+                      >
+                        {specName}
+                      </p>
+                      <p className="text-sm font-bold text-foreground">{wowClassName}</p>
+                      {bracketLabel && (
+                        <p className="mt-0.5 text-[10px] text-muted-foreground">
+                          {bracketLabel} · PvP
+                        </p>
+                      )}
+                    </div>
+                  )}
+                  {statsData?.avg_ilvl != null && (
+                    <div className="flex flex-col items-center leading-none">
+                      <span
+                        className="text-2xl font-bold tabular-nums"
+                        style={{
+                          color: activeColor,
+                        }}
+                      >
+                        {statsData.avg_ilvl}
+                      </span>
+                      <span className="mt-1 text-[9px] font-semibold uppercase tracking-widest text-muted-foreground">
+                        Avg ilvl
+                      </span>
+                    </div>
                   )}
                 </div>
-              )}
 
-              {/* Avg ilvl */}
-              {statsData?.avg_ilvl != null && (
-                <div className="flex flex-col items-center leading-none">
-                  <span
-                    className="text-2xl font-bold tabular-nums"
-                    style={{
-                      color: activeColor,
-                    }}
-                  >
-                    {statsData.avg_ilvl}
-                  </span>
-                  <span className="mt-1 text-[9px] font-semibold uppercase tracking-widest text-muted-foreground">
-                    Avg ilvl
-                  </span>
-                </div>
-              )}
-
-              {/* PvP gem — always required */}
-              {pvpGem && (
-                <div className="border-border/30 w-full border-t pt-4">
-                  <p className="mb-2 text-[9px] font-semibold uppercase tracking-widest text-muted-foreground">
-                    PvP gem
-                  </p>
-                  <ClickableTooltip
-                    side="left"
-                    align="center"
-                    content={
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2">
+                {/* Col 2 — PvP gem + Top gem */}
+                <div className="flex flex-col gap-4 xl:w-full">
+                  {pvpGem && (
+                    <div className="xl:border-border/30 xl:border-t xl:pt-4">
+                      <p className="mb-2 text-[9px] font-semibold uppercase tracking-widest text-muted-foreground">
+                        PvP gem
+                      </p>
+                      <ClickableTooltip
+                        side="left"
+                        align="center"
+                        content={
+                          <div className="space-y-2">
+                            <div className="flex items-center gap-2">
+                              {pvpGem.item.icon_url && (
+                                <Image
+                                  src={pvpGem.item.icon_url}
+                                  alt={pvpGem.item.name}
+                                  width={28}
+                                  height={28}
+                                  className="shrink-0 rounded"
+                                />
+                              )}
+                              <div>
+                                <p className="text-sm font-medium text-foreground">
+                                  {pvpGem.item.name}
+                                </p>
+                                <div className="mt-0.5 flex gap-0.5">
+                                  {gemStatColors(pvpGem.item.name).map((color, i) => (
+                                    <span
+                                      key={i}
+                                      className="inline-block size-2 rounded-full"
+                                      style={{
+                                        background: color,
+                                      }}
+                                    />
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+                            <p className="text-[10px] text-muted-foreground">
+                              Required in all PvP content.
+                            </p>
+                          </div>
+                        }
+                      >
+                        <div
+                          className="flex cursor-default items-center gap-2 rounded-md border px-2 py-1.5"
+                          style={{
+                            borderColor: activeColor,
+                          }}
+                        >
                           {pvpGem.item.icon_url && (
                             <Image
                               src={pvpGem.item.icon_url}
                               alt={pvpGem.item.name}
-                              width={28}
-                              height={28}
+                              width={24}
+                              height={24}
                               className="shrink-0 rounded"
                             />
                           )}
-                          <div>
-                            <p className="text-sm font-medium text-foreground">
-                              {pvpGem.item.name}
-                            </p>
-                            <div className="mt-0.5 flex gap-0.5">
-                              {gemStatColors(pvpGem.item.name).map((color, i) => (
-                                <span
-                                  key={i}
-                                  className="inline-block size-2 rounded-full"
-                                  style={{
-                                    background: color,
-                                  }}
-                                />
-                              ))}
-                            </div>
-                          </div>
+                          <p className="truncate text-xs font-medium text-foreground">
+                            {pvpGem.item.name}
+                          </p>
                         </div>
-                        <p className="text-[10px] text-muted-foreground">
-                          Required in all PvP content.
-                        </p>
-                      </div>
-                    }
-                  >
-                    <div
-                      className="flex cursor-default items-center gap-2 rounded-md border px-2 py-1.5"
-                      style={{
-                        borderColor: activeColor,
-                      }}
-                    >
-                      {pvpGem.item.icon_url && (
-                        <Image
-                          src={pvpGem.item.icon_url}
-                          alt={pvpGem.item.name}
-                          width={24}
-                          height={24}
-                          className="shrink-0 rounded"
-                        />
-                      )}
-                      <p className="truncate text-xs font-medium text-foreground">
-                        {pvpGem.item.name}
-                      </p>
+                      </ClickableTooltip>
                     </div>
-                  </ClickableTooltip>
-                </div>
-              )}
+                  )}
 
-              {/* Top gem */}
-              {topGem && (
-                <div className="border-border/30 w-full border-t pt-4">
-                  <p className="mb-2 text-[9px] font-semibold uppercase tracking-widest text-muted-foreground">
-                    Top gem
-                  </p>
-                  <div className="flex items-center gap-2">
-                    {topGem.item.icon_url && (
-                      <Image
-                        src={topGem.item.icon_url}
-                        alt={topGem.item.name}
-                        width={24}
-                        height={24}
-                        className="shrink-0 rounded"
-                      />
-                    )}
-                    <div className="min-w-0">
-                      <p className="truncate text-xs font-medium text-foreground">
-                        {topGem.item.name}
+                  {topGem && (
+                    <div className="xl:border-border/30 xl:border-t xl:pt-4">
+                      <p className="mb-2 text-[9px] font-semibold uppercase tracking-widest text-muted-foreground">
+                        Top gem
                       </p>
-                      <div className="mt-0.5 flex gap-0.5">
-                        {gemStatColors(topGem.item.name).map((color, i) => (
-                          <span
-                            key={i}
-                            className="inline-block size-2 rounded-full"
-                            style={{
-                              background: color,
-                            }}
+                      <div className="flex items-center gap-2">
+                        {topGem.item.icon_url && (
+                          <Image
+                            src={topGem.item.icon_url}
+                            alt={topGem.item.name}
+                            width={24}
+                            height={24}
+                            className="shrink-0 rounded"
                           />
-                        ))}
+                        )}
+                        <div className="min-w-0">
+                          <p className="truncate text-xs font-medium text-foreground">
+                            {topGem.item.name}
+                          </p>
+                          <div className="mt-0.5 flex gap-0.5">
+                            {gemStatColors(topGem.item.name).map((color, i) => (
+                              <span
+                                key={i}
+                                className="inline-block size-2 rounded-full"
+                                style={{
+                                  background: color,
+                                }}
+                              />
+                            ))}
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
                 </div>
-              )}
 
-              {/* Stat bars */}
-              {statsData && (
-                <div className="w-full space-y-2">
-                  {(() => {
-                    const vals = STAT_ORDER.map((k) => statsData.stats[k] ?? 0)
-                    const maxVal = Math.max(...vals, 1)
-                    return STAT_ORDER.map((key, i) => {
-                      const val = vals[i]
-                      if (val === 0) return null
-                      const { color } = getStatMeta(key)
-                      return (
-                        <div key={key} className="flex items-center gap-2">
-                          <span className="w-7 shrink-0 text-[10px] text-muted-foreground">
-                            {STAT_LABELS[key]}
-                          </span>
-                          <div className="flex-1 h-1.5 rounded-full bg-white/5">
-                            <div
-                              className="h-full rounded-full"
+                {/* Col 3 — stat bars */}
+                {statsData && (
+                  <div className="w-full space-y-2">
+                    {(() => {
+                      const vals = STAT_ORDER.map((k) => statsData.stats[k] ?? 0)
+                      const maxVal = Math.max(...vals, 1)
+                      return STAT_ORDER.map((key, i) => {
+                        const val = vals[i]
+                        if (val === 0) return null
+                        const { color } = getStatMeta(key)
+                        return (
+                          <div key={key} className="flex items-center gap-2">
+                            <span className="w-7 shrink-0 text-[10px] text-muted-foreground">
+                              {STAT_LABELS[key]}
+                            </span>
+                            <div className="flex-1 h-1.5 rounded-full bg-white/5">
+                              <div
+                                className="h-full rounded-full"
+                                style={{
+                                  width: `${(val / maxVal) * 100}%`,
+                                  background: color ?? activeColor,
+                                }}
+                              />
+                            </div>
+                            <span
+                              className="w-8 shrink-0 text-right font-mono text-[10px]"
                               style={{
-                                width: `${(val / maxVal) * 100}%`,
-                                background: color ?? activeColor,
+                                color: color ?? activeColor,
                               }}
-                            />
+                            >
+                              {val}
+                            </span>
                           </div>
-                          <span
-                            className="w-8 shrink-0 text-right font-mono text-[10px]"
-                            style={{
-                              color: color ?? activeColor,
-                            }}
-                          >
-                            {val}
-                          </span>
-                        </div>
-                      )
-                    })
-                  })()}
-                </div>
-              )}
+                        )
+                      })
+                    })()}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
-          {/* Right column */}
-          <div className="flex flex-col gap-2">
+          {/* Left column — xl: explicit col 1 */}
+          <div className="flex flex-col gap-2 xl:col-start-1 xl:row-start-1">
+            {LEFT_SLOTS.map((slot) => renderSlot(slot, "left"))}
+          </div>
+
+          {/* Right column — xl: explicit col 3 */}
+          <div className="flex flex-col gap-2 xl:col-start-3 xl:row-start-1">
             {RIGHT_SLOTS.map((slot) => renderSlot(slot, "right"))}
           </div>
         </div>

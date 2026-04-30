@@ -42,7 +42,6 @@ function createSpriteTexture(gl: WebGLRenderingContext): WebGLTexture {
   g.addColorStop(1, "rgba(255,255,255,0)")
   ctx.fillStyle = g
   ctx.fillRect(0, 0, 32, 32)
-
   const tex = gl.createTexture()!
   gl.bindTexture(gl.TEXTURE_2D, tex)
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, c)
@@ -57,27 +56,40 @@ function createSpriteTexture(gl: WebGLRenderingContext): WebGLTexture {
 
 export interface HomeBgRenderer {
   dispose: () => void
+  setColor: (r: number, g: number, b: number) => void
 }
+
+// Resolution reduction — bg is blurry noise, full-res pixels are wasted
+const SCALE = 0.65
+const DPR_CAP = 0.9
 
 export function createHomeBgRenderer(
   canvas: HTMLCanvasElement,
   onFallback: () => void,
+  options?: {
+    color?: [
+      number,
+      number,
+      number,
+    ]
+  },
 ): HomeBgRenderer {
+  const noop: HomeBgRenderer = {
+    dispose: () => {},
+    setColor: () => {},
+  }
+
   const gl = canvas.getContext("webgl", {
     alpha: true,
     antialias: false,
     powerPreference: "low-power",
   })
   if (!gl) {
-    console.warn("[HomeBg] getContext('webgl') returned null")
     onFallback()
-    return {
-      dispose: () => {},
-    }
+    return noop
   }
 
-  const scale = 0.75
-  const dpr = Math.min(window.devicePixelRatio * scale, 1.0)
+  const dpr = Math.min(window.devicePixelRatio * SCALE, DPR_CAP)
 
   function resize() {
     const w = window.innerWidth
@@ -92,12 +104,10 @@ export function createHomeBgRenderer(
 
   if (gl.isContextLost()) {
     onFallback()
-    return {
-      dispose: () => {},
-    }
+    return noop
   }
 
-  // --- BG program ---
+  // --- Programs ---
   const bgProg = linkProgram(
     gl,
     compileShader(gl, gl.VERTEX_SHADER, BG_VS),
@@ -108,8 +118,23 @@ export function createHomeBgRenderer(
   const bgUniRes = gl.getUniformLocation(bgProg, "uRes")
   const bgUniMouse = gl.getUniformLocation(bgProg, "uMouse")
   const bgUniDark = gl.getUniformLocation(bgProg, "uDark")
+  const bgUniColor = gl.getUniformLocation(bgProg, "uColor")
 
-  // Fullscreen quad (2 triangles)
+  const ptProg = linkProgram(
+    gl,
+    compileShader(gl, gl.VERTEX_SHADER, PARTICLE_VS),
+    compileShader(gl, gl.FRAGMENT_SHADER, PARTICLE_FS),
+  )
+  const ptAttrPos = gl.getAttribLocation(ptProg, "aPos")
+  const ptAttrCol = gl.getAttribLocation(ptProg, "aCol")
+  const ptAttrSize = gl.getAttribLocation(ptProg, "aSize")
+  const ptUniViewport = gl.getUniformLocation(ptProg, "uViewport")
+  const ptUniCamOff = gl.getUniformLocation(ptProg, "uCamOff")
+  const ptUniRot = gl.getUniformLocation(ptProg, "uRot")
+  const ptUniOpacity = gl.getUniformLocation(ptProg, "uOpacity")
+  const ptUniSprite = gl.getUniformLocation(ptProg, "uSprite")
+
+  // --- Buffers ---
   const quadBuf = gl.createBuffer()!
   gl.bindBuffer(gl.ARRAY_BUFFER, quadBuf)
   gl.bufferData(
@@ -127,39 +152,42 @@ export function createHomeBgRenderer(
     gl.STATIC_DRAW,
   )
 
-  // --- Particle program ---
-  const ptProg = linkProgram(
-    gl,
-    compileShader(gl, gl.VERTEX_SHADER, PARTICLE_VS),
-    compileShader(gl, gl.FRAGMENT_SHADER, PARTICLE_FS),
-  )
-  const ptAttrPos = gl.getAttribLocation(ptProg, "aPos")
-  const ptAttrCol = gl.getAttribLocation(ptProg, "aCol")
-  const ptAttrSize = gl.getAttribLocation(ptProg, "aSize")
-  const ptUniViewport = gl.getUniformLocation(ptProg, "uViewport")
-  const ptUniCamOff = gl.getUniformLocation(ptProg, "uCamOff")
-  const ptUniRot = gl.getUniformLocation(ptProg, "uRot")
-  const ptUniOpacity = gl.getUniformLocation(ptProg, "uOpacity")
-  const ptUniSprite = gl.getUniformLocation(ptProg, "uSprite")
-
   const N = PARTICLE_COUNT
   const particles = initParticles(N)
-
   const posBuf = gl.createBuffer()!
   const colBuf = gl.createBuffer()!
   const sizeBuf = gl.createBuffer()!
-
   gl.bindBuffer(gl.ARRAY_BUFFER, colBuf)
   gl.bufferData(gl.ARRAY_BUFFER, particles.colors, gl.STATIC_DRAW)
 
   const spriteTex = createSpriteTexture(gl)
 
-  // --- State ---
-  let raf = 0
-  let frame = 0
+  // --- Color state ---
+  const def =
+    options?.color ??
+    ([
+      0.75,
+      0.22,
+      0.03,
+    ] as [
+      number,
+      number,
+      number,
+    ])
+  let cr = def[0],
+    cg = def[1],
+    cb = def[2]
+  let targetR = cr,
+    targetG = cg,
+    targetB = cb
+
+  // --- Animation state ---
+  let raf = 0,
+    frame = 0,
+    lastRender = 0
   let mx = 0,
-    my = 0
-  let smx = 0,
+    my = 0,
+    smx = 0,
     smy = 0
   let isDark = document.documentElement.classList.contains("dark") ? 1.0 : 0.0
   let darkSmooth = isDark
@@ -192,21 +220,16 @@ export function createHomeBgRenderer(
   document.addEventListener("mousemove", onMouse, {
     passive: true,
   })
+  window.addEventListener("resize", resize)
 
-  const onResize = () => resize()
-  window.addEventListener("resize", onResize)
-
-  // --- Render functions ---
+  // --- Render ---
 
   function renderBg() {
     gl!.useProgram(bgProg)
     gl!.disable(gl!.BLEND)
-
-    // Disable particle attribs that may still be enabled
     gl!.disableVertexAttribArray(ptAttrPos)
     gl!.disableVertexAttribArray(ptAttrCol)
     gl!.disableVertexAttribArray(ptAttrSize)
-
     gl!.bindBuffer(gl!.ARRAY_BUFFER, quadBuf)
     gl!.enableVertexAttribArray(bgPosAttr)
     gl!.vertexAttribPointer(bgPosAttr, 2, gl!.FLOAT, false, 0, 0)
@@ -214,6 +237,7 @@ export function createHomeBgRenderer(
     gl!.uniform2f(bgUniRes, canvas.width, canvas.height)
     gl!.uniform2f(bgUniMouse, smx, smy)
     gl!.uniform1f(bgUniDark, darkSmooth)
+    gl!.uniform3f(bgUniColor, cr, cg, cb)
     gl!.drawArrays(gl!.TRIANGLE_STRIP, 0, 4)
     gl!.disableVertexAttribArray(bgPosAttr)
   }
@@ -221,41 +245,31 @@ export function createHomeBgRenderer(
   function renderParticles() {
     gl!.useProgram(ptProg)
     gl!.enable(gl!.BLEND)
-    gl!.blendFunc(gl!.SRC_ALPHA, gl!.ONE) // additive
-
+    gl!.blendFunc(gl!.SRC_ALPHA, gl!.ONE)
     gl!.uniform2f(ptUniViewport, canvas.width, canvas.height)
     gl!.uniform2f(ptUniCamOff, -camX, -camY)
     gl!.uniform2f(ptUniRot, rotY, rotX)
     gl!.uniform1f(ptUniOpacity, particleOpacity)
-
     gl!.activeTexture(gl!.TEXTURE0)
     gl!.bindTexture(gl!.TEXTURE_2D, spriteTex)
     gl!.uniform1i(ptUniSprite, 0)
-
     gl!.bindBuffer(gl!.ARRAY_BUFFER, posBuf)
     gl!.bufferData(gl!.ARRAY_BUFFER, particles.positions, gl!.DYNAMIC_DRAW)
     gl!.enableVertexAttribArray(ptAttrPos)
     gl!.vertexAttribPointer(ptAttrPos, 3, gl!.FLOAT, false, 0, 0)
-
     gl!.bindBuffer(gl!.ARRAY_BUFFER, colBuf)
     gl!.enableVertexAttribArray(ptAttrCol)
     gl!.vertexAttribPointer(ptAttrCol, 3, gl!.FLOAT, false, 0, 0)
-
     gl!.bindBuffer(gl!.ARRAY_BUFFER, sizeBuf)
     gl!.bufferData(gl!.ARRAY_BUFFER, particles.sizes, gl!.DYNAMIC_DRAW)
     gl!.enableVertexAttribArray(ptAttrSize)
     gl!.vertexAttribPointer(ptAttrSize, 1, gl!.FLOAT, false, 0, 0)
-
     gl!.drawArrays(gl!.POINTS, 0, N)
     gl!.disableVertexAttribArray(ptAttrPos)
     gl!.disableVertexAttribArray(ptAttrCol)
     gl!.disableVertexAttribArray(ptAttrSize)
     gl!.disable(gl!.BLEND)
   }
-
-  // --- Main loop ---
-
-  let lastRender = 0
 
   function animate(now: number) {
     raf = requestAnimationFrame(animate)
@@ -267,14 +281,13 @@ export function createHomeBgRenderer(
     smx += (mx - smx) * 0.05
     smy += (my - smy) * 0.05
     darkSmooth += (isDark - darkSmooth) * 0.05
+    cr += (targetR - cr) * 0.02
+    cg += (targetG - cg) * 0.02
+    cb += (targetB - cb) * 0.02
 
-    for (let i = 0; i < N; i++) {
-      updateParticle(i, particles, frame)
-    }
+    for (let i = 0; i < N; i++) updateParticle(i, particles, frame)
 
     particleOpacity += ((isDark ? 0.35 : 0.18) - particleOpacity) * 0.05
-
-    // Mouse parallax
     rotY += (mx * 0.06 - rotY) * 0.03
     rotX += (-my * 0.04 - rotX) * 0.03
     camX += (mx * 5 - camX) * 0.02
@@ -291,12 +304,15 @@ export function createHomeBgRenderer(
   return {
     dispose() {
       cancelAnimationFrame(raf)
-      window.removeEventListener("resize", onResize)
+      window.removeEventListener("resize", resize)
       document.removeEventListener("mousemove", onMouse)
       document.removeEventListener("visibilitychange", onVis)
       themeObs.disconnect()
-      // Don't loseContext() — React strict mode re-runs effects on the same
-      // canvas element, and a lost context can't be reacquired.
+    },
+    setColor(r: number, g: number, b: number) {
+      targetR = r
+      targetG = g
+      targetB = b
     },
   }
 }

@@ -99,7 +99,7 @@ export function MetaTierList({
           <div key={t} className="flex items-stretch gap-0">
             {/* Tier label */}
             <div
-              className={`flex w-14 shrink-0 flex-col items-center justify-center rounded-l-lg border-r-0 px-2 py-3 ${TIER_COLORS[t]}`}
+              className={`flex w-14 shrink-0 flex-col items-center justify-center rounded-l-lg border-r-0 px-2 py-3 backdrop-blur-sm ${TIER_COLORS[t]}`}
             >
               <span className="text-sm font-bold">{t}</span>
               <span className="text-[8px] uppercase tracking-wider opacity-60">
@@ -108,7 +108,7 @@ export function MetaTierList({
             </div>
 
             {/* Spec icons row */}
-            <div className="flex flex-1 flex-wrap items-center gap-3 rounded-r-lg border border-border/40 bg-card/40 px-4 py-3 min-h-16">
+            <div className="flex flex-1 flex-wrap items-center gap-3 rounded-r-lg border border-border/30 bg-card/15 px-4 py-3 min-h-16 ">
               {specs.map((entry) => {
                 const comparison = bracketComparison.get(entry.key)
                 const isHovered = hoveredSpec === entry.key

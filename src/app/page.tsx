@@ -224,7 +224,9 @@ async function HomeContent() {
         <div className="mx-auto w-full max-w-5xl">
           <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-center lg:gap-16">
             <HomeHero seasonId={seasonId} totalEntries={totalEntries} />
-            <HomeTopSpecsList specs={topSpecsList} />
+            <div className="mx-auto w-full max-w-lg lg:max-w-none">
+              <HomeTopSpecsList specs={topSpecsList} />
+            </div>
           </div>
         </div>
         <ScrollHint />

@@ -1,9 +1,23 @@
 // --- Constants ---
 
-export const PARTICLE_COUNT = 220
+export const PARTICLE_COUNT = 130
 export const SPREAD_X = 230
 export const SPREAD_Y = 130
-export const FRAME_INTERVAL = 1000 / 30
+export const FRAME_INTERVAL = 1000 / 25
+
+// Pre-computed sin lookup table — avoids Math.sin() in hot particle loop
+const SIN_TABLE_SIZE = 2048
+const SIN_TABLE_MASK = SIN_TABLE_SIZE - 1
+const SIN_TABLE = new Float32Array(SIN_TABLE_SIZE)
+const TWO_PI = Math.PI * 2
+for (let i = 0; i < SIN_TABLE_SIZE; i++) {
+  SIN_TABLE[i] = Math.sin((i / SIN_TABLE_SIZE) * TWO_PI)
+}
+export function fastSin(x: number): number {
+  // wrap to [0, TABLE_SIZE)
+  const idx = ((x / TWO_PI) * SIN_TABLE_SIZE) & SIN_TABLE_MASK
+  return SIN_TABLE[(idx + SIN_TABLE_SIZE) & SIN_TABLE_MASK]
+}
 
 // --- Palette ---
 
@@ -146,7 +160,7 @@ export function updateParticle(i: number, data: ParticleData, frame: number): vo
   } = data
   positions[i * 3 + 1] += vy[i]
   positions[i * 3] =
-    px0[i] + vx[i] * frame + Math.sin(frame * swayFrequency[i] + swayPhase[i]) * swayAmplitude[i]
+    px0[i] + vx[i] * frame + fastSin(frame * swayFrequency[i] + swayPhase[i]) * swayAmplitude[i]
 
   if (positions[i * 3 + 1] > HALF_Y + 8) {
     positions[i * 3 + 1] = -HALF_Y - 8
@@ -154,7 +168,7 @@ export function updateParticle(i: number, data: ParticleData, frame: number): vo
     positions[i * 3] = px0[i]
   }
 
-  const breathe = 0.75 + 0.25 * Math.sin(frame * 0.04 + swayPhase[i])
+  const breathe = 0.75 + 0.25 * fastSin(frame * 0.04 + swayPhase[i])
   const topFade = 1 - Math.max(0, (positions[i * 3 + 1] - (HALF_Y - 16)) / 16)
   const botFade = 1 - Math.max(0, (-HALF_Y + 14 - positions[i * 3 + 1]) / 14)
   sizes[i] = baseSizes[i] * baseAlpha[i] * breathe * Math.min(topFade, botFade)

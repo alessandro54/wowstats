@@ -49,14 +49,15 @@ export function ClassWheel({ entries }: Props) {
     const endRad = (endAngle * Math.PI) / 180
     const largeArc = angle > 180 ? 1 : 0
 
-    const x1o = cx + outerR * Math.cos(startRad)
-    const y1o = cy + outerR * Math.sin(startRad)
-    const x2o = cx + outerR * Math.cos(endRad)
-    const y2o = cy + outerR * Math.sin(endRad)
-    const x1i = cx + innerR * Math.cos(startRad)
-    const y1i = cy + innerR * Math.sin(startRad)
-    const x2i = cx + innerR * Math.cos(endRad)
-    const y2i = cy + innerR * Math.sin(endRad)
+    const r4 = (n: number) => Math.round(n * 1e4) / 1e4
+    const x1o = r4(cx + outerR * Math.cos(startRad))
+    const y1o = r4(cy + outerR * Math.sin(startRad))
+    const x2o = r4(cx + outerR * Math.cos(endRad))
+    const y2o = r4(cy + outerR * Math.sin(endRad))
+    const x1i = r4(cx + innerR * Math.cos(startRad))
+    const y1i = r4(cy + innerR * Math.sin(startRad))
+    const x2i = r4(cx + innerR * Math.cos(endRad))
+    const y2i = r4(cy + innerR * Math.sin(endRad))
 
     const d = [
       `M ${x1o} ${y1o}`,

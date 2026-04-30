@@ -49,6 +49,15 @@ const SORT_COMPARATORS: Record<SortKey, (a: MetaStatsEntry, b: MetaStatsEntry) =
   confidence: (a, b) => b.bK - a.bK,
 }
 
+function RankTrend({ change }: { change: number | null | undefined }) {
+  if (change == null) return null
+  if (change > 0)
+    return <span className="ml-0.5 text-[9px] font-bold text-emerald-400">▲{change}</span>
+  if (change < 0)
+    return <span className="ml-0.5 text-[9px] font-bold text-red-400">▼{Math.abs(change)}</span>
+  return <span className="ml-0.5 text-[9px] text-muted-foreground">—</span>
+}
+
 function wrColor(wr: number): string {
   if (wr >= 0.53) return "text-emerald-400"
   if (wr >= 0.48) return "text-foreground"
@@ -78,15 +87,6 @@ function confidenceLevel(bK: number): {
     dots: 1,
     label: "Low",
   }
-}
-
-function RankTrend({ change }: { change: number | null | undefined }) {
-  if (change == null) return null
-  if (change > 0)
-    return <span className="ml-0.5 text-[9px] font-bold text-emerald-400">▲{change}</span>
-  if (change < 0)
-    return <span className="ml-0.5 text-[9px] font-bold text-red-400">▼{Math.abs(change)}</span>
-  return <span className="ml-0.5 text-[9px] text-muted-foreground">—</span>
 }
 
 function scoreHeatBg(tier: Tier): string {
@@ -185,8 +185,13 @@ export function MetaStatsTable({
               onMouseEnter={() => setHoverSlug(entry.className as WowClassSlug)}
               onMouseLeave={() => setHoverSlug(defaultClassSlug ?? null)}
             >
-              <TableCell className="text-center font-mono text-xs text-muted-foreground">
-                <span className="inline-flex items-baseline gap-0">
+              <TableCell className="text-center font-mono text-xs">
+                <span
+                  className="inline-flex items-baseline gap-0"
+                  style={{
+                    color: entry.color,
+                  }}
+                >
                   {index + 1}
                   <RankTrend change={entry.rankChange} />
                 </span>

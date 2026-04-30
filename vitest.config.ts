@@ -42,6 +42,14 @@ export default defineConfig({
         },
         plugins: [
           storybookTest({ configDir: path.resolve(__dirname, ".storybook") }) as unknown as Plugin,
+          {
+            name: "raw-glsl",
+            transform(code: string, id: string) {
+              if (/\.(glsl|vert|frag)$/.test(id)) {
+                return { code: `export default ${JSON.stringify(code)};`, map: null }
+              }
+            },
+          } as unknown as Plugin,
         ],
         test: {
           name: "storybook",
