@@ -1,5 +1,5 @@
 import { cdnImage } from "@/config/cdn-config"
-import type { WowClassConfig } from "./classes-config"
+import type { SpecAtmosphere, SpecParticleEffect, WowClassConfig } from "./classes-config"
 
 // Class color: #A330C9
 const DemonHunterConfig: WowClassConfig = {
@@ -14,12 +14,15 @@ const DemonHunterConfig: WowClassConfig = {
       name: "havoc",
       url: "/pvp/demon-hunter/havoc",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_demonhunter_specdps.jpg",
+      effect: "felfire" as SpecParticleEffect,
+      atmosphere: "fel" as SpecAtmosphere,
     },
     {
       id: 581,
       name: "vengeance",
       url: "/pvp/demon-hunter/vengeance",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_demonhunter_spectank.jpg",
+      atmosphere: "fire" as SpecAtmosphere,
     },
     {
       id: 1480,
@@ -27,6 +30,8 @@ const DemonHunterConfig: WowClassConfig = {
       url: "/pvp/demon-hunter/devourer",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/classicon_demonhunter_void.jpg",
       iconRemasteredUrl: cdnImage("/class_media/demon-hunter/devourer_icon.png", 80),
+      effect: "voidfire" as SpecParticleEffect,
+      atmosphere: "shadow" as SpecAtmosphere,
     },
   ],
 }

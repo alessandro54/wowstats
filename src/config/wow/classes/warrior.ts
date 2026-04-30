@@ -1,5 +1,5 @@
 import { cdnImage } from "@/config/cdn-config"
-import type { WowClassConfig } from "./classes-config"
+import type { SpecAtmosphere, SpecParticleEffect, WowClassConfig } from "./classes-config"
 
 // Class color: #C69B6D
 const WarriorConfig: WowClassConfig = {
@@ -15,6 +15,8 @@ const WarriorConfig: WowClassConfig = {
       url: "/pvp/warrior/arms",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_warrior_savageblow.jpg",
       iconRemasteredUrl: cdnImage("/class_media/warrior/arms_icon.png", 80),
+      effect: "ashfire" as SpecParticleEffect,
+      atmosphere: "blood" as SpecAtmosphere,
     },
     {
       id: 72,
@@ -22,6 +24,8 @@ const WarriorConfig: WowClassConfig = {
       url: "/pvp/warrior/fury",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_warrior_innerrage.jpg",
       iconRemasteredUrl: cdnImage("/class_media/warrior/fury_icon.png", 80),
+      effect: "flames" as SpecParticleEffect,
+      atmosphere: "fire" as SpecAtmosphere,
     },
     {
       id: 73,
@@ -29,6 +33,7 @@ const WarriorConfig: WowClassConfig = {
       url: "/pvp/warrior/protection",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_warrior_defensivestance.jpg",
       iconRemasteredUrl: cdnImage("/class_media/warrior/protection_icon.png", 80),
+      atmosphere: "iron" as SpecAtmosphere,
     },
   ],
 }

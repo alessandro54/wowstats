@@ -64,6 +64,7 @@ export function ItemCard({
       key={slot}
       side="bottom"
       align="end"
+      borderColor={primary.crafted ? "#fb923c" : undefined}
       content={
         <DistributionTooltip
           entries={distribution}
@@ -71,6 +72,7 @@ export function ItemCard({
           gemEntries={fiberGemEntries}
           activeColor={activeColor}
           craftingStats={primary.crafted ? primary.top_crafting_stats : undefined}
+          isCrafted={primary.crafted}
         />
       }
     >

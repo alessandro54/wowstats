@@ -18,6 +18,7 @@ import { NatureAtmosphere } from "@/lib/fx/atmospheres/nature"
 import { ShadowAtmosphere } from "@/lib/fx/atmospheres/shadow"
 import { StormAtmosphere } from "@/lib/fx/atmospheres/storm"
 import { ToxicAtmosphere } from "@/lib/fx/atmospheres/toxic"
+import { LunarAtmosphere } from "@/lib/fx/atmospheres/lunar"
 import { WarmAtmosphere } from "@/lib/fx/atmospheres/warm"
 
 const ATMOSPHERES: Record<SpecAtmosphere, FC> = {
@@ -34,6 +35,7 @@ const ATMOSPHERES: Record<SpecAtmosphere, FC> = {
   arcane: ArcaneAtmosphere,
   iron: IronAtmosphere,
   mist: MistAtmosphere,
+  lunar: LunarAtmosphere,
 }
 
 /* ── Particle runner registry (lazy-loaded per effect) ─────────────────── */
@@ -48,6 +50,17 @@ const RUNNERS: Record<SpecParticleEffect, () => Promise<RunnerFn>> = {
   coinrain: () => import("@/lib/fx/particles/coinrain").then((m) => m.runCoinRain),
   shadowsmoke: () => import("@/lib/fx/particles/shadowsmoke").then((m) => m.runShadowSmoke),
   venomdrip: () => import("@/lib/fx/particles/venomdrip").then((m) => m.runVenomDrip),
+  flames: () => import("@/lib/fx/particles/flames").then((m) => m.runFlames),
+  lightning: () => import("@/lib/fx/particles/lightning").then((m) => m.runLightning),
+  waterrain: () => import("@/lib/fx/particles/waterrain").then((m) => m.runWaterRain),
+  rainoffrost: () => import("@/lib/fx/particles/rainoffrost").then((m) => m.runRainOfFrost),
+  felfire: () => import("@/lib/fx/particles/felfire").then((m) => m.runFelFire),
+  voidfire: () => import("@/lib/fx/particles/voidfire").then((m) => m.runVoidFire),
+  rainofstars: () => import("@/lib/fx/particles/rainofstars").then((m) => m.runRainOfStars),
+  arcaneorbs: () => import("@/lib/fx/particles/arcaneorbs").then((m) => m.runArcaneOrbs),
+  holylight: () => import("@/lib/fx/particles/holylight").then((m) => m.runHolyLight),
+  ashfire: () => import("@/lib/fx/particles/ashfire").then((m) => m.runAshFire),
+  holyfire: () => import("@/lib/fx/particles/holyfire").then((m) => m.runHolyFire),
 }
 
 /* ── Public component ──────────────────────────────────────────────────── */

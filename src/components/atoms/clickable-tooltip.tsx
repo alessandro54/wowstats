@@ -5,7 +5,7 @@ import { useState } from "react"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 
 const tooltipInnerClass =
-  "bg-card text-card-foreground border border-border shadow-lg rounded-[inherit] px-3 py-1.5"
+  "bg-card text-card-foreground border shadow-lg rounded-[inherit] px-3 py-1.5"
 const tooltipArrowClass = "fill-slate-200 dark:fill-zinc-700"
 
 export function ClickableTooltip({
@@ -13,11 +13,13 @@ export function ClickableTooltip({
   content,
   side,
   align,
+  borderColor,
 }: {
   children: ReactNode
   content: ReactNode
   side: "left" | "bottom" | "top" | "right"
   align: "center" | "end" | "start"
+  borderColor?: string
 }) {
   const [open, setOpen] = useState(false)
   return (
@@ -33,7 +35,14 @@ export function ClickableTooltip({
         className="border-0 bg-transparent p-0 shadow-none"
         arrowClassName={tooltipArrowClass}
       >
-        <div className={tooltipInnerClass}>{content}</div>
+        <div
+          className={tooltipInnerClass}
+          style={{
+            borderColor: borderColor ?? "var(--color-border)",
+          }}
+        >
+          {content}
+        </div>
       </TooltipContent>
     </Tooltip>
   )

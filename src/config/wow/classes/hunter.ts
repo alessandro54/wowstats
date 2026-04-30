@@ -1,5 +1,5 @@
 import { cdnImage } from "@/config/cdn-config"
-import type { WowClassConfig } from "./classes-config"
+import type { SpecAtmosphere, WowClassConfig } from "./classes-config"
 
 // Class color: #AAD372
 const HunterConfig: WowClassConfig = {
@@ -16,6 +16,7 @@ const HunterConfig: WowClassConfig = {
       iconUrl:
         "https://render.worldofwarcraft.com/us/icons/56/ability_hunter_bestialdiscipline.jpg",
       iconRemasteredUrl: cdnImage("/class_media/hunter/beastmastery_icon.png", 80),
+      atmosphere: "nature" as SpecAtmosphere,
     },
     {
       id: 254,
@@ -23,6 +24,7 @@ const HunterConfig: WowClassConfig = {
       url: "/pvp/hunter/marksmanship",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_hunter_focusedaim.jpg",
       iconRemasteredUrl: cdnImage("/class_media/hunter/marksmanship_icon.png", 80),
+      atmosphere: "iron" as SpecAtmosphere,
     },
     {
       id: 255,
@@ -30,6 +32,7 @@ const HunterConfig: WowClassConfig = {
       url: "/pvp/hunter/survival",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_hunter_camouflage.jpg",
       iconRemasteredUrl: cdnImage("/class_media/hunter/survival_icon.png", 80),
+      atmosphere: "nature" as SpecAtmosphere,
     },
   ],
 }

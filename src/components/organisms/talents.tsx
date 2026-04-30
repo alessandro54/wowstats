@@ -63,7 +63,7 @@ export function Talents({ classSlug, talents, talentsMeta, hideStats }: Props) {
 
   return (
     <div className="space-y-8">
-      {talentsMeta?.data_confidence !== "high" && (
+      {talentsMeta && talentsMeta.data_confidence !== "high" && (
         <Badge variant="outline" className="border-amber-500/50 text-amber-400 bg-amber-500/10">
           {talentsMeta?.data_confidence === "low"
             ? "Limited data — may not reflect current patch"

@@ -1,5 +1,5 @@
 import { cdnImage } from "@/config/cdn-config"
-import type { WowClassConfig } from "./classes-config"
+import type { SpecAtmosphere, SpecParticleEffect, WowClassConfig } from "./classes-config"
 
 // Class color: #69CCF0
 const MageConfig: WowClassConfig = {
@@ -14,6 +14,8 @@ const MageConfig: WowClassConfig = {
       url: "/pvp/mage/arcane",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_holy_magicalsentry.jpg",
       iconRemasteredUrl: cdnImage("/class_media/mage/arcane_icon.png", 80),
+      effect: "arcaneorbs" as SpecParticleEffect,
+      atmosphere: "arcane" as SpecAtmosphere,
     },
     {
       id: 63,
@@ -21,6 +23,8 @@ const MageConfig: WowClassConfig = {
       url: "/pvp/mage/fire",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_fire_fireball02.jpg",
       iconRemasteredUrl: cdnImage("/class_media/mage/fire_icon.png", 80),
+      effect: "rainoffire" as SpecParticleEffect,
+      atmosphere: "fire" as SpecAtmosphere,
     },
     {
       id: 64,
@@ -28,6 +32,8 @@ const MageConfig: WowClassConfig = {
       url: "/pvp/mage/frost",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_frost_frostbolt02.jpg",
       iconRemasteredUrl: cdnImage("/class_media/mage/frost_icon.png", 80),
+      effect: "rainoffrost" as SpecParticleEffect,
+      atmosphere: "frost" as SpecAtmosphere,
     },
   ],
 }

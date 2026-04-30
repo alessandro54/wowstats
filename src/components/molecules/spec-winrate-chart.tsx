@@ -1,11 +1,5 @@
 import type { BracketData } from "@/app/pvp/[classSlug]/[specSlug]/page"
-
-const BRACKET_COLORS: Record<string, string> = {
-  "2v2": "#7ec8e3",
-  "3v3": "#c8a84b",
-  shuffle: "#7b68ee",
-  blitz: "#ff6b35",
-}
+import { BRACKET_COLORS } from "@/config/wow/brackets-config"
 
 interface Props {
   brackets: BracketData[]

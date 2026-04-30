@@ -77,6 +77,17 @@ export type SpecParticleEffect =
   | "coinrain"
   | "shadowsmoke"
   | "venomdrip"
+  | "flames"
+  | "lightning"
+  | "waterrain"
+  | "rainoffrost"
+  | "felfire"
+  | "voidfire"
+  | "rainofstars"
+  | "arcaneorbs"
+  | "holylight"
+  | "ashfire"
+  | "holyfire"
 
 export type SpecAtmosphere =
   | "frost"
@@ -92,6 +103,7 @@ export type SpecAtmosphere =
   | "arcane"
   | "iron"
   | "mist"
+  | "lunar"
 
 export interface WowClassSpec {
   id: number

@@ -4,13 +4,7 @@ import { usePathname } from "next/navigation"
 import { HomeBgCanvas } from "@/components/molecules/home-bg-canvas"
 import { useHoverSlug } from "@/components/providers/hover-provider"
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
-
-const BRACKET_COLORS: Record<string, string> = {
-  "2v2": "#7ec8e3",
-  "3v3": "#c8a84b",
-  "shuffle-overall": "#7b68ee",
-  "blitz-overall": "#ff6b35",
-}
+import { bracketColor } from "@/config/wow/brackets-config"
 
 export default function DynamicBackground() {
   const hoverSlug = useHoverSlug()
@@ -30,14 +24,14 @@ export default function DynamicBackground() {
 
   // bracket slug sits at segments[2] for /pvp/meta/[bracket]/[role]
   const bracketSlug = isMetaPage ? segments[2] : null
-  const bracketColor = bracketSlug ? BRACKET_COLORS[bracketSlug] : undefined
+  const bracketColorVal = bracketSlug ? bracketColor(bracketSlug) : undefined
 
   // Home has its own canvas; spec pages have their own atmosphere
   if (isHome || isSpecPage) return null
 
   if (isMetaPage) {
     // Hover overrides bracket color for live class tinting
-    const bgColor = activeSlug ? `var(--color-class-${activeSlug})` : bracketColor
+    const bgColor = activeSlug ? `var(--color-class-${activeSlug})` : bracketColorVal
     return <HomeBgCanvas color={bgColor} />
   }
 

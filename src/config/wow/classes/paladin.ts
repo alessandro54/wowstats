@@ -1,4 +1,4 @@
-import type { WowClassConfig } from "./classes-config"
+import type { SpecAtmosphere, SpecParticleEffect, WowClassConfig } from "./classes-config"
 
 // Class color: #F58CBA
 const PaladinConfig: WowClassConfig = {
@@ -12,18 +12,23 @@ const PaladinConfig: WowClassConfig = {
       name: "holy",
       url: "/pvp/paladin/holy",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_holy_holybolt.jpg",
+      effect: "holylight" as SpecParticleEffect,
+      atmosphere: "holy" as SpecAtmosphere,
     },
     {
       id: 66,
       name: "protection",
       url: "/pvp/paladin/protection",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_holy_devotionaura.jpg",
+      atmosphere: "iron" as SpecAtmosphere,
     },
     {
       id: 70,
       name: "retribution",
       url: "/pvp/paladin/retribution",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_holy_auraoflight.jpg",
+      effect: "holyfire" as SpecParticleEffect,
+      atmosphere: "holy" as SpecAtmosphere,
     },
   ],
 }

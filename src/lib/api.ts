@@ -256,6 +256,11 @@ export interface CharacterPvpEntry {
   spec_id: number | null
 }
 
+export interface CharacterSocket {
+  name: string
+  icon_url?: string | null
+}
+
 export interface CharacterEquipmentItem {
   slot: string
   item_level: number | null
@@ -264,7 +269,7 @@ export interface CharacterEquipmentItem {
   name: string | null
   icon_url: string | null
   enchant: string | null
-  sockets: string[]
+  sockets: CharacterSocket[]
 }
 
 export interface CharacterProfile {

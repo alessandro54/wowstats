@@ -22,24 +22,28 @@ export function DistributionTooltip({
   gemEntries,
   activeColor,
   craftingStats,
+  isCrafted,
 }: {
   entries: DistEntry[]
   enchantEntries?: DistEntry[]
   gemEntries?: DistEntry[]
   activeColor: string
   craftingStats?: string[]
+  isCrafted?: boolean
 }) {
   const current = entries[0]
   const alternatives = entries.slice(1)
   const enchantAlts = enchantEntries?.slice(1) ?? []
   const hasRightCol = enchantAlts.length > 0 || (gemEntries && gemEntries.length > 0)
   const hasLeftCol = alternatives.length > 0 || (craftingStats && craftingStats.length > 0)
-  const qualityColor = current?.quality ? QUALITY_COLORS[current.quality] : activeColor
+  const qualityColor = current?.quality
+    ? QUALITY_COLORS[current.quality?.toUpperCase()]
+    : activeColor
 
   if (!current) return null
 
   return (
-    <div className="w-72 space-y-3">
+    <div className="w-96 space-y-3">
       {/* Current item — hero card */}
       <div
         className="flex items-center gap-3 rounded-lg border px-3 py-2.5"
@@ -66,8 +70,22 @@ export function DistributionTooltip({
           >
             {current.name}
           </div>
-          <div className="text-[10px] uppercase tracking-wide text-muted-foreground">
-            Currently equipped
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] uppercase tracking-wide text-muted-foreground">
+              Currently equipped
+            </span>
+            {isCrafted && (
+              <span
+                className="rounded px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider"
+                style={{
+                  background: "rgba(251,146,60,0.15)",
+                  color: "#fb923c",
+                  border: "1px solid rgba(251,146,60,0.4)",
+                }}
+              >
+                Crafted
+              </span>
+            )}
           </div>
         </div>
         <div className="flex shrink-0 items-center gap-1.5">

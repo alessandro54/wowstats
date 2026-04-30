@@ -3,6 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useHoverSlug } from "@/components/providers/hover-provider"
+import { bracketColor } from "@/config/wow/brackets-config"
 import { titleizeSlug } from "@/lib/utils"
 
 interface TopSpec {
@@ -25,13 +26,6 @@ interface Props {
   brackets: BracketSummary[]
 }
 
-const BRACKET_COLORS: Record<string, string> = {
-  "2v2": "#7ec8e3",
-  "3v3": "#c8a84b",
-  "shuffle-overall": "#7b68ee",
-  "blitz-overall": "#ff6b35",
-}
-
 export function HomeBracketCards({ brackets }: Props) {
   const hoverSlug = useHoverSlug()
   const glowColor = hoverSlug ? `var(--color-class-${hoverSlug})` : "rgb(249, 115, 22)"
@@ -46,7 +40,7 @@ export function HomeBracketCards({ brackets }: Props) {
       </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {brackets.map((b) => {
-          const accentColor = BRACKET_COLORS[b.bracket] ?? glowColor
+          const accentColor = bracketColor(b.bracket) ?? glowColor
           const topWr = b.topSpecs[0]?.wrHat
 
           return (

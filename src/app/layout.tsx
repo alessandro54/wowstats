@@ -10,6 +10,7 @@ import DynamicBackground from "@/components/organisms/dynamic-background"
 import { HoverProvider } from "@/components/providers/hover-provider"
 import { ThemeProvider } from "@/components/providers/theme-provider"
 import { TopNavProvider } from "@/components/providers/top-nav-provider"
+import { PageTransition } from "@/components/atoms/page-transition"
 import { ScrollToTop } from "@/components/atoms/scroll-to-top"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import "./globals.css"
@@ -140,6 +141,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 data-scroll-container=""
               >
                 <ScrollToTop />
+                <PageTransition />
                 <TopNavProvider>
                   <TopNav />
                   <div className="flex-1 w-full pb-45">{children}</div>

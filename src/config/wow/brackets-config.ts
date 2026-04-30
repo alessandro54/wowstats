@@ -23,3 +23,17 @@ export const BRACKETS = [
 ] as const
 
 export type BracketSlug = (typeof BRACKETS)[number]["slug"]
+
+export const BRACKET_COLORS: Record<string, string> = {
+  "2v2": "#7ec8e3",
+  "3v3": "#c8a84b",
+  shuffle: "#7b68ee",
+  blitz: "#ff6b35",
+}
+
+/** Returns the color for any bracket string (handles suffixed slugs like shuffle-overall). */
+export function bracketColor(bracket: string): string {
+  if (bracket.startsWith("shuffle")) return BRACKET_COLORS.shuffle
+  if (bracket.startsWith("blitz")) return BRACKET_COLORS.blitz
+  return BRACKET_COLORS[bracket] ?? "#888888"
+}

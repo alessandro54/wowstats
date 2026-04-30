@@ -32,7 +32,7 @@ export function DistList({ entries }: { entries: DistEntry[] }) {
             </span>
           )}
           <span
-            className="flex-1 truncate text-sm"
+            className="flex-1 truncate text-xs"
             style={{
               color: e.quality ? QUALITY_COLORS[e.quality] : undefined,
             }}
@@ -40,7 +40,7 @@ export function DistList({ entries }: { entries: DistEntry[] }) {
             {e.name}
           </span>
           <span className="flex shrink-0 items-center gap-1">
-            <span className="text-muted-foreground font-mono text-xs">{e.pct.toFixed(1)}%</span>
+            <span className="text-muted-foreground font-mono text-[10px]">{e.pct.toFixed(1)}%</span>
             <TrendArrow trend={e.trend} />
           </span>
         </div>

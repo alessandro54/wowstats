@@ -4,7 +4,13 @@ import type { Meta, StoryObj } from "@storybook/react-vite"
 import type { DistEntry } from "../distribution-tooltip"
 import { DistributionTooltip } from "../distribution-tooltip"
 import { TrendArrow } from "@/components/atoms/trend-arrow"
-import { iconUrl } from "@/config/cdn-config"
+
+const WZ = "https://wow.zamimg.com/images/wow/icons/large"
+// Icons confirmed working (used elsewhere in stories)
+const ICON_SWORD = `${WZ}/ability_warrior_savageblow.jpg`
+const ICON_ENCHANT = `${WZ}/spell_nature_starfall.jpg`
+const ICON_GEM_1 = `${WZ}/inv_misc_gem_sapphire_02.jpg`
+const ICON_GEM_2 = `${WZ}/inv_helmet_154.jpg`
 
 const weaponEntries: DistEntry[] = [
   {
@@ -12,22 +18,21 @@ const weaponEntries: DistEntry[] = [
     pct: 61.3,
     trend: "up",
     quality: "EPIC",
-    icon_url: "https://render.worldofwarcraft.com/us/icons/56/inv_sword_1h_pvpwarrior_c_01.jpg",
+    icon_url: ICON_SWORD,
   },
   {
     name: "Emerald Dream Greatsword",
     pct: 22.7,
     trend: "down",
     quality: "EPIC",
-    icon_url: "https://render.worldofwarcraft.com/us/icons/56/inv_sword_2h_grizzlyhill_c_02.jpg",
+    icon_url: ICON_SWORD,
   },
   {
     name: "Ulduar's Echo",
     pct: 10.1,
     trend: "stable",
     quality: "RARE",
-    icon_url:
-      "https://render.worldofwarcraft.com/us/icons/56/inv_sword_1h_artifactfelomelorn_d_01.jpg",
+    icon_url: ICON_SWORD,
   },
   {
     name: "Other",
@@ -41,19 +46,19 @@ const enchantEntries: DistEntry[] = [
     name: "Authority of Radiant Power",
     pct: 54.8,
     trend: "stable",
-    icon_url: "https://render.worldofwarcraft.com/us/icons/56/trade_engraving.jpg",
+    icon_url: ICON_ENCHANT,
   },
   {
     name: "Authority of the Depths",
     pct: 30.2,
     trend: "up",
-    icon_url: "https://render.worldofwarcraft.com/us/icons/56/trade_engraving.jpg",
+    icon_url: ICON_ENCHANT,
   },
   {
     name: "Stormrider's Fury",
     pct: 15.0,
     trend: "down",
-    icon_url: "https://render.worldofwarcraft.com/us/icons/56/trade_engraving.jpg",
+    icon_url: ICON_ENCHANT,
   },
 ]
 
@@ -62,15 +67,13 @@ const gemEntries: DistEntry[] = [
     name: "Masterful Jewel Doublet",
     pct: 72.4,
     trend: "up",
-    icon_url:
-      "https://render.worldofwarcraft.com/us/icons/56/inv_jewelcrafting_90_prospectedgem5.jpg",
+    icon_url: ICON_GEM_1,
   },
   {
     name: "Quick Jewel Cluster",
     pct: 27.6,
     trend: "new",
-    icon_url:
-      "https://render.worldofwarcraft.com/us/icons/56/inv_jewelcrafting_90_prospectedgem3.jpg",
+    icon_url: ICON_GEM_2,
   },
 ]
 
@@ -230,7 +233,7 @@ export const VariantBars: Story = {
                   <div className="flex items-center gap-1.5">
                     {e.icon_url && (
                       <Image
-                        src={iconUrl(e.icon_url, 16)!}
+                        src={e.icon_url}
                         width={16}
                         height={16}
                         className="shrink-0 rounded opacity-80"
@@ -397,7 +400,7 @@ export const VariantRankedPills: Story = {
                 </span>
                 {e.icon_url && (
                   <Image
-                    src={iconUrl(e.icon_url, 16)!}
+                    src={e.icon_url}
                     width={16}
                     height={16}
                     className="shrink-0 rounded opacity-80"
@@ -467,7 +470,7 @@ export const VariantCurrentFirst: Story = {
         <div className="flex items-center gap-1.5">
           {e.icon_url && (
             <Image
-              src={iconUrl(e.icon_url, 20)!}
+              src={e.icon_url}
               width={20}
               height={20}
               className="shrink-0 rounded opacity-90"
@@ -502,7 +505,7 @@ export const VariantCurrentFirst: Story = {
         >
           {current.icon_url && (
             <Image
-              src={iconUrl(current.icon_url, 32)!}
+              src={current.icon_url}
               width={32}
               height={32}
               className="shrink-0 rounded"

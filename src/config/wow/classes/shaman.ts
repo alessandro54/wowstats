@@ -1,5 +1,5 @@
 import { cdnImage } from "@/config/cdn-config"
-import type { WowClassConfig } from "./classes-config"
+import type { SpecAtmosphere, SpecParticleEffect, WowClassConfig } from "./classes-config"
 
 // Class color: #0070DE
 const ShamanConfig: WowClassConfig = {
@@ -15,6 +15,8 @@ const ShamanConfig: WowClassConfig = {
       url: "/pvp/shaman/elemental",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_nature_lightning.jpg",
       iconRemasteredUrl: cdnImage("/class_media/shaman/elemental_icon.png", 80),
+      effect: "lightning" as SpecParticleEffect,
+      atmosphere: "storm" as SpecAtmosphere,
     },
     {
       id: 263,
@@ -23,6 +25,8 @@ const ShamanConfig: WowClassConfig = {
       iconUrl:
         "https://render.worldofwarcraft.com/us/icons/56/spell_shaman_improvedstormstrike.jpg",
       iconRemasteredUrl: cdnImage("/class_media/shaman/enhancement_icon.png", 80),
+      effect: "lightning" as SpecParticleEffect,
+      atmosphere: "storm" as SpecAtmosphere,
     },
     {
       id: 264,
@@ -30,6 +34,8 @@ const ShamanConfig: WowClassConfig = {
       url: "/pvp/shaman/restoration",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_nature_magicimmunity.jpg",
       iconRemasteredUrl: cdnImage("/class_media/shaman/restoration_icon.png", 80),
+      effect: "waterrain" as SpecParticleEffect,
+      atmosphere: "nature" as SpecAtmosphere,
     },
   ],
 }

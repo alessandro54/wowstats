@@ -1,7 +1,7 @@
 "use client"
 
 import { usePathname, useSearchParams } from "next/navigation"
-import { Suspense, useEffect, useRef, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { MetaInsightsPanel } from "@/components/molecules/meta-insights-panel"
 import { MetaKpiRow } from "@/components/molecules/meta-kpi-row"
 import { MetaStatsSkeleton } from "@/components/molecules/meta-stats-skeleton"
@@ -176,6 +176,27 @@ function DashboardInner({ datasets, allBrackets, bracket, initialRole, initialRe
     setHoverSlug,
   ])
 
+  // Sync state when browser back/forward hits a pushState entry
+  useEffect(() => {
+    const onPopState = () => {
+      const segs = window.location.pathname.split("/")
+      const urlRole = segs[4] as Role
+      const urlParams = new URLSearchParams(window.location.search)
+      const urlRegion = (urlParams.get("region") ?? "all") as Region
+      if (
+        [
+          "dps",
+          "healer",
+          "tank",
+        ].includes(urlRole)
+      )
+        setRole(urlRole)
+      setRegion(urlRegion)
+    }
+    window.addEventListener("popstate", onPopState)
+    return () => window.removeEventListener("popstate", onPopState)
+  }, [])
+
   const updateUrl = (newRole: Role, newRegion: Region) => {
     const segments = pathname.split("/")
     segments[4] = newRole
@@ -202,27 +223,6 @@ function DashboardInner({ datasets, allBrackets, bracket, initialRole, initialRe
     updateUrl(role, r)
   }
 
-  // Animate content on data switch (KPIs stay static)
-  const [contentAnimating, setContentAnimating] = useState(false)
-  const prevContentKey = useRef(`${role}-${region}`)
-
-  useEffect(() => {
-    const key = `${role}-${region}`
-    if (key !== prevContentKey.current) {
-      prevContentKey.current = key
-      setContentAnimating(true)
-      const timer = setTimeout(() => setContentAnimating(false), 200)
-      return () => clearTimeout(timer)
-    }
-  }, [
-    role,
-    region,
-  ])
-
-  if (contentAnimating) {
-    return <MetaStatsSkeleton />
-  }
-
   return (
     <div className="space-y-6">
       <MetaKpiRow
@@ -243,7 +243,7 @@ function DashboardInner({ datasets, allBrackets, bracket, initialRole, initialRe
             <RegionSwitcher current={region} onSwitch={handleRegionChange} />
           </div>
         </div>
-        <div>
+        <div key={`${role}-${region}`} className="animate-fade-in">
           {/* Tier list + insights side by side */}
           <div className="grid grid-cols-1 gap-4 p-4 lg:grid-cols-[1fr_280px]">
             <MetaTierList

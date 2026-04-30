@@ -17,6 +17,8 @@ const WarlockConfig: WowClassConfig = {
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_shadow_deathcoil.jpg",
       iconRemasteredUrl: cdnImage("/class_media/warlock/affliction_icon.png", 80),
       animationUrl: `${CDN_BASE}/class_media/warlock/affliction_animation.mp4`,
+      effect: "venomdrip" as const,
+      atmosphere: "shadow" as SpecAtmosphere,
     },
     {
       id: 266,
@@ -25,6 +27,7 @@ const WarlockConfig: WowClassConfig = {
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_shadow_metamorphosis.jpg",
       iconRemasteredUrl: cdnImage("/class_media/warlock/demonology_icon.png", 80),
       animationUrl: `${CDN_BASE}/class_media/warlock/demonology_animation.mp4`,
+      atmosphere: "fel" as SpecAtmosphere,
     },
     {
       id: 267,
