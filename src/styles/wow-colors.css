@@ -28,6 +28,16 @@
   --color-spec-warlock-affliction: oklch(44.255% 0.1469 143.267deg);
   --color-spec-warlock-demonology: oklch(62.793% 0.25768 29.223deg / 62.7%);
   --color-spec-warlock-destruction: oklch(72.445% 0.18897 50.929deg / 49.3%);
+
+  /* Item-quality colors — same in both themes per WoW UI convention */
+  --color-quality-poor: #9d9d9d;
+  --color-quality-common: #ffffff;
+  --color-quality-uncommon: #1eff00;
+  --color-quality-rare: #0070dd;
+  --color-quality-epic: #a335ee;
+  --color-quality-legendary: #ff8000;
+  --color-quality-artifact: #e6cc80;
+  --color-quality-heirloom: #00ccff;
 }
 
 /* ─── Dark mode ──────────────────────────────────────────────────────────── */

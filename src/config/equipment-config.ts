@@ -36,11 +36,20 @@ export const SLOT_ORDER = [
   "TRINKET_2",
 ]
 
+// Item-quality colors. Hex form is needed here because callers concatenate
+// alpha suffixes (e.g. `${color}44`) for inline styles — that doesn't work
+// with var(). Mirror of --color-quality-* tokens in src/styles/wow-colors.css;
+// keep both in sync. Tailwind classes that need the same colors should
+// reference the CSS variables directly (e.g. `border-[var(--color-quality-legendary)]`).
 export const QUALITY_COLORS: Record<string, string> = {
-  EPIC: "#a335ee",
-  RARE: "#0070dd",
-  UNCOMMON: "#1eff00",
   POOR: "#9d9d9d",
+  COMMON: "#ffffff",
+  UNCOMMON: "#1eff00",
+  RARE: "#0070dd",
+  EPIC: "#a335ee",
+  LEGENDARY: "#ff8000",
+  ARTIFACT: "#e6cc80",
+  HEIRLOOM: "#00ccff",
 }
 
 export function formatSlot(slot: string): string {
