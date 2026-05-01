@@ -38,6 +38,15 @@
   --color-quality-legendary: #ff8000;
   --color-quality-artifact: #e6cc80;
   --color-quality-heirloom: #00ccff;
+
+  /* Meta-tier accents — semantic states distinct from item qualities.
+     Crafted = saturated yellow-gold; differs from legendary orange
+     so BiS and Crafted items are visually separable at a glance. */
+  --color-tier-crafted-bg-light: #facc15; /* yellow-400 */
+  --color-tier-crafted-bg-dark: #fde047; /* yellow-300 */
+  --color-tier-crafted-fg-light: #422006; /* deep brown for AAA on yellow */
+  --color-tier-crafted-fg-dark: #422006;
+  --color-tier-crafted-border: #facc15;
 }
 
 /* ─── Dark mode ──────────────────────────────────────────────────────────── */
