@@ -40,19 +40,24 @@
   --color-quality-heirloom: #00ccff;
 
   /* Meta-tier accents — semantic states distinct from item qualities.
-     Crafted = saturated pink/magenta. Sits in a hue band (~330deg) that
-     no stat (haste 90, crit 35, mastery 295, versatility 225), quality
-     (legendary 50, uncommon 125, epic 295), enchant lime (120), or class
-     color uses — so it pops against every other palette element. */
-  --color-tier-crafted-bg-light: #ec4899; /* pink-500 */
-  --color-tier-crafted-bg-dark: #f472b6; /* pink-400 — slightly lighter on dark bg */
+     Crafted = monochrome inverse-of-theme. The hue wheel is crowded
+     (stats crit 35 / haste 90 / vers 225 / mastery 295, qualities
+     50/125/200/250/295, evoker 176, monk 156, etc.) — every chromatic
+     pick clashes with at least one neighbour. Going achromatic + max
+     value contrast vs page bg sidesteps all hue conflicts and reads as
+     a distinct "system tag" against every other palette element. */
+  --color-tier-crafted-bg-light: #0f172a; /* slate-900 — opposite of light page bg */
+  --color-tier-crafted-bg-dark: #f8fafc; /* slate-50  — opposite of dark page bg */
   --color-tier-crafted-fg-light: #ffffff;
-  --color-tier-crafted-fg-dark: #500724; /* pink-950 — high contrast on pink-400 */
-  --color-tier-crafted-border: #ec4899;
+  --color-tier-crafted-fg-dark: #0f172a;
+  --color-tier-crafted-border: #0f172a;
 }
 
 /* ─── Dark mode ──────────────────────────────────────────────────────────── */
 .dark {
+  /* Tier-crafted border: light slate in dark mode so it shows up on the slot card */
+  --color-tier-crafted-border: #f8fafc;
+
   /* Stat colors */
   --color-stat-haste: oklch(96% 0.18 98deg);
   --color-stat-crit: oklch(68% 0.22 35deg);
