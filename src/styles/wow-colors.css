@@ -40,13 +40,15 @@
   --color-quality-heirloom: #00ccff;
 
   /* Meta-tier accents — semantic states distinct from item qualities.
-     Crafted = saturated yellow-gold; differs from legendary orange
-     so BiS and Crafted items are visually separable at a glance. */
-  --color-tier-crafted-bg-light: #facc15; /* yellow-400 */
-  --color-tier-crafted-bg-dark: #fde047; /* yellow-300 */
-  --color-tier-crafted-fg-light: #422006; /* deep brown for AAA on yellow */
-  --color-tier-crafted-fg-dark: #422006;
-  --color-tier-crafted-border: #facc15;
+     Crafted = saturated pink/magenta. Sits in a hue band (~330deg) that
+     no stat (haste 90, crit 35, mastery 295, versatility 225), quality
+     (legendary 50, uncommon 125, epic 295), enchant lime (120), or class
+     color uses — so it pops against every other palette element. */
+  --color-tier-crafted-bg-light: #ec4899; /* pink-500 */
+  --color-tier-crafted-bg-dark: #f472b6; /* pink-400 — slightly lighter on dark bg */
+  --color-tier-crafted-fg-light: #ffffff;
+  --color-tier-crafted-fg-dark: #500724; /* pink-950 — high contrast on pink-400 */
+  --color-tier-crafted-border: #ec4899;
 }
 
 /* ─── Dark mode ──────────────────────────────────────────────────────────── */
