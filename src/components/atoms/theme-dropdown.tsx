@@ -36,7 +36,15 @@ const THEME_LABELS: Record<string, string> = {
   dark: "Dark",
 }
 
-export function ThemeDropdown() {
+interface Props {
+  /**
+   * Compact icon-only trigger for the collapsed sidebar. Drops the label
+   * and chevron so the button fits in the rail's narrow footprint.
+   */
+  compact?: boolean
+}
+
+export function ThemeDropdown({ compact = false }: Props) {
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
 
@@ -46,19 +54,32 @@ export function ThemeDropdown() {
 
   const current = theme ?? "system"
   const CurrentIcon = THEME_OPTIONS.find((o) => o.value === current)?.icon ?? Monitor
+  const currentLabel = THEME_LABELS[current] ?? "Theme"
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="w-full justify-start gap-2 text-sm text-sidebar-foreground/70"
-        >
-          <CurrentIcon className="size-4" />
-          {THEME_LABELS[current] ?? "Theme"}
-          <ChevronDown className="ml-auto size-3" />
-        </Button>
+        {compact ? (
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label={`Theme: ${currentLabel}`}
+            title={`Theme: ${currentLabel}`}
+            className="size-8 text-sidebar-foreground/70"
+          >
+            <CurrentIcon className="size-4" />
+          </Button>
+        ) : (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-full justify-start gap-2 text-sm text-sidebar-foreground/70"
+          >
+            <CurrentIcon className="size-4" />
+            {currentLabel}
+            <ChevronDown className="ml-auto size-3" />
+          </Button>
+        )}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" side="top" className="min-w-[140px]">
         <DropdownMenuRadioGroup value={current} onValueChange={setTheme}>
