@@ -46,17 +46,17 @@
      pick clashes with at least one neighbour. Going achromatic + max
      value contrast vs page bg sidesteps all hue conflicts and reads as
      a distinct "system tag" against every other palette element. */
-  --color-tier-crafted-bg-light: #0f172a; /* slate-900 — opposite of light page bg */
-  --color-tier-crafted-bg-dark: #f8fafc; /* slate-50  — opposite of dark page bg */
+  --color-tier-crafted-bg-light: #0f172a; /* slate-900 — strong contrast on light bg */
+  --color-tier-crafted-bg-dark: #334155; /* slate-700 — muted, fits dark UI without glaring */
   --color-tier-crafted-fg-light: #ffffff;
-  --color-tier-crafted-fg-dark: #0f172a;
+  --color-tier-crafted-fg-dark: #f1f5f9; /* slate-100 — readable on slate-700 */
   --color-tier-crafted-border: #0f172a;
 }
 
 /* ─── Dark mode ──────────────────────────────────────────────────────────── */
 .dark {
-  /* Tier-crafted border: light slate in dark mode so it shows up on the slot card */
-  --color-tier-crafted-border: #f8fafc;
+  /* Tier-crafted border: muted slate in dark mode — readable on dark bg without glaring */
+  --color-tier-crafted-border: #64748b; /* slate-500 */
 
   /* Stat colors */
   --color-stat-haste: oklch(96% 0.18 98deg);

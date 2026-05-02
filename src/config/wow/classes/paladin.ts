@@ -14,6 +14,10 @@ const PaladinConfig: WowClassConfig = {
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_holy_holybolt.jpg",
       effect: "holylight" as SpecParticleEffect,
       atmosphere: "holy" as SpecAtmosphere,
+      heroTreeSlugs: [
+        "heraldofthesun",
+        "lightsmith",
+      ],
     },
     {
       id: 66,
@@ -21,6 +25,10 @@ const PaladinConfig: WowClassConfig = {
       url: "/pvp/paladin/protection",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_holy_devotionaura.jpg",
       atmosphere: "iron" as SpecAtmosphere,
+      heroTreeSlugs: [
+        "lightsmith",
+        "templar",
+      ],
     },
     {
       id: 70,
@@ -29,6 +37,39 @@ const PaladinConfig: WowClassConfig = {
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_holy_auraoflight.jpg",
       effect: "holyfire" as SpecParticleEffect,
       atmosphere: "holy" as SpecAtmosphere,
+      heroTreeSlugs: [
+        "heraldofthesun",
+        "templar",
+      ],
+    },
+  ],
+  heroTrees: [
+    {
+      slug: "templar",
+      name: "Templar",
+      signatures: [
+        "Light's Guidance",
+        "Shake the Heavens",
+        "Hammer and Anvil",
+      ],
+    },
+    {
+      slug: "lightsmith",
+      name: "Lightsmith",
+      signatures: [
+        "Holy Armaments",
+        "Holy Bulwark",
+        "Blessing of the Forge",
+      ],
+    },
+    {
+      slug: "heraldofthesun",
+      name: "Herald of the Sun",
+      signatures: [
+        "Dawnlight",
+        "Sun's Avatar",
+        "Sun Sear",
+      ],
     },
   ],
 }

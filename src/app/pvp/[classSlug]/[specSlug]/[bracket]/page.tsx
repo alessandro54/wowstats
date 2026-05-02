@@ -213,6 +213,7 @@ async function TalentsSection({
   return (
     <Talents
       classSlug={classSlug}
+      specId={specId}
       talents={talentsResponse.talents}
       talentsMeta={talentsResponse.meta}
     />

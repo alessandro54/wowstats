@@ -286,6 +286,8 @@ export interface CharacterProfile {
   pvp_entries: CharacterPvpEntry[]
   equipment: CharacterEquipmentItem[]
   talents: MetaTalent[]
+  /** WoW in-game import string for the primary spec's talent loadout. */
+  talent_loadout_code: string | null
 }
 
 export interface StatPriorityEntry {

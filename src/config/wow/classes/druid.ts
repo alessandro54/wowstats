@@ -14,6 +14,10 @@ const DruidConfig: WowClassConfig = {
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_nature_starfall.jpg",
       effect: "rainofstars" as SpecParticleEffect,
       atmosphere: "lunar" as SpecAtmosphere,
+      heroTreeSlugs: [
+        "keeperofthegrove",
+        "eluneschosen",
+      ],
     },
     {
       id: 103,
@@ -21,6 +25,10 @@ const DruidConfig: WowClassConfig = {
       url: "/pvp/druid/feral",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_druid_catform.jpg",
       atmosphere: "nature" as SpecAtmosphere,
+      heroTreeSlugs: [
+        "druidoftheclaw",
+        "wildstalker",
+      ],
     },
     {
       id: 104,
@@ -28,6 +36,10 @@ const DruidConfig: WowClassConfig = {
       url: "/pvp/druid/guardian",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_racial_bearform.jpg",
       atmosphere: "nature" as SpecAtmosphere,
+      heroTreeSlugs: [
+        "druidoftheclaw",
+        "wildstalker",
+      ],
     },
     {
       id: 105,
@@ -35,6 +47,44 @@ const DruidConfig: WowClassConfig = {
       url: "/pvp/druid/restoration",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_nature_healingtouch.jpg",
       atmosphere: "mist" as SpecAtmosphere,
+      heroTreeSlugs: [
+        "keeperofthegrove",
+        "wildstalker",
+      ],
+    },
+  ],
+  heroTrees: [
+    {
+      slug: "druidoftheclaw",
+      name: "Druid of the Claw",
+      signatures: [
+        "Ravage",
+        "Aggravate Wounds",
+      ],
+    },
+    {
+      slug: "keeperofthegrove",
+      name: "Keeper of the Grove",
+      signatures: [
+        "Dream Surge",
+        "Treants of the Moon",
+      ],
+    },
+    {
+      slug: "wildstalker",
+      name: "Wildstalker",
+      signatures: [
+        "Thriving Growth",
+        "Bursting Growth",
+      ],
+    },
+    {
+      slug: "eluneschosen",
+      name: "Elune's Chosen",
+      signatures: [
+        "Boundless Moonlight",
+        "Lunar Insight",
+      ],
     },
   ],
 }

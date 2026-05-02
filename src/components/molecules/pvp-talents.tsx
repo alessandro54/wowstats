@@ -1,121 +1,106 @@
 "use client"
 
-import { useState } from "react"
 import { PvpTalentTooltip } from "@/components/atoms/pvp-talent-tooltip"
+import { SectionTitle } from "@/components/atoms/section-title"
 import { TalentCard } from "@/components/atoms/talent-card"
 import { TalentIcon } from "@/components/atoms/talent-icon"
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import type { MetaTalent } from "@/lib/api"
-import { cn } from "@/lib/utils"
-import { BORDER_SITUATIONAL } from "@/lib/utils/talent-tree"
+import { BORDER_BIS, BORDER_SITUATIONAL } from "@/lib/utils/talent-tree"
 
-const GOLD_BORDER = "border-amber-400 dark:border-amber-300 border-2"
-const ICON_SIZE = 36
+// Top 3 = the meta picks; render large + bordered. Others in a compact grid.
+const ICON_SIZE_TOP = 56
+const ICON_SIZE_REST = 36
 
 interface Props {
   talents: MetaTalent[]
   activeColor: string
   classSlug: WowClassSlug
   hideStats?: boolean
+  /**
+   * Stack the top 3 meta picks vertically instead of side-by-side. Used on
+   * the character page where horizontal real estate is tighter and the PvP
+   * card sits beside a wider talent tree.
+   */
+  vertical?: boolean
 }
 
-export function PvpTalents({ talents, activeColor, classSlug, hideStats }: Props) {
-  const [hovered, setHovered] = useState(false)
+export function PvpTalents({ talents, activeColor, classSlug, hideStats, vertical }: Props) {
   const sorted = [
     ...talents,
   ].sort((a, b) => b.usage_pct - a.usage_pct)
   const top3 = sorted.slice(0, 3)
   const others = sorted.slice(3)
-  const situational = others.filter((t) => t.usage_pct > 20)
-  const rest = others.filter((t) => t.usage_pct <= 20)
 
   return (
-    <div
-      className="relative"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      <h2 className="mb-3 text-center text-sm font-semibold">PvP Talents</h2>
-      <TalentCard classSlug={classSlug} className="p-3">
-        <div className="flex flex-col items-center gap-2">
-          {top3.map((t) => (
-            <div key={t.talent.id} className="flex flex-col items-center gap-0.5">
-              <TalentIcon
-                talent={t}
-                size={ICON_SIZE}
-                activeColor={activeColor}
-                borderClass={GOLD_BORDER}
-                tooltipContent={<PvpTalentTooltip talent={t} activeColor={activeColor} />}
-              />
-              {!hideStats && (
-                <span className="font-mono text-[10px] font-bold tabular-nums text-amber-400">
-                  {t.usage_pct.toFixed(0)}%
-                </span>
-              )}
-            </div>
-          ))}
-        </div>
-      </TalentCard>
-
-      {!hideStats && (situational.length > 0 || rest.length > 0) && (
-        <div
-          className={cn(
-            "absolute left-0 z-30 transition-all duration-200",
-            hovered ? "opacity-100" : "pointer-events-none opacity-0",
-          )}
-          style={{
-            top: 0,
-            left: "100%",
-            paddingLeft: 8,
-          }}
-        >
-          <TalentCard classSlug={classSlug} className="p-3">
-            <div className="flex flex-col items-center gap-2">
-              {situational.length > 0 && (
-                <>
-                  <span className="text-[9px] font-medium uppercase tracking-wider text-purple-400">
-                    situational
+    <section className="relative">
+      <SectionTitle>PvP Talents</SectionTitle>
+      <TalentCard classSlug={classSlug} className="p-4">
+        <div className="flex flex-col items-center gap-3">
+          {/* Top 3 — meta picks, large icons with legendary border. Layout
+              flips to vertical when the parent has limited horizontal space. */}
+          <div
+            className={
+              vertical
+                ? "flex flex-col items-center gap-3"
+                : "flex flex-row items-start justify-center gap-3"
+            }
+          >
+            {top3.map((t) => (
+              <div key={t.talent.id} className="flex flex-col items-center gap-1">
+                <TalentIcon
+                  talent={t}
+                  size={ICON_SIZE_TOP}
+                  activeColor={activeColor}
+                  borderClass={BORDER_BIS}
+                  tooltipContent={<PvpTalentTooltip talent={t} activeColor={activeColor} />}
+                />
+                {!hideStats && (
+                  <span className="font-mono text-xs font-bold tabular-nums text-[var(--color-quality-legendary)]">
+                    {t.usage_pct.toFixed(0)}%
                   </span>
-                  {situational.map((t) => (
-                    <div key={t.talent.id} className="flex flex-col items-center gap-0.5">
-                      <TalentIcon
-                        talent={t}
-                        size={ICON_SIZE}
-                        activeColor={activeColor}
-                        borderClass={BORDER_SITUATIONAL}
-                        tooltipContent={<PvpTalentTooltip talent={t} activeColor={activeColor} />}
-                      />
-                      <span className="font-mono text-[10px] font-bold tabular-nums text-purple-400">
-                        {t.usage_pct.toFixed(0)}%
-                      </span>
-                    </div>
-                  ))}
-                </>
-              )}
-              {rest.length > 0 && (
-                <>
-                  {rest.map((t) => (
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Rest — compact grid below. Situational gets purple border, the
+              tail (usage <= 20%) keeps a neutral look + reduced opacity.    */}
+          {others.length > 0 && (
+            <>
+              <div className="h-px w-3/4 bg-border/50" />
+              <div className="grid grid-cols-4 gap-2">
+                {others.map((t) => {
+                  const isSituational = t.usage_pct > 20
+                  return (
                     <div
                       key={t.talent.id}
-                      className="flex flex-col items-center gap-0.5 opacity-50"
+                      className={`flex flex-col items-center gap-0.5 ${isSituational ? "" : "opacity-60"}`}
                     >
                       <TalentIcon
                         talent={t}
-                        size={ICON_SIZE}
+                        size={ICON_SIZE_REST}
                         activeColor={activeColor}
+                        borderClass={isSituational ? BORDER_SITUATIONAL : undefined}
                         tooltipContent={<PvpTalentTooltip talent={t} activeColor={activeColor} />}
                       />
-                      <span className="font-mono text-[10px] font-bold tabular-nums text-muted-foreground">
-                        {t.usage_pct.toFixed(0)}%
-                      </span>
+                      {!hideStats && (
+                        <span
+                          className={`font-mono text-[10px] font-bold tabular-nums ${
+                            isSituational ? "text-purple-400" : "text-muted-foreground"
+                          }`}
+                        >
+                          {t.usage_pct.toFixed(0)}%
+                        </span>
+                      )}
                     </div>
-                  ))}
-                </>
-              )}
-            </div>
-          </TalentCard>
+                  )
+                })}
+              </div>
+            </>
+          )}
         </div>
-      )}
-    </div>
+      </TalentCard>
+    </section>
   )
 }

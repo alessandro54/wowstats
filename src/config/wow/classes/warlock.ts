@@ -19,6 +19,10 @@ const WarlockConfig: WowClassConfig = {
       animationUrl: `${CDN_BASE}/class_media/warlock/affliction_animation.mp4`,
       effect: "venomdrip" as const,
       atmosphere: "shadow" as SpecAtmosphere,
+      heroTreeSlugs: [
+        "hellcaller",
+        "soulharvester",
+      ],
     },
     {
       id: 266,
@@ -28,6 +32,10 @@ const WarlockConfig: WowClassConfig = {
       iconRemasteredUrl: cdnImage("/class_media/warlock/demonology_icon.png", 80),
       animationUrl: `${CDN_BASE}/class_media/warlock/demonology_animation.mp4`,
       atmosphere: "fel" as SpecAtmosphere,
+      heroTreeSlugs: [
+        "diabolist",
+        "soulharvester",
+      ],
     },
     {
       id: 267,
@@ -38,6 +46,36 @@ const WarlockConfig: WowClassConfig = {
       animationUrl: `${CDN_BASE}/class_media/warlock/destruction_animation.mp4`,
       effect: "rainoffire" as SpecParticleEffect,
       atmosphere: "fire" as SpecAtmosphere,
+      heroTreeSlugs: [
+        "diabolist",
+        "hellcaller",
+      ],
+    },
+  ],
+  heroTrees: [
+    {
+      slug: "hellcaller",
+      name: "Hellcaller",
+      signatures: [
+        "Wither",
+        "Bleakheart Tactics",
+      ],
+    },
+    {
+      slug: "diabolist",
+      name: "Diabolist",
+      signatures: [
+        "Diabolic Ritual",
+        "Ruination",
+      ],
+    },
+    {
+      slug: "soulharvester",
+      name: "Soul Harvester",
+      signatures: [
+        "Demonic Soul",
+        "Soul Anathema",
+      ],
     },
   ],
 }

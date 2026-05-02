@@ -119,6 +119,24 @@ export interface WowClassSpec {
   animationUrl?: string
   effect?: SpecParticleEffect
   atmosphere?: SpecAtmosphere
+  /**
+   * Slugs of the hero talent trees this spec can choose between.
+   * Each spec only unlocks 2 of the class's 3 hero trees (DH is the
+   * exception with only 2 total). Slugs match `HeroTreeConfig.slug`.
+   */
+  heroTreeSlugs?: string[]
+}
+
+// Hero talent tree (TWW). Lives on each class config so per-class data
+// (specs, hero trees, future tier-set bonuses, …) is colocated.
+//
+// Icon URL pattern (Blizzard's TextureAtlas, hosted via Wowhead CDN):
+//   talents-heroclass-{class}-{slug}.webp
+// where {class} is the class slug with hyphens stripped (e.g. "deathknight").
+export interface HeroTreeConfig {
+  slug: string // matches the suffix in the atlas filename
+  name: string // display label
+  signatures: string[] // any matching talent name picks this entry
 }
 
 export interface WowClassConfig {
@@ -130,6 +148,7 @@ export interface WowClassConfig {
   bannerUrl?: string
   bgGradient?: string
   specs: WowClassSpec[]
+  heroTrees?: HeroTreeConfig[]
 }
 
 export const WOW_CLASSES: WowClassConfig[] = [

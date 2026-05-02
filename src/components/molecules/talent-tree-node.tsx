@@ -21,6 +21,12 @@ interface Props {
   activeColor: string
   hideStats?: boolean
   isApex?: boolean
+  /**
+   * Enforced-pick nodes (hero gateway/capstone) — every build that uses the
+   * tree has them, so their usage % is uninformative and suppressed. Visual
+   * size/shape is unchanged; for the round bottom-node treatment use isApex.
+   */
+  enforcedPick?: boolean
 }
 
 export function TalentNodeCard({
@@ -33,6 +39,7 @@ export function TalentNodeCard({
   activeColor,
   hideStats,
   isApex,
+  enforcedPick,
 }: Props) {
   const tier = bestTier(node)
   const isBis = tier === "bis"
@@ -54,8 +61,13 @@ export function TalentNodeCard({
   const maxBarPct = rankBars ? Math.max(...rankBars.map((b) => b.pct), 1) : 0
 
   const isVariable = node.isChoice || node.isRanked
+  // Suppress % on apex (visual capstone) AND on any enforced-pick node —
+  // both add no signal because every build of the tree has them.
   const showPct =
-    (!inTopBuild || isSituational || isVariable) && (!onlyChoicePct || isSituational || isVariable)
+    !isApex &&
+    !enforcedPick &&
+    (!inTopBuild || isSituational || isVariable) &&
+    (!onlyChoicePct || isSituational || isVariable)
   const showRank = node.isRanked && node.maxRank > 1 && invested > 0
   const nodeSize = isApex ? APEX_NODE_SIZE : NODE_SIZE
 

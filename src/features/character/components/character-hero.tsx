@@ -1,4 +1,5 @@
 import Image from "next/image"
+import { CopyLinkButton } from "@/features/character/components/copy-link-button"
 import { titleizeSlug } from "@/lib/utils"
 
 interface Props {
@@ -105,6 +106,8 @@ export function CharacterHero({
               >
                 Armory ↗
               </a>
+              <span className="text-muted-foreground/40">·</span>
+              <CopyLinkButton />
             </div>
           </div>
         </div>

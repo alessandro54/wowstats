@@ -5,6 +5,8 @@ import { notFound } from "next/navigation"
 export const dynamic = "force-dynamic"
 
 import { CharacterEquipment } from "@/features/character/components/character-equipment"
+import { CopyTalentStringButton } from "@/features/character/components/copy-talent-string-button"
+import { SectionTitle } from "@/components/atoms/section-title"
 import { Talents } from "@/components/organisms/talents"
 import { CharacterHero } from "@/features/character/components/character-hero"
 import { SpecParticleFx } from "@/components/molecules/spec-particle-fx"
@@ -275,10 +277,13 @@ export default async function CharacterPage({ params }: PageProps) {
 
         {/* Talent Tree */}
         {character.talents.length > 0 && (
-          <section className="space-y-3">
-            <h2 className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
-              Talents
-            </h2>
+          <section>
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <SectionTitle className="mb-0">Talents</SectionTitle>
+              {character.talent_loadout_code && (
+                <CopyTalentStringButton code={character.talent_loadout_code} />
+              )}
+            </div>
             <Talents classSlug={classSlug} talents={character.talents} hideStats />
           </section>
         )}

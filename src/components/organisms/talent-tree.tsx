@@ -96,6 +96,8 @@ export function TalentTree({
   budget,
   hideStats,
   apexCircle = false,
+  nodeKeyMode = "id",
+  suppressEnforcedPct = false,
 }: {
   talents: MetaTalent[]
   activeColor: string
@@ -105,6 +107,20 @@ export function TalentTree({
   budget?: number
   hideStats?: boolean
   apexCircle?: boolean
+  /**
+   * "id"        — key each node by its blizzard nodeId (default).
+   * "position"  — key each node by `${row}-${col}`. Use when the surrounding
+   *               UI swaps between trees that share the same topology (e.g.
+   *               cycling through hero talent trees), so React reuses the
+   *               same DOM node and only the icon image inside changes.
+   */
+  nodeKeyMode?: "id" | "position"
+  /**
+   * When true, suppresses the % label on enforced-pick nodes (top gateway
+   * and bottom capstone, when present). Visual layout/sizes are unchanged —
+   * use `apexCircle` separately for the round bottom-node treatment.
+   */
+  suppressEnforcedPct?: boolean
 }) {
   const nodeMap = useMemo(
     () => buildNodeMap(talents),
@@ -137,10 +153,31 @@ export function TalentTree({
     ],
   )
 
+  // Set of "row-col" position keys that appear on more than one node.
+  // Used by position-keying to fall back to nodeId for the collided pair.
+  const positionCollisions = useMemo(() => {
+    if (nodeKeyMode !== "position") return new Set<string>()
+    const counts = new Map<string, number>()
+    for (const n of nodes) {
+      const k = `${n.row}-${n.col}`
+      counts.set(k, (counts.get(k) ?? 0) + 1)
+    }
+    return new Set(
+      Array.from(counts.entries())
+        .filter(([, c]) => c > 1)
+        .map(([k]) => k),
+    )
+  }, [
+    nodes,
+    nodeKeyMode,
+  ])
+
   if (nodes.length === 0) return null
 
-  const { svgW, svgH, maxRow, botApex, nodeCX, nodeY } = layout
+  const { svgW, svgH, maxRow, botApex, topApex, nodeCX, nodeY } = layout
   const useApex = apexCircle && botApex
+  // Top-row index for enforced-pick lookup. Only used when suppressEnforcedPct.
+  const minRow = suppressEnforcedPct && topApex ? Math.min(...nodes.map((n) => n.row)) : -1
 
   return (
     <div className="flex h-full min-h-0 flex-col">
@@ -163,11 +200,28 @@ export function TalentTree({
             budget={budget}
           />
           {nodes.map((node) => {
+            // isApex drives the visual treatment (bigger size, circle).
+            // enforcedPick is purely semantic — used to suppress the % label
+            // on gateway/capstone nodes that every build of this tree picks.
             const isApex = useApex && node.row === maxRow
+            const enforcedPick =
+              suppressEnforcedPct &&
+              ((botApex && node.row === maxRow) || (topApex && node.row === minRow))
             const size = isApex ? APEX_NODE_SIZE : NODE_SIZE
+            // When two nodes share row+col (rare — some choice/split layouts
+            // collide), suffix with nodeId to keep the React key unique.
+            // The collided node won't morph across hero-tree swaps (it gets
+            // a tree-specific id), but the rest of the grid still does.
+            const posKey = `${node.row}-${node.col}`
+            const key =
+              nodeKeyMode === "position"
+                ? positionCollisions.has(posKey)
+                  ? `${posKey}-${node.nodeId}`
+                  : posKey
+                : node.nodeId
             return (
               <TalentNodeCard
-                key={node.nodeId}
+                key={key}
                 node={node}
                 left={nodeCX(node) - size / 2}
                 top={nodeY(node.row) - size / 2}
@@ -177,6 +231,7 @@ export function TalentTree({
                 activeColor={activeColor}
                 hideStats={hideStats}
                 isApex={isApex}
+                enforcedPick={enforcedPick}
               />
             )
           })}
