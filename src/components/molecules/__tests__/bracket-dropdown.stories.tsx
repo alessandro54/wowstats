@@ -27,6 +27,6 @@ export const ThreeVThree: Story = {
 }
 export const ShuffleOverall: Story = {
   args: {
-    current: "shuffle-overall",
+    current: "shuffle",
   },
 }

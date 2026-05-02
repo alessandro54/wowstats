@@ -169,12 +169,12 @@ export function NavMain() {
       Icon: Icon3v3,
     },
     {
-      slug: "shuffle-overall",
+      slug: "shuffle",
       label: "Solo Shuffle",
       Icon: IconSolo,
     },
     {
-      slug: "blitz-overall",
+      slug: "blitz",
       label: "Blitz",
       Icon: IconBlitz,
     },

@@ -68,7 +68,7 @@ export function HomeBracketCards({ brackets }: Props) {
                   ? "Two vs Two Arena"
                   : b.bracket === "3v3"
                     ? "Three vs Three Arena"
-                    : b.bracket === "shuffle-overall"
+                    : b.bracket === "shuffle"
                       ? "6-Player Round-Robin"
                       : "10-Player Battleground"}
               </p>

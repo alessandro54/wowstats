@@ -24,8 +24,8 @@ export interface TopSpecEntry {
 const SHORT_BRACKET_LABELS: Record<string, string> = {
   "2v2": "2v2",
   "3v3": "3v3",
-  "shuffle-overall": "Shuffle",
-  "blitz-overall": "Blitz",
+  shuffle: "Shuffle",
+  blitz: "Blitz",
 }
 
 interface Props {
@@ -90,7 +90,7 @@ export function HomeTopSpecsList({ specs }: Props) {
                 {spec.brackets.length > 0 && (
                   <div className="mt-1.5 flex flex-wrap gap-1">
                     {spec.brackets
-                      .filter((b) => b.slug !== "blitz-overall")
+                      .filter((b) => b.slug !== "blitz")
                       .map((b) => (
                         <span
                           key={b.slug}

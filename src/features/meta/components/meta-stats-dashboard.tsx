@@ -16,22 +16,22 @@ import { tier, tierByPercentile } from "@/config/app-config"
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 
 const SOLO_BRACKETS = [
-  "shuffle-overall",
-  "blitz-overall",
+  "shuffle",
+  "blitz",
 ]
 
 const BRACKET_LABELS: Record<string, string> = {
   "2v2": "2v2",
   "3v3": "3v3",
-  "shuffle-overall": "Shuffle",
-  "blitz-overall": "Blitz",
+  shuffle: "Shuffle",
+  blitz: "Blitz",
 }
 
 const ALL_BRACKETS = [
   "2v2",
   "3v3",
-  "shuffle-overall",
-  "blitz-overall",
+  "shuffle",
+  "blitz",
 ]
 
 export type Region = "all" | "us" | "eu"

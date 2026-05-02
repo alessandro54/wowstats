@@ -56,11 +56,11 @@ export const TIERLIST_LINKS = [
   },
   {
     label: "Shuffle Tierlist",
-    href: "/pvp/meta/shuffle-overall/dps",
+    href: "/pvp/meta/shuffle/dps",
   },
   {
     label: "Blitz Tierlist",
-    href: "/pvp/meta/blitz-overall/dps",
+    href: "/pvp/meta/blitz/dps",
   },
 ] as const
 
