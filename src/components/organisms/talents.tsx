@@ -83,10 +83,10 @@ export function Talents({ classSlug, specId, talents, talentsMeta, hideStats }: 
             <div className="flex flex-col items-center">
               <SectionTitle>{TYPE_LABELS.hero}</SectionTitle>
               <div
-                className={`grid grid-cols-1 gap-6 lg:grid-cols-[auto_auto] lg:items-center lg:gap-10 ${
+                className={`grid grid-cols-1 gap-6 sm:grid-cols-[auto_auto] sm:items-center sm:gap-10 ${
                   hideStats
-                    ? "place-items-start lg:justify-start"
-                    : "place-items-center lg:justify-center"
+                    ? "place-items-start sm:justify-start"
+                    : "place-items-center sm:justify-center"
                 }`}
               >
                 <HeroSection

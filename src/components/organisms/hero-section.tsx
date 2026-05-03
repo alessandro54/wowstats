@@ -84,7 +84,7 @@ export function HeroSection({ heroEntries, activeColor, classSlug, specId, hideS
       <TalentCard classSlug={classSlug} className="w-fit p-6">
         <div className="mx-auto flex w-fit flex-col items-center gap-5">
           <div
-            className={`grid items-center gap-5 transition-opacity duration-300 lg:grid-cols-[auto_auto] lg:gap-8 ${
+            className={`grid place-items-center gap-5 transition-opacity duration-300 sm:grid-cols-[auto_auto] sm:gap-8 ${
               isUnused ? "opacity-40" : "opacity-100"
             }`}
           >
@@ -144,7 +144,12 @@ export function HeroSection({ heroEntries, activeColor, classSlug, specId, hideS
             <button
               type="button"
               onClick={cycle}
-              className="inline-flex items-center gap-2 rounded-full border border-[var(--color-quality-epic)]/50 bg-[var(--color-quality-epic)]/10 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[var(--color-quality-epic)] shadow-sm transition-colors hover:bg-[var(--color-quality-epic)]/20"
+              className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-wider shadow-sm transition-colors"
+              style={{
+                borderColor: `color-mix(in oklch, ${activeColor} 50%, transparent)`,
+                backgroundColor: `color-mix(in oklch, ${activeColor} 12%, transparent)`,
+                color: activeColor,
+              }}
               aria-label={`Switch to ${nextMeta.name}`}
             >
               <span>Switch to</span>

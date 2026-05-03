@@ -13,17 +13,20 @@ export default function DynamicBackground() {
   const segments = pathname.split("/").filter(Boolean)
   const isPvpRoute = segments[0] === "pvp"
   const isMetaPage = isPvpRoute && segments[1] === "meta"
+  const isLeaderboardPage = isPvpRoute && segments[1] === "leaderboard"
   const classSlug =
-    isPvpRoute && !isMetaPage ? ((segments[1] as WowClassSlug | undefined) ?? null) : null
-  const specSlug = isPvpRoute && !isMetaPage ? (segments[2] ?? null) : null
-  const isSpecPage = isPvpRoute && !isMetaPage && classSlug && specSlug
+    isPvpRoute && !isMetaPage && !isLeaderboardPage
+      ? ((segments[1] as WowClassSlug | undefined) ?? null)
+      : null
+  const specSlug = isPvpRoute && !isMetaPage && !isLeaderboardPage ? (segments[2] ?? null) : null
+  const isSpecPage = isPvpRoute && !isMetaPage && !isLeaderboardPage && classSlug && specSlug
 
   const isHome = pathname === "/"
   const activeSlug = hoverSlug ?? classSlug
   const background = activeSlug ? `var(--color-class-${activeSlug})` : "oklch(0.7 0.15 340)"
 
-  // bracket slug sits at segments[2] for /pvp/meta/[bracket]/[role]
-  const bracketSlug = isMetaPage ? segments[2] : null
+  // bracket slug sits at segments[2] for /pvp/meta/[bracket]/[role] or /pvp/leaderboard/[bracket]
+  const bracketSlug = isMetaPage ? segments[2] : isLeaderboardPage ? segments[2] : null
   const bracketColorVal = bracketSlug ? bracketColor(bracketSlug) : undefined
 
   // Home has its own canvas; spec pages have their own atmosphere
@@ -32,6 +35,11 @@ export default function DynamicBackground() {
   if (isMetaPage) {
     // Hover overrides bracket color for live class tinting
     const bgColor = activeSlug ? `var(--color-class-${activeSlug})` : bracketColorVal
+    return <HomeBgCanvas color={bgColor} />
+  }
+
+  if (isLeaderboardPage) {
+    const bgColor = activeSlug ? `var(--color-class-${activeSlug})` : "#4f46e5"
     return <HomeBgCanvas color={bgColor} />
   }
 

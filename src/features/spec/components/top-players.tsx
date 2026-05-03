@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { LazyImage } from "@/components/atoms/lazy-image"
 import { characterUrl } from "@/components/atoms/player-tooltip"
+import { PlayerHoverCard } from "@/components/molecules/player-hover-card"
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { classColor } from "@/hooks/use-active-color"
 import type { TopPlayer } from "@/lib/api"
@@ -17,6 +18,8 @@ interface Props {
   lazyRegionsUrl?: string
   /** Class slug for color fallback when nothing is hovered */
   defaultClassSlug?: WowClassSlug
+  /** When set, renders a "Full leaderboard" link in the header. */
+  leaderboardHref?: string
 }
 
 const REGIONS: {
@@ -41,7 +44,12 @@ const REGIONS: {
   },
 ]
 
-export function TopPlayers({ playersByRegion, lazyRegionsUrl, defaultClassSlug }: Props) {
+export function TopPlayers({
+  playersByRegion,
+  lazyRegionsUrl,
+  defaultClassSlug,
+  leaderboardHref,
+}: Props) {
   const [region, setRegion] = useState<Region>("all")
   const [lazyData, setLazyData] = useState<Record<string, TopPlayer[]>>({})
   const router = useRouter()
@@ -88,34 +96,49 @@ export function TopPlayers({ playersByRegion, lazyRegionsUrl, defaultClassSlug }
 
   return (
     <section>
-      <div className="mb-4 flex items-center justify-between gap-4">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
         <div className="flex items-center gap-2">
           <span className="inline-block size-2 rounded-full bg-emerald-500 shadow-[0_0_6px] shadow-emerald-500" />
           <h2 className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
             Top Players
           </h2>
-          <div className="ml-2 h-px w-16 bg-gradient-to-r from-border to-transparent" />
+          <div className="ml-2 hidden h-px w-16 bg-gradient-to-r from-border to-transparent sm:block" />
         </div>
-        <div className="flex rounded-lg border border-border/50 bg-card/30">
-          {REGIONS.map((r) => (
+        <div className="flex flex-wrap items-center gap-2">
+          {leaderboardHref && (
             <button
-              key={r.value}
               type="button"
-              onClick={() => setRegion(r.value)}
-              className={`px-3 py-1.5 text-[11px] font-medium transition-colors ${
-                region === r.value ? "bg-white/10" : "text-muted-foreground hover:text-foreground"
-              } ${r.value === "all" ? "rounded-l-lg" : ""} ${r.value === "kr" ? "rounded-r-lg" : ""}`}
-              style={
-                region === r.value
-                  ? {
-                      color: activeColor,
-                    }
-                  : undefined
-              }
+              onMouseEnter={() => router.prefetch(leaderboardHref)}
+              onClick={() => router.push(leaderboardHref)}
+              className="shrink-0 whitespace-nowrap rounded-lg border border-border/50 bg-card/30 px-3 py-1.5 text-[11px] font-semibold transition-colors hover:bg-white/10"
+              style={{
+                color: activeColor,
+              }}
             >
-              {r.label}
+              Full leaderboard →
             </button>
-          ))}
+          )}
+          <div className="flex rounded-lg border border-border/50 bg-card/30">
+            {REGIONS.map((r) => (
+              <button
+                key={r.value}
+                type="button"
+                onClick={() => setRegion(r.value)}
+                className={`px-3 py-1.5 text-[11px] font-medium transition-colors ${
+                  region === r.value ? "bg-white/10" : "text-muted-foreground hover:text-foreground"
+                } ${r.value === "all" ? "rounded-l-lg" : ""} ${r.value === "kr" ? "rounded-r-lg" : ""}`}
+                style={
+                  region === r.value
+                    ? {
+                        color: activeColor,
+                      }
+                    : undefined
+                }
+              >
+                {r.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -184,7 +207,9 @@ function TopPlayerRow({
     player.wins + player.losses > 0 ? (player.wins / (player.wins + player.losses)) * 100 : 0
 
   return (
-    <tr
+    <PlayerHoverCard
+      player={player}
+      onClick={onClick}
       className={`cursor-pointer border-b border-white/[0.03] transition-colors hover:bg-white/[0.03] ${isTop3 ? "border-l-2" : ""}`}
       style={
         isTop3
@@ -193,7 +218,6 @@ function TopPlayerRow({
             }
           : undefined
       }
-      onClick={onClick}
     >
       <td className="px-4 py-3 text-center">
         <span
@@ -256,6 +280,6 @@ function TopPlayerRow({
           {player.region.toUpperCase()}
         </span>
       </td>
-    </tr>
+    </PlayerHoverCard>
   )
 }
