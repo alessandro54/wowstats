@@ -13,10 +13,10 @@ import type {
 
 export const revalidate = 21600
 
-import { Equipment } from "@/components/organisms/equipment"
+import { Equipment } from "@/features/spec/components/equipment"
 import { TalentTreeSkeleton } from "@/components/organisms/talent-tree"
 import { Talents } from "@/components/organisms/talents"
-import { TopPlayers } from "@/components/organisms/top-players"
+import { TopPlayers } from "@/features/spec/components/top-players"
 import { Skeleton } from "@/components/ui/skeleton"
 import { apiBracket } from "@/config/app-config"
 import { SLOT_ORDER } from "@/config/equipment-config"
@@ -153,12 +153,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 // ── Top Players: only fetch "all" region server-side ─────────
 async function TopPlayersSection({
   resolvedBracket,
+  bracket,
   specId,
   classSlug,
+  specSlug,
 }: {
   resolvedBracket: string
+  bracket: string
   specId: number
   classSlug: WowClassSlug
+  specSlug: string
 }) {
   const locale = DEFAULT_LOCALE
   const topAll = await fetchTopPlayers(resolvedBracket, specId, undefined, locale).catch(
@@ -180,6 +184,7 @@ async function TopPlayersSection({
       }}
       lazyRegionsUrl={`/api/prefetch/top-players?bracket=${resolvedBracket}&spec_id=${specId}`}
       defaultClassSlug={classSlug}
+      leaderboardHref={`/pvp/leaderboard/${bracket}?class=${classSlug}&spec=${specSlug}`}
     />
   )
 }
@@ -213,6 +218,7 @@ async function TalentsSection({
   return (
     <Talents
       classSlug={classSlug}
+      specId={specId}
       talents={talentsResponse.talents}
       talentsMeta={talentsResponse.meta}
     />
@@ -405,8 +411,10 @@ export default async function SpecPage({ params }: PageProps) {
       <Suspense fallback={<TopPlayersSkeleton />}>
         <TopPlayersSection
           resolvedBracket={resolvedBracket}
+          bracket={bracket}
           specId={spec.id}
           classSlug={cls.slug as WowClassSlug}
+          specSlug={specSlug}
         />
       </Suspense>
       <Suspense fallback={<TalentsSkeleton />}>

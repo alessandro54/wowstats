@@ -14,11 +14,11 @@ const BRACKETS = [
     label: "3v3",
   },
   {
-    value: "shuffle-overall",
+    value: "shuffle",
     label: "Solo Shuffle",
   },
   {
-    value: "blitz-overall",
+    value: "blitz",
     label: "Blitz",
   },
 ] as const

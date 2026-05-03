@@ -222,6 +222,7 @@ export interface TopPlayer {
   score: number
   avatar_url: string | null
   class_slug: string
+  spec_id?: number | null
 }
 
 export interface TopPlayersResponse {
@@ -244,6 +245,49 @@ export function fetchTopPlayers(
   }
   if (region) params.region = region
   return apiFetch("/api/v1/pvp/meta/top_players", params, locale)
+}
+
+export interface LeaderboardResponse {
+  bracket: string
+  spec_id: number | null
+  class_slug: string | null
+  regions: string[]
+  query: string | null
+  page: number
+  per_page: number
+  total: number
+  total_pages: number
+  players: TopPlayer[]
+  snapshot_at: string | null
+}
+
+export function fetchLeaderboard(
+  args: {
+    bracket: string
+    specId?: number
+    classSlug?: string
+    region?: string
+    page?: number
+    perPage?: number
+    q?: string
+    minRating?: number
+    maxRating?: number
+    /** 0–1 fraction (e.g. 0.55 = 55%). */
+    minWinrate?: number
+  },
+  locale?: string,
+): Promise<LeaderboardResponse> {
+  const params: Record<string, string> = {}
+  if (args.specId) params.spec_id = String(args.specId)
+  if (args.classSlug) params.class_slug = args.classSlug
+  if (args.region) params.region = args.region
+  if (args.page) params.page = String(args.page)
+  if (args.perPage) params.per_page = String(args.perPage)
+  if (args.q) params.q = args.q
+  if (args.minRating != null) params.min_rating = String(args.minRating)
+  if (args.maxRating != null) params.max_rating = String(args.maxRating)
+  if (args.minWinrate != null) params.min_winrate = String(args.minWinrate)
+  return apiFetch(`/api/v1/pvp/${args.bracket}/leaderboard`, params, locale)
 }
 
 export interface CharacterPvpEntry {
@@ -286,6 +330,8 @@ export interface CharacterProfile {
   pvp_entries: CharacterPvpEntry[]
   equipment: CharacterEquipmentItem[]
   talents: MetaTalent[]
+  /** WoW in-game import string for the primary spec's talent loadout. */
+  talent_loadout_code: string | null
 }
 
 export interface StatPriorityEntry {
@@ -368,7 +414,6 @@ export function fetchClassDistribution(
     bracket: params.bracket,
     region: params.region,
     role: params.role,
-    new_model: "true",
   }
   if (params.seasonId) {
     query.season_id = params.seasonId

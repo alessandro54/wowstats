@@ -8,6 +8,7 @@
 export type { BracketSlug } from "@/config/wow/brackets-config"
 // Re-export types from config
 export type {
+  HeroTreeConfig,
   WowClassConfig,
   WowClassSlug,
   WowClassSpec,
@@ -24,6 +25,8 @@ export {
 } from "./brackets"
 // Re-export all class utilities
 export { getWowClassBySlug } from "./classes"
+// Re-export hero-tree utilities
+export { heroTreeIconUrl, identifyHeroTree } from "./hero-trees"
 // Re-export all color utilities
 export {
   getClassBgGradient,

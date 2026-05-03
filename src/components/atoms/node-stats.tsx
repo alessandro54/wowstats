@@ -12,6 +12,9 @@ interface Props {
   position?: "right"
 }
 
+// >= this usage is "the pick" — % label is noise. Rank still renders.
+const HIDE_PCT_THRESHOLD = 90
+
 export function NodeStats({
   hideStats,
   showPct,
@@ -22,9 +25,11 @@ export function NodeStats({
   opacity,
   position,
 }: Props) {
-  const hasPct = !hideStats && showPct
-  const hasRank = showRank && (hideStats || !showPct)
-  const hasInlineRank = !hideStats && showPct && showRank
+  const pctValue = displayUsagePct(node)
+  const showPctEffective = showPct && pctValue < HIDE_PCT_THRESHOLD
+  const hasPct = !hideStats && showPctEffective
+  const hasRank = showRank && (hideStats || !showPctEffective)
+  const hasInlineRank = !hideStats && showPctEffective && showRank
   if (!hasPct && !hasRank && !hasInlineRank) return null
 
   const el = (
@@ -34,9 +39,7 @@ export function NodeStats({
         opacity,
       }}
     >
-      {hasPct && (
-        <span className="text-slate-600 dark:text-white">{displayUsagePct(node).toFixed(0)}%</span>
-      )}
+      {hasPct && <span className="text-slate-600 dark:text-white">{pctValue.toFixed(0)}%</span>}
       {hasInlineRank && <span className="text-slate-600 dark:text-white"> · </span>}
       {(hasInlineRank || hasRank) && (
         <span

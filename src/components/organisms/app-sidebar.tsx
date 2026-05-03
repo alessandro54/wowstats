@@ -18,7 +18,8 @@ import {
 import { cdnImage } from "@/config/cdn-config"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { open, isMobile } = useSidebar()
+  const { open, isMobile, state } = useSidebar()
+  const collapsed = state === "collapsed" && !isMobile
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -41,8 +42,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavMain />
       </SidebarContent>
-      <SidebarFooter className="flex items-center justify-center pb-4 group-data-[collapsible=icon]:hidden">
-        {isMobile ? <ThemeDropdown /> : <ThemeSwitcher />}
+      <SidebarFooter className="flex items-center justify-center pb-4">
+        {collapsed ? <ThemeDropdown compact /> : isMobile ? <ThemeDropdown /> : <ThemeSwitcher />}
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

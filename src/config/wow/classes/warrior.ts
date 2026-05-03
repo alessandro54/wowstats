@@ -17,6 +17,10 @@ const WarriorConfig: WowClassConfig = {
       iconRemasteredUrl: cdnImage("/class_media/warrior/arms_icon.png", 80),
       effect: "ashfire" as SpecParticleEffect,
       atmosphere: "blood" as SpecAtmosphere,
+      heroTreeSlugs: [
+        "colossus",
+        "slayer",
+      ],
     },
     {
       id: 72,
@@ -26,6 +30,10 @@ const WarriorConfig: WowClassConfig = {
       iconRemasteredUrl: cdnImage("/class_media/warrior/fury_icon.png", 80),
       effect: "flames" as SpecParticleEffect,
       atmosphere: "fire" as SpecAtmosphere,
+      heroTreeSlugs: [
+        "mountainthane",
+        "slayer",
+      ],
     },
     {
       id: 73,
@@ -34,6 +42,39 @@ const WarriorConfig: WowClassConfig = {
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_warrior_defensivestance.jpg",
       iconRemasteredUrl: cdnImage("/class_media/warrior/protection_icon.png", 80),
       atmosphere: "iron" as SpecAtmosphere,
+      heroTreeSlugs: [
+        "colossus",
+        "mountainthane",
+      ],
+    },
+  ],
+  heroTrees: [
+    {
+      slug: "mountainthane",
+      name: "Mountain Thane",
+      signatures: [
+        "Lightning Strikes",
+        "Thorim's Might",
+        "Thunder Blast",
+      ],
+    },
+    {
+      slug: "slayer",
+      name: "Slayer",
+      signatures: [
+        "Slayer's Dominance",
+        "Slayer's Malice",
+        "Imminent Demise",
+      ],
+    },
+    {
+      slug: "colossus",
+      name: "Colossus",
+      signatures: [
+        "Demolish",
+        "Colossal Might",
+        "Dominance of the Colossus",
+      ],
     },
   ],
 }

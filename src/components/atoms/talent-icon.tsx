@@ -56,15 +56,15 @@ export function TalentIcon({
         }),
       }}
     >
-      {/* Image layer — overflow-hidden kept here so the icon stays fully visible */}
       <div className={cn("absolute inset-0 overflow-hidden", radius)}>
         {talent.talent.icon_url ? (
           <Image
+            key={talent.talent.icon_url}
             src={iconUrl(talent.talent.icon_url, size)!}
             alt={talent.talent.name || "Talent Icon"}
             width={size}
             height={size}
-            className="object-cover"
+            className="object-cover motion-safe:animate-in motion-safe:fade-in motion-safe:duration-500"
             unoptimized
           />
         ) : (

@@ -1,5 +1,6 @@
 "use client"
 
+import { SectionTitle } from "@/components/atoms/section-title"
 import { TalentCard } from "@/components/atoms/talent-card"
 import { PvpTalents } from "@/components/molecules/pvp-talents"
 import { TalentList } from "@/components/molecules/talent-list"
@@ -19,12 +20,19 @@ const TYPE_LABELS: Record<string, string> = {
 
 interface Props {
   classSlug: WowClassSlug
+  /** Spec id of the page being rendered. Used to scope hero-tree options. */
+  specId?: number
   talents: MetaTalent[]
   talentsMeta?: TalentsMeta
   hideStats?: boolean
 }
 
-export function Talents({ classSlug, talents, talentsMeta, hideStats }: Props) {
+/**
+ * Top-level talent display orchestrator. Splits talents into class tree, spec
+ * tree, hero trees, and PvP talents. Used by both character profile and spec
+ * meta pages — `hideStats` toggles meta-stats columns for character page.
+ */
+export function Talents({ classSlug, specId, talents, talentsMeta, hideStats }: Props) {
   const activeColor = useActiveColor(classSlug)
 
   const safeTalents = Array.isArray(talents) ? talents : []
@@ -63,11 +71,9 @@ export function Talents({ classSlug, talents, talentsMeta, hideStats }: Props) {
 
   return (
     <div className="space-y-8">
-      {talentsMeta && talentsMeta.data_confidence !== "high" && (
+      {talentsMeta && talentsMeta.data_confidence === "medium" && (
         <Badge variant="outline" className="border-amber-500/50 text-amber-400 bg-amber-500/10">
-          {talentsMeta?.data_confidence === "low"
-            ? "Limited data — may not reflect current patch"
-            : "Partial data"}
+          Partial data
         </Badge>
       )}
       {/* ── 2K+: hero at top, class + spec below ────────────── */}
@@ -75,25 +81,29 @@ export function Talents({ classSlug, talents, talentsMeta, hideStats }: Props) {
         <div className="hidden min-[1800px]:flex min-[1800px]:flex-col min-[1800px]:items-center min-[1800px]:gap-8">
           {heroEntries && (
             <div className="flex flex-col items-center">
-              <h2 className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground mb-1 text-center">
-                {TYPE_LABELS.hero}
-              </h2>
-              <div className="relative inline-flex flex-col items-center md:block">
+              <SectionTitle>{TYPE_LABELS.hero}</SectionTitle>
+              <div
+                className={`grid grid-cols-1 gap-6 sm:grid-cols-[auto_auto] sm:items-center sm:gap-10 ${
+                  hideStats
+                    ? "place-items-start sm:justify-start"
+                    : "place-items-center sm:justify-center"
+                }`}
+              >
                 <HeroSection
                   heroEntries={heroEntries}
                   activeColor={activeColor}
                   classSlug={classSlug}
+                  specId={specId}
                   hideStats={hideStats}
                 />
                 {pvpEntries && (
-                  <div className="mt-6 md:absolute md:top-1/2 md:z-20 md:mt-0 md:left-[calc(100%+50px)] md:-translate-y-1/2">
-                    <PvpTalents
-                      talents={pvpEntries}
-                      activeColor={activeColor}
-                      classSlug={classSlug}
-                      hideStats={hideStats}
-                    />
-                  </div>
+                  <PvpTalents
+                    talents={pvpEntries}
+                    activeColor={activeColor}
+                    classSlug={classSlug}
+                    hideStats={hideStats}
+                    vertical={hideStats}
+                  />
                 )}
               </div>
             </div>
@@ -101,9 +111,7 @@ export function Talents({ classSlug, talents, talentsMeta, hideStats }: Props) {
           <div className="flex items-start justify-center gap-8">
             {classEntries && (
               <div className="flex flex-col">
-                <h2 className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground mb-1 text-center">
-                  {TYPE_LABELS.class}
-                </h2>
+                <SectionTitle>{TYPE_LABELS.class}</SectionTitle>
                 <TalentCard classSlug={classSlug} className="flex flex-col overflow-x-auto">
                   {renderTree(classEntries)}
                 </TalentCard>
@@ -111,9 +119,7 @@ export function Talents({ classSlug, talents, talentsMeta, hideStats }: Props) {
             )}
             {specEntries && (
               <div className="flex flex-col">
-                <h2 className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground mb-1 text-center">
-                  {TYPE_LABELS.spec}
-                </h2>
+                <SectionTitle>{TYPE_LABELS.spec}</SectionTitle>
                 <TalentCard classSlug={classSlug} className="flex flex-col overflow-x-auto">
                   {renderTree(specEntries, true)}
                 </TalentCard>
@@ -132,24 +138,33 @@ export function Talents({ classSlug, talents, talentsMeta, hideStats }: Props) {
               : "flex flex-col items-center"
           }
         >
-          <div className="relative inline-flex flex-col items-center md:block">
+          <div
+            className={`grid grid-cols-1 gap-6 lg:grid-cols-[auto_auto] lg:items-center lg:gap-10 ${
+              hideStats
+                ? "place-items-start lg:justify-start"
+                : "place-items-center lg:justify-center"
+            }`}
+          >
             {heroEntries && (
-              <HeroSection
-                heroEntries={heroEntries}
-                activeColor={activeColor}
-                classSlug={classSlug}
-                hideStats={hideStats}
-              />
-            )}
-            {pvpEntries && (
-              <div className="mt-6 md:absolute md:top-1/2 md:z-20 md:mt-0 md:left-[calc(100%+50px)] md:-translate-y-1/2">
-                <PvpTalents
-                  talents={pvpEntries}
+              <div className="flex flex-col items-start">
+                <SectionTitle>{TYPE_LABELS.hero}</SectionTitle>
+                <HeroSection
+                  heroEntries={heroEntries}
                   activeColor={activeColor}
                   classSlug={classSlug}
+                  specId={specId}
                   hideStats={hideStats}
                 />
               </div>
+            )}
+            {pvpEntries && (
+              <PvpTalents
+                talents={pvpEntries}
+                activeColor={activeColor}
+                classSlug={classSlug}
+                hideStats={hideStats}
+                vertical={hideStats}
+              />
             )}
           </div>
         </div>
@@ -163,7 +178,7 @@ export function Talents({ classSlug, talents, talentsMeta, hideStats }: Props) {
           <div className="flex flex-col items-stretch gap-6 sm:min-w-max sm:flex-row">
             {classEntries && (
               <div className="flex flex-1 flex-col">
-                <h2 className="mb-3 text-center text-lg font-semibold">{TYPE_LABELS.class}</h2>
+                <SectionTitle>{TYPE_LABELS.class}</SectionTitle>
                 <TalentCard classSlug={classSlug} className="flex flex-1 flex-col overflow-x-auto">
                   {renderTree(classEntries)}
                 </TalentCard>
@@ -171,7 +186,7 @@ export function Talents({ classSlug, talents, talentsMeta, hideStats }: Props) {
             )}
             {specEntries && (
               <div className="flex flex-1 flex-col">
-                <h2 className="mb-3 text-center text-lg font-semibold">{TYPE_LABELS.spec}</h2>
+                <SectionTitle>{TYPE_LABELS.spec}</SectionTitle>
                 <TalentCard classSlug={classSlug} className="flex flex-1 flex-col overflow-x-auto">
                   {renderTree(specEntries, true)}
                 </TalentCard>

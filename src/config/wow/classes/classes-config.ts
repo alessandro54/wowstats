@@ -113,12 +113,20 @@ export interface WowClassSpec {
   iconRemasteredUrl?: string
   splash?: {
     url: string
-    position?: string
-  } // position is CSS object-position, e.g. "80% center" or "right top"
-  splashPosition?: string // CSS object-position, e.g. "80% center" or "right top"
+    position?: string // CSS object-position
+  }
+  splashPosition?: string // CSS object-position
   animationUrl?: string
   effect?: SpecParticleEffect
   atmosphere?: SpecAtmosphere
+  // Hero trees this spec can choose between (2 of the class's 3, except DH).
+  heroTreeSlugs?: string[]
+}
+
+export interface HeroTreeConfig {
+  slug: string // suffix in the atlas filename
+  name: string // display label
+  signatures: string[] // any matching talent name picks this tree
 }
 
 export interface WowClassConfig {
@@ -130,6 +138,7 @@ export interface WowClassConfig {
   bannerUrl?: string
   bgGradient?: string
   specs: WowClassSpec[]
+  heroTrees?: HeroTreeConfig[]
 }
 
 export const WOW_CLASSES: WowClassConfig[] = [

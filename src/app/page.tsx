@@ -1,13 +1,13 @@
 import { Suspense } from "react"
 import { LazySection } from "@/components/atoms/lazy-section"
-import { ScrollHint } from "@/components/atoms/scroll-hint"
-import { HomeBgCanvas } from "@/components/molecules/home-bg-canvas"
-import type { BracketSummary } from "@/components/molecules/home-bracket-cards"
-import { HomeBracketCards } from "@/components/molecules/home-bracket-cards"
-import { HomeClassGrid } from "@/components/molecules/home-class-grid"
-import { HomeHero } from "@/components/molecules/home-hero"
-import type { TopSpecBracket, TopSpecEntry } from "@/components/molecules/home-top-specs-list"
-import { HomeTopSpecsList } from "@/components/molecules/home-top-specs-list"
+import { ScrollHint } from "@/features/home/components/scroll-hint"
+import { HomeBgCanvas } from "@/features/home/components/home-bg-canvas"
+import type { BracketSummary } from "@/features/home/components/home-bracket-cards"
+import { HomeBracketCards } from "@/features/home/components/home-bracket-cards"
+import { HomeClassGrid } from "@/features/home/components/home-class-grid"
+import { HomeHero } from "@/features/home/components/home-hero"
+import type { TopSpecBracket, TopSpecEntry } from "@/features/home/components/home-top-specs-list"
+import { HomeTopSpecsList } from "@/features/home/components/home-top-specs-list"
 import { tier, tierByPercentile } from "@/config/app-config"
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
@@ -25,18 +25,18 @@ const BRACKETS = [
     label: "3v3",
   },
   {
-    bracket: "shuffle-overall",
+    bracket: "shuffle",
     label: "Solo Shuffle",
   },
   {
-    bracket: "blitz-overall",
+    bracket: "blitz",
     label: "Blitz",
   },
 ]
 
 const SOLO_BRACKETS = [
-  "shuffle-overall",
-  "blitz-overall",
+  "shuffle",
+  "blitz",
 ]
 
 const classMap = new Map(

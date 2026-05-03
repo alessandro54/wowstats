@@ -63,12 +63,12 @@ describe("formatBracket", () => {
   })
 
   it("formats shuffle brackets", () => {
-    expect(formatBracket("shuffle-overall")).toBe("Solo Shuffle")
+    expect(formatBracket("shuffle")).toBe("Solo Shuffle")
     expect(formatBracket("shuffle-warrior-arms")).toBe("Solo Shuffle")
   })
 
   it("formats blitz brackets", () => {
-    expect(formatBracket("blitz-overall")).toBe("Blitz")
+    expect(formatBracket("blitz")).toBe("Blitz")
   })
 
   it("uppercases unknown brackets", () => {

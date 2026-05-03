@@ -75,14 +75,7 @@ export function DistributionTooltip({
               Currently equipped
             </span>
             {isCrafted && (
-              <span
-                className="rounded px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider"
-                style={{
-                  background: "rgba(251,146,60,0.15)",
-                  color: "#fb923c",
-                  border: "1px solid rgba(251,146,60,0.4)",
-                }}
-              >
+              <span className="rounded bg-[var(--color-tier-crafted-bg-light)] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-[var(--color-tier-crafted-fg-light)] shadow-sm dark:bg-[var(--color-tier-crafted-bg-dark)] dark:text-[var(--color-tier-crafted-fg-dark)]">
                 Crafted
               </span>
             )}

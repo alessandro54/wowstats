@@ -46,15 +46,20 @@ pnpm perf:size        # Bundle size check (≤ 300KB gzip)
 ```
 src/
 ├── app/                    # Next.js App Router pages and layouts
-├── components/
-│   ├── atoms/              # Basic UI building blocks
+├── components/             # SHARED across 2+ pages (atomic design)
+│   ├── atoms/              # Basic UI building blocks (cross-page only)
 │   │   └── __tests__/      # Tests (.test.tsx) AND stories (.stories.tsx)
-│   ├── molecules/          # Mid-level feature components
+│   ├── molecules/          # Mid-level cross-page components
 │   │   └── __tests__/      # Tests AND stories (colocated)
-│   ├── organisms/          # High-level feature sections / orchestrators
+│   ├── organisms/          # High-level cross-page sections
 │   │   └── __tests__/      # Tests AND stories (colocated)
 │   ├── providers/          # React context providers
 │   └── ui/                 # shadcn/ui primitives
+├── features/               # PAGE-OWNED feature modules
+│   ├── home/components/    # Used only by app/page.tsx
+│   ├── character/components/ # Used only by /character/[...]
+│   ├── spec/components/    # Used only by /pvp/[class]/[spec]/[bracket]
+│   └── meta/components/    # Used only by /pvp/meta/...
 ├── config/
 │   ├── cdn-config.ts       # CDN_BASE, cdnImage() for Cloudflare transforms
 │   └── wow/                # WoW class/spec/bracket config + app config
@@ -198,12 +203,40 @@ cdnImage(path, width)
 
 ## Components
 
-### Atomic Design
+### Hybrid Atomic Design + Feature-Sliced
 
-- **Atoms** (`src/components/atoms/`) — `diversity-meter.tsx`, `class-wheel.tsx`, `talent-icon.tsx`, `lazy-section.tsx`, `sliding-switch.tsx`, `theme-switcher.tsx`, etc.
-- **Molecules** (`src/components/molecules/`) — `meta-stats-table.tsx`, `meta-insights-panel.tsx`, `meta-tier-list.tsx`, `bracket-selector.tsx`, `class-panels.tsx`, `home-class-grid.tsx`, `spec-particle-fx.tsx`, etc.
-- **Organisms** (`src/components/organisms/`) — `meta-stats-dashboard.tsx`, `app-sidebar.tsx`, `equipment.tsx`, `talent-tree.tsx`, `talents.tsx`, `top-players.tsx`, `dynamic-background.tsx`
+**`components/`** = SHARED across 2+ pages (atomic design)
+
+- **Atoms** (`src/components/atoms/`) — Cross-page primitives: `clickable-tooltip`, `talent-icon`, `talent-card`, `transition-link`, `lazy-section`, `theme-switcher`
+- **Molecules** (`src/components/molecules/`) — Cross-page composed: `talent-list`, `talent-tree-node`, `pvp-talents`, `bracket-dropdown`, `region-switcher`, `distribution-tooltip`, `spec-particle-fx`
+- **Organisms** (`src/components/organisms/`) — Cross-page sections: `talents`, `talent-tree`, `app-sidebar`, `dynamic-background`, `nav-main`, `hero-section`
 - **UI** (`src/components/ui/`) — shadcn primitives
+
+**`features/<page>/components/`** = PAGE-OWNED, used by exactly one page tree
+
+- `features/home/` — `home-hero`, `home-bg-canvas`, `home-class-grid`, `scroll-hint`
+- `features/character/` — `character-hero`, `character-equipment/` (split: index, slot-card, center-card)
+- `features/spec/` — `equipment/` (split), `top-players`, `stat-priority`, `spec-*`, `pvp-spec-top-nav`
+- `features/meta/` — `meta-stats-dashboard`, `meta-stats-table`, `meta-tier-list`, `meta-insights-panel`, `class-wheel`, `top-performers`, `diversity-meter`
+
+### Component Placement Rules
+
+1. Used by 1 page only → `features/<page>/components/`
+2. Used by 2+ pages → `components/molecules/` or `components/organisms/`
+3. UI primitive (no domain logic) → `components/ui/` or `components/atoms/`
+
+### Size Limits (enforced by `lefthook` pre-commit)
+
+- Atoms: <100 lines
+- Molecules: <200 lines
+- Organisms / features components: <300 lines
+
+Exceeded → split into sub-files in a directory: `foo.tsx` → `foo/{index,sub-a,sub-b}.tsx`.
+
+### Test Requirements
+
+- All molecules + organisms + features components require a colocated test file
+- Pre-commit hook (`scripts/check-test-exists.sh`) blocks commits without tests
 
 Add new shadcn components: `pnpm dlx shadcn@latest add <component>`
 

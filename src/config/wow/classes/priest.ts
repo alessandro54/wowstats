@@ -13,6 +13,10 @@ const PriestConfig: WowClassConfig = {
       url: "/pvp/priest/discipline",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_holy_powerwordshield.jpg",
       atmosphere: "holy" as SpecAtmosphere,
+      heroTreeSlugs: [
+        "oracle",
+        "voidweaver",
+      ],
     },
     {
       id: 257,
@@ -21,6 +25,10 @@ const PriestConfig: WowClassConfig = {
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_holy_guardianspirit.jpg",
       effect: "holylight" as SpecParticleEffect,
       atmosphere: "holy" as SpecAtmosphere,
+      heroTreeSlugs: [
+        "archon",
+        "oracle",
+      ],
     },
     {
       id: 258,
@@ -29,6 +37,40 @@ const PriestConfig: WowClassConfig = {
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/spell_shadow_shadowwordpain.jpg",
       effect: "shadowsmoke" as SpecParticleEffect,
       atmosphere: "shadow" as SpecAtmosphere,
+      heroTreeSlugs: [
+        "archon",
+        "voidweaver",
+      ],
+    },
+  ],
+  heroTrees: [
+    {
+      slug: "archon",
+      name: "Archon",
+      signatures: [
+        "Power Surge",
+        "Resonant Energy",
+        "Sustained Potency",
+      ],
+    },
+    {
+      slug: "oracle",
+      name: "Oracle",
+      signatures: [
+        "Preventive Measures",
+        "Save the Day",
+        "Foreseen Circumstances",
+        "Prompt Prognosis",
+      ],
+    },
+    {
+      slug: "voidweaver",
+      name: "Voidweaver",
+      signatures: [
+        "Entropic Rift",
+        "Void Blast",
+        "Voidwraith",
+      ],
     },
   ],
 }

@@ -1,10 +1,10 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { SpecBracketCards } from "@/components/molecules/spec-bracket-cards"
-import { SpecComparisonTable } from "@/components/molecules/spec-comparison-table"
-import { SpecDistributionChart } from "@/components/molecules/spec-distribution-chart"
-import { SpecStatBar } from "@/components/molecules/spec-stat-bar"
-import { SpecWinRateChart } from "@/components/molecules/spec-winrate-chart"
+import { SpecBracketCards } from "@/features/spec/components/spec-bracket-cards"
+import { SpecComparisonTable } from "@/features/spec/components/spec-comparison-table"
+import { SpecDistributionChart } from "@/features/spec/components/spec-distribution-chart"
+import { SpecStatBar } from "@/features/spec/components/spec-stat-bar"
+import { SpecWinRateChart } from "@/features/spec/components/spec-winrate-chart"
 import type { Tier } from "@/config/app-config"
 import { tier, tierByPercentile } from "@/config/app-config"
 import { WOW_CLASSES } from "@/config/wow/classes/classes-config"
@@ -54,19 +54,19 @@ const BRACKETS = [
     slug: "shuffle",
     label: "Solo Shuffle",
     description: "6-player round-robin arena",
-    apiSlug: "shuffle-overall",
+    apiSlug: "shuffle",
   },
   {
     slug: "blitz",
     label: "Blitz",
     description: "10-player rated battleground",
-    apiSlug: "blitz-overall",
+    apiSlug: "blitz",
   },
 ]
 
 const SOLO_BRACKETS = [
-  "shuffle-overall",
-  "blitz-overall",
+  "shuffle",
+  "blitz",
 ]
 
 function normalizeClassSlug(value: string): string {

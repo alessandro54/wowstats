@@ -17,6 +17,10 @@ const ShamanConfig: WowClassConfig = {
       iconRemasteredUrl: cdnImage("/class_media/shaman/elemental_icon.png", 80),
       effect: "lightning" as SpecParticleEffect,
       atmosphere: "storm" as SpecAtmosphere,
+      heroTreeSlugs: [
+        "farseer",
+        "stormbringer",
+      ],
     },
     {
       id: 263,
@@ -27,6 +31,10 @@ const ShamanConfig: WowClassConfig = {
       iconRemasteredUrl: cdnImage("/class_media/shaman/enhancement_icon.png", 80),
       effect: "lightning" as SpecParticleEffect,
       atmosphere: "storm" as SpecAtmosphere,
+      heroTreeSlugs: [
+        "stormbringer",
+        "totemic",
+      ],
     },
     {
       id: 264,
@@ -36,6 +44,36 @@ const ShamanConfig: WowClassConfig = {
       iconRemasteredUrl: cdnImage("/class_media/shaman/restoration_icon.png", 80),
       effect: "waterrain" as SpecParticleEffect,
       atmosphere: "nature" as SpecAtmosphere,
+      heroTreeSlugs: [
+        "farseer",
+        "totemic",
+      ],
+    },
+  ],
+  heroTrees: [
+    {
+      slug: "farseer",
+      name: "Farseer",
+      signatures: [
+        "Call of the Ancestors",
+        "Ancestral Swiftness",
+      ],
+    },
+    {
+      slug: "stormbringer",
+      name: "Stormbringer",
+      signatures: [
+        "Tempest",
+        "Storm Swell",
+      ],
+    },
+    {
+      slug: "totemic",
+      name: "Totemic",
+      signatures: [
+        "Surging Totem",
+        "Totemic Rebound",
+      ],
     },
   ],
 }

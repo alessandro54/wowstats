@@ -16,6 +16,8 @@ export function HeroTree({ talents, activeColor, hideStats }: Props) {
       onlyChoicePct
       fullOpacity
       hideStats={hideStats}
+      nodeKeyMode="position"
+      suppressEnforcedPct
     />
   ) : (
     <TalentList talents={talents} activeColor={activeColor} hideStats={hideStats} />

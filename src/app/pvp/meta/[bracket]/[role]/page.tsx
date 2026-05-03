@@ -1,15 +1,15 @@
 import type { Metadata } from "next"
 import { Suspense } from "react"
-import type { MetaStatsEntry } from "@/components/molecules/meta-stats-table"
-import type { MetaDataset, Region, Role } from "@/components/organisms/meta-stats-dashboard"
+import type { MetaStatsEntry } from "@/features/meta/components/meta-stats-table"
+import type { MetaDataset, Region, Role } from "@/features/meta/components/meta-stats-dashboard"
 
 export const dynamic = "force-static"
 export const revalidate = 21600
 
 import { BracketDropdown } from "@/components/molecules/bracket-dropdown"
-import { MetaStatsSkeleton } from "@/components/molecules/meta-stats-skeleton"
+import { MetaStatsSkeleton } from "@/features/meta/components/meta-stats-skeleton"
 import { TopNavConfig } from "@/components/molecules/top-nav-config"
-import { MetaStatsDashboard } from "@/components/organisms/meta-stats-dashboard"
+import { MetaStatsDashboard } from "@/features/meta/components/meta-stats-dashboard"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -33,8 +33,8 @@ const META_ROLES = [
 const META_BRACKETS = [
   "2v2",
   "3v3",
-  "shuffle-overall",
-  "blitz-overall",
+  "shuffle",
+  "blitz",
 ] as const
 
 export function generateStaticParams() {
@@ -54,7 +54,7 @@ export function generateStaticParams() {
   return params
 }
 
-type Bracket = "2v2" | "3v3" | "rbg" | "shuffle-overall" | "blitz-overall"
+type Bracket = "2v2" | "3v3" | "rbg" | "shuffle" | "blitz"
 
 const ALL_BRACKETS = META_BRACKETS
 const REGIONS: Region[] = [

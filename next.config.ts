@@ -8,9 +8,9 @@ const nextConfig: NextConfig = {
   experimental: {},
   turbopack: {
     rules: {
-      "*.glsl": { loaders: ["./loaders/raw.js"], as: "*.js" },
-      "*.vert": { loaders: ["./loaders/raw.js"], as: "*.js" },
-      "*.frag": { loaders: ["./loaders/raw.js"], as: "*.js" },
+      "*.glsl": { loaders: ["./scripts/raw-loader.js"], as: "*.js" },
+      "*.vert": { loaders: ["./scripts/raw-loader.js"], as: "*.js" },
+      "*.frag": { loaders: ["./scripts/raw-loader.js"], as: "*.js" },
     },
   },
   images: {

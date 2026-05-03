@@ -69,19 +69,13 @@ describe("pvpTalents", () => {
     expect(getByTestId("talent-icon-3")).toBeInTheDocument()
   })
 
-  it("renders situational talents in the dropdown", () => {
-    const { getByTestId, container } = render(
-      <PvpTalents talents={talents} activeColor="#c79c6e" classSlug="warrior" />,
-    )
-    expect(getByTestId("talent-icon-4")).toBeInTheDocument()
-    expect(getByTestId("talent-icon-5")).toBeInTheDocument()
-    expect(container.textContent).toContain("situational")
-  })
-
-  it("renders rest talents in the dropdown", () => {
+  it("renders the remaining talents below the top 3", () => {
     const { getByTestId } = render(
       <PvpTalents talents={talents} activeColor="#c79c6e" classSlug="warrior" />,
     )
+    // Situational + tail talents both render in the grid below top 3.
+    expect(getByTestId("talent-icon-4")).toBeInTheDocument()
+    expect(getByTestId("talent-icon-5")).toBeInTheDocument()
     expect(getByTestId("talent-icon-6")).toBeInTheDocument()
   })
 
@@ -94,11 +88,13 @@ describe("pvpTalents", () => {
     expect(container.textContent).toContain("55%")
   })
 
-  it("renders without dropdown when only 3 talents", () => {
+  it("renders only the top 3 row when there are exactly 3 talents", () => {
     const top3Only = talents.slice(0, 3)
-    const { container } = render(
+    const { queryByTestId } = render(
       <PvpTalents talents={top3Only} activeColor="#c79c6e" classSlug="warrior" />,
     )
-    expect(container.textContent).not.toContain("situational")
+    expect(queryByTestId("talent-icon-4")).toBeNull()
+    expect(queryByTestId("talent-icon-5")).toBeNull()
+    expect(queryByTestId("talent-icon-6")).toBeNull()
   })
 })

@@ -16,6 +16,10 @@ const MageConfig: WowClassConfig = {
       iconRemasteredUrl: cdnImage("/class_media/mage/arcane_icon.png", 80),
       effect: "arcaneorbs" as SpecParticleEffect,
       atmosphere: "arcane" as SpecAtmosphere,
+      heroTreeSlugs: [
+        "spellslinger",
+        "sunfury",
+      ],
     },
     {
       id: 63,
@@ -25,6 +29,10 @@ const MageConfig: WowClassConfig = {
       iconRemasteredUrl: cdnImage("/class_media/mage/fire_icon.png", 80),
       effect: "rainoffire" as SpecParticleEffect,
       atmosphere: "fire" as SpecAtmosphere,
+      heroTreeSlugs: [
+        "frostfire",
+        "sunfury",
+      ],
     },
     {
       id: 64,
@@ -34,6 +42,37 @@ const MageConfig: WowClassConfig = {
       iconRemasteredUrl: cdnImage("/class_media/mage/frost_icon.png", 80),
       effect: "rainoffrost" as SpecParticleEffect,
       atmosphere: "frost" as SpecAtmosphere,
+      heroTreeSlugs: [
+        "frostfire",
+        "spellslinger",
+      ],
+    },
+  ],
+  heroTrees: [
+    {
+      slug: "frostfire",
+      name: "Frostfire",
+      signatures: [
+        "Frostfire Empowerment",
+        "Frostfire Bolt",
+        "Frostfire Infusion",
+      ],
+    },
+    {
+      slug: "spellslinger",
+      name: "Spellslinger",
+      signatures: [
+        "Splinterstorm",
+        "Splintering Sorcery",
+      ],
+    },
+    {
+      slug: "sunfury",
+      name: "Sunfury",
+      signatures: [
+        "Spellfire Spheres",
+        "Memory of Al'ar",
+      ],
     },
   ],
 }

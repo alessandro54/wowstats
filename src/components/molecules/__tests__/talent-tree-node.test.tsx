@@ -172,12 +172,13 @@ describe("talentNodeCard", () => {
   })
 
   it("shows inline % and rank for ranked nodes on meta page", () => {
-    // rank-1 variant (1 point invested) and rank-2 variant (2 points = full investment)
-    const v1 = makeTalent(41, "Impale", 90, {
+    // rank-1 variant (1 point invested) and rank-2 variant (2 points = full investment).
+    // Pct kept under 90 so the % label isn't suppressed by the high-usage rule.
+    const v1 = makeTalent(41, "Impale", 85, {
       topBuildRank: 1,
       maxRank: 2,
     })
-    const v2 = makeTalent(42, "Impale", 85, {
+    const v2 = makeTalent(42, "Impale", 80, {
       topBuildRank: 2,
       maxRank: 2,
     })
@@ -201,7 +202,7 @@ describe("talentNodeCard", () => {
         budget={34}
       />,
     )
-    expect(container.textContent).toContain("90%")
+    expect(container.textContent).toContain("85%")
     expect(container.textContent).toContain("2/2")
   })
 
