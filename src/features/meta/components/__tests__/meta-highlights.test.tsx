@@ -26,6 +26,7 @@ const mockEntries: MetaStatsEntry[] = [
     bK: 0.92,
     color: "var(--color-class-rogue)",
     specUrl: "/pvp/rogue/subtlety/2v2",
+    rankChange: 1,
   },
   {
     key: "2",
@@ -44,6 +45,7 @@ const mockEntries: MetaStatsEntry[] = [
     bK: 0.88,
     color: "var(--color-class-monk)",
     specUrl: "/pvp/monk/windwalker/2v2",
+    rankChange: -4,
   },
   {
     key: "3",
@@ -62,6 +64,7 @@ const mockEntries: MetaStatsEntry[] = [
     bK: 0.65,
     color: "var(--color-class-priest)",
     specUrl: "/pvp/priest/shadow/2v2",
+    rankChange: 2,
   },
 ]
 
@@ -81,9 +84,9 @@ describe("MetaHighlights", () => {
     expect(container.textContent).toContain("Most Popular")
   })
 
-  it("renders Most Volatile highlight", () => {
+  it("renders Biggest Mover highlight", () => {
     const { container } = render(<MetaHighlights entries={mockEntries} />)
-    expect(container.textContent).toContain("Most Volatile")
+    expect(container.textContent).toContain("Biggest Mover")
   })
 
   it("renders win rate value as percentage", () => {

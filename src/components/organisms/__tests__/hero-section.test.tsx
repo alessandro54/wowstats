@@ -1,5 +1,5 @@
-import { fireEvent, render } from "@testing-library/react"
-import { describe, expect, it, vi } from "vitest"
+import { act, fireEvent, render } from "@testing-library/react"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import type { MetaTalent } from "@/lib/api"
 
 import { HeroSection } from "../hero-section"
@@ -16,14 +16,8 @@ vi.mock("@/components/atoms/talent-card", () => ({
   ),
 }))
 
-vi.mock("@/components/atoms/corner-peel", () => ({
-  CornerPeel: ({ onClick, label }: any) => (
-    <button data-testid="corner-peel" onClick={onClick}>
-      {label}
-    </button>
-  ),
-}))
-
+// Make signature names line up with the warrior hero-tree config so
+// identifyHeroTree picks a real tree instead of returning null.
 function makeTalent(
   id: number,
   name: string,
@@ -59,13 +53,13 @@ function makeTalent(
   }
 }
 
-// Two disconnected components = two hero trees
+// Two disconnected components = two hero trees. Names match warrior signatures.
 const primaryTree = [
-  makeTalent(1, "Primary A", 95, {
+  makeTalent(1, "Lightning Strikes", 95, {
     row: 0,
     col: 0,
   }),
-  makeTalent(2, "Primary B", 90, {
+  makeTalent(2, "Thorim's Might", 90, {
     row: 1,
     col: 0,
     prereqs: [
@@ -74,12 +68,12 @@ const primaryTree = [
   }),
 ]
 const altTree = [
-  makeTalent(10, "Alt A", 40, {
+  makeTalent(10, "Slayer's Dominance", 40, {
     row: 0,
     col: 0,
     nodeId: 10,
   }),
-  makeTalent(11, "Alt B", 35, {
+  makeTalent(11, "Imminent Demise", 35, {
     row: 1,
     col: 0,
     nodeId: 11,
@@ -90,6 +84,15 @@ const altTree = [
 ]
 
 describe("heroSection", () => {
+  beforeEach(() => {
+    vi.useFakeTimers({
+      shouldAdvanceTime: true,
+    })
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
   it("renders hero section with trees", () => {
     const { container } = render(
       <HeroSection
@@ -111,36 +114,7 @@ describe("heroSection", () => {
     expect(getAllByTestId("hero-tree")[0].textContent).toContain("2 nodes")
   })
 
-  it("shows corner peel when two trees exist", () => {
-    const { getByTestId } = render(
-      <HeroSection
-        heroEntries={[
-          ...primaryTree,
-          ...altTree,
-        ]}
-        activeColor="#c79c6e"
-        classSlug="warrior"
-      />,
-    )
-    expect(getByTestId("corner-peel")).toBeInTheDocument()
-    expect(getByTestId("corner-peel").textContent).toContain("Alt")
-  })
-
-  it("does not render corner peel when only one tree exists", () => {
-    const { queryByTestId } = render(
-      <HeroSection heroEntries={primaryTree} activeColor="#c79c6e" classSlug="warrior" />,
-    )
-    expect(queryByTestId("corner-peel")).toBeNull()
-  })
-
-  it("returns null for empty entries", () => {
-    const { container } = render(
-      <HeroSection heroEntries={[]} activeColor="#c79c6e" classSlug="warrior" />,
-    )
-    expect(container.innerHTML).toBe("")
-  })
-
-  it("renders both primary and alt tree cards when two trees exist", () => {
+  it("renders one card with current tree only (no flip stack)", () => {
     const { getAllByTestId } = render(
       <HeroSection
         heroEntries={[
@@ -151,12 +125,12 @@ describe("heroSection", () => {
         classSlug="warrior"
       />,
     )
-    const cards = getAllByTestId("talent-card")
-    expect(cards.length).toBe(2)
+    expect(getAllByTestId("talent-card").length).toBe(1)
+    expect(getAllByTestId("hero-tree").length).toBe(1)
   })
 
-  it("toggles corner peel label on click", () => {
-    const { getByTestId } = render(
+  it("shows a switch button when more than one tree exists", () => {
+    const { getByRole } = render(
       <HeroSection
         heroEntries={[
           ...primaryTree,
@@ -166,9 +140,44 @@ describe("heroSection", () => {
         classSlug="warrior"
       />,
     )
-    const peel = getByTestId("corner-peel")
-    expect(peel.textContent).toContain("Alt")
-    fireEvent.click(peel)
-    expect(peel.textContent).toContain("Main")
+    const button = getByRole("button")
+    expect(button.textContent?.toLowerCase()).toContain("switch to")
+    // The "next" tree's name should appear in the label.
+    expect(button.textContent).toContain("Slayer")
+  })
+
+  it("does not render a switch button when only one tree exists", () => {
+    const { queryByRole } = render(
+      <HeroSection heroEntries={primaryTree} activeColor="#c79c6e" classSlug="warrior" />,
+    )
+    expect(queryByRole("button")).toBeNull()
+  })
+
+  it("cycles to the next tree when the switch button is clicked", () => {
+    const { getByRole, getAllByTestId } = render(
+      <HeroSection
+        heroEntries={[
+          ...primaryTree,
+          ...altTree,
+        ]}
+        activeColor="#c79c6e"
+        classSlug="warrior"
+      />,
+    )
+    expect(getAllByTestId("hero-tree")[0].textContent).toContain("2 nodes")
+    fireEvent.click(getByRole("button"))
+    // Cycle is async (fade-out → swap → fade-in). Flush the timer.
+    act(() => {
+      vi.advanceTimersByTime(300)
+    })
+    const buttonAfter = getByRole("button")
+    expect(buttonAfter.textContent).toContain("Mountain Thane")
+  })
+
+  it("returns null for empty entries", () => {
+    const { container } = render(
+      <HeroSection heroEntries={[]} activeColor="#c79c6e" classSlug="warrior" />,
+    )
+    expect(container.innerHTML).toBe("")
   })
 })

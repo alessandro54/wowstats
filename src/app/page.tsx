@@ -25,18 +25,18 @@ const BRACKETS = [
     label: "3v3",
   },
   {
-    bracket: "shuffle-overall",
+    bracket: "shuffle",
     label: "Solo Shuffle",
   },
   {
-    bracket: "blitz-overall",
+    bracket: "blitz",
     label: "Blitz",
   },
 ]
 
 const SOLO_BRACKETS = [
-  "shuffle-overall",
-  "blitz-overall",
+  "shuffle",
+  "blitz",
 ]
 
 const classMap = new Map(

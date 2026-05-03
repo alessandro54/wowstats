@@ -16,6 +16,10 @@ const DemonHunterConfig: WowClassConfig = {
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_demonhunter_specdps.jpg",
       effect: "felfire" as SpecParticleEffect,
       atmosphere: "fel" as SpecAtmosphere,
+      heroTreeSlugs: [
+        "aldrachireaver",
+        "felscarred",
+      ],
     },
     {
       id: 581,
@@ -23,6 +27,10 @@ const DemonHunterConfig: WowClassConfig = {
       url: "/pvp/demon-hunter/vengeance",
       iconUrl: "https://render.worldofwarcraft.com/us/icons/56/ability_demonhunter_spectank.jpg",
       atmosphere: "fire" as SpecAtmosphere,
+      heroTreeSlugs: [
+        "aldrachireaver",
+        "felscarred",
+      ],
     },
     {
       id: 1480,
@@ -32,6 +40,29 @@ const DemonHunterConfig: WowClassConfig = {
       iconRemasteredUrl: cdnImage("/class_media/demon-hunter/devourer_icon.png", 80),
       effect: "voidfire" as SpecParticleEffect,
       atmosphere: "shadow" as SpecAtmosphere,
+      heroTreeSlugs: [
+        "aldrachireaver",
+        "felscarred",
+      ],
+    },
+  ],
+  heroTrees: [
+    {
+      slug: "aldrachireaver",
+      name: "Aldrachi Reaver",
+      signatures: [
+        "Art of the Glaive",
+        "Aldrachi Tactics",
+        "Fury of the Aldrachi",
+      ],
+    },
+    {
+      slug: "felscarred",
+      name: "Fel-scarred",
+      signatures: [
+        "Demonsurge",
+        "Enduring Torment",
+      ],
     },
   ],
 }

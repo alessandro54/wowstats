@@ -1,5 +1,6 @@
 "use client"
 
+import { SectionTitle } from "@/components/atoms/section-title"
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import type { CharacterEquipmentItem } from "@/lib/api"
 import { useActiveColor } from "@/hooks/use-active-color"
@@ -77,14 +78,7 @@ export function CharacterEquipment({
 
   return (
     <section>
-      <div className="mb-4 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <h2 className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
-            Equipment
-          </h2>
-          <div className="ml-2 h-px w-16 bg-gradient-to-r from-border to-transparent" />
-        </div>
-      </div>
+      <SectionTitle>Equipment</SectionTitle>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-[1fr_auto_1fr]">
         <div className="flex justify-center md:col-span-2 xl:col-span-1 xl:col-start-2 xl:row-start-1">

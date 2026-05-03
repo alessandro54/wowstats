@@ -96,6 +96,8 @@ export function TalentTree({
   budget,
   hideStats,
   apexCircle = false,
+  nodeKeyMode = "id",
+  suppressEnforcedPct = false,
 }: {
   talents: MetaTalent[]
   activeColor: string
@@ -105,6 +107,10 @@ export function TalentTree({
   budget?: number
   hideStats?: boolean
   apexCircle?: boolean
+  // "position" reuses node DOM across topology-equivalent tree swaps.
+  nodeKeyMode?: "id" | "position"
+  // Hides % on top gateway + bottom capstone (visual layout unchanged).
+  suppressEnforcedPct?: boolean
 }) {
   const nodeMap = useMemo(
     () => buildNodeMap(talents),
@@ -137,10 +143,29 @@ export function TalentTree({
     ],
   )
 
+  // row-col keys appearing on more than one node — those fall back to nodeId.
+  const positionCollisions = useMemo(() => {
+    if (nodeKeyMode !== "position") return new Set<string>()
+    const counts = new Map<string, number>()
+    for (const n of nodes) {
+      const k = `${n.row}-${n.col}`
+      counts.set(k, (counts.get(k) ?? 0) + 1)
+    }
+    return new Set(
+      Array.from(counts.entries())
+        .filter(([, c]) => c > 1)
+        .map(([k]) => k),
+    )
+  }, [
+    nodes,
+    nodeKeyMode,
+  ])
+
   if (nodes.length === 0) return null
 
-  const { svgW, svgH, maxRow, botApex, nodeCX, nodeY } = layout
+  const { svgW, svgH, maxRow, botApex, topApex, nodeCX, nodeY } = layout
   const useApex = apexCircle && botApex
+  const minRow = suppressEnforcedPct && topApex ? Math.min(...nodes.map((n) => n.row)) : -1
 
   return (
     <div className="flex h-full min-h-0 flex-col">
@@ -164,10 +189,20 @@ export function TalentTree({
           />
           {nodes.map((node) => {
             const isApex = useApex && node.row === maxRow
+            const enforcedPick =
+              suppressEnforcedPct &&
+              ((botApex && node.row === maxRow) || (topApex && node.row === minRow))
             const size = isApex ? APEX_NODE_SIZE : NODE_SIZE
+            const posKey = `${node.row}-${node.col}`
+            const key =
+              nodeKeyMode === "position"
+                ? positionCollisions.has(posKey)
+                  ? `${posKey}-${node.nodeId}`
+                  : posKey
+                : node.nodeId
             return (
               <TalentNodeCard
-                key={node.nodeId}
+                key={key}
                 node={node}
                 left={nodeCX(node) - size / 2}
                 top={nodeY(node.row) - size / 2}
@@ -177,6 +212,7 @@ export function TalentTree({
                 activeColor={activeColor}
                 hideStats={hideStats}
                 isApex={isApex}
+                enforcedPick={enforcedPick}
               />
             )
           })}

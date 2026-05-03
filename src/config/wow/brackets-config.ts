@@ -31,7 +31,7 @@ export const BRACKET_COLORS: Record<string, string> = {
   blitz: "#ff6b35",
 }
 
-/** Returns the color for any bracket string (handles suffixed slugs like shuffle-overall). */
+/** Returns the color for any bracket string (handles suffixed slugs like shuffle). */
 export function bracketColor(bracket: string): string {
   if (bracket.startsWith("shuffle")) return BRACKET_COLORS.shuffle
   if (bracket.startsWith("blitz")) return BRACKET_COLORS.blitz

@@ -21,8 +21,12 @@ const DeathKnightConfig: WowClassConfig = {
         position: "right 20%",
       },
       animationUrl: `${CDN_BASE}/class_media/death-knight/frost_animation.mp4`,
-      effect: "rainoffrost" as SpecParticleEffect,
+      effect: "snow" as SpecParticleEffect,
       atmosphere: "frost" as SpecAtmosphere,
+      heroTreeSlugs: [
+        "deathbringer",
+        "rideroftheapocalypse",
+      ],
     },
     {
       id: 252,
@@ -37,6 +41,10 @@ const DeathKnightConfig: WowClassConfig = {
       animationUrl: `${CDN_BASE}/class_media/death-knight/unholy_animation.mp4`,
       effect: "plague" as SpecParticleEffect,
       atmosphere: "toxic" as SpecAtmosphere,
+      heroTreeSlugs: [
+        "sanlayn",
+        "rideroftheapocalypse",
+      ],
     },
     {
       id: 250,
@@ -51,6 +59,36 @@ const DeathKnightConfig: WowClassConfig = {
       animationUrl: `${CDN_BASE}/class_media/death-knight/blood_animation.mp4`,
       effect: "blood" as SpecParticleEffect,
       atmosphere: "blood" as SpecAtmosphere,
+      heroTreeSlugs: [
+        "sanlayn",
+        "deathbringer",
+      ],
+    },
+  ],
+  heroTrees: [
+    {
+      slug: "sanlayn",
+      name: "San'layn",
+      signatures: [
+        "Vampiric Strike",
+        "The Blood is Life",
+      ],
+    },
+    {
+      slug: "rideroftheapocalypse",
+      name: "Rider of the Apocalypse",
+      signatures: [
+        "Death Charge",
+        "Apocalypse Now",
+      ],
+    },
+    {
+      slug: "deathbringer",
+      name: "Deathbringer",
+      signatures: [
+        "Reaper's Mark",
+        "Wave of Souls",
+      ],
     },
   ],
 }

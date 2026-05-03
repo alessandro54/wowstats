@@ -8,7 +8,7 @@ import { formatSlot, gemStatColors, getStatMeta, QUALITY_COLORS } from "@/config
 import type { MetaEnchant, MetaGem, MetaItem } from "@/lib/api"
 
 function borderColor(isBis: boolean, isCrafted: boolean, activeColor: string): string {
-  if (isCrafted) return "rgb(245 158 11)"
+  if (isCrafted) return "var(--color-tier-crafted-border)"
   if (isBis) return activeColor
   return "rgb(100 100 100 / 0.4)"
 }
@@ -118,9 +118,24 @@ export function SlotCard({
           </span>
         )}
         <div className="min-w-0 flex-1">
-          <span className="text-[9px] font-semibold uppercase tracking-wider text-muted-foreground">
-            {formatSlot(slot)}
-          </span>
+          <div className="flex items-center gap-1.5">
+            <span className="text-[9px] font-semibold uppercase tracking-wider text-muted-foreground">
+              {formatSlot(slot)}
+            </span>
+            {isCrafted &&
+              primary.top_crafting_stats.slice(0, 2).map((stat) => {
+                const { color } = getStatMeta(stat)
+                return color ? (
+                  <span
+                    key={stat}
+                    className="inline-block size-1.5 shrink-0 rounded-full"
+                    style={{
+                      background: color,
+                    }}
+                  />
+                ) : null
+              })}
+          </div>
           <p
             className="truncate text-sm font-medium leading-tight"
             style={{
@@ -139,20 +154,8 @@ export function SlotCard({
         </div>
         <div className="flex shrink-0 flex-col items-end gap-0.5">
           {isCrafted && (
-            <span className="flex items-center gap-1 rounded bg-amber-500/20 px-1.5 py-0.5 text-[8px] font-bold uppercase text-amber-400">
+            <span className="rounded bg-[var(--color-tier-crafted-bg-light)] px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-[var(--color-tier-crafted-fg-light)] shadow-sm dark:bg-[var(--color-tier-crafted-bg-dark)] dark:text-[var(--color-tier-crafted-fg-dark)]">
               Crafted
-              {primary.top_crafting_stats.slice(0, 2).map((stat) => {
-                const { color } = getStatMeta(stat)
-                return color ? (
-                  <span
-                    key={stat}
-                    className="inline-block size-1.5 rounded-full"
-                    style={{
-                      background: color,
-                    }}
-                  />
-                ) : null
-              })}
             </span>
           )}
           <span

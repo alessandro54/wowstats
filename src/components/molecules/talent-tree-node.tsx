@@ -21,6 +21,8 @@ interface Props {
   activeColor: string
   hideStats?: boolean
   isApex?: boolean
+  // Hero gateway/capstone — suppress %, keep visual size/shape.
+  enforcedPick?: boolean
 }
 
 export function TalentNodeCard({
@@ -33,6 +35,7 @@ export function TalentNodeCard({
   activeColor,
   hideStats,
   isApex,
+  enforcedPick,
 }: Props) {
   const tier = bestTier(node)
   const isBis = tier === "bis"
@@ -55,7 +58,10 @@ export function TalentNodeCard({
 
   const isVariable = node.isChoice || node.isRanked
   const showPct =
-    (!inTopBuild || isSituational || isVariable) && (!onlyChoicePct || isSituational || isVariable)
+    !isApex &&
+    !enforcedPick &&
+    (!inTopBuild || isSituational || isVariable) &&
+    (!onlyChoicePct || isSituational || isVariable)
   const showRank = node.isRanked && node.maxRank > 1 && invested > 0
   const nodeSize = isApex ? APEX_NODE_SIZE : NODE_SIZE
 

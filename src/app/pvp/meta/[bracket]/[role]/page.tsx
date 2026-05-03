@@ -33,8 +33,8 @@ const META_ROLES = [
 const META_BRACKETS = [
   "2v2",
   "3v3",
-  "shuffle-overall",
-  "blitz-overall",
+  "shuffle",
+  "blitz",
 ] as const
 
 export function generateStaticParams() {
@@ -54,7 +54,7 @@ export function generateStaticParams() {
   return params
 }
 
-type Bracket = "2v2" | "3v3" | "rbg" | "shuffle-overall" | "blitz-overall"
+type Bracket = "2v2" | "3v3" | "rbg" | "shuffle" | "blitz"
 
 const ALL_BRACKETS = META_BRACKETS
 const REGIONS: Region[] = [

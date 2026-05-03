@@ -17,6 +17,10 @@ const RogueConfig: WowClassConfig = {
       iconRemasteredUrl: cdnImage("/class_media/rogue/assassination_icon.png", 80),
       effect: "venomdrip" as const,
       atmosphere: "toxic" as const,
+      heroTreeSlugs: [
+        "deathstalker",
+        "fatebound",
+      ],
     },
     {
       id: 260,
@@ -26,6 +30,10 @@ const RogueConfig: WowClassConfig = {
       iconRemasteredUrl: cdnImage("/class_media/rogue/outlaw_icon.png", 80),
       effect: "coinrain" as const,
       atmosphere: "warm" as const,
+      heroTreeSlugs: [
+        "fatebound",
+        "trickster",
+      ],
     },
     {
       id: 261,
@@ -35,6 +43,36 @@ const RogueConfig: WowClassConfig = {
       iconRemasteredUrl: cdnImage("/class_media/rogue/subtlety_icon.png", 80),
       effect: "shadowsmoke" as const,
       atmosphere: "shadow" as const,
+      heroTreeSlugs: [
+        "deathstalker",
+        "trickster",
+      ],
+    },
+  ],
+  heroTrees: [
+    {
+      slug: "fatebound",
+      name: "Fatebound",
+      signatures: [
+        "Hand of Fate",
+        "Fate Intertwined",
+      ],
+    },
+    {
+      slug: "trickster",
+      name: "Trickster",
+      signatures: [
+        "Unseen Blade",
+        "Disorienting Strikes",
+      ],
+    },
+    {
+      slug: "deathstalker",
+      name: "Deathstalker",
+      signatures: [
+        "Hunt Them Down",
+        "Deathstalker's Mark",
+      ],
     },
   ],
 }

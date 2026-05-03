@@ -54,19 +54,19 @@ const BRACKETS = [
     slug: "shuffle",
     label: "Solo Shuffle",
     description: "6-player round-robin arena",
-    apiSlug: "shuffle-overall",
+    apiSlug: "shuffle",
   },
   {
     slug: "blitz",
     label: "Blitz",
     description: "10-player rated battleground",
-    apiSlug: "blitz-overall",
+    apiSlug: "blitz",
   },
 ]
 
 const SOLO_BRACKETS = [
-  "shuffle-overall",
-  "blitz-overall",
+  "shuffle",
+  "blitz",
 ]
 
 function normalizeClassSlug(value: string): string {

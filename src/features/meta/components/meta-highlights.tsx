@@ -8,16 +8,25 @@ interface Props {
   entries: MetaStatsEntry[]
 }
 
+// Drop troll-pick / tiny-sample specs from highlight aggregations. ~0.5%
+// of the ladder filters out near-zero-presence outliers (e.g. Augmentation
+// on Solo Shuffle) whose stats are dominated by sample-size noise.
+const MIN_PRESENCE = 0.005
+
 export function MetaHighlights({ entries }: Props) {
+  const meaningful = entries.filter((e) => e.presence >= MIN_PRESENCE)
+
   const highestWr = [
-    ...entries,
+    ...meaningful,
   ].sort((a, b) => b.wrHat - a.wrHat)[0]
   const mostPresence = [
-    ...entries,
+    ...meaningful,
   ].sort((a, b) => b.presence - a.presence)[0]
-  const widestCi = [
-    ...entries,
-  ].sort((a, b) => b.ratingCiHigh - b.ratingCiLow - (a.ratingCiHigh - a.ratingCiLow))[0]
+  const biggestMover = [
+    ...meaningful,
+  ]
+    .filter((e) => e.rankChange != null && e.rankChange !== 0)
+    .sort((a, b) => Math.abs(b.rankChange ?? 0) - Math.abs(a.rankChange ?? 0))[0]
 
   const highlights = [
     {
@@ -30,12 +39,16 @@ export function MetaHighlights({ entries }: Props) {
       spec: mostPresence,
       value: `${(mostPresence?.presence * 100).toFixed(1)}%`,
     },
-    {
-      label: "Most Volatile",
-      spec: widestCi,
-      value: `±${((widestCi?.ratingCiHigh - widestCi?.ratingCiLow) / 2).toFixed(0)}`,
+    biggestMover && {
+      label: "Biggest Mover",
+      spec: biggestMover,
+      value: `${biggestMover.rankChange! > 0 ? "↑" : "↓"} ${Math.abs(biggestMover.rankChange!)}`,
     },
-  ]
+  ].filter(Boolean) as Array<{
+    label: string
+    spec: MetaStatsEntry
+    value: string
+  }>
 
   return (
     <div className="space-y-2">
