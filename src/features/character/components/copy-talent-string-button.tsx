@@ -3,7 +3,6 @@
 import { useState } from "react"
 
 interface Props {
-  /** Raw WoW in-game import string. */
   code: string
 }
 
@@ -17,7 +16,7 @@ export function CopyTalentStringButton({ code }: Props) {
       setCopied(true)
       setTimeout(() => setCopied(false), 1600)
     } catch {
-      // No reliable fallback in restricted clipboard contexts.
+      // Restricted clipboard context — fail silently.
     }
   }
 

@@ -8,7 +8,6 @@ import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 import type { MetaTalent } from "@/lib/api"
 import { BORDER_BIS, BORDER_SITUATIONAL } from "@/lib/utils/talent-tree"
 
-// Top 3 = the meta picks; render large + bordered. Others in a compact grid.
 const ICON_SIZE_TOP = 56
 const ICON_SIZE_REST = 36
 
@@ -17,11 +16,6 @@ interface Props {
   activeColor: string
   classSlug: WowClassSlug
   hideStats?: boolean
-  /**
-   * Stack the top 3 meta picks vertically instead of side-by-side. Used on
-   * the character page where horizontal real estate is tighter and the PvP
-   * card sits beside a wider talent tree.
-   */
   vertical?: boolean
 }
 
@@ -37,8 +31,6 @@ export function PvpTalents({ talents, activeColor, classSlug, hideStats, vertica
       <SectionTitle>PvP Talents</SectionTitle>
       <TalentCard classSlug={classSlug} className="p-4">
         <div className="flex flex-col items-center gap-3">
-          {/* Top 3 — meta picks, large icons with legendary border. Layout
-              flips to vertical when the parent has limited horizontal space. */}
           <div
             className={
               vertical
@@ -64,8 +56,6 @@ export function PvpTalents({ talents, activeColor, classSlug, hideStats, vertica
             ))}
           </div>
 
-          {/* Rest — compact grid below. Situational gets purple border, the
-              tail (usage <= 20%) keeps a neutral look + reduced opacity.    */}
           {others.length > 0 && (
             <>
               <div className="h-px w-3/4 bg-border/50" />

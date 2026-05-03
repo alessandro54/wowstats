@@ -107,19 +107,9 @@ export function TalentTree({
   budget?: number
   hideStats?: boolean
   apexCircle?: boolean
-  /**
-   * "id"        — key each node by its blizzard nodeId (default).
-   * "position"  — key each node by `${row}-${col}`. Use when the surrounding
-   *               UI swaps between trees that share the same topology (e.g.
-   *               cycling through hero talent trees), so React reuses the
-   *               same DOM node and only the icon image inside changes.
-   */
+  // "position" reuses node DOM across topology-equivalent tree swaps.
   nodeKeyMode?: "id" | "position"
-  /**
-   * When true, suppresses the % label on enforced-pick nodes (top gateway
-   * and bottom capstone, when present). Visual layout/sizes are unchanged —
-   * use `apexCircle` separately for the round bottom-node treatment.
-   */
+  // Hides % on top gateway + bottom capstone (visual layout unchanged).
   suppressEnforcedPct?: boolean
 }) {
   const nodeMap = useMemo(
@@ -153,8 +143,7 @@ export function TalentTree({
     ],
   )
 
-  // Set of "row-col" position keys that appear on more than one node.
-  // Used by position-keying to fall back to nodeId for the collided pair.
+  // row-col keys appearing on more than one node — those fall back to nodeId.
   const positionCollisions = useMemo(() => {
     if (nodeKeyMode !== "position") return new Set<string>()
     const counts = new Map<string, number>()
@@ -176,7 +165,6 @@ export function TalentTree({
 
   const { svgW, svgH, maxRow, botApex, topApex, nodeCX, nodeY } = layout
   const useApex = apexCircle && botApex
-  // Top-row index for enforced-pick lookup. Only used when suppressEnforcedPct.
   const minRow = suppressEnforcedPct && topApex ? Math.min(...nodes.map((n) => n.row)) : -1
 
   return (
@@ -200,18 +188,11 @@ export function TalentTree({
             budget={budget}
           />
           {nodes.map((node) => {
-            // isApex drives the visual treatment (bigger size, circle).
-            // enforcedPick is purely semantic — used to suppress the % label
-            // on gateway/capstone nodes that every build of this tree picks.
             const isApex = useApex && node.row === maxRow
             const enforcedPick =
               suppressEnforcedPct &&
               ((botApex && node.row === maxRow) || (topApex && node.row === minRow))
             const size = isApex ? APEX_NODE_SIZE : NODE_SIZE
-            // When two nodes share row+col (rare — some choice/split layouts
-            // collide), suffix with nodeId to keep the React key unique.
-            // The collided node won't morph across hero-tree swaps (it gets
-            // a tree-specific id), but the rest of the grid still does.
             const posKey = `${node.row}-${node.col}`
             const key =
               nodeKeyMode === "position"

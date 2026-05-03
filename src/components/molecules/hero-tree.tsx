@@ -16,13 +16,7 @@ export function HeroTree({ talents, activeColor, hideStats }: Props) {
       onlyChoicePct
       fullOpacity
       hideStats={hideStats}
-      // Position-based keying so swapping between hero trees of the same class
-      // reuses each node's DOM — only the icon image inside changes (and fades
-      // via the keyed <Image> in TalentIcon).
       nodeKeyMode="position"
-      // Top gateway + bottom capstone are enforced picks for any build that
-      // uses the tree, so their % is uninformative — hide it. Visual size
-      // and shape stay the same as a regular node (no circle).
       suppressEnforcedPct
     />
   ) : (

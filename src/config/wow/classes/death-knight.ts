@@ -21,7 +21,7 @@ const DeathKnightConfig: WowClassConfig = {
         position: "right 20%",
       },
       animationUrl: `${CDN_BASE}/class_media/death-knight/frost_animation.mp4`,
-      effect: "rainoffrost" as SpecParticleEffect,
+      effect: "snow" as SpecParticleEffect,
       atmosphere: "frost" as SpecAtmosphere,
       heroTreeSlugs: [
         "deathbringer",

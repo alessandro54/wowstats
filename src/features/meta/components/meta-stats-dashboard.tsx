@@ -12,7 +12,7 @@ import { MetaTierList } from "@/features/meta/components/meta-tier-list"
 import { RegionSwitcher } from "@/components/molecules/region-switcher"
 import { RoleSwitcher } from "@/components/molecules/role-switcher"
 import { useSetHoverSlug } from "@/components/providers/hover-provider"
-import { tier, tierByPercentile } from "@/config/app-config"
+import { type Tier, tier, tierByPercentile } from "@/config/app-config"
 import type { WowClassSlug } from "@/config/wow/classes/classes-config"
 
 const SOLO_BRACKETS = [
@@ -93,9 +93,19 @@ function filterByRole(dataset: MetaDataset, role: Role, bracket: string): MetaDa
   const weightedWR = entries.reduce((s, e) => s + e.wrHat * e.presence, 0) / totalCount
 
   const topRow = entries[0]
-  const reliableRow = [
-    ...entries,
-  ].sort((a, b) => b.bK - a.bK)[0]
+  // Highest-confidence pick among S+/S/A — strong AND well-sampled.
+  // Falls back to top spec when no S+/S/A entries exist.
+  const STRONG_TIERS: Tier[] = [
+    "S+",
+    "S",
+    "A",
+  ]
+  const reliableRow =
+    [
+      ...entries,
+    ]
+      .filter((e) => STRONG_TIERS.includes(e.tier))
+      .sort((a, b) => b.bK - a.bK)[0] ?? topRow
 
   return {
     entries,

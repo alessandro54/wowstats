@@ -56,12 +56,6 @@ export function TalentIcon({
         }),
       }}
     >
-      {/* Image layer — overflow-hidden kept here so the icon stays fully visible.
-          Keyed by icon_url so swapping between hero trees of the same class
-          (TalentTree's nodeKeyMode="position") triggers a per-icon fade-in
-          animation. Caller is responsible for warming the cache (e.g.
-          HeroSection preloads sibling tree icons) so the remount doesn't
-          paint empty before the cached bytes arrive.                       */}
       <div className={cn("absolute inset-0 overflow-hidden", radius)}>
         {talent.talent.icon_url ? (
           <Image

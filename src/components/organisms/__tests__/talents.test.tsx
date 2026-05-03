@@ -175,15 +175,14 @@ describe("confidence badge", () => {
     const { queryByText } = render(
       <Talents classSlug="warrior" talents={specTalents} talentsMeta={makeMeta("high")} />,
     )
-    expect(queryByText(/Limited data/i)).toBeNull()
     expect(queryByText(/Partial data/i)).toBeNull()
   })
 
-  it("shows 'Limited data' badge when confidence is low", () => {
-    const { getByText } = render(
+  it("shows no badge when confidence is low", () => {
+    const { queryByText } = render(
       <Talents classSlug="warrior" talents={specTalents} talentsMeta={makeMeta("low")} />,
     )
-    expect(getByText(/Limited data/i)).toBeDefined()
+    expect(queryByText(/Partial data/i)).toBeNull()
   })
 
   it("shows 'Partial data' badge when confidence is medium", () => {

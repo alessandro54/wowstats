@@ -12,8 +12,7 @@ interface Props {
   position?: "right"
 }
 
-// Talents at >= this usage are "the pick" — the label adds noise without
-// adding information, so we suppress the % (rank still renders).
+// >= this usage is "the pick" — % label is noise. Rank still renders.
 const HIDE_PCT_THRESHOLD = 90
 
 export function NodeStats({

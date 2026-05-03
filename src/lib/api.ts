@@ -370,7 +370,6 @@ export function fetchClassDistribution(
     bracket: params.bracket,
     region: params.region,
     role: params.role,
-    new_model: "true",
   }
   if (params.seasonId) {
     query.season_id = params.seasonId

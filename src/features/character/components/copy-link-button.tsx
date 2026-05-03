@@ -12,9 +12,7 @@ export function CopyLinkButton() {
       setCopied(true)
       setTimeout(() => setCopied(false), 1600)
     } catch {
-      // Clipboard write can fail under restricted contexts (file://, http on
-      // some browsers). Fail silently — there's no good UX for telling the
-      // user "your browser blocked it".
+      // Restricted clipboard context — fail silently.
     }
   }
 

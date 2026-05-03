@@ -71,11 +71,9 @@ export function Talents({ classSlug, specId, talents, talentsMeta, hideStats }: 
 
   return (
     <div className="space-y-8">
-      {talentsMeta && talentsMeta.data_confidence !== "high" && (
+      {talentsMeta && talentsMeta.data_confidence === "medium" && (
         <Badge variant="outline" className="border-amber-500/50 text-amber-400 bg-amber-500/10">
-          {talentsMeta?.data_confidence === "low"
-            ? "Limited data — may not reflect current patch"
-            : "Partial data"}
+          Partial data
         </Badge>
       )}
       {/* ── 2K+: hero at top, class + spec below ────────────── */}
@@ -148,13 +146,16 @@ export function Talents({ classSlug, specId, talents, talentsMeta, hideStats }: 
             }`}
           >
             {heroEntries && (
-              <HeroSection
-                heroEntries={heroEntries}
-                activeColor={activeColor}
-                classSlug={classSlug}
-                specId={specId}
-                hideStats={hideStats}
-              />
+              <div className="flex flex-col items-start">
+                <SectionTitle>{TYPE_LABELS.hero}</SectionTitle>
+                <HeroSection
+                  heroEntries={heroEntries}
+                  activeColor={activeColor}
+                  classSlug={classSlug}
+                  specId={specId}
+                  hideStats={hideStats}
+                />
+              </div>
             )}
             {pvpEntries && (
               <PvpTalents
